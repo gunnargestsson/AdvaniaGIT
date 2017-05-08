@@ -7,7 +7,7 @@
         [PSObject]$BranchSettings
     )
     if ($BranchSettings.databaseInstance -gt "") {
-        $Server = $BranchSettings.databaseServer + "\\" + $BranchSettings.databaseInstance
+        $Server = $BranchSettings.databaseServer + "\" + $BranchSettings.databaseInstance
     } else {
         $Server = $BranchSettings.databaseServer
     }
