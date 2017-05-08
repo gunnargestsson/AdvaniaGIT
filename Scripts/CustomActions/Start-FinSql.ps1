@@ -6,11 +6,8 @@ if ($SetupParameters.patchNoFunction -ne "") {
 
 $finsqlexe = (Join-Path $SetupParameters.navIdePath 'finsql.exe')
 $IdFile = Join-Path $LogPath "finsqlsettings.zup"
-if ($BranchSettings.databaseInstance -gt "") {
-    $params="database=`"$($BranchSettings.databaseName)`",servername=`"$($BranchSettings.databaseServer)\$($BranchSettings.instanceName)`",ID=`"$($IdFile)`""
-} else {
-    $params="database=`"$($BranchSettings.databaseName)`",servername=`"$($BranchSettings.databaseServer)`",ID=`"$($IdFile)`""
-}
+$params="database=`"$($BranchSettings.databaseName)`",servername=`"$(Get-DatabaseServer -BranchSettings $BranchSettings)`",ID=`"$($IdFile)`""
+
 Write-Host "Running: `"$finsqlexe`" $params" -ForegroundColor Green
 Start-Process -FilePath $finsqlexe -ArgumentList $params 
 
