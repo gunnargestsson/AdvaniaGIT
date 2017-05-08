@@ -1,0 +1,55 @@
+﻿#Kamil Sacek
+function Get-SQLCommandResult
+{
+    [CmdletBinding()]
+    Param
+    (
+        # SQL Server
+        [Parameter(Mandatory = $false,ValueFromPipelinebyPropertyName = $true,
+        Position = 0)]
+        $Server = "localhost",
+        # SQL Database Name
+        [Parameter(Mandatory = $true,ValueFromPipelinebyPropertyName = $true)]
+        [String]
+        $Database,
+        # SQL Command to run
+        [Parameter(Mandatory = $true,ValueFromPipelinebyPropertyName = $true)]
+        [String]
+        $Command,
+        # Force return of dataset even when doesn't begin with SELECT
+        [Parameter(ValueFromPipelinebyPropertyName = $true)]
+        [Switch]
+        $ForceDataset
+      
+    )
+    Write-Verbose -Message "Executing SQL command: $Command"
+
+    $SqlConnection = New-Object -TypeName System.Data.SqlClient.SqlConnection
+    $SqlConnection.ConnectionString = "Server = $Server; Database = $Database; Integrated Security = True"
+ 
+    $SqlCmd = New-Object -TypeName System.Data.SqlClient.SqlCommand
+    $SqlCmd.CommandText = $Command
+    $SqlCmd.Connection = $SqlConnection
+    
+    if (($Command.Split(' ')[0] -ilike 'select') -or ($ForceDataset)) 
+    {
+        $SqlAdapter = New-Object -TypeName System.Data.SqlClient.SqlDataAdapter
+        $SqlAdapter.SelectCommand = $SqlCmd
+ 
+        $DataSet = New-Object -TypeName System.Data.DataSet
+        $result = $SqlAdapter.Fill($DataSet)
+ 
+        $result = $SqlConnection.Close()
+        $SqlConnection.Dispose()
+ 
+        return $DataSet.Tables[0]
+    }
+    else 
+    {
+        $result = $SqlConnection.Open()
+        $result = $SqlCmd.ExecuteNonQuery()
+        $SqlConnection.Close()
+        $SqlConnection.Dispose()
+        return $result
+    }
+}

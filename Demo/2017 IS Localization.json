@@ -1,0 +1,13 @@
+{
+  "branchId": "add32a78-bfe2-4723-a00e-82f5f06890b6",
+  "navVersion": "10.0.16177.0",
+  "navSolution": "IS",  
+  "projectName": "IS365",
+  "baseBranch": "IS",
+  "uidOffset": "10900",  
+  "storeAllObjects": "true", 
+  "objectProperties": "true",
+  "licenseFile": "Advania.flf",
+  "datetimeCulture": "is-IS"
+}
+

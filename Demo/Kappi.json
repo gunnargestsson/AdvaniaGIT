@@ -1,0 +1,14 @@
+{
+  "branchId": "bc2f9d07-88a6-49ab-b50a-da21c72e672e",
+  "navSolution": "ADIS",
+  "storeAllObjects": "true",
+  "licenseFile": "Advania.flf",
+  "navVersion": "9.0.48316.0",
+  "navProduct": "ADIS",
+  "projectName": "Kappi_ehf",
+  "baseBranch": "ADIS",
+  "deltaBranchList": "PUNCH,STORE,ExternalAttachments,ItemHistory",
+  "uidOffset": "50000",  
+  "objectProperties": "true",
+  "datetimeCulture": "is-IS"
+}
