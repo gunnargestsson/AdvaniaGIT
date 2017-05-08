@@ -10,5 +10,5 @@ When debugging in Administration mode open PowerShell ISE in Administration mode
 
 The solution is made by Gunnar Gestsson (http://navision.guru), ©Advania (http://www.advania.is)
 Scripts in the folder Cloud.Ready.Software.NAV are downloaded from https://github.com/waldo1001/Cloud.Ready.Software.PowerShell
-Some of the scripts in the AdvaniaGIT folder are inspired or copied from Kamil Sacke (https://github.com/kine)
+Some of the scripts in the AdvaniaGIT folder are inspired or copied from Kamil Sacek (https://github.com/kine)
 
