@@ -2,7 +2,7 @@
 {
     Load-InstanceAdminTools -SetupParameters $SetupParameters
     $menuItems = @()
-    $instances = Get-NAVServerInstance | Where-Object -Property Version -Match $SetupParameters.navVersion.Substring(0,2)
+    $instances = Get-NAVServerInstance | Where-Object -Property Version -Match ($SetupParameters.navVersion.Substring(0,2) + ".*.0")
     $instanceNo = 1
     foreach ($instance in $instances) {
         $instanceName = $instance.ServerInstance.Substring(27,$instance.ServerInstance.Length - 27)
