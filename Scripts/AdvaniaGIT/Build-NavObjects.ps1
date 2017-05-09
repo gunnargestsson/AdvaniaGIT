@@ -38,6 +38,7 @@ function Build-NAVObjects
         $deltaBranchList = ($SetupParameters.deltaBranchList).split(",")
         foreach ($deltaBranch in $deltaBranchList)
         {
+          Start-Sleep -Seconds 1
           Write-Host Get deltas from $deltaBranch
           $result = git.exe checkout --force $deltaBranch --quiet 
           $branchFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $deltaBranch))

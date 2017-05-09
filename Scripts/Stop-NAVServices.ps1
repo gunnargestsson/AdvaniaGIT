@@ -2,7 +2,6 @@
 Get-Module -Name AdvaniaGIT | Remove-Module
 Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
 
-Enable-TcpPortSharingService
 UnLoad-InstanceAdminTools
 
 $versions = Get-ChildItem (Join-Path $env:ProgramFiles 'Microsoft Dynamics NAV') | Select-Object -Property Name
