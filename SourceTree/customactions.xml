@@ -71,6 +71,13 @@
     <ShowFullOutput>false</ShowFullOutput>
   </CustomAction>
   <CustomAction>
+    <Caption>Clear Comment Section from NAV Objects</Caption>
+    <Target>StartPowerShell.cmd</Target>
+    <Parameters>"$REPO" "Clear-NAVCommentSection.ps1" $false</Parameters>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>true</ShowFullOutput>
+  </CustomAction>
+  <CustomAction>
     <Caption>Remove NAV Environment</Caption>
     <Target>StartPowerShell.cmd</Target>
     <Parameters>"$REPO" "Remove-NavEnvironment.ps1" $true $true</Parameters>
