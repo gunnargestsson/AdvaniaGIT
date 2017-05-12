@@ -13,7 +13,7 @@
     if (Test-Path $BackupFilePath) {
         Copy-Item -Path $BackupFilePath -Destination $TempBackupFilePath -Force
     } else {
-        $BackupFilePath = (Join-Path $BackupPath ("$($SetupParameters.navRelease)$($SetupParameters.navSolution).bak"))
+        $BackupFilePath = (Join-Path $BackupPath ("$($SetupParameters.navRelease)-$($SetupParameters.navSolution).bak"))
         if (Test-Path $BackupFilePath) {
             Copy-Item -Path $BackupFilePath -Destination $TempBackupFilePath -Force
         } else {
