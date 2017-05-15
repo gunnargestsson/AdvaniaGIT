@@ -17,7 +17,6 @@ if ($BranchSettings.instanceName -eq "") {
     $BranchSettings.databaseName = $ServerInstance
     $BranchSettings.instanceName = ""    
     Write-Host "Upgrading database..."
-    Remove-NAVDatabaseLicense -BranchSettings $BranchSettings
     Invoke-NAVDatabaseConversion -SetupParameters $SetupParameters -BranchSettings $BranchSettings
     Write-Host "Compiling Service Objects..."
     Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=Table;Id=2000000004..2000000999" -SynchronizeSchemaChanges No 
