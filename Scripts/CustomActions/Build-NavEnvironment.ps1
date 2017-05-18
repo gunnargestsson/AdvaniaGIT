@@ -22,26 +22,27 @@ if ($BranchSettings.instanceName -eq "") {
     Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=Table;Id=2000000004..2000000999" -SynchronizeSchemaChanges No 
     Write-Host "Creatings Service..."
     $DefaultInstanceSettings = Get-DefaultInstanceSettings -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-    $BranchSettings.clientServicesPort = ($DefaultInstanceSettings | Where-Object -Property Key -EQ ClientServicesPort).Value
-    $BranchSettings.managementServicesPort = ($DefaultInstanceSettings | Where-Object -Property Key -EQ ManagementServicesPort).Value
+    $BranchSettings.clientServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ClientServicesPort']").Attributes["value"].Value
+    $BranchSettings.managementServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ManagementServicesPort']").Attributes["value"].Value
     $params = @{       
       ServerInstance = $ServerInstance 
       DatabaseName = $BranchSettings.databaseName
       DatabaseServer = $BranchSettings.databaseServer
-      ManagementServicesPort = ($DefaultInstanceSettings | Where-Object -Property Key -EQ ManagementServicesPort).Value
-      ClientServicesPort = ($DefaultInstanceSettings | Where-Object -Property Key -EQ ClientServicesPort).Value
-      SOAPServicesPort = ($DefaultInstanceSettings | Where-Object -Property Key -EQ SOAPServicesPort).Value
-      ODataServicesPort = ($DefaultInstanceSettings | Where-Object -Property Key -EQ ODataServicesPort).Value }
+      ManagementServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ManagementServicesPort']").Attributes["value"].Value
+      ClientServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ClientServicesPort']").Attributes["value"].Value
+      SOAPServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='SOAPServicesPort']").Attributes["value"].Value
+      ODataServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ODataServicesPort']").Attributes["value"].Value
+    }
     if ($BranchSettings.databaseInstance -ne "") { $params.DatabaseInstance = $BranchSettings.databaseInstance }
     New-NAVServerInstance @params -Force -ServiceAccount NetworkService -ErrorAction Stop
     Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName ServicesDefaultTimeZone -KeyValue 'UTC' 
-    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName ServicesLanguage -KeyValue 'en-US'
-    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName ODataServicesSSLEnabled -KeyValue $false
-    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName ODataServicesEnabled -KeyValue $true
-    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName SOAPServicesSSLEnabled -KeyValue $false
-    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName SOAPServicesEnabled -KeyValue $true
-    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DataCacheSize -KeyValue 7
-    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName CompileBusinessApplicationAtStartup -KeyValue $false
+    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName ServicesLanguage -KeyValue 'en-US' 
+    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName ODataServicesSSLEnabled -KeyValue $false 
+    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName ODataServicesEnabled -KeyValue $true 
+    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName SOAPServicesSSLEnabled -KeyValue $false 
+    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName SOAPServicesEnabled -KeyValue $true 
+    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DataCacheSize -KeyValue 7 
+    Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName CompileBusinessApplicationAtStartup -KeyValue $false 
     $BranchSettings.instanceName = $ServerInstance
     Enable-DelayedStartForNAVService -BranchSettings $BranchSettings
     Enable-TcpPortSharingForNAVService -BranchSettings $BranchSettings
@@ -60,7 +61,7 @@ if ($BranchSettings.instanceName -eq "") {
 
 $LicenseFilePath = Join-Path (Join-Path $SetupParameters.rootPath "License") $SetupParameters.licenseFile
 if (Test-Path $LicenseFilePath) {  
-    Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $LicenseFilePath
+    Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $LicenseFilePath 
 }
 
 if ($Setupparameters.uidOffset) {

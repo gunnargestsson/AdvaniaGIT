@@ -8,6 +8,6 @@
     )
     
     Load-InstanceAdminTools -setupParameters $SetupParameters
-    $instanceSettings = Get-NAVServerConfiguration2 -ServerInstance $BranchSettings.instanceName 
+    $instanceSettings = Get-NAVServerConfiguration -ServerInstance $BranchSettings.instanceName -AsXml
     Return $instanceSettings
 }
