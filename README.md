@@ -3,8 +3,9 @@ Source Control Management for NAV C/AL
 
 
 The installation is basically as follows:
-                Install SQL Server 2016 Developers.  Enable TCP/IP port and set Maximum Memory options.
-                Install Dynamics NAV (2016 & 2017) with Developer option.  
+                Install SQL Server 2016 Developers.  Enable TCP/IP port and set Maximum Memory options
+                Install Dynamics NAV (2016 & 2017) with Developer option 
+                Import valid NAV Development license into the master database
                 Install GIT https://git-for-windows.github.io/ with default options
                 Install SourceTree https://www.sourcetreeapp.com/ with default options
                 Move customactions.xml to %LocalAppData%\Atlassian\SourceTree
