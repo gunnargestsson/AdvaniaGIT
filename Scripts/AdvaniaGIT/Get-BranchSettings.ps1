@@ -7,7 +7,7 @@ function Get-BranchSettings
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$SettingsFilePath = "Data\BranchSettings.Json"
     )
-    $allBranchSettings = Get-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) | ConvertFrom-Json
+    $allBranchSettings = Get-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) | Out-String | ConvertFrom-Json
     $branchSettings = ($allBranchSettings.Branches | Where-Object -Property branchId -EQ $SetupParameters.branchId)
     if ($branchSettings -eq $null) {
         $branchSettings = @{
