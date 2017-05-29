@@ -13,8 +13,16 @@ Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Ser
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServer' -NewValue (Get-HelpServer -mainVersion $SetupParameters.mainVersion)
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServerPort' -NewValue (Get-HelpServerPort -mainVersion $SetupParameters.mainVersion)
 Set-Content -Path $clientSettingsPath -Value $clientUserSettings.OuterXml -Force
-$companyName = Get-FirstCompanyName -SQLServer (Get-DatabaseServer -BranchSettings $BranchSettings) -SQLDb $BranchSettings.databaseName
-$CodeunitId = 130402
+if ($SetupParameters.testCompanyName) {
+    $companyName = $SetupParameters.testCompanyName
+} else {
+    $companyName = Get-FirstCompanyName -SQLServer (Get-DatabaseServer -BranchSettings $BranchSettings) -SQLDb $BranchSettings.databaseName
+}
+if ($SetupParameters.testCodeunitId) {
+    $CodeunitId = $SetupParameters.testCodeunitId
+} else {
+    $CodeunitId = 130402
+}
 $params = @()
 $params += @("-consolemode -showNavigationPage:0 -settings:`"$clientSettingsPath`" `"dynamicsnav:////$companyName/RunCodeunit?Codeunit=$CodeunitId`"")
 Write-Host "Running: `"$clientexe`" $params" -ForegroundColor Green
