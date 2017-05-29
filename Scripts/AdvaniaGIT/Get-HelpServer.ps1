@@ -7,7 +7,7 @@
         [String]$SettingsFilePath = "Data\NAVVersions.Json"
     )
                 
-    $navVersions = Get-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) | ConvertFrom-Json
+    $navVersions = Get-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) | Out-String | ConvertFrom-Json
     $webClientPort = ($navVersions.Releases | Where-Object -Property mainVersion -EQ $MainVersion).helpServer
     
     Return $webClientPort
