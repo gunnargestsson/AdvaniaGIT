@@ -11,7 +11,9 @@
     $TempBackupFilePath = (Join-Path $LogPath "NAVBackup.bak")
     $Backups = @()
     $Backups += (Get-ChildItem -Path $BackupPath -File).Name
-    $Backups += Get-FtpDirectory -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -Directory "$($SetupParameters.navRelease)/"
+    if ($SetupParameters.ftpServer -ne "") {
+        $Backups += Get-FtpDirectory -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -Directory "$($SetupParameters.navRelease)/"
+    }
     $FilePatterns = @(
         "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak",
         "$($SetupParameters.navRelease)/$($SetupParameters.navVersion)/$($SetupParameters.projectName).bak",
