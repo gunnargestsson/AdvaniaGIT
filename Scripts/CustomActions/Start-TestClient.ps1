@@ -23,16 +23,20 @@ if ($SetupParameters.testCodeunitId) {
 } else {
     $CodeunitId = 130402
 }
+
 $params = @()
 $params += @("-consolemode -showNavigationPage:0 -settings:`"$clientSettingsPath`" `"dynamicsnav:////$companyName/RunCodeunit?Codeunit=$CodeunitId`"")
+$startDate = Get-Date 
 Write-Host "Running: `"$clientexe`" $params" -ForegroundColor Green
 Start-Process -FilePath $clientexe -ArgumentList $params -Wait
 
-
-$ResultTableName = Get-TestResultTableName -CompanyName $companyName
+$ResultTableName = Get-DatabaseTableName -CompanyName $companyName -TableName 'CAL Test Result'
 $Command = "select count([No_]) as [No. of Tests],CASE [Result] WHEN 0 THEN 'Passed' WHEN 1 THEN 'Failed' WHEN 2 THEN 'Inconclusive' ELSE 'Incomplete' END as [Result] from [$ResultTableName] group by [Result]"
 $SqlResult = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $Command  
 Write-Host ''
 Write-Host "Results..."
 Write-Host ''
-$($SqlResult.Table) | Format-Table
+$SqlResult | Format-Table
+$endDate = Get-Date
+Write-Host ''
+Write-Host "Started $startDate, ended $endDate, duration $(($endDate - $StartDate).ToString('g'))"
