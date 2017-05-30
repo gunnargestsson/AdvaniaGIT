@@ -18,7 +18,6 @@ if (-not (([Environment]::GetEnvironmentVariable('PSModulePath','Machine')) -lik
     [Environment]::SetEnvironmentVariable('PSModulePath',[Environment]::GetEnvironmentVariable('PSModulePath','Machine')+';'+$Installfolder,'Machine')
 
     Write-Host 'Importing the modules' -ForegroundColor Green
-    Import-Module Cloud.Ready.Software.NAV -DisableNameChecking -Global
     Import-Module AdvaniaGIT -DisableNameChecking -Global
 
 } else 
@@ -38,3 +37,9 @@ $CmdFile = "@echo off`r`n" + `
            "PowerShell.exe -noprofile -file " + (Join-Path $Installfolder 'Start-CustomAction.ps1 %1 %2 %3 %4') + "`r`n"
 Set-Content $startPowerShell $CmdFile -Exclude ASCII
 
+# Copy CustomActions.xml to SourceTree Settings
+if (Test-Path (Join-Path $env:LOCALAPPDATA 'Atlassian\SourceTree')) {
+  if (Test-Path (Join-Path (Split-Path $PSScriptRoot -Parent) 'SourceTree\customactions.xml')) {
+    Copy-Item -Path (Join-Path (Split-Path $PSScriptRoot -Parent) 'SourceTree\CustomActions.xml') -Destination (Join-Path $env:LOCALAPPDATA 'Atlassian\SourceTree') -Force
+  }
+}
