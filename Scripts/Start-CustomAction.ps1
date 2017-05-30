@@ -33,7 +33,6 @@ else
 {
     # Import all needed modules
     Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
-    Import-Module Cloud.Ready.Software.NAV -DisableNameChecking | Out-Null
 
     Push-Location 
     Set-Location $Repository

@@ -1,14 +1,29 @@
-﻿function Merge-NAVVersionListString
+﻿Add-Type -Language CSharp -TypeDefinition @"
+  public enum VersionListMergeMode
+  {
+    SourceFirst,
+    TargetFirst
+  }
+"@
+
+function Merge-NAVVersionListString 
 {
     param
     (
-        [String]$source,
-        [String]$target,
-        [String]$newversion,
-        [Switch]$SourceFirst
+        [System.String]
+        $source,
+
+        [System.String]
+        $target,
+
+        [System.String]
+        $newversion,
+
+        [String]
+        $mode = [VersionListMergeMode]::SourceFirst
     )
 
-    if (!$SourceFirst) 
+    if ($mode -eq [VersionListMergeMode]::TargetFirst) 
     {
         $temp = $source
         $source = $target
@@ -24,7 +39,12 @@
     {
         $actualversion = ''
         $moduleinfo = Get-VersionListModuleShortcut($module)
-        $actualversion = Get-NAVHighestVersionList -Prefix $moduleinfo.shortcut -VersionList1 $sourcehash[$moduleinfo.shortcut] -VersionList2 $targethash[$moduleinfo.shortcut]
+        $actualversion = Get-NAVVersionListBigger $sourcehash[$moduleinfo.shortcut] $targethash[$moduleinfo.shortcut]
+
+        if ($moduleinfo.shortcut -eq $newmoduleinfo.shortcut) 
+        {
+            $actualversion = $newmoduleinfo.version
+        }
         if ($result.Length -gt 0) 
         {
             $result = $result + ','
