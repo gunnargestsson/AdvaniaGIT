@@ -80,23 +80,23 @@
   <CustomAction>
     <Caption>Run All Automated Tests</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Start-FullTest.ps1" $true</Parameters>
+    <Parameters>"$REPO" "Start-FullTest.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
-    <ShowFullOutput>true</ShowFullOutput>
+    <ShowFullOutput>false</ShowFullOutput>
   </CustomAction>
   <CustomAction>
     <Caption>Run Failed Tests Only</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Restart-FailedTest.ps1" $true</Parameters>
+    <Parameters>"$REPO" "Restart-FailedTest.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
-    <ShowFullOutput>true</ShowFullOutput>
+    <ShowFullOutput>false</ShowFullOutput>
   </CustomAction>
   <CustomAction>
     <Caption>Run Tests on Modified Objects</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Start-ModifiedObjectsTest.ps1" $true</Parameters>
+    <Parameters>"$REPO" "Start-ModifiedObjectsTest.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
-    <ShowFullOutput>true</ShowFullOutput>
+    <ShowFullOutput>false</ShowFullOutput>
   </CustomAction>    
   <CustomAction>
     <Caption>Show Automated Test Results</Caption>
