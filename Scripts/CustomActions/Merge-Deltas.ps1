@@ -1,11 +1,11 @@
 Load-ModelTools -SetupParameters $SetupParameters
 
-$SourceFileName = (Join-Path $workFolder 'Source.txt')
-$TargetFileName = (Join-Path $workFolder 'Target.txt')
-$DeltaFolder = (Join-Path $workFolder 'Deltas')
+$SourceFileName = (Join-Path $SetupParameters.workFolder 'Source.txt')
+$TargetFileName = (Join-Path $SetupParameters.workFolder 'Target.txt')
+$DeltaFolder = (Join-Path $SetupParameters.workFolder 'Deltas')
 
-$newFolder = (Join-Path $workFolder 'SourceObjects')
-$newCustomizedFolder = (Join-Path $workFolder 'TargetObjects')
+$newFolder = (Join-Path $SetupParameters.workFolder 'SourceObjects')
+$newCustomizedFolder = (Join-Path $SetupParameters.workFolder 'TargetObjects')
 
 Remove-Item -Path $newFolder -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item -Path $newCustomizedFolder -Recurse -Force -ErrorAction SilentlyContinue

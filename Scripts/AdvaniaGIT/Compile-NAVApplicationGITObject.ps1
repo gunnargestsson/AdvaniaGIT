@@ -14,7 +14,7 @@
         [ValidateSet('Yes','No','Force')]
         [string] $SynchronizeSchemaChanges = 'Yes'
     )
-    $LogFile = "$LogPath\filtercompile.log"
+    $LogFile = Join-Path $SetupParameters.LogPath "filtercompile.log"
     $command = "Command=CompileObjects`,SynchronizeSchemaChanges=$SynchronizeSchemaChanges`,Filter=`"$Filter`""
     Run-NavIdeCommand -SetupParameters $SetupParameters `
                     -BranchSettings $BranchSettings `
@@ -24,10 +24,10 @@
                     -Verbose:$VerbosePreference
    
 
-    if (Test-Path -Path "$LogPath\navcommandresult.txt")
+    if (Test-Path -Path "$($SetupParameters.LogPath)\navcommandresult.txt")
     {
         Write-Verbose -Message "Processed $Filter."
-        Remove-Item -Path "$LogPath\navcommandresult.txt"
+        Remove-Item -Path "$($SetupParameters.LogPath)\navcommandresult.txt"
     }
     else
     {

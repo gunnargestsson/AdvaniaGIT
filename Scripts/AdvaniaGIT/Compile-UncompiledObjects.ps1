@@ -18,7 +18,7 @@
     foreach($objectType in $objectTypes)
     {
         Write-Verbose "Starting $objectType compilation..."
-        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databaseName -Filter Type=$objectType -AsJob -NavServerName $env:COMPUTERNAME -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $LogPath -SynchronizeSchemaChanges Force 
+        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databaseName -Filter Type=$objectType -AsJob -NavServerName $env:COMPUTERNAME -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Force 
     }
     if ($Wait) { 
         Receive-Job -Job $jobs -Wait

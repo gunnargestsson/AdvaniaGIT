@@ -42,7 +42,7 @@
         $global:LASTEXITCODE = 0
     }
       
-    if (Test-Path "$logPath\navcommandresult.txt")
+    if (Test-Path (Join-Path $LogFolder "navcommandresult.txt"))
     {
         if (Test-Path $LogFile)
         {
@@ -55,6 +55,6 @@
     }
     else
     {
-        throw "${ErrorText}!"
+        throw "${ErrText}!"
     }
 }

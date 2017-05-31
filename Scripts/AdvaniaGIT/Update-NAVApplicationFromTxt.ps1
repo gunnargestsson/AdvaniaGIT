@@ -170,7 +170,7 @@
         else 
         {
             Write-Verbose -Message "Importing $($ObjToImport.FileName.FileName)"
-            Import-NAVApplicationObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $ObjToImport.FileName.FileName -ImportAction Overwrite -SynchronizeSchemaChanges Force
+            Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $ObjToImport.FileName.FileName -ImportAction Overwrite -SynchronizeSchemaChanges Force
         }
         Invoke-PostImportCompilation -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Object $ObjToImport
     }

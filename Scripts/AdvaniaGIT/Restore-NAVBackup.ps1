@@ -10,7 +10,9 @@
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyname=$true)]
         [String]$DatabaseInstance,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [String]$DatabaseName
+        [String]$DatabaseName,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [String]$DatabasePath
     )
     $DataFilesDestinationPath = Join-Path $DatabasePath ($DatabaseName + '_data.mdf')
     $LogFilesDestinationPath = Join-Path $DatabasePath ($DatabaseName + '_log.ldf')

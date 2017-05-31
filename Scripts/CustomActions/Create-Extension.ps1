@@ -1,14 +1,14 @@
 Check-GitNotUnattached
 
 Load-AppsTools -SetupParameters $SetupParameters
-if (Test-Path $ExtensionPath) 
+if (Test-Path $SetupParameters.ExtensionPath) 
 {
-  Remove-Item -Path $ExtensionPath -Recurse -Force -ErrorAction SilentlyContinue
+  Remove-Item -Path $SetupParameters.ExtensionPath -Recurse -Force -ErrorAction SilentlyContinue
 }
-New-Item -Path $ExtensionPath -ItemType Directory | Out-Null
+New-Item -Path $SetupParameters.ExtensionPath -ItemType Directory | Out-Null
 
-$appManifastFilePath = (Join-Path $ExtensionPath "AppManifest.xml")
-$appPackageFileName = (Join-Path $ExtensionPath 'AppPackage.navx')
+$appManifastFilePath = (Join-Path $SetupParameters.ExtensionPath "AppManifest.xml")
+$appPackageFileName = (Join-Path $SetupParameters.ExtensionPath 'AppPackage.navx')
 
 $params = @{ 
   Id = $SetupParameters.appId
@@ -27,46 +27,46 @@ if ($SetupParameters.appDependencies -ne "") { $params.Dependencies = $SetupPara
 
 New-NAVAppManifest @params | New-NAVAppManifestFile -Path $appManifastFilePath -Force
 
-$ResourceFolder = (Join-Path $WorkFolder 'Resources')
+$ResourceFolder = (Join-Path $SetupParameters.WorkFolder 'Resources')
 Remove-Item -Path $ResourceFolder -Recurse -Force -ErrorAction SilentlyContinue
 New-Item $ResourceFolder -ItemType Directory | Out-Null
-if (Test-Path $DeltasPath) {
+if (Test-Path $SetupParameters.DeltasPath) {
   Write-Host "Copying Deltas..."
-  Copy-Item -Path (Join-Path $DeltasPath '*.DELTA') -Destination $ResourceFolder
+  Copy-Item -Path (Join-Path $SetupParameters.DeltasPath '*.DELTA') -Destination $ResourceFolder
 }
-if (Test-Path $PermissionSetsPath) {
+if (Test-Path $SetupParameters.PermissionSetsPath) {
   Write-Host "Copying Permission Sets..."
-  Copy-Item -Path (Join-Path $PermissionSetsPath '*.xml') -Destination $ResourceFolder
+  Copy-Item -Path (Join-Path $SetupParameters.PermissionSetsPath '*.xml') -Destination $ResourceFolder
 }
-if (Test-Path $AddinsPath) {
+if (Test-Path $SetupParameters.AddinsPath) {
   Write-Host "Copying Add-ins..."
-  Copy-Item -Path (Join-Path $AddinsPath '*.dll') -Destination $ResourceFolder
+  Copy-Item -Path (Join-Path $SetupParameters.AddinsPath '*.dll') -Destination $ResourceFolder
 }
-if (Test-Path $WebServicesPath) {
+if (Test-Path $SetupParameters.WebServicesPath) {
   Write-Host "Copying Web Services..."
-  Copy-Item -Path (Join-Path $WebServicesPath '*.xml') -Destination $ResourceFolder
+  Copy-Item -Path (Join-Path $SetupParameters.WebServicesPath '*.xml') -Destination $ResourceFolder
 }
-if (Test-Path $TableDataPath) {
+if (Test-Path $SetupParameters.TableDataPath) {
   Write-Host "Copying Table Data..."
-  Copy-Item -Path (Join-Path $TableDataPath '*.xml') -Destination $ResourceFolder
+  Copy-Item -Path (Join-Path $SetupParameters.TableDataPath '*.xml') -Destination $ResourceFolder
 }
-if (Test-Path $CustomReportLayoutsPath) {
+if (Test-Path $SetupParameters.CustomReportLayoutsPath) {
   Write-Host "Copying Custom Report Layouts..."
-  Copy-Item -Path (Join-Path $CustomReportLayoutsPath '*.xml') -Destination $ResourceFolder
+  Copy-Item -Path (Join-Path $SetupParameters.CustomReportLayoutsPath '*.xml') -Destination $ResourceFolder
 }
-if (Test-Path $LanguagePath) {
+if (Test-Path $SetupParameters.LanguagePath) {
   Write-Host "Copying Language..."
-  Copy-Item -Path (Join-Path $LanguagePath '*.flm') -Destination $ResourceFolder
+  Copy-Item -Path (Join-Path $SetupParameters.LanguagePath '*.flm') -Destination $ResourceFolder
 }
 
 if ($SetupParameters.appIcon -ne "") {  
-  $iconPath = (Get-ChildItem -Path $ImagesPath -Filter ($SetupParameters.appIcon + "*")).FullName
+  $iconPath = (Get-ChildItem -Path $SetupParameters.ImagesPath -Filter ($SetupParameters.appIcon + "*")).FullName
 } else {
   $iconPath = ""
 }
 
-if (Test-Path $ScreenshotsPath) {
-  $screenShots = (Get-ChildItem -Path $ScreenshotsPath).FullName
+if (Test-Path $SetupParameters.ScreenshotsPath) {
+  $screenShots = (Get-ChildItem -Path $SetupParameters.ScreenshotsPath).FullName
 } else {
   $screenShots = @{}
 }

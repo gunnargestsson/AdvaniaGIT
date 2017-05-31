@@ -30,7 +30,7 @@ function Invoke-NAVDatabaseConversion
         [PSObject]$BranchSettings       
     )
 
-    $logFile = (Join-Path $LogPath naverrorlog.txt)
+    $logFile = (Join-Path $SetupParameters.LogPath naverrorlog.txt)
 
     $command = 'Command=UpgradeDatabase'
     

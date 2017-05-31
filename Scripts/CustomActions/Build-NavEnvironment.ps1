@@ -7,7 +7,8 @@ if ($BranchSettings.instanceName -eq "") {
     $params = @{ 
         BackupFilePath = $BackupFilePath
         DatabaseServer = $SetupParameters.defaultDatabaseServer
-        DatabaseName = $ServerInstance }
+        DatabaseName = $ServerInstance
+        DatabasePath = $SetupParameters.DatabasePath }
     if ($SetupParameters.defaultDatabaseInstance -ne "") { $params.DatabaseInstance = $SetupParameters.defaultDatabaseInstance }
     Write-Host "Restoring database..."
     Restore-NAVBackup @params
@@ -58,10 +59,8 @@ if ($BranchSettings.instanceName -eq "") {
     Write-Host "Environment already created..."
 }
 
-
-$LicenseFilePath = Join-Path (Join-Path $SetupParameters.rootPath "License") $SetupParameters.licenseFile
-if (Test-Path $LicenseFilePath) {  
-    Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $LicenseFilePath 
+if (Test-Path $SetupParameters.LicenseFilePath) {  
+    Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFilePath 
 }
 
 if ($Setupparameters.uidOffset) {

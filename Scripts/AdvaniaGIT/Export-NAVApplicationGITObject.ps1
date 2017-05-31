@@ -26,7 +26,7 @@
     {
         $command = "$command`,Filter=`"$Filter`""
     }
-    $logFile = Join-Path $LogPath 'navexport.log'
+    $logFile = Join-Path $SetupParameters.LogPath 'navexport.log'
     try
     {
         Run-NavIdeCommand -Command $command `

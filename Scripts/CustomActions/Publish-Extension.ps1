@@ -2,9 +2,9 @@ Load-InstanceAdminTools -SetupParameters $SetupParameters
 Load-AppsManagementTools  -SetupParameters $SetupParameters
 $DefaultInstance = Get-DefaultInstanceName -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 
-$appPackageFileName = (Join-Path $ExtensionPath 'AppPackage.navx')
-Copy-Item -Path $appPackageFileName -Destination $LogPath
-$installationPackage = (Join-Path $LogPath 'AppPackage.navx')
+$appPackageFileName = (Join-Path $SetupParameters.ExtensionPath 'AppPackage.navx')
+Copy-Item -Path $appPackageFileName -Destination $SetupParameters.LogPath
+$installationPackage = (Join-Path $SetupParameters.LogPath 'AppPackage.navx')
 
 Write-Host "$($SetupParameters.appName) is being published to server instance $DefaultInstance"
 

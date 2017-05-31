@@ -7,7 +7,7 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$BranchSettings
     )
-    $PermissionSets = Get-ChildItem -Path $PermissionSetsPath -ErrorAction SilentlyContinue
+    $PermissionSets = Get-ChildItem -Path $SetupParameters.PermissionSetsPath -ErrorAction SilentlyContinue
     foreach ($PermissionSet in $PermissionSets) {
         [xml]$Xml = Get-Content $PermissionSet.FullName
         Write-Host "Importing Permission Set $($PermissionSet.FullName)"

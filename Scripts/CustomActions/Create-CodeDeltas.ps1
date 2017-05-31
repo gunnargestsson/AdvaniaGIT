@@ -1,9 +1,9 @@
 Load-ModelTools -SetupParameters $SetupParameters
-$SourceFileName = (Join-Path $WorkFolder 'Source.txt')
-$SourceFolderName = (Join-Path $WorkFolder 'Srcs')
-$ModifiedFileName = (Join-Path $WorkFolder 'Modified.txt')
-$ModifiedFolderName = (Join-Path $WorkFolder 'Mods')
-$DeltaFolder = (Join-Path $WorkFolder 'Deltas')
+$SourceFileName = (Join-Path $SetupParameters.WorkFolder 'Source.txt')
+$SourceFolderName = (Join-Path $SetupParameters.WorkFolder 'Srcs')
+$ModifiedFileName = (Join-Path $SetupParameters.WorkFolder 'Modified.txt')
+$ModifiedFolderName = (Join-Path $SetupParameters.WorkFolder 'Mods')
+$DeltaFolder = (Join-Path $SetupParameters.WorkFolder 'Deltas')
 
 if (Test-Path $DeltaFolder)
 {

@@ -18,9 +18,9 @@ function Update-NAVTxtFromApplication
         [string]$ObjectsPath
     )
     Write-Host -Object 'Exporting all files...'
-    Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path (Join-Path -Path $LogPath 'all.txt') -Filter 'Compiled=0|1' 
-    Split-NAVApplicationObjectFile -Source (Join-Path -Path $LogPath 'all.txt') -Destination $ObjectsPath -Force
-    Remove-Item (Join-Path -Path $LogPath 'all.txt')
+    Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path (Join-Path -Path $SetupParameters.LogPath 'all.txt') -Filter 'Compiled=0|1' 
+    Split-NAVApplicationObjectFile -Source (Join-Path -Path $SetupParameters.LogPath 'all.txt') -Destination $ObjectsPath -Force
+    Remove-Item (Join-Path -Path $SetupParameters.LogPath 'all.txt')
     Write-Host -Object ''
     Write-Host -Object 'Exported all files...'
 

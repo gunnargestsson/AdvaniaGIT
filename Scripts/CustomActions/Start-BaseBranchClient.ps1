@@ -3,7 +3,7 @@ $BaseBranchSettings = Get-BranchSettings -SetupParameters $BaseSetupParameters
 Check-NAVServiceRunning -SetupParameters $BaseSetupParameters -BranchSettings $BaseBranchSettings
 
 [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:APPDATA ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))
-$clientSettingsPath = (Join-Path $LogPath 'ClientUserSettings.config')
+$clientSettingsPath = (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
 $clientexe = (Join-Path $SetupParameters.navIdePath 'Microsoft.Dynamics.Nav.Client.exe')
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $env:COMPUTERNAME
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesPort' -NewValue $BaseBranchSettings.clientServicesPort

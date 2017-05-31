@@ -1,11 +1,11 @@
 Check-GitNotUnattached
 
 Load-ModelTools -SetupParameters $SetupParameters
-$ObjectFileName = (Join-Path $workFolder 'Target.txt')
+$ObjectFileName = (Join-Path $SetupParameters.workFolder 'Target.txt')
 
 if (Test-Path $ObjectFileName)
 {
-    Split-NAVApplicationObjectFile -Source $ObjectFileName -Destination $ObjectsPath -Force
+    Split-NAVApplicationObjectFile -Source $ObjectFileName -Destination $SetupParameters.ObjectsPath -Force
 }
 else
 {

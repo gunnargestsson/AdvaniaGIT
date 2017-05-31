@@ -1,4 +1,4 @@
-$allObjects = Get-Item -Path (Join-Path (Join-Path $SetupParameters.Repository $SetupParameters.objectsPath) "*.TXT")
+$allObjects = Get-Item -Path (Join-Path $SetupParameters.objectsPath "*.TXT")
 foreach ($object in $allObjects) {
     Write-Verbose "Handling object $object.BasicName"
     $objectData = (Get-Content -Path $object.FullName -Encoding Oem) -split "`r`n"

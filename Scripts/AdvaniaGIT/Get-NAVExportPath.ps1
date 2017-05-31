@@ -14,7 +14,7 @@
     if ($StoreAllObjects.ToUpper() -eq "TRUE" -or $StoreAllObjects -eq $true) {
         return $Repository        
     } else {
-        return $workFolder
+        return $WorkFolder
     }
 
 }

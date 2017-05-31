@@ -5,7 +5,7 @@ if ($SetupParameters.patchNoFunction -ne "") {
 }
 
 $finsqlexe = (Join-Path $SetupParameters.navIdePath 'finsql.exe')
-$IdFile = Join-Path $LogPath "finsqlsettings.zup"
+$IdFile = Join-Path $SetupParameters.LogPath "finsqlsettings.zup"
 $params="database=`"$($BranchSettings.databaseName)`",servername=`"$(Get-DatabaseServer -BranchSettings $BranchSettings)`",ID=`"$($IdFile)`""
 
 Write-Host "Running: `"$finsqlexe`" $params" -ForegroundColor Green

@@ -8,9 +8,9 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$BranchSettings
     )
-    $TempBackupFilePath = (Join-Path $LogPath "NAVBackup.bak")
+    $TempBackupFilePath = (Join-Path $SetupParameters.LogPath "NAVBackup.bak")
     $Backups = @()
-    $Backups += (Get-ChildItem -Path $BackupPath -File).Name
+    $Backups += (Get-ChildItem -Path $SetupParameters.BackupPath -File).Name
     if ($SetupParameters.ftpServer -ne "") {
         $Backups += Get-FtpDirectory -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -Directory "$($SetupParameters.navRelease)/"
     }
@@ -23,8 +23,8 @@
         "$($SetupParameters.navRelease)/$($SetupParameters.navSolution).bak")
     foreach ($FilePattern in $FilePatterns) {
         if ($Backups -imatch $FilePattern ) {
-            if (Test-Path (Join-Path $BackupPath $FilePattern)) {
-                Copy-Item -Path (Join-Path $BackupPath $FilePattern) -Destination $TempBackupFilePath -Force
+            if (Test-Path (Join-Path $SetupParameters.BackupPath $FilePattern)) {
+                Copy-Item -Path (Join-Path $SetupParameters.BackupPath $FilePattern) -Destination $TempBackupFilePath -Force
             } else {
                 Get-FtpFile `
                     -Server $SetupParameters.ftpServer `
@@ -39,6 +39,6 @@
     if (Test-Path $TempBackupFilePath) {
         return $TempBackupFilePath
     } else {
-        Write-Error "No backup found for $($SetupParameters.projectName)" -ErrorAction Stop
+        Show-Error -ErrorMessage "No backup found for $($SetupParameters.projectName)"
     }
 }

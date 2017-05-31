@@ -28,7 +28,7 @@ Write-Host Creating reverse deltas in your work folder...
 $buildSource = Join-Path $PSScriptRoot 'Create-ReverseDeltas.ps1'
 . $buildSource -Repository $Repository | Out-Null
 
-$SourceFolder = (Join-Path $workFolder 'Deltas')
+$SourceFolder = (Join-Path $SetupParameters.workFolder 'Deltas')
 $TargetFolder = $DeltasPath
 
 if (Test-Path $TargetFolder) 
@@ -39,7 +39,7 @@ New-Item -Path $TargetFolder -ItemType Directory | Out-Null
 Write-Host Saving new deltas $TargetFileName
 Copy-Item -Path (Join-Path $SourceFolder '*.*') -Destination $TargetFolder
 
-$SourceFolder = (Join-Path $workFolder 'ReverseDeltas')
+$SourceFolder = (Join-Path $SetupParameters.workFolder 'ReverseDeltas')
 $TargetFolder = $ReverseDeltasPath 
 
 if (Test-Path $TargetFolder) 
