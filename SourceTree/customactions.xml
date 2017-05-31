@@ -101,7 +101,7 @@
   <CustomAction>
     <Caption>Show Automated Test Results</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Save-TestResults.ps1" $false</Parameters>
+    <Parameters>"$REPO" "Save-TestResultsCsv.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
   </CustomAction>
