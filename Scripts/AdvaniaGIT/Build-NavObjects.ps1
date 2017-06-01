@@ -3,8 +3,6 @@ function Build-NAVObjects
     param
     (
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-    [String]$Repository,
-    [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
     [PSObject]$SetupParameters,
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
     [PSObject]$BranchSettings,    
@@ -27,11 +25,11 @@ function Build-NAVObjects
 
     Write-Host Get objects from $SetupParameters.baseBranch
     $result = git.exe checkout --force $SetupParameters.baseBranch --quiet 
-    $BaseSetupParameters = Get-Content (Join-Path $Repository $($SetupParameters.setupPath)) | Out-String | ConvertFrom-Json
+    $BaseSetupParameters = Get-Content $SetupParameters.setupPath | Out-String | ConvertFrom-Json
     if ($BaseSetupParameters.storeAllObjects -eq "false" -or $BaseSetupParameters.storeAllObjects -eq $false) {
         Split-NAVApplicationObjectFile -Source (Get-BaseObjectsPath -SetupParameters $BaseSetupParameters) -Destination (Join-Path $MergeFolder 'Base') -Force
     } else {
-        Copy-Item -Path (Join-Path (Join-Path $Repository $($SetupParameters.objectsPath)) '*.txt') -Destination (Join-Path $MergeFolder 'Base') -Force
+        Copy-Item -Path (Join-Path $SetupParameters.objectsPath '*.txt') -Destination (Join-Path $MergeFolder 'Base') -Force
     }
     $DeltaFolderIndexNo = 10000
     if ($SetupParameters.deltaBranchList) {
@@ -43,7 +41,7 @@ function Build-NAVObjects
           $result = git.exe checkout --force $deltaBranch --quiet 
           $branchFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $deltaBranch))
           New-Item $branchFolder -ItemType Directory | Out-Null
-          Copy-Item -Path (Join-Path (Join-Path $Repository $($SetupParameters.deltasPath)) '*.delta') -Destination $branchFolder -Force 
+          Copy-Item -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchFolder -Force 
           $DeltaFolderIndexNo += 10
         }
     }
@@ -53,12 +51,12 @@ function Build-NAVObjects
 
     if ($IncludeCustomization -eq $true)
     {
-        if (Test-Path (Join-Path $Repository $($SetupParameters.deltasPath))) 
+        if (Test-Path $SetupParameters.deltasPath) 
         {
           Write-Host Get deltas from $sourcebranch  
           $branchFolder = (Join-Path $MergeFolder $sourcebranch)
           New-Item $branchFolder -ItemType Directory | Out-Null
-          Copy-Item -Path (Join-Path (Join-Path $Repository $($SetupParameters.deltasPath)) '*.delta') -Destination $branchFolder -Force -Recurse
+          Copy-Item -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchFolder -Force -Recurse
         }
     }
 
