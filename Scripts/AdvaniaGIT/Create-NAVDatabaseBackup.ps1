@@ -20,8 +20,9 @@
     if ($env:bamboo_build_working_directory) {
         $BackupFilePath = Join-Path $env:bamboo_build_working_directory "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak"
     } else {
-        $BackupFilePath = Join-Path $BackupPath "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak"
+        $BackupFilePath = Join-Path $SetupParameters.BackupPath "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak"
     }
+    if (!(Test-Path $TempBackupFilePath)) { Show-ErrorMessage -ErrorMessage "Failed to create backup" }
     Move-Item -Path $TempBackupFilePath -Destination $BackupFilePath -Force
     Write-Host "Backup $BackupFilePath Created..."
 }

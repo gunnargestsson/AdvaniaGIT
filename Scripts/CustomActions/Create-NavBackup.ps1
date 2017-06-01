@@ -1,3 +1,4 @@
+Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 Write-Host "Requesting new NAV backup for branch" $SetupParameters.Branchame
 Write-Host "Removing NAV License from database before backing up..."
 Remove-NAVDatabaseLicense -BranchSettings $BranchSettings

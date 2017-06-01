@@ -5,5 +5,5 @@
         [String]$InstanceName
     )
     $ProviderName = (Get-Service | Where-Object -Property Name -Match $InstanceName).Name
-    Get-WinEvent -ProviderName $ProviderName -MaxEvents 20 | Format-Table -Property LevelDisplayName, Message -Wrap -AutoSize
+    Get-WinEvent -ProviderName $ProviderName -MaxEvents 30 | Format-Table -Property LevelDisplayName, Message -Wrap -AutoSize
 }
