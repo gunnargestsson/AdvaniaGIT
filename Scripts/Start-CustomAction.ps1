@@ -41,7 +41,7 @@ else
     $SetupParameters = Get-GITSettings
 
     # Get Repository Settings
-    $SetupParameters = (Combine-Settings $SetupParameters (Get-Content (Join-Path $Repository $SetupParameters.setupPath) | Out-String | ConvertFrom-Json))
+    $SetupParameters = (Combine-Settings (Get-Content (Join-Path $Repository $SetupParameters.setupPath) | Out-String | ConvertFrom-Json) $SetupParameters)
     $SetupParameters | add-member "Repository" $Repository
     $GitBranchName = (git.exe rev-parse --abbrev-ref HEAD)
     $SetupParameters | add-member "Branchname" $GitBranchName 
@@ -59,27 +59,31 @@ else
     $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     
     # Set Global Parameters
-    $WorkFolder = $SetupParameters.workFolder
-    $SetupPath = (Join-Path $Repository $SetupParameters.setupPath)
-    $ObjectsPath = (Join-Path $Repository $SetupParameters.objectsPath)
-    $DeltasPath = (Join-Path $Repository $SetupParameters.deltasPath)
-    $ReverseDeltasPath = (Join-Path $Repository $SetupParameters.reverseDeltasPath)
-    $ExtensionPath = (Join-Path $Repository $SetupParameters.extensionPath)
-    $ImagesPath = (Join-Path $Repository $SetupParameters.imagesPath)
-    $ScreenshotsPath = (Join-Path $Repository $SetupParameters.screenshotsPath)
-    $PermissionSetsPath = (Join-Path $Repository $SetupParameters.permissionSetsPath)
-    $AddinsPath = (Join-Path $Repository $SetupParameters.addinsPath)
-    $LanguagePath = (Join-Path $Repository $SetupParameters.languagePath)
-    $TableDataPath = (Join-Path $Repository $SetupParameters.tableDataPath)
-    $CustomReportLayoutsPath = (Join-Path $Repository $SetupParameters.customReportLayoutsPath)
-    $WebServicesPath = (Join-Path $Repository $SetupParameters.webServicesPath)
-    $BinaryPath = (Join-Path $Repository $SetupParameters.binaryPath)
-    $LogPath = (Join-Path $SetupParameters.rootPath "Log\$([GUID]::NewGuid().GUID)")
-    $BackupPath = (Join-Path $SetupParameters.rootPath "Backup")
-    $DatabasePath = (Join-Path $SetupParameters.rootPath "Database")
-    
-    New-Item -Path (Split-Path -Path $LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-    New-Item -Path $LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+    $Globals = New-Object -TypeName PSObject
+    $Globals | Add-Member WorkFolder $SetupParameters.workFolder
+    $Globals | Add-Member SetupPath  (Join-Path $Repository $SetupParameters.setupPath)
+    $Globals | Add-Member ObjectsPath  (Join-Path $Repository $SetupParameters.objectsPath)
+    $Globals | Add-Member DeltasPath  (Join-Path $Repository $SetupParameters.deltasPath)
+    $Globals | Add-Member ReverseDeltasPath  (Join-Path $Repository $SetupParameters.reverseDeltasPath)
+    $Globals | Add-Member ExtensionPath  (Join-Path $Repository $SetupParameters.extensionPath)
+    $Globals | Add-Member ImagesPath  (Join-Path $Repository $SetupParameters.imagesPath)
+    $Globals | Add-Member ScreenshotsPath  (Join-Path $Repository $SetupParameters.screenshotsPath)
+    $Globals | Add-Member PermissionSetsPath  (Join-Path $Repository $SetupParameters.permissionSetsPath)
+    $Globals | Add-Member AddinsPath  (Join-Path $Repository $SetupParameters.addinsPath)
+    $Globals | Add-Member LanguagePath  (Join-Path $Repository $SetupParameters.languagePath)
+    $Globals | Add-Member TableDataPath  (Join-Path $Repository $SetupParameters.tableDataPath)
+    $Globals | Add-Member CustomReportLayoutsPath  (Join-Path $Repository $SetupParameters.customReportLayoutsPath)
+    $Globals | Add-Member WebServicesPath  (Join-Path $Repository $SetupParameters.webServicesPath)
+    $Globals | Add-Member BinaryPath  (Join-Path $Repository $SetupParameters.binaryPath)
+    $Globals | Add-Member LogPath  (Join-Path $SetupParameters.rootPath "Log\$([GUID]::NewGuid().GUID)")
+    $Globals | Add-Member BackupPath  (Join-Path $SetupParameters.rootPath "Backup")
+    $Globals | Add-Member DatabasePath  (Join-Path $SetupParameters.rootPath "Database")
+    $Globals | Add-Member LicensePath  (Join-Path $SetupParameters.rootPath "License")
+    $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile)
+    $SetupParameters = Combine-Settings $Globals $SetupParameters
+
+    New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+    New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     if ($IsInAdminMode) { For ($i=0; $i -le 10; $i++) { Write-Host "" }}
     
     # Start the script
