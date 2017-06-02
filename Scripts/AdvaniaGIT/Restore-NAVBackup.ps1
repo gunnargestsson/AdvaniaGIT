@@ -28,4 +28,19 @@
         Timeout = 360 }
     if ($DatabaseInstance -ne "") { $params.DatabaseInstance = $DatabaseInstance }
     New-NAVDatabase @params -Force | Out-Null
+    
+    if ($DatabaseInstance -gt "") {
+        $Server = $DatabaseServer + "\\" + $DatabaseInstance
+    } else {
+        $Server = $DatabaseServer
+    }
+
+    # Change Database Recovery Model to Simple and shrink the log file
+    $command = "ALTER DATABASE [$DatabaseName] SET RECOVERY SIMPLE WITH NO_WAIT"
+    $result = Get-SQLCommandResult -Server $Server -Database $DatabaseName -Command $command
+    $command = "SELECT Name FROM sys.database_files WHERE type = 1"
+    $logfileName = Get-SQLCommandResult -Server $Server -Database $DatabaseName -Command $command
+    $command = "DBCC SHRINKFILE(N'$($logfileName.Name)', 1)"
+    $result = Get-SQLCommandResult -Server $Server -Database $DatabaseName -Command $command
+
 }
