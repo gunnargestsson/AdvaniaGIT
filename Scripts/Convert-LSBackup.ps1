@@ -9,7 +9,7 @@ Get-Module -Name AdvaniaGIT | Remove-Module
 Get-Module -Name Cloud.Ready.Software.NAV | Remove-Module
 Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
 
-if (!(Test-Path -Path $backupFilePath)) { Write-Error "File not found!" -ErrorAction Stop }
+if (!(Test-Path -Path $backupFilePath)) { Show-Error -ErrorMessage "File not found!" }
 $backupFilePath = Get-Item $backupFilePath
 $dbName = $backupFilePath.BaseName
 $navDataFileName = (Join-Path $Env:TEMP "$dbName.navdata")
