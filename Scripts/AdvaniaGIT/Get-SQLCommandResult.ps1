@@ -19,13 +19,23 @@ function Get-SQLCommandResult
         # Force return of dataset even when doesn't begin with SELECT
         [Parameter(ValueFromPipelinebyPropertyName = $true)]
         [Switch]
-        $ForceDataset
+        $ForceDataset,
+        [Parameter(ValueFromPipelinebyPropertyName = $true)]
+        [String]
+        $Username,
+        [Parameter(ValueFromPipelinebyPropertyName = $true)]
+        [String]
+        $Password
       
     )
     Write-Verbose -Message "Executing SQL command: $Command"
 
     $SqlConnection = New-Object -TypeName System.Data.SqlClient.SqlConnection
-    $SqlConnection.ConnectionString = "Server = $Server; Database = $Database; Integrated Security = True"
+    if ($Username) {
+        $SqlConnection.ConnectionString = "Server = $Server; Database = $Database; Integrated Security = False;User ID= $Username;Password=$Password"
+    } else {
+        $SqlConnection.ConnectionString = "Server = $Server; Database = $Database; Integrated Security = True"
+    }
  
     $SqlCmd = New-Object -TypeName System.Data.SqlClient.SqlCommand
     $SqlCmd.CommandText = $Command

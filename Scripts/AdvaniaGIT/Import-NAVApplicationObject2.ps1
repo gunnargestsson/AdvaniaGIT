@@ -95,7 +95,7 @@ function Import-NAVApplicationObject2
 
                 try
                 {
-                    Run-NavIdeCommand -Command $command `
+                    Run-NavIdeCommandWithParam -Command $command `
                                       -DatabaseServer $DatabaseServer `
                                       -DatabaseName $DatabaseName `
                                       -NTAuthentication:($Username -eq $null) `

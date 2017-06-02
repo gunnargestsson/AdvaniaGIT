@@ -15,6 +15,10 @@
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [string] $ErrText,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [string] $Username,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [string] $Password,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [Switch]$StopOnError
     )
     
@@ -24,6 +28,10 @@
     Remove-Item $logFile -ErrorAction Ignore
 
     $databaseInfo = "ServerName=`"$(Get-DatabaseServer -BranchSettings $BranchSettings)`",Database=`"$($BranchSettings.databaseName)`""
+    if ($Username)
+    {
+        $databaseInfo = "ntauthentication=No`,username=`"$Username`",password=`"$Password`",$databaseInfo"
+    }
     $NavIde = (Join-Path $SetupParameters.navIdePath 'finsql.exe')
     if ($BranchSettings.instanceName -eq "") {
         $finSqlCommand = "& `"$NavIde`" --% $Command`,LogFile=`"$LogFile`"`,${databaseInfo}`,id=${IdFile} | Out-Null" 
