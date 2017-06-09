@@ -1,4 +1,4 @@
-﻿Function Copy-EnvVariableToRemote
+Function Copy-EnvVariableToRemote
 {
     [CmdletBinding()]
     param (

@@ -266,4 +266,11 @@
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
   </CustomAction>
+  <CustomAction>
+    <Caption>Upgrade NAV Installation</Caption>
+    <Target>StartPowerShell.cmd</Target>
+    <Parameters>"$REPO" "Upgrade-NAVInstallation.ps1" $true $true</Parameters>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>false</ShowFullOutput>
+  </CustomAction>
 </ArrayOfCustomAction>
