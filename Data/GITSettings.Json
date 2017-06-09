@@ -2,7 +2,6 @@
   "ftpServer": "ftp://ftp02.hysing.is/",
   "ftpUser": "ftp_sourcetree",
   "ftpPass": "******",
-  "navZipFiles" : "C:\\AdvaniaGIT\\Download\\NAV %navRelease%",
   "workFolder": "C:\\AdvaniaGIT\\Workspace",
   "patchNoFunction": "Display-PatchDayNo",
   "defaultDatabaseServer": "localhost",
