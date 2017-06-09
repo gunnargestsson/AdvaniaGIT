@@ -40,6 +40,6 @@ Set-Content $startPowerShell $CmdFile -Exclude ASCII
 # Copy CustomActions.xml to SourceTree Settings
 if (Test-Path (Join-Path $env:LOCALAPPDATA 'Atlassian\SourceTree')) {
   if (Test-Path (Join-Path (Split-Path $PSScriptRoot -Parent) 'SourceTree\customactions.xml')) {
-    Copy-Item -Path (Join-Path (Split-Path $PSScriptRoot -Parent) 'SourceTree\CustomActions.xml') -Destination (Join-Path $env:LOCALAPPDATA 'Atlassian\SourceTree') -Force
+    Copy-Item -Path (Join-Path (Split-Path $PSScriptRoot -Parent) 'SourceTree\customactions.xml') -Destination (Join-Path $env:LOCALAPPDATA 'Atlassian\SourceTree') -Force
   }
 }
