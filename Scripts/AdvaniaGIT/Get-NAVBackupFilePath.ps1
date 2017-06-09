@@ -39,6 +39,6 @@
     if (Test-Path $TempBackupFilePath) {
         return $TempBackupFilePath
     } else {
-        Show-Error -ErrorMessage "No backup found for $($SetupParameters.projectName)"
+        Show-Error -SetupParameters $SetupParameters -ErrorMessage "No backup found for $($SetupParameters.projectName)"
     }
 }

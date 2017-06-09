@@ -8,11 +8,7 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$BranchSettings
     )
-    if ($env:bamboo_build_working_directory) {
-        $BackupFilePath = Join-Path $env:bamboo_build_working_directory "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak"
-    } else {
-        $BackupFilePath = Join-Path $SetupParameters.BackupPath "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak"
-    }
+    $BackupFilePath = Join-Path $SetupParameters.BackupPath "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak"
     if (Test-Path $BackupFilePath) { 
         $FtpFileName = ((Get-Item -Path $BackupFilePath).Name).Replace("-","/")
         Put-FtpFile  `

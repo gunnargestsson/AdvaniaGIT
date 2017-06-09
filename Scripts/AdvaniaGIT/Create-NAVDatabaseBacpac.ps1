@@ -30,13 +30,9 @@
     $command = "ALTER ROLE [db_owner] ADD MEMBER [NT AUTHORITY\NETWORK SERVICE]"
     $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
 
-    if ($env:bamboo_build_working_directory) {
-        $BackupFilePath = Join-Path $env:bamboo_build_working_directory "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bacpac"
-    } else {
-        $BackupFilePath = Join-Path $SetupParameters.BackupPath "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bacpac"
-    }
+    $BackupFilePath = Join-Path $SetupParameters.BackupPath "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bacpac"
     
-    if (!(Test-Path $TempBackupFilePath)) { Show-ErrorMessage -ErrorMessage "Failed to create bacpac" }
+    if (!(Test-Path $TempBackupFilePath)) { Show-ErrorMessage -SetupParameters $SetupParameters -ErrorMessage "Failed to create bacpac" }
     Move-Item -Path $TempBackupFilePath -Destination $BackupFilePath -Force
     Write-Host "Backup $BackupFilePath Created..."
 }

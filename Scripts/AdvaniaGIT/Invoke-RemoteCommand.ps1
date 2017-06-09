@@ -1,21 +1,3 @@
-ï»¿Function Copy-EnvVariableToRemote
-{
-    [CmdletBinding()]
-    param (
-        $Session,
-        $Variables
-    )
-    $copyvar  = {
-        param ($variables)
-        foreach ($var in $variables) {
-        if (-not (Test-Path env:$($var.Name))) {
-            Set-Item  -Path env:$($var.Name) -Value $($var.Value)
-        }
-        }
-       }
-    Invoke-Command -Session $session -ScriptBlock  $copyvar -ArgumentList @(,$Variables)
-}
-
 Function Invoke-RemoteCommand
 {
     [CmdletBinding()]
@@ -39,7 +21,7 @@ Function Invoke-RemoteCommand
         Write-Verbose 'Creating session to remote computer'
         $WinRmUri = New-Object Uri("https://$($VMURL):5986") -ErrorAction Stop
         $WinRmCredential = New-Object System.Management.Automation.PSCredential($VMAdminUserName, (ConvertTo-SecureString $VMAdminPassword -AsPlainText -Force))
-        $WinRmOption = New-PSSessionOption â€“SkipCACheck â€“SkipCNCheck â€“SkipRevocationCheck
+        $WinRmOption = New-PSSessionOption –SkipCACheck –SkipCNCheck –SkipRevocationCheck
         $PSSession = New-PSSession -ConnectionUri $WinRMUri -Credential $WinRmCredential -SessionOption $WinRmOption
         Write-Verbose 'Copying env: variables to remote (only adding new)'
         Copy-EnvVariableToRemote -Session $PSSession -Variables (Get-ChildItem env:)

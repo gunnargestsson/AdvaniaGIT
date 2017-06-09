@@ -27,7 +27,7 @@
             Write-Host "Updating new objects..."
             $MergeResult = Update-NAVApplicationObject -Target $BaseObjectsPath -Delta $SetupParameters.DeltasPath -Result $ObjectsPath -DateTimeProperty FromModified -ModifiedProperty FromModified -VersionListProperty FromModified -DocumentationConflict ModifiedFirst 
             $MergeResult | Where-Object -Property UpdateResult -EQ 'Conflict' | Out-Host
-            Get-ChildItem -Path (Join-Path $SetupParameters.DeltasPath '*.delta')| foreach { if (Test-Path (Join-Path $ObjectsPath ($_.BaseName + '.txt'))) {Set-NAVApplicationObjectProperty -Target (Join-Path $ObjectsPath ($_.BaseName + '.txt')) -VersionListProperty (Merge-NAVVersionListString -source (Get-NAVApplicationObjectProperty -Source (Join-Path $ObjectsPath ($_.BaseName + '.txt'))).VersionList -target (Get-NAVApplicationObjectProperty -Source (Join-Path $DeltasPath $_.Name)).VersionList -SourceFirst)}}
+            Get-ChildItem -Path (Join-Path $SetupParameters.DeltasPath '*.delta')| foreach { if (Test-Path (Join-Path $ObjectsPath ($_.BaseName + '.txt'))) {Set-NAVApplicationObjectProperty -Target (Join-Path $ObjectsPath ($_.BaseName + '.txt')) -VersionListProperty (Merge-NAVVersionListString -source (Get-NAVApplicationObjectProperty -Source (Join-Path $ObjectsPath ($_.BaseName + '.txt'))).VersionList -target (Get-NAVApplicationObjectProperty -Source (Join-Path $SetupParameters.DeltasPath $_.Name)).VersionList -SourceFirst)}}
         } else {
             Write-Host Splitting $BaseObjects objects...
             Split-NAVApplicationObjectFile -Source $BaseObjectsFile -Destination $ObjectsPath -Force

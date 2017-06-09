@@ -17,12 +17,8 @@
         $command = "BACKUP DATABASE [$($BranchSettings.databaseName)] TO DISK = N'$TempBackupFilePath' WITH COPY_ONLY, COMPRESSION, NOFORMAT, INIT, NAME = N'NAVAPP_QA_MT-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
     }
     Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database master -Command $command | Out-Null
-    if ($env:bamboo_build_working_directory) {
-        $BackupFilePath = Join-Path $env:bamboo_build_working_directory "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak"
-    } else {
-        $BackupFilePath = Join-Path $SetupParameters.BackupPath "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak"
-    }
-    if (!(Test-Path $TempBackupFilePath)) { Show-ErrorMessage -ErrorMessage "Failed to create backup" }
+    $BackupFilePath = Join-Path $SetupParameters.BackupPath "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak"
+    if (!(Test-Path $TempBackupFilePath)) { Show-ErrorMessage -SetupParameters $SetupParameters -ErrorMessage "Failed to create backup" }
     Move-Item -Path $TempBackupFilePath -Destination $BackupFilePath -Force
     Write-Host "Backup $BackupFilePath Created..."
 }

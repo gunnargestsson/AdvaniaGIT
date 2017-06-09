@@ -2,9 +2,11 @@
 {
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$SetupParameters,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$ErrorMessage
     )
-    if ($env:bamboo_build_working_directory) {
+    if ($SetupParameters.ExecutingBuild) {
         Write-Error $ErrorMessage -ErrorAction Stop 
     } else {
         $a = new-object -comobject wscript.shell

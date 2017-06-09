@@ -7,7 +7,11 @@
 [Parameter(Mandatory=$False, ValueFromPipelineByPropertyName=$true)]
 [String]$InAdminMode='$false',
 [Parameter(Mandatory=$False, ValueFromPipelineByPropertyName=$true)]
-[String]$Wait='$false'
+[String]$Wait='$false',
+[Parameter(Mandatory=$False, ValueFromPipelineByPropertyName=$true)]
+[String]$BuildFolder,
+[Parameter(Mandatory=$False, ValueFromPipelineByPropertyName=$true)]
+[HashTable]$BuildSettings
 )
 # Get the ID and security principal of the current user account
 $myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()
@@ -60,7 +64,17 @@ else
     
     # Set Global Parameters
     $Globals = New-Object -TypeName PSObject
-    $Globals | Add-Member WorkFolder $SetupParameters.workFolder
+    if ($BuildFolder) {
+        $Globals | Add-Member WorkFolder $BuildFolder
+        $Globals | Add-Member BackupPath  $BuildFolder
+        $Globals | Add-Member DatabasePath  $BuildFolder
+        $Globals | Add-Member ExecutingBuild $true
+    } else {
+        $Globals | Add-Member WorkFolder $SetupParameters.workFolder
+        $Globals | Add-Member BackupPath  (Join-Path $SetupParameters.rootPath "Backup")
+        $Globals | Add-Member DatabasePath  (Join-Path $SetupParameters.rootPath "Database")
+        $Globals | Add-Member ExecutingBuild $false
+    }    
     $Globals | Add-Member SetupPath  (Join-Path $Repository $SetupParameters.setupPath)
     $Globals | Add-Member ObjectsPath  (Join-Path $Repository $SetupParameters.objectsPath)
     $Globals | Add-Member DeltasPath  (Join-Path $Repository $SetupParameters.deltasPath)
@@ -76,8 +90,6 @@ else
     $Globals | Add-Member WebServicesPath  (Join-Path $Repository $SetupParameters.webServicesPath)
     $Globals | Add-Member BinaryPath  (Join-Path $Repository $SetupParameters.binaryPath)
     $Globals | Add-Member LogPath  (Join-Path $SetupParameters.rootPath "Log\$([GUID]::NewGuid().GUID)")
-    $Globals | Add-Member BackupPath  (Join-Path $SetupParameters.rootPath "Backup")
-    $Globals | Add-Member DatabasePath  (Join-Path $SetupParameters.rootPath "Database")
     $Globals | Add-Member LicensePath  (Join-Path $SetupParameters.rootPath "License")
     $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile)
     $SetupParameters = Combine-Settings $Globals $SetupParameters

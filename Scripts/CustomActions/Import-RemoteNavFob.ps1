@@ -9,7 +9,7 @@ try {
 
     Remove-Item $LocalArchive -Force -ErrorAction SilentlyContinue| Out-Null
     Write-Verbose 'Compressing the file'
-    [io.compression.zipfile]::CreateFromDirectory($env:bamboo_working_directory,$LocalArchive)
+    [io.compression.zipfile]::CreateFromDirectory($SetupParameters.WorkFolder,$LocalArchive)
 
     $session = Invoke-RemoteCommand -Command 'import-module "C:\Program Files\Microsoft Dynamics NAV\100\Service\Microsoft.Dynamics.Nav.Management.dll"' -Verbose 
     Write-Verbose 'Copying file to remote machine'

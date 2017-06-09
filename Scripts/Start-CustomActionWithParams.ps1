@@ -54,7 +54,9 @@
 [String]$instanceName,
 [String]$databaseInstance,
 [String]$databaseServer,
-[String]$clientServicesPort
+[String]$clientServicesPort,
+[String]$BuildFolder,
+[HashTable]$BuildSettings
 )
 
 # Import all needed modules
@@ -62,7 +64,19 @@ Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
     
 # Set Environment Settings
 $SetupParameters = New-Object -TypeName PSObject
-$SetupParameters | add-member "WorkFolder" $WorkFolder
+
+if ($BuildFolder) {
+    $SetupParameters | Add-Member WorkFolder $BuildFolder
+    $SetupParameters | Add-Member BackupPath  $BuildFolder
+    $SetupParameters | Add-Member DatabasePath  $BuildFolder
+    $SetupParameters | Add-Member ExecutingBuild $true
+} else {
+    $SetupParameters | Add-Member WorkFolder $WorkFolder
+    $SetupParameters | add-member "BackupPath" $BackupPath
+    $SetupParameters | add-member "DatabasePath" $DatabasePath
+    $SetupParameters | Add-Member ExecutingBuild $false
+}    
+
 $SetupParameters | add-member "SetupPath" $SetupPath
 $SetupParameters | add-member "ObjectsPath" $ObjectsPath
 $SetupParameters | add-member "DeltasPath" $DeltasPath
@@ -78,8 +92,6 @@ $SetupParameters | add-member "CustomReportLayoutsPath" $CustomReportLayoutsPath
 $SetupParameters | add-member "WebServicesPath" $WebServicesPath
 $SetupParameters | add-member "BinaryPath" $BinaryPath
 $SetupParameters | add-member "LogPath" $LogPath
-$SetupParameters | add-member "BackupPath" $BackupPath
-$SetupParameters | add-member "DatabasePath" $DatabasePath
 $SetupParameters | add-member "LicensePath" $LicensePath
 $SetupParameters | add-member "LicenseFilePath" $LicenseFilePath
 $SetupParameters | add-member "baseBranch" $baseBranch

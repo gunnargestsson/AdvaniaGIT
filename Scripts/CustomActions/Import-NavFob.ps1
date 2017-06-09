@@ -15,7 +15,7 @@ param(
 
         # Specifies the Microsoft Dynamics NAV Server instance that is being used.The default value is DynamicsNAV80.
         [Parameter(Mandatory=$false)]
-        [string] $NavServerInstance = 'DynamicsNAV80',
+        [string] $NavServerInstance = 'DynamicsNAV100',
 
         # Specifies the port on the Microsoft Dynamics NAV Server server that the Microsoft Dynamics NAV Windows PowerShell cmdlets access. The default value is 7045.
         [Parameter(Mandatory=$false)]
@@ -23,11 +23,7 @@ param(
         [string] $Path=''
 )
 if (-not $Path) {
-    if ($env:bamboo_build_working_directory) {
-        $ObjectFileName = (Join-Path $env:bamboo_build_working_directory 'AllObjects.fob')
-    } else {
-        $ObjectFileName = (Join-Path $SetupParameters.workFolder 'AllObjects.fob')
-    }
+    $ObjectFileName = (Join-Path $SetupParameters.workFolder 'AllObjects.fob')
 } else {
     $ObjectFileName = $Path
 }
