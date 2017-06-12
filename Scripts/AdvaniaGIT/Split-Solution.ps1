@@ -9,7 +9,7 @@
     [String]$ObjectsFilePath
     )
     if ($SetupParameters.storeAllObjects -eq "false" -or $SetupParameters.storeAllObjects -eq $false) {
-        $BaseObjectsFile = Get-BaseObjectsPath -SetupParameters $SetupParameters
+        $BaseObjectsFile = Get-NAVSourceFilePath -SetupParameters $SetupParameters
         Test-Path $BaseObjectsFile -ErrorAction Stop | Out-Null
         $DeltaFolder = Join-Path $SetupParameters.workFolder $SetupParameters.deltasPath
         $ReverseDeltaFolder = Join-Path $SetupParameters.workFolder $SetupParameters.reverseDeltasPath

@@ -2,7 +2,7 @@ Load-InstanceAdminTools -SetupParameters $Setupparameters
 
 if ($BranchSettings.instanceName -eq "") {
     Write-Host "Requesting new NAV Environment for branch" $Setupparameters.Branchname
-    $BackupFilePath = Get-NAVBackupFilePath -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    $BackupFilePath = Get-NAVBackupFilePath -SetupParameters $SetupParameters
     $ServerInstance = "NAV" + $($Setupparameters.navRelease) + "DEV" + (Get-EnvironmentNo)
     $params = @{ 
         BackupFilePath = $BackupFilePath

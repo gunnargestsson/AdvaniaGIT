@@ -11,7 +11,7 @@
         [String]$ObjectsPath
     )
     if ($($SetupParameters.storeAllObjects).ToUpper() -eq "FALSE" -or $($SetupParameters.storeAllObjects) -eq $false) {
-        $BaseObjectsFile = Get-BaseObjectsPath -SetupParameters $SetupParameters
+        $BaseObjectsFile = Get-NAVSourceFilePath -SetupParameters $SetupParameters
         $BaseObjects = (Split-Path -Path $BaseObjectsFile -Leaf)
         Write-Host "Building solution objects..."
         $ObjectsPath = (Join-Path $SetupParameters.workFolder 'Objects')

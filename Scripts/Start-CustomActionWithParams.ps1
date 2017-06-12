@@ -21,8 +21,10 @@
 [String]$LogPath=$Env:TEMP,
 [String]$BackupPath,
 [String]$DatabasePath,
+[String]$SourcePath,
 [String]$LicensePath,
 [String]$LicenseFilePath,
+[String]$DownloadPath,
 [String]$baseBranch,
 [String]$branchId,
 [String]$Branchname,
@@ -69,69 +71,72 @@ if ($BuildFolder) {
     $SetupParameters | Add-Member WorkFolder $BuildFolder
     $SetupParameters | Add-Member BackupPath  $BuildFolder
     $SetupParameters | Add-Member DatabasePath  $BuildFolder
+    $SetupParameters | Add-Member SourcePath  $BuildFolder
     $SetupParameters | Add-Member ExecutingBuild $true
 } else {
-    $SetupParameters | Add-Member WorkFolder $WorkFolder
-    $SetupParameters | add-member "BackupPath" $BackupPath
-    $SetupParameters | add-member "DatabasePath" $DatabasePath
-    $SetupParameters | Add-Member ExecutingBuild $false
+    $SetupParameters | Add-Member "WorkFolder" $WorkFolder
+    $SetupParameters | Add-Member "BackupPath" $BackupPath
+    $SetupParameters | Add-Member "DatabasePath" $DatabasePath
+    $SetupParameters | Add-Member "SourcePath" $SourcePath
+    $SetupParameters | Add-Member "ExecutingBuild" $false
 }    
 
-$SetupParameters | add-member "SetupPath" $SetupPath
-$SetupParameters | add-member "ObjectsPath" $ObjectsPath
-$SetupParameters | add-member "DeltasPath" $DeltasPath
-$SetupParameters | add-member "ReverseDeltasPath" $ReverseDeltasPath
-$SetupParameters | add-member "ExtensionPath" $ExtensionPath
-$SetupParameters | add-member "ImagesPath" $ImagesPath
-$SetupParameters | add-member "ScreenshotsPath" $ScreenshotsPath
-$SetupParameters | add-member "PermissionSetsPath" $PermissionSetsPath
-$SetupParameters | add-member "AddinsPath" $AddinsPath
-$SetupParameters | add-member "LanguagePath" $LanguagePath
-$SetupParameters | add-member "TableDataPath" $TableDataPath
-$SetupParameters | add-member "CustomReportLayoutsPath" $CustomReportLayoutsPath
-$SetupParameters | add-member "WebServicesPath" $WebServicesPath
-$SetupParameters | add-member "BinaryPath" $BinaryPath
-$SetupParameters | add-member "LogPath" $LogPath
-$SetupParameters | add-member "LicensePath" $LicensePath
-$SetupParameters | add-member "LicenseFilePath" $LicenseFilePath
-$SetupParameters | add-member "baseBranch" $baseBranch
-$SetupParameters | add-member "branchId" $branchId
-$SetupParameters | add-member "Branchname" $Branchname
-$SetupParameters | add-member "codeSigningCertificate" $codeSigningCertificate
-$SetupParameters | add-member "codeSigningCertificatePassword" $codeSigningCertificatePassword
-$SetupParameters | add-member "datetimeCulture" $datetimeCulture
-$SetupParameters | add-member "defaultDatabaseInstance" $defaultDatabaseInstance
-$SetupParameters | add-member "defaultDatabaseServer" $defaultDatabaseServer
-$SetupParameters | add-member "ftpPass" $ftpPass
-$SetupParameters | add-member "ftpServer" $ftpServer
-$SetupParameters | add-member "ftpUser" $ftpUser
-$SetupParameters | add-member "licenseFile" $licenseFile
-$SetupParameters | add-member "mainVersion" $mainVersion
-$SetupParameters | add-member "navIdePath" $navIdePath
-$SetupParameters | add-member "navRelease" $navRelease
-$SetupParameters | add-member "navServicePath" $navServicePath
-$SetupParameters | add-member "navSolution" $navSolution
-$SetupParameters | add-member "navVersion" $navVersion
-$SetupParameters | add-member "objectProperties" $objectProperties
-$SetupParameters | add-member "objectsNotToDelete" $objectsNotToDelete
-$SetupParameters | add-member "patchNoFunction" $patchNoFunction
-$SetupParameters | add-member "projectName" $projectName
-$SetupParameters | add-member "Repository" $Repository
-$SetupParameters | add-member "rootPath" $rootPath
-$SetupParameters | add-member "sigToolExecutable" $sigToolExecutable
-$SetupParameters | add-member "storeAllObjects" $storeAllObjects
-$SetupParameters | add-member "uidOffset" $uidOffset
+$SetupParameters | Add-Member "SetupPath" $SetupPath
+$SetupParameters | Add-Member "ObjectsPath" $ObjectsPath
+$SetupParameters | Add-Member "DeltasPath" $DeltasPath
+$SetupParameters | Add-Member "ReverseDeltasPath" $ReverseDeltasPath
+$SetupParameters | Add-Member "ExtensionPath" $ExtensionPath
+$SetupParameters | Add-Member "ImagesPath" $ImagesPath
+$SetupParameters | Add-Member "ScreenshotsPath" $ScreenshotsPath
+$SetupParameters | Add-Member "PermissionSetsPath" $PermissionSetsPath
+$SetupParameters | Add-Member "AddinsPath" $AddinsPath
+$SetupParameters | Add-Member "LanguagePath" $LanguagePath
+$SetupParameters | Add-Member "TableDataPath" $TableDataPath
+$SetupParameters | Add-Member "CustomReportLayoutsPath" $CustomReportLayoutsPath
+$SetupParameters | Add-Member "WebServicesPath" $WebServicesPath
+$SetupParameters | Add-Member "BinaryPath" $BinaryPath
+$SetupParameters | Add-Member "LogPath" $LogPath
+$SetupParameters | Add-Member "LicensePath" $LicensePath
+$SetupParameters | Add-Member "LicenseFilePath" $LicenseFilePath
+$SetupParameters | Add-Member "DownloadPath"  $DownloadPath
+$SetupParameters | Add-Member "baseBranch" $baseBranch
+$SetupParameters | Add-Member "branchId" $branchId
+$SetupParameters | Add-Member "Branchname" $Branchname
+$SetupParameters | Add-Member "codeSigningCertificate" $codeSigningCertificate
+$SetupParameters | Add-Member "codeSigningCertificatePassword" $codeSigningCertificatePassword
+$SetupParameters | Add-Member "datetimeCulture" $datetimeCulture
+$SetupParameters | Add-Member "defaultDatabaseInstance" $defaultDatabaseInstance
+$SetupParameters | Add-Member "defaultDatabaseServer" $defaultDatabaseServer
+$SetupParameters | Add-Member "ftpPass" $ftpPass
+$SetupParameters | Add-Member "ftpServer" $ftpServer
+$SetupParameters | Add-Member "ftpUser" $ftpUser
+$SetupParameters | Add-Member "licenseFile" $licenseFile
+$SetupParameters | Add-Member "mainVersion" $mainVersion
+$SetupParameters | Add-Member "navIdePath" $navIdePath
+$SetupParameters | Add-Member "navRelease" $navRelease
+$SetupParameters | Add-Member "navServicePath" $navServicePath
+$SetupParameters | Add-Member "navSolution" $navSolution
+$SetupParameters | Add-Member "navVersion" $navVersion
+$SetupParameters | Add-Member "objectProperties" $objectProperties
+$SetupParameters | Add-Member "objectsNotToDelete" $objectsNotToDelete
+$SetupParameters | Add-Member "patchNoFunction" $patchNoFunction
+$SetupParameters | Add-Member "projectName" $projectName
+$SetupParameters | Add-Member "Repository" $Repository
+$SetupParameters | Add-Member "rootPath" $rootPath
+$SetupParameters | Add-Member "sigToolExecutable" $sigToolExecutable
+$SetupParameters | Add-Member "storeAllObjects" $storeAllObjects
+$SetupParameters | Add-Member "uidOffset" $uidOffset
 
 # Set Branch Settings
 $BranchSettings = New-Object PSObject
-$BranchSettings | add-member "databaseName" $databaseName
-$BranchSettings | add-member "branchId" $branchId
-$BranchSettings | add-member "managementServicesPort" $managementServicesPort
-$BranchSettings | add-member "projectName" $projectName
-$BranchSettings | add-member "instanceName" $instanceName
-$BranchSettings | add-member "databaseInstance" $databaseInstance
-$BranchSettings | add-member "databaseServer" $databaseServer
-$BranchSettings | add-member "clientServicesPort" $clientServicesPort
+$BranchSettings | Add-Member "databaseName" $databaseName
+$BranchSettings | Add-Member "branchId" $branchId
+$BranchSettings | Add-Member "managementServicesPort" $managementServicesPort
+$BranchSettings | Add-Member "projectName" $projectName
+$BranchSettings | Add-Member "instanceName" $instanceName
+$BranchSettings | Add-Member "databaseInstance" $databaseInstance
+$BranchSettings | Add-Member "databaseServer" $databaseServer
+$BranchSettings | Add-Member "clientServicesPort" $clientServicesPort
    
 New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
 New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null

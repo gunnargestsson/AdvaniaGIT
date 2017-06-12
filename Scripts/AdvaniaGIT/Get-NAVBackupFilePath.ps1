@@ -4,9 +4,7 @@
     param
     (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$SetupParameters,
-        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$BranchSettings
+        [PSObject]$SetupParameters
     )
     $TempBackupFilePath = (Join-Path $SetupParameters.LogPath "NAVBackup.bak")
     $Backups = @()

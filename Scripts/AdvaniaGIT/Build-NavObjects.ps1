@@ -27,7 +27,7 @@ function Build-NAVObjects
     $result = git.exe checkout --force $SetupParameters.baseBranch --quiet 
     $BaseSetupParameters = Get-Content $SetupParameters.setupPath | Out-String | ConvertFrom-Json
     if ($BaseSetupParameters.storeAllObjects -eq "false" -or $BaseSetupParameters.storeAllObjects -eq $false) {
-        Split-NAVApplicationObjectFile -Source (Get-BaseObjectsPath -SetupParameters $BaseSetupParameters) -Destination (Join-Path $MergeFolder 'Base') -Force
+        Split-NAVApplicationObjectFile -Source (Get-NAVSourceFilePath -SetupParameters $BaseSetupParameters) -Destination (Join-Path $MergeFolder 'Base') -Force
     } else {
         Copy-Item -Path (Join-Path $SetupParameters.objectsPath '*.txt') -Destination (Join-Path $MergeFolder 'Base') -Force
     }

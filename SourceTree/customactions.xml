@@ -273,4 +273,11 @@
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
   </CustomAction>
+  <CustomAction>
+    <Caption>Update GIT from latest CU</Caption>
+    <Target>StartPowerShell.cmd</Target>
+    <Parameters>"$REPO" "Update-NAVSource.ps1" $true $true</Parameters>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>false</ShowFullOutput>
+  </CustomAction>
 </ArrayOfCustomAction>

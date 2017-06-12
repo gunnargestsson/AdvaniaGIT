@@ -46,18 +46,18 @@ else
 
     # Get Repository Settings
     $SetupParameters = (Combine-Settings (Get-Content (Join-Path $Repository $SetupParameters.setupPath) | Out-String | ConvertFrom-Json) $SetupParameters)
-    $SetupParameters | add-member "Repository" $Repository
+    $SetupParameters | Add-Member "Repository" $Repository
     $GitBranchName = (git.exe rev-parse --abbrev-ref HEAD)
-    $SetupParameters | add-member "Branchname" $GitBranchName 
+    $SetupParameters | Add-Member "Branchname" $GitBranchName 
     
     # Find NAV major version based on the repository NAV version - client
     $mainVersion =  ($SetupParameters.navVersion).Split('.').GetValue(0) + ($SetupParameters.navVersion).Split('.').GetValue(1)
-    $SetupParameters | add-member "mainVersion" $mainVersion
-    $SetupParameters | add-member "navIdePath" (Get-NAVClientPath -SetupParameters $SetupParameters)
-    $SetupParameters | add-member "navServicePath" (Get-NAVServicePath -SetupParameters $SetupParameters)
+    $SetupParameters | Add-Member "mainVersion" $mainVersion
+    $SetupParameters | Add-Member "navIdePath" (Get-NAVClientPath -SetupParameters $SetupParameters)
+    $SetupParameters | Add-Member "navServicePath" (Get-NAVServicePath -SetupParameters $SetupParameters)
     
     # Find NAV Release
-    $SetupParameters | add-member "navRelease" (Get-NAVRelease -mainVersion $mainVersion)
+    $SetupParameters | Add-Member "navRelease" (Get-NAVRelease -mainVersion $mainVersion)
 
     # Find Branch Settings
     $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
@@ -68,11 +68,13 @@ else
         $Globals | Add-Member WorkFolder $BuildFolder
         $Globals | Add-Member BackupPath  $BuildFolder
         $Globals | Add-Member DatabasePath  $BuildFolder
+        $Globals | Add-Member SourcePath  $BuildFolder
         $Globals | Add-Member ExecutingBuild $true
     } else {
         $Globals | Add-Member WorkFolder $SetupParameters.workFolder
         $Globals | Add-Member BackupPath  (Join-Path $SetupParameters.rootPath "Backup")
         $Globals | Add-Member DatabasePath  (Join-Path $SetupParameters.rootPath "Database")
+        $Globals | Add-Member SourcePath  (Join-Path $SetupParameters.rootPath "Source")
         $Globals | Add-Member ExecutingBuild $false
     }    
     $Globals | Add-Member SetupPath  (Join-Path $Repository $SetupParameters.setupPath)
@@ -92,6 +94,7 @@ else
     $Globals | Add-Member LogPath  (Join-Path $SetupParameters.rootPath "Log\$([GUID]::NewGuid().GUID)")
     $Globals | Add-Member LicensePath  (Join-Path $SetupParameters.rootPath "License")
     $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile)
+    $Globals | Add-Member DownloadPath  (Join-Path $SetupParameters.rootPath "Download")
     $SetupParameters = Combine-Settings $Globals $SetupParameters
 
     New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
