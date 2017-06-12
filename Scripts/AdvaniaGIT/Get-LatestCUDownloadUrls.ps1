@@ -21,7 +21,7 @@
         Write-Verbose "Found article $($item.title)..."
 
         if ($item.title -like $SearchString) {
-            Invoke-WebRequest -Uri $item.link -OutFile $ArticlePath -ErrorAction Stop
+            Download-File -Url $item.link -FileName $ArticlePath
             $Article = Get-Content $ArticlePath | Out-String
             $endPos = 1
             while ($Article.IndexOf("http://download.microsoft.com/download", $endPos) -gt 0) {
