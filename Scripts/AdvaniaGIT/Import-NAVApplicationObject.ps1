@@ -25,12 +25,15 @@
     )
 
     $command = "Command=ImportObjects`,ImportAction=$ImportAction`,SynchronizeSchemaChanges=$SynchronizeSchemaChanges`,File=`"$Path`"" 
-    $logFile = Join-Path $SetupParameters.LogPath 'navexport.log'
+    $logFile = Join-Path $SetupParameters.LogPath 'navimport.log'
     try
     {
         Run-NavIdeCommand -Command $command `
           -SetupParameters $SetupParameters `
           -BranchSettings $BranchSettings `
+          -NTAuthentication:($Username -eq $null) `
+          -Username $Username `
+          -Password $Password `
           -LogFile $logFile `
           -ErrText "Error while exporting $Filter" `
           -Verbose:$VerbosePreference `

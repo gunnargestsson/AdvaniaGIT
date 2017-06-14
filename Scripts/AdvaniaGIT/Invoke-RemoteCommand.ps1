@@ -11,14 +11,8 @@ Function Invoke-RemoteCommand
         [Switch]$CloseSession
     )
 
-    if ($env:bamboo_AzureVM_ServerName -and (-not $PSSession)) {
-        Write-Host 'Taking parameters from bamboo'
-        $VMAdminUserName = $env:bamboo_AzureVM_Username
-        $VMAdminPassword = $env:bamboo_AzureVM_Password
-        $VMURL = $env:bamboo_AzureVM_ServerName
-    }
     if (-not $PSSession) {
-        Write-Verbose 'Creating session to remote computer'
+        Write-Verbose "Creating session to remote computer $VMURL"
         $WinRmUri = New-Object Uri("https://$($VMURL):5986") -ErrorAction Stop
         $WinRmCredential = New-Object System.Management.Automation.PSCredential($VMAdminUserName, (ConvertTo-SecureString $VMAdminPassword -AsPlainText -Force))
         $WinRmOption = New-PSSessionOption –SkipCACheck –SkipCNCheck –SkipRevocationCheck
