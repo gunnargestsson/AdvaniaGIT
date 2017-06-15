@@ -9,6 +9,9 @@ if ($zipFileVersion -gt $navInstallationVersion) {
     # Stop NAV Servers
     & (Join-path $PSScriptRoot 'Stop-NAVServices.ps1')
 
+    Update-RegistryStringValue -RegistryPath "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\DynamicsNav$($SetupParameters.navRelease)" -Name "InstallSource" -Value $installWorkFolder
+    Update-RegistryStringValue -RegistryPath "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\DynamicsNav$($SetupParameters.navRelease)" -Name "SourcePath" -Value $installWorkFolder
+
     Write-Host "Starting $($SetupParameters.navRelease) update by running Setup.exe /quiet /repair ..."
     Start-Process -FilePath (Join-Path $installWorkFolder "Setup.exe") -ArgumentList "/quiet /repair" -Wait
     Write-Host "$($SetupParameters.navRelease) updated!"
