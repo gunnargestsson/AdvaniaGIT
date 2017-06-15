@@ -1,6 +1,7 @@
 ﻿# Download Latest CU
 $Language = Get-InstalledLanguage -SetupParameters $SetupParameters
-$installWorkFolder = Join-Path $SetupParameters.rootPath "$($SetupParameters.navRelease)$($Language)"
+$installWorkFolder = Join-Path $SetupParameters.rootPath "$($SetupParameters.navRelease)$($Language)\"
+
 Download-LatestNAVUpdate -SetupParameters $SetupParameters -InstallWorkFolder $InstallWorkFolder -Language $Language
 
 $zipFileVersion = (Get-ItemProperty -Path (Join-Path $installWorkFolder "ServiceTier\\program files\\Microsoft Dynamics NAV\\$($SetupParameters.mainVersion)\\Service\\Microsoft.Dynamics.Nav.Server.exe")).VersionInfo.FileVersion
@@ -9,9 +10,7 @@ if ($zipFileVersion -gt $navInstallationVersion) {
     # Stop NAV Servers
     & (Join-path $PSScriptRoot 'Stop-NAVServices.ps1')
 
-    Update-RegistryStringValue -RegistryPath "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\DynamicsNav$($SetupParameters.mainVersion)" -Name "InstallSource" -Value $installWorkFolder
-    Update-RegistryStringValue -RegistryPath "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\DynamicsNav$($SetupParameters.mainVersion)" -Name "SourcePath" -Value $installWorkFolder
-
+    Update-CurrentInstallSource -MainVersion $SetupParameters.mainVersion -NewInstallSource $installWorkFolder
     Write-Host "Starting $($SetupParameters.navRelease) update by running Setup.exe /quiet /repair ..."
     Start-Process -FilePath (Join-Path $installWorkFolder "Setup.exe") -ArgumentList "/quiet /repair" -Wait
     Write-Host "$($SetupParameters.navRelease) updated!"
