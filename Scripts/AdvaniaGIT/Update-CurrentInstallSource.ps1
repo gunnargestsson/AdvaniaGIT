@@ -18,14 +18,14 @@
             $_.PSObject.Properties |
             foreach {                
                 if ($_.Value -like "$($CurrentInstallSource)*") {
-                    Write-Verbose "Path:`t`t"$CurrentUserShellFoldersPath
-                    Write-Verbose "SID:`t`t"$SID
-                    Write-Verbose "Name:`t`t"$_.Name
-                    Write-Verbose "Old Value:`t"$_.Value
+                    Write-Verbose -Message "Path:`t`t"$CurrentUserShellFoldersPath
+                    Write-Verbose -Message "SID:`t`t"$SID
+                    Write-Verbose -Message "Name:`t`t"$_.Name
+                    Write-Verbose -Message "Old Value:`t"$_.Value
                     $newValue = ($_.Value).Replace($CurrentInstallSource,$NewInstallSource)
-                    Write-Verbose "New Value:`t"$newValue
+                    Write-Verbose -Message "New Value:`t"$newValue
                     Set-ItemProperty -Path $CurrentUserShellFoldersPath -Name $_.Name -Value $newValue
-                    Write-Verbose "================================================================"
+                    Write-Verbose -Message "================================================================"
                 }
             }
         }

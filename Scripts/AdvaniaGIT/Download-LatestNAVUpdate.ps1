@@ -33,7 +33,7 @@
 
             Write-Host "Extracting $zipFile to $($InstallWorkFolder)..."        
             Remove-Item -Path $installWorkFolder -Force -Recurse -ErrorAction SilentlyContinue
-            New-Item -Path $installWorkFolder -ItemType Directory | Out-Null
+            New-Item -Path $installWorkFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
             [System.IO.Compression.ZipFile]::ExtractToDirectory($zipFile, $installWorkFolder)
             $tempZipFile = Get-ChildItem -Path $installWorkFolder -Filter "NAV*.zip"
             [System.IO.Compression.ZipFile]::ExtractToDirectory($tempZipFile.FullName, $installWorkFolder) 
