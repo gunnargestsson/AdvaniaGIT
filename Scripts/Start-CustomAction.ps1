@@ -47,9 +47,15 @@ else
     # Get Repository Settings
     $SetupParameters = (Combine-Settings (Get-Content (Join-Path $Repository $SetupParameters.setupPath) | Out-String | ConvertFrom-Json) $SetupParameters)
     $SetupParameters | Add-Member "Repository" $Repository
-    $GitBranchName = (git.exe rev-parse --abbrev-ref HEAD)
-    $SetupParameters | Add-Member "Branchname" $GitBranchName 
-    
+    try {
+        $GitBranchName = (git.exe rev-parse --abbrev-ref HEAD)
+        $SetupParameters | Add-Member "Branchname" $GitBranchName 
+    } 
+    catch
+    {
+        $SetupParameters | Add-Member "Branchname" ""
+    }
+        
     # Find NAV major version based on the repository NAV version - client
     $mainVersion =  ($SetupParameters.navVersion).Split('.').GetValue(0) + ($SetupParameters.navVersion).Split('.').GetValue(1)
     $SetupParameters | Add-Member "mainVersion" $mainVersion
