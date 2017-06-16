@@ -11,6 +11,7 @@ if ($zipFileVersion -gt $navInstallationVersion) {
     & (Join-path $PSScriptRoot 'Stop-NAVServices.ps1')
 
     Update-CurrentInstallSource -MainVersion $SetupParameters.mainVersion -NewInstallSource $installWorkFolder
+    Update-NAVInstallationParameter -MainVersion $SetupParameters.mainVersion -ParameterId SQLReplaceDb -NewValue DROPDATABASE
     Write-Host "Starting $($SetupParameters.navRelease) update by running Setup.exe /quiet /repair ..."
     Start-Process -FilePath (Join-Path $installWorkFolder "Setup.exe") -ArgumentList "/quiet /repair" -Wait
     Write-Host "$($SetupParameters.navRelease) updated!"
