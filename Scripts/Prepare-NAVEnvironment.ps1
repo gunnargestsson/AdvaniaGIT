@@ -15,17 +15,17 @@ foreach ($version in $versions) {
         #Import-Module (Join-Path $setupParameters.navServicePath 'Microsoft.Dynamics.Nav.Management.dll') -Scope Local
 
         #Stop NAV Server Instances
-        Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Name.Substring(0,$version.Name.Length - 1) + ".*.0") | Set-NAVServerInstance -Stop
+        Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Name.Substring(0,$version.Name.Length - 1) + "*.0") | Set-NAVServerInstance -Stop
         
         #Update Startup Type and Dependency on NAV Server Instances
-        Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Name.Substring(0,$version.Name.Length - 1) + ".*.0") | foreach {
+        Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Name.Substring(0,$version.Name.Length - 1) + "*.0") | foreach {
             $branchSetting = @{instanceName = $($_.ServerInstance)}
             Enable-TcpPortSharingForNAVService -branchSetting $branchSetting
             Enable-DelayedStartForNAVService -branchSetting $branchSetting
         }
         #Start NAV Server Instances
         Write-Host "Starting Services for version $($version.Name.Substring(0,$version.Name.Length - 1))"
-        Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Name.Substring(0,$version.Name.Length - 1) + ".*.0") | Set-NAVServerInstance -Start
+        Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Name.Substring(0,$version.Name.Length - 1) + "*.0") | Set-NAVServerInstance -Start
 
         UnLoad-InstanceAdminTools
 
