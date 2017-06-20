@@ -1,5 +1,4 @@
-﻿
-function Get-BranchSettings
+﻿function Get-BranchSettings
 {
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
