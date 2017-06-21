@@ -16,7 +16,7 @@
             "CustomerRegistrationNo" = ""; 
             "CustomerName" = ""; 
             "CustomerEMail" = "";
-            "PasswordPid" = "";
+            "PasswordId" = "";
             "LicenseNo" = "";
             "ClickOnceUrl" = ""}
         $allTenantSettings.Tenants += $TenantSettings

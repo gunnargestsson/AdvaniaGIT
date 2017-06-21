@@ -1,7 +1,11 @@
 ﻿Function New-UserDialog {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [String]$Message
+        [String]$Message,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$User,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Switch]$UserNameNotEditable
     )
     PROCESS
     {
@@ -10,23 +14,24 @@
 
         $objForm = New-Object System.Windows.Forms.Form 
         $objForm.Text = $Message
-        $objForm.Size = New-Object System.Drawing.Size(300,300) 
+        $objForm.Size = New-Object System.Drawing.Size(300,400) 
         $objForm.StartPosition = "CenterScreen"
 
         $OKButton = New-Object System.Windows.Forms.Button
-        $OKButton.Location = New-Object System.Drawing.Size(75,230)
+        $OKButton.Location = New-Object System.Drawing.Size(75,330)
         $OKButton.Size = New-Object System.Drawing.Size(75,23)
         $OKButton.Text = "OK"
         $OKButton.Add_Click({
             $Script:UserName=$objUserNameTextBox.Text;
             $Script:FullName=$objFullNameTextBox.Text;
             $Script:AuthenticationEMail=$objAuthenticationEMailTextBox.Text;
-            $Script:LicenseType=$objLicenseTypeComboBox.SelectedText;
+            $Script:LicenseType=$objLicenseTypeComboBox.SelectedItem;
+            $Script:State=$objStateComboBox.SelectedItem;
             $objForm.Close()})
         $objForm.Controls.Add($OKButton)
 
         $CancelButton = New-Object System.Windows.Forms.Button
-        $CancelButton.Location = New-Object System.Drawing.Size(150,230)
+        $CancelButton.Location = New-Object System.Drawing.Size(150,330)
         $CancelButton.Size = New-Object System.Drawing.Size(75,23)
         $CancelButton.Text = "Cancel"
         $CancelButton.Add_Click({$objForm.Close()})
@@ -36,11 +41,14 @@
         $objUserNameLabel.Location = New-Object System.Drawing.Size(10,20) 
         $objUserNameLabel.Size = New-Object System.Drawing.Size(280,20) 
         $objUserNameLabel.Text = "User Name:"
+         
         $objForm.Controls.Add($objUserNameLabel) 
 
         $objUserNameTextBox = New-Object System.Windows.Forms.TextBox 
         $objUserNameTextBox.Location = New-Object System.Drawing.Size(10,40) 
         $objUserNameTextBox.Size = New-Object System.Drawing.Size(260,20) 
+        $objUserNameTextBox.Text = $User.UserName
+        if ($UserNameNotEditable) { $objUserNameTextBox.Enabled = $false }
         $objForm.Controls.Add($objUserNameTextBox)
         
         $objFullNameLabel = New-Object System.Windows.Forms.Label
@@ -52,6 +60,7 @@
         $objFullNameTextBox = New-Object System.Windows.Forms.TextBox 
         $objFullNameTextBox.Location = New-Object System.Drawing.Size(10,90) 
         $objFullNameTextBox.Size = New-Object System.Drawing.Size(260,20) 
+        $objFullNameTextBox.Text = $User.FullName
         $objForm.Controls.Add($objFullNameTextBox)  
 
         $objAuthenticationEMailLabel = New-Object System.Windows.Forms.Label
@@ -63,6 +72,7 @@
         $objAuthenticationEMailTextBox = New-Object System.Windows.Forms.TextBox 
         $objAuthenticationEMailTextBox.Location = New-Object System.Drawing.Size(10,140) 
         $objAuthenticationEMailTextBox.Size = New-Object System.Drawing.Size(260,20) 
+        $objAuthenticationEMailTextBox.Text = $User.AuthenticationEMail
         $objForm.Controls.Add($objAuthenticationEMailTextBox)  
 
         $objLicenseTypeLabel = New-Object System.Windows.Forms.Label
@@ -74,10 +84,24 @@
         $objLicenseTypeComboBox = New-Object System.Windows.Forms.ComboBox
         $objLicenseTypeComboBox.Location = New-Object System.Drawing.Size(10,190) 
         $objLicenseTypeComboBox.Size = New-Object System.Drawing.Size(260,20) 
-        $Item = $objLicenseTypeComboBox.Items.Add("Full User")
-        $Item = $objLicenseTypeComboBox.Items.Add("Limited User")
-        $objLicenseTypeComboBox.SelectedText = "Full User"
+        $Item = $objLicenseTypeComboBox.Items.Add("Full")
+        $Item = $objLicenseTypeComboBox.Items.Add("Limited")
+        $objLicenseTypeComboBox.SelectedItem = $User.LicenseType
         $objForm.Controls.Add($objLicenseTypeComboBox)  
+
+        $objStateLabel = New-Object System.Windows.Forms.Label
+        $objStateLabel.Location = New-Object System.Drawing.Size(10,220) 
+        $objStateLabel.Size = New-Object System.Drawing.Size(280,20) 
+        $objStateLabel.Text = "State:"
+        $objForm.Controls.Add($objStateLabel) 
+
+        $objStateComboBox = New-Object System.Windows.Forms.ComboBox
+        $objStateComboBox.Location = New-Object System.Drawing.Size(10,240) 
+        $objStateComboBox.Size = New-Object System.Drawing.Size(260,20) 
+        $Item = $objStateComboBox.Items.Add("Enabled")
+        $Item = $objStateComboBox.Items.Add("Disabled")
+        $objStateComboBox.SelectedItem = $User.State
+        $objForm.Controls.Add($objStateComboBox)  
 
         $objForm.KeyPreview = $True
         $objForm.Add_KeyDown({if ($_.KeyCode -eq "Enter") 
@@ -85,7 +109,8 @@
                 $Script:UserName=$objUserNameTextBox.Text;
                 $Script:FullName=$objFullNameTextBox.Text;
                 $Script:AuthenticationEMail=$objAuthenticationEMailTextBox.Text;
-                $Script:LicenseType=$objLicenseTypeComboBox.SelectedText;
+                $Script:LicenseType=$objLicenseTypeComboBox.SelectedItem;
+                $Script:State=$objStateComboBox.SelectedItem;
                 $objForm.Close()}}})
         $objForm.Add_KeyDown({if ($_.KeyCode -eq "Escape") 
             {$objForm.Close()}})
@@ -100,8 +125,7 @@
         $NewUser | Add-Member -MemberType NoteProperty -Name FullName -Value $FullName
         $NewUser | Add-Member -MemberType NoteProperty -Name AuthenticationEMail -Value $AuthenticationEMail
         $NewUser | Add-Member -MemberType NoteProperty -Name LicenseType -Value $LicenseType
+        $NewUser | Add-Member -MemberType NoteProperty -Name State -Value $State
         return $NewUser
     }
 }
-
-New-UserDialog -Message "New User for ADIS"

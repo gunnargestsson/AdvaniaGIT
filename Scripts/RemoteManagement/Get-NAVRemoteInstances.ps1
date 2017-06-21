@@ -18,9 +18,11 @@
                         $instanceConfig | Add-Member -MemberType NoteProperty -Name $($Child.Attributes["key"].Value) -Value $($Child.Attributes["value"].Value)
                     }
                     $TenantList = @()
-                    foreach ($Tenant in (Get-NAVTenant -ServerInstance $Instance.ServerInstance)) {
-                        $TenantSettings = Get-TenantSettings -Tenant $Tenant
-                        $TenantList += Combine-Settings $TenantSettings $Tenant 
+                    if ($Instance.State -eq "Running") {
+                        foreach ($Tenant in (Get-NAVTenant -ServerInstance $Instance.ServerInstance)) {
+                            $TenantSettings = Get-TenantSettings -Tenant $Tenant
+                            $TenantList += Combine-Settings $TenantSettings $Tenant 
+                        }
                     }
                     $instanceConfig | Add-Member -MemberType NoteProperty -Name TenantList -Value $TenantList
                     $InstanceConfigs += Combine-Settings $instanceConfig $instance

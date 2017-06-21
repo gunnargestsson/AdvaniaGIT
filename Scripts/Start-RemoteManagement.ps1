@@ -3,7 +3,6 @@ Get-Module RemoteManagement | Remove-Module
 Import-Module RemoteManagement -DisableNameChecking | Out-Null
 Get-Module AdvaniaGIT | Remove-Module
 Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
-Import-Module AzureRM
 
 $VMAdminUserName = 'navlightadmin'
 $VMAdminPassword = 'tempt-v#JZc%'

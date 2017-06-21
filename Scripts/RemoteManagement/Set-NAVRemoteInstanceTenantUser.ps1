@@ -1,23 +1,22 @@
-﻿Function New-NAVRemoteInstanceTenantUser {
+﻿Function Set-NAVRemoteInstanceTenantUser {
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.Runspaces.PSSession]$Session,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$SelectedTenant
+        [PSObject]$SelectedTenant,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$SelectedUser
     )
     PROCESS 
     {
-        $NewUser = New-UserDialog -Message "Enter details on new user." -User (New-UserObject)
-        if ($NewUser.UserName -eq "") { break }     
-        $NewPassword = Get-NewUserPassword 
+        $User = New-UserObject -UserName $SelectedUser.UserName -FullName $SelectedUser.FullName -AuthenticationEMail $SelectedUser.AuthenticationEMail -LicenseType $SelectedUser.LicenseType -State $SelectedUser.State
+        $User = New-UserDialog -Message "Enter details on user." -User $User -UserNameNotEditable
         $Result = Invoke-Command -Session $Session -ScriptBlock `
             {
                 param(
                     [String]$ServerInstance,
                     [String]$TenantId,
-                    [PSObject]$User,                    
-                    [String]$NewPassword,
-                    [Switch]$ChangePasswordAtNextLogOn)
+                    [PSObject]$User)
                 Write-Verbose "Import Module from $($SetupParameters.navServicePath)..."
                 Load-InstanceAdminTools -SetupParameters $SetupParameters
                 $params = @{ 
@@ -27,19 +26,13 @@
                     FullName = $User.FullName
                     AuthenticationEmail = $User.AuthenticationEmail
                     LicenseType = $User.LicenseType
-                    State = $User.State
-                    Password = (ConvertTo-SecureString -String $NewPassword -AsPlainText -Force) }
-                if ($ChangePasswordAtNextLogOn) { $params.ChangePasswordAtNextLogOn = $true }
-                New-NAVServerUser @params -Force
+                    State = $User.State }
+                Set-NAVServerUser @params -Force
                 UnLoad-InstanceAdminTools
             } -ArgumentList (
                 $SelectedTenant.ServerInstance, 
                 $SelectedTenant.Id, 
-                $NewUser, 
-                $NewPassword, 
-                ($RemoteConfig.NAVSuperUser.ToUpper() -eq $User.UserName))
-
-        $NewUser | Add-Member -MemberType NoteProperty -Name Password -Value $NewPassword
-        Return $NewUser
+                $User )
+        Return $User
     }    
 }

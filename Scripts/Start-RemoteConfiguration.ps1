@@ -34,7 +34,7 @@ do {
                 do {   
                     Clear-Host
                     For ($i=0; $i -le 10; $i++) { Write-Host "" }
-                    $selectedDeployment | Format-Table -Property No, Deployment, Description -AutoSize 
+                    $selectedDeployment | Format-Table -Property Deployment, Description -AutoSize 
                     $input = Read-Host "Please select action (1 = configure, 0 = exit)"
                     switch ($input) {
                         '0' { break }

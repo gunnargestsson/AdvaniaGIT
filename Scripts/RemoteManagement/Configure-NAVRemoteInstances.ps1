@@ -20,7 +20,14 @@
             default {
                 $selectedInstance = $menuItems | Where-Object -Property No -EQ $input
                 if ($selectedInstance) {
-                    Configure-NAVRemoteInstanceTenants -Credential $Credential -SelectedInstance $selectedInstance
+                    $Session = Create-NAVRemoteSession -Credential $Credential -HostName $SelectedInstance.PSComputerName
+                    if ($selectedInstance.Multitenant -eq "true") {
+                        Configure-NAVRemoteInstanceTenants -Session $Session -SelectedInstance $selectedInstance -DeploymentName $DeploymentName -Credential $Credential
+                    } else {
+                        $selectedTenant = Get-NAVRemoteInstanceDefaultTenant -SelectedInstance $selectedInstance
+                        Configure-NAVRemoteInstanceTenant -Session $Session -SelectedInstance $selectedInstance -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential
+                    }
+                    Remove-PSSession -Session $Session
                 }
             }
         }
