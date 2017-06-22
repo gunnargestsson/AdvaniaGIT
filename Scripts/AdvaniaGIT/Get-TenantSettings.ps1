@@ -18,7 +18,7 @@
             "CustomerEMail" = "";
             "PasswordId" = "";
             "LicenseNo" = "";
-            "ClickOnceUrl" = ""}
+            "ClickOnceHost" = ""}
         $allTenantSettings.Tenants += $TenantSettings
         Set-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) -Value ($allTenantSettings | ConvertTo-Json)        
     }    

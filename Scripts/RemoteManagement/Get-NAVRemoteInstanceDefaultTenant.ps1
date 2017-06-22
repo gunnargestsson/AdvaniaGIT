@@ -5,9 +5,8 @@
     )
     PROCESS 
     {    
-        
-        if ($SelectedInstance.TenantList[0]) {
-            $tenant = $SelectedInstance.TenantList[0]
+        if ($SelectedInstance.TenantList.Count -ge 1) {
+            $tenant = $SelectedInstance.TenantList | Select-Object -First 1
         } else {
             $tenant = New-Object -TypeName PSObject
             $tenant | Add-Member -MemberType NoteProperty -Name CustomerRegistrationNo -Value ""

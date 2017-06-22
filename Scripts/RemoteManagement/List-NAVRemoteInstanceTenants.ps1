@@ -11,7 +11,7 @@
         $menuItems = Load-NAVRemoteInstanceTenantsMenu -Credential $Credential -SelectedInstance $SelectedInstance
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
-        $menuItems | Format-Table -Property No, Id, DatabaseName, CustomerName, LicenseNo, PasswordPid, State -AutoSize 
+        $menuItems | Format-Table -Property No, Id, DatabaseName, CustomerName, LicenseNo, PasswordPid, ClickOnceHost, State -AutoSize 
         $input = Read-Host "Please select tenant number (0 = exit)"
         switch ($input) {
             '0' { break }
@@ -21,7 +21,7 @@
                     do {
                         Clear-Host
                         For ($i=0; $i -le 10; $i++) { Write-Host "" }
-                        $selectedTenant | Format-Table -Property No, Id, DatabaseName, CustomerName, LicenseNo, PasswordPid, State -AutoSize 
+                        $selectedTenant | Format-Table -Property Id, DatabaseName, CustomerName, LicenseNo, PasswordPid, ClickOnceHost, State -AutoSize 
                         $input = Read-Host "Please select action:`
     0 = exit, `
     1 = nav client `
@@ -42,7 +42,7 @@
 
                         }                    
                     }
-                    until ($input -iin ('0', '1', '2'))
+                    until ($input -iin ('0'))
                 }
             }
         }

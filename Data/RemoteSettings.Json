@@ -3,18 +3,21 @@
     {
       "Deployment": "NAV2016",
       "Description": "NAV 2016 Installation",
+      "ClickOnceEndpoint": "advanianav2016.westeurope.cloudapp.azure.com",
+      "ClickOnceHost": "$(ServerInstance).navleiga.is",
       "Hosts": [
         {
           "HostName": "NAV2016-01",
           "FQDN": "advanianav2016-01.westeurope.cloudapp.azure.com",
           "Roles": "Client,Web,ClickOnce",
+          "NAVDVDPath": "C:\\AdvaniaGIT\\2016IS",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
           "InstanceSettings": [
             {
-              "PublicODataBaseUrl": "https://azure2017odata.navleiga.is/$($ServerInstance)/OData",
-              "PublicSOAPBaseUrl": "https://azure2017soap.navleiga.is/$($ServerInstance)/WS",
-              "PublicWebBaseUrl": "https://azure2017.navleiga.is/$($ServerInstance)",
-              "PublicWinBaseUrl": "DynamicsNAV://azure2017.navleiga.is:7046/$($ServerInstance)",
+              "PublicODataBaseUrl": "https://azure2016odata.navleiga.is/$($ServerInstance)/OData",
+              "PublicSOAPBaseUrl": "https://azure2016soap.navleiga.is/$($ServerInstance)/WS",
+              "PublicWebBaseUrl": "https://azure2016.navleiga.is/$($ServerInstance)",
+              "PublicWinBaseUrl": "DynamicsNAV://azure2016.navleiga.is:7046/$($ServerInstance)",
               "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
               "ClientServicesCredentialType": "NavUserPassword",
               "EnableSqlConnectionEncryption": "true",
@@ -31,12 +34,13 @@
           "FQDN": "advanianav2016-02.westeurope.cloudapp.azure.com",
           "Roles": "Client,Web,ClickOnce",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
+          "NAVDVDPath": "C:\\AdvaniaGIT\\2016IS",
           "InstanceSettings": [
             {
-              "PublicODataBaseUrl": "https://azure2017odata.navleiga.is/$($ServerInstance)/OData",
-              "PublicSOAPBaseUrl": "https://azure2017soap.navleiga.is/$($ServerInstance)/WS",
-              "PublicWebBaseUrl": "https://azure2017.navleiga.is/$($ServerInstance)",
-              "PublicWinBaseUrl": "DynamicsNAV://azure2017.navleiga.is:7046/$($ServerInstance)",
+              "PublicODataBaseUrl": "https://azure2016odata.navleiga.is/$($ServerInstance)/OData",
+              "PublicSOAPBaseUrl": "https://azure2016soap.navleiga.is/$($ServerInstance)/WS",
+              "PublicWebBaseUrl": "https://azure2016.navleiga.is/$($ServerInstance)",
+              "PublicWinBaseUrl": "DynamicsNAV://azure2016.navleiga.is:7046/$($ServerInstance)",
               "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
               "ClientServicesCredentialType": "NavUserPassword",
               "EnableSqlConnectionEncryption": "true",
@@ -53,12 +57,15 @@
     {
       "Deployment": "NAV2017",
       "Description": "NAV 2017 Installation",
+      "ClickOnceEndpoint": "advanianav2017.westeurope.cloudapp.azure.com",
+      "ClickOnceHost": "$(ServerInstance).navleiga.is",
       "Hosts": [
         {
           "HostName": "NAV2017-01",
           "FQDN": "advanianav2017-01.westeurope.cloudapp.azure.com",
           "Roles": "Client,Web,ClickOnce",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
+          "NAVDVDPath": "C:\\AdvaniaGIT\\2017IS",
           "InstanceSettings": [
             {
               "PublicODataBaseUrl": "https://azure2017odata.navleiga.is/$($ServerInstance)/OData",
@@ -81,6 +88,7 @@
           "FQDN": "advanianav2017-02.westeurope.cloudapp.azure.com",
           "Roles": "Client,Web,ClickOnce",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
+          "NAVDVDPath": "C:\\AdvaniaGIT\\2017IS",
           "InstanceSettings": [
             {
               "PublicODataBaseUrl": "https://azure2017odata.navleiga.is/$($ServerInstance)/OData",
@@ -103,12 +111,15 @@
     {
       "Deployment": "LSNAV2016",
       "Description": "NAV 2016 LS-Retail Installation",
+      "ClickOnceEndpoint": "advanialsnav2016.westeurope.cloudapp.azure.com",
+      "ClickOnceHost": "$(ServerInstance).navleiga.is",
       "Hosts": [
         {
           "HostName": "LSNAV2016-01",
           "FQDN": "advanialsnav2016-01.westeurope.cloudapp.azure.com",
           "Roles": "Client,Web,ClickOnce",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
+          "NAVDVDPath": "C:\\AdvaniaGIT\\2016IS",
           "InstanceSettings": [
             {
               "PublicODataBaseUrl": "https://lsazure2016odata.navleiga.is/$($ServerInstance)/OData",
@@ -131,6 +142,7 @@
           "FQDN": "advanialsnav2016-02.westeurope.cloudapp.azure.com",
           "Roles": "Client,Web,ClickOnce",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
+          "NAVDVDPath": "C:\\AdvaniaGIT\\2016IS",
           "InstanceSettings": [
             {
               "PublicODataBaseUrl": "https://lsazure2016odata.navleiga.is/$($ServerInstance)/OData",
@@ -153,6 +165,7 @@
           "FQDN": "advanianav2016-dd01.westeurope.cloudapp.azure.com",
           "Roles": "NAS",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
+          "NAVDVDPath": "C:\\AdvaniaGIT\\2016IS",
           "InstanceSettings": [
             {
               "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
@@ -170,11 +183,13 @@
     }
   ],
   "PasswordStateUrl": "https://hulda.advania.is",
+  "PasswordStateAPIKey": "0q2308q120348723048572034785",
   "VMUserPasswordID": "13891",
   "DBUserPasswordID": "13774",
   "AzureRMUserPasswordID": "13888",
   "EncryptionKeyPasswordID": "13940",
-  "PasswordStateAPIKey": "0q2308q120348723048572034785",
+  "NAVPasswordStateListId": "12",
+  "NAVPasswordStateAPIKey": "0a98sd0f9a8098098324", 
   "NAVSuperUser": "ADVANIA",
   "NAVAccountantUser": "ENDURSKODANDI"
 }

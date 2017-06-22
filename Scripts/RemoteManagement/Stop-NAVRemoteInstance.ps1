@@ -11,7 +11,7 @@
         Foreach ($selectedInstance in $SelectedInstances) {
             $instanceName = $selectedInstance.ServerInstance
             Write-Host "Stopping $instanceName on $($SelectedInstance.HostName):"
-            $Session = Create-NAVRemoteSession -Credential $Credential -HostName $SelectedInstance.PSComputerName 
+            $Session = New-NAVRemoteSession -Credential $Credential -HostName $SelectedInstance.PSComputerName 
             Invoke-Command -Session $Session -ScriptBlock `
                 {
                     param([string] $InstanceName)
@@ -19,7 +19,8 @@
                     $Results = Set-NAVServerInstance -ServerInstance $InstanceName -Stop
                     UnLoad-InstanceAdminTools
                     Return $Results
-                } -ArgumentList $instanceName            
+                } -ArgumentList $instanceName 
+            Remove-PSSession -Session $Session           
         }
     }    
 }

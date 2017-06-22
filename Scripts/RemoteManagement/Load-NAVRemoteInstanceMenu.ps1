@@ -19,7 +19,7 @@
         $Roles = $Host.Roles
         if ($Roles -like "*Client*" -or $Roles -like "*NAS*") {
             Write-Verbose "Connect to $FQDN..."
-            $Session = Create-NAVRemoteSession -Credential $Credential -HostName $FQDN 
+            $Session = New-NAVRemoteSession -Credential $Credential -HostName $FQDN 
             $hostInstances = Get-NAVRemoteInstances -Session $Session
             foreach ($instance in $hostInstances) {
                 if (!($Instances | Where-Object -Property ServerInstance -EQ $instance.ServerInstance) -or $IncludeAllHosts) {                   

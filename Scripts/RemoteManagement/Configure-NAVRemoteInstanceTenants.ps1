@@ -16,7 +16,7 @@
         $menuItems = Load-NAVRemoteInstanceTenantsMenu -Session $Session -SelectedInstance $SelectedInstance
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
-        $menuItems | Format-Table -Property No, Id, DatabaseName, CustomerName, LicenseNo, PasswordPid, State -AutoSize 
+        $menuItems | Format-Table -Property No, Id, DatabaseName, CustomerName, LicenseNo, PasswordPid, ClickOnceHost, State -AutoSize 
         $input = Read-Host "Please select tenant number (0 = exit)"
         switch ($input) {
             '0' { break }

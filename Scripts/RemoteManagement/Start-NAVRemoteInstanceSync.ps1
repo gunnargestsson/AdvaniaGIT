@@ -1,4 +1,4 @@
-﻿Function Sync-NAVRemoteInstance {
+﻿Function Start-NAVRemoteInstanceSync {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.PSCredential]$Credential,
@@ -11,7 +11,7 @@
         Foreach ($selectedInstance in $SelectedInstances) {
             $instanceName = $selectedInstance.ServerInstance
             Write-Host "Syncronizing Tenants for $instanceName on $($SelectedInstance.HostName):"
-            $Session = Create-NAVRemoteSession -Credential $Credential -HostName $SelectedInstance.PSComputerName 
+            $Session = New-NAVRemoteSession -Credential $Credential -HostName $SelectedInstance.PSComputerName 
             Invoke-Command -Session $Session -ScriptBlock `
                 {
                     param([string] $InstanceName)
@@ -20,6 +20,7 @@
                     UnLoad-InstanceAdminTools
                     Return $Results
                 } -ArgumentList $instanceName
+            Remove-PSSession -Session $Session
         }
         $anyKey = Read-Host "Press enter to continue..."
     }    

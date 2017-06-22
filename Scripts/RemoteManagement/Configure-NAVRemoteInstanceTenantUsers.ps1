@@ -82,7 +82,7 @@
                                 }
                         }                    
                     }
-                    until ($input -iin ('0', '1', '2', '3'))
+                    until ($input -iin ('0'))
                 }
             }
         }

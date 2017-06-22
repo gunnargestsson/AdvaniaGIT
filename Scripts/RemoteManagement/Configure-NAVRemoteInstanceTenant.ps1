@@ -14,25 +14,28 @@
     do {
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
-        $selectedTenant | Format-Table -Property Id, DatabaseName, CustomerName, LicenseNo, PasswordPid, State -AutoSize 
+        $SelectedTenant | Format-Table -Property Id, DatabaseName, CustomerName, LicenseNo, PasswordPid, ClickOnceHost, State -AutoSize 
         $input = Read-Host "Please select action:`
     0 = exit, `
     1 = users, `
     2 = database, `
-    2 = ClickOnce, `
+    3 = settings, `
+    4 = clickonce, `
     Action: "
 
         switch ($input) {
             '0' { break }
-            '1' { Configure-NAVRemoteInstanceTenantUsers -Session $Session -SelectedTenant $selectedTenant }
+            '1' { Configure-NAVRemoteInstanceTenantUsers -Session $Session -SelectedTenant $SelectedTenant }
             '2' { 
                     if ($SelectedInstance.Multitenant -eq "true") {
-                        #Configure-NAVRemoteInstanceTenantDatabase -Session $Session -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential}
+                        #Configure-NAVRemoteInstanceTenantDatabase -Session $Session -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential
                     } else {
-                        Configure-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $selectedInstance -DeploymentName $DeploymentName -Credential $Credential}                        
+                        Configure-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $SelectedInstance -DeploymentName $DeploymentName -Credential $Credential                       
                     }
-            
+                }
+            '3' { $SelectedTenant = Configure-NAVRemoteInstanceTenantSettings -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant }
+            '4' { New-NAVRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant }
         }                    
     }
-    until ($input -iin ('0', '1', '2'))        
+    until ($input -iin ('0'))        
 }

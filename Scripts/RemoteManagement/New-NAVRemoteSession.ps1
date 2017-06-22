@@ -1,4 +1,4 @@
-﻿Function Create-NAVRemoteSession {
+﻿Function New-NAVRemoteSession {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.PSCredential]$Credential,

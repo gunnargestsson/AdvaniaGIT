@@ -32,18 +32,18 @@
     3 = start, `
     4 = stop, `
     5 = event log, `
-    6 = tenants `
-    7 = development `
-    8 = web client `
-    9 = nav client `
+    6 = tenants, `
+    7 = development, `
+    8 = web client, `
+    9 = nav client, `
     Action: "
                         switch ($input) {
                             '0' { break }
                             '1' { 
-                                    ForceSync-NAVRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance
+                                    Start-NAVRemoteInstanceForceSync -Credential $Credential -SelectedInstances $selectedInstance
                                 }
                             '2' {                                     
-                                    Sync-NAVRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance
+                                    Start-NAVRemoteInstanceSync -Credential $Credential -SelectedInstances $selectedInstance
                                 }
                             '3' {
                                     Start-NAVRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance
@@ -52,7 +52,7 @@
                                     Stop-NAVRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance
                                 }
                             '5' {
-                                    Show-NAVRemoteInstanceEvents -Credential $Credential -SelectedInstances $selectedInstance
+                                    Get-NAVRemoteInstanceEvents -Credential $Credential -SelectedInstances $selectedInstance
                                 }
                             '6' {
                                     List-NAVRemoteInstanceTenants -Credential $Credential -SelectedInstance $selectedInstance[0]
@@ -80,7 +80,7 @@
                                 }
                         }                    
                     }
-                    until ($input -iin ('0', '1', '2', '3', '4', '5', '6', '7', '8', '8'))
+                    until ($input -iin ('0'))
                 }
             }
         }
