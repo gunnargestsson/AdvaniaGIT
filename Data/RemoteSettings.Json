@@ -169,9 +169,11 @@
       ]
     }
   ],
-  "RemoteUserName": "navlightadmin",
-  "AzureRMUserName": "admin@advanianav.onmicrosoft.com",
   "PasswordStateUrl": "https://hulda.advania.is",
+  "VMUserPasswordID": "13891",
+  "DBUserPasswordID": "13774",
+  "AzureRMUserPasswordID": "13888",
+  "EncryptionKeyPasswordID": "13940",
   "PasswordStateAPIKey": "0q2308q120348723048572034785",
   "NAVSuperUser": "ADVANIA",
   "NAVAccountantUser": "ENDURSKODANDI"

@@ -21,7 +21,7 @@
         $OKButton.Text = "OK"
         $OKButton.Add_Click({
             $Script:DatabaseName=$objDatabaseNameTextBox.Text;
-            $Script:DatabaseServerName=$objDatabaseNameTextBox.Text;
+            $Script:DatabaseServerName=$objDatabaseServerNameTextBox.Text;
             $Script:DatabaseInstanceName=$objDatabaseInstanceNameTextBox.Text;
             $Script:DatabaseUserName=$objDatabaseUserNameTextBox.Text;
             $Script:DatabasePassword=$objDatabasePasswordTextBox.Text;
@@ -102,7 +102,7 @@
         $objForm.Add_KeyDown({if ($_.KeyCode -eq "Enter") 
             {{
                 $Script:DatabaseName=$objDatabaseNameTextBox.Text;
-                $Script:DatabaseServerName=$objDatabaseNameTextBox.Text;
+                $Script:DatabaseServerName=$objDatabaseServerNameTextBox.Text;
                 $Script:DatabaseInstanceName=$objDatabaseInstanceNameTextBox.Text;
                 $Script:DatabaseUserName=$objDatabaseUserNameTextBox.Text;
                 $Script:DatabasePassword=$objDatabasePasswordTextBox.Text;

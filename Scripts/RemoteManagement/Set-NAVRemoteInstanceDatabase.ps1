@@ -68,6 +68,7 @@
                     Enable-DelayedStartForNAVService -branchSetting $branchSetting
                     Write-Host "Starting Instance $ServerInstance ..."
                     Set-NAVServerInstance -ServerInstance $ServerInstance -Start
+                    Get-NAVTenant -ServerInstance $ServerInstance | Sync-NAVTenant -Mode Sync -Force
                     UnLoad-InstanceAdminTools
                 } -ArgumentList (
                     $SelectedInstance.ServerInstance,  
