@@ -4,19 +4,21 @@ Import-Module RemoteManagement -DisableNameChecking | Out-Null
 Get-Module AdvaniaGIT | Remove-Module
 Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
 
-$VMAdminUserName = 'navlightadmin'
-$VMAdminPassword = 'tempt-v#JZc%'
-$Credential = New-Object System.Management.Automation.PSCredential($VMAdminUserName, (ConvertTo-SecureString $VMAdminPassword -AsPlainText -Force))
+# Get Environment Settings
+$SetupParameters = Get-GITSettings
+$RemoteConfig = Get-RemoteConfig
 
-#$Credential = Get-Credential -Message "Remote Login to Hosts" -ErrorAction Stop
+$VMAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
+if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
+    $Credential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
+} else {
+    $Credential = Get-Credential -Message "Remote Login to Hosts" -ErrorAction Stop    
+}
+
 if (!$Credential.UserName -or !$Credential.Password) {
     Write-Host -ForegroundColor Red "Credentials required!"
     break
 }
-   
-# Get Environment Settings
-$SetupParameters = Get-GITSettings
-$RemoteConfig = Get-RemoteConfig
 
 do {
     # Start Menu

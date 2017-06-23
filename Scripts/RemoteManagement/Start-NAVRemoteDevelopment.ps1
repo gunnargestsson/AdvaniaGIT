@@ -8,7 +8,7 @@
     if ($DBAdmin.UserName -gt "" -and $DBAdmin.Password -gt "") {
         $Credential = New-Object System.Management.Automation.PSCredential($DBAdmin.UserName, (ConvertTo-SecureString $DBAdmin.Password -AsPlainText -Force))
     } else {
-        $Credential = Get-Credential -Message "Remote Login to Hosts" -ErrorAction Stop
+        $Credential = Get-Credential -Message "Remote Login to FinSql" -ErrorAction Stop
         $DBAdmin.UserName = $Credential.UserName
         $DBAdmin.Password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password))
     }    

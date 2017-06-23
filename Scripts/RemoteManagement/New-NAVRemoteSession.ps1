@@ -64,7 +64,9 @@
 
             New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
             New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-
+            if (Test-Path (Join-Path (Split-Path $SetupPath -Parent) "mage.exe")) {
+                $SetupParameters | Add-Member MageExeLocation (Join-Path (Split-Path $SetupPath -Parent) "mage.exe")
+            }
         } -ArgumentList $SetupPath
         
     Return $Session

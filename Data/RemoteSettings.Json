@@ -5,6 +5,8 @@
       "Description": "NAV 2016 Installation",
       "ClickOnceEndpoint": "advanianav2016.westeurope.cloudapp.azure.com",
       "ClickOnceHost": "$(ServerInstance).navleiga.is",
+      "ClickOnceApplicationName": "Dynamics NAV 2016 frá Advania",
+      "ClickOnceApplicationPublisher": "Advania",
       "Hosts": [
         {
           "HostName": "NAV2016-01",
@@ -59,6 +61,8 @@
       "Description": "NAV 2017 Installation",
       "ClickOnceEndpoint": "advanianav2017.westeurope.cloudapp.azure.com",
       "ClickOnceHost": "$(ServerInstance).navleiga.is",
+      "ClickOnceApplicationName": "Dynamics NAV 2017 frá Advania",
+      "ClickOnceApplicationPublisher": "Advania",
       "Hosts": [
         {
           "HostName": "NAV2017-01",
@@ -113,6 +117,8 @@
       "Description": "NAV 2016 LS-Retail Installation",
       "ClickOnceEndpoint": "advanialsnav2016.westeurope.cloudapp.azure.com",
       "ClickOnceHost": "$(ServerInstance).navleiga.is",
+      "ClickOnceApplicationName": "Dynamics LS-NAV 2016 frá Advania",
+      "ClickOnceApplicationPublisher": "Advania",
       "Hosts": [
         {
           "HostName": "LSNAV2016-01",
@@ -186,6 +192,7 @@
   "PasswordStateAPIKey": "0q2308q120348723048572034785",
   "VMUserPasswordID": "13891",
   "DBUserPasswordID": "13774",
+  "AzureRMSubscriptionName": "Microsoft Azure",
   "AzureRMUserPasswordID": "13888",
   "EncryptionKeyPasswordID": "13940",
   "NAVPasswordStateListId": "12",

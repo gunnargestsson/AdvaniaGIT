@@ -34,7 +34,14 @@
                     }
                 }
             '3' { $SelectedTenant = Configure-NAVRemoteInstanceTenantSettings -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant }
-            '4' { New-NAVRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant }
+            '4' { 
+                    if ($SelectedInstance.Multitenant -eq "true") {
+                        #New-NAVRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant 
+                    } else {
+                        New-NAVRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant 
+                        $anyKey = Read-Host "Press enter to continue..."
+                    }
+                }
         }                    
     }
     until ($input -iin ('0'))        
