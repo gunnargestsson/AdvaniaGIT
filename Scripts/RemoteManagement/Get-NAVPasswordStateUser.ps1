@@ -5,8 +5,9 @@
     )
     try {
         $RemoteConfig = Get-RemoteConfig        
-        $url = "$($RemoteConfig.PasswordStateUrl)/api/passwords/$($PasswordId)?apikey=$($RemoteConfig.NAVPasswordStateAPIKey)"
-        $ResonseJson = Invoke-WebRequest -Uri $url -UseDefaultCredentials
+        $url = "$($RemoteConfig.PasswordStateUrl)/api/passwords/$($PasswordId)"
+        $Headers = @{apikey=$($RemoteConfig.NAVPasswordStateAPIKey)}
+        $ResonseJson = Invoke-WebRequest -Uri $url -UseDefaultCredentials -Headers $Headers
         $Response = $ResonseJson | Out-String | ConvertFrom-Json
     }
     catch
@@ -38,3 +39,5 @@
     }
     return $Response
 }
+
+Get-NAVPasswordStateUser -PasswordId 13923 

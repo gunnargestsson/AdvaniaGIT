@@ -3,13 +3,30 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.Runspaces.PSSession]$Session,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [System.Management.Automation.PSCredential]$Credential,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [String]$DeploymentName,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SelectedTenant
     )
     PROCESS 
     {
+        $RemoteConfig = Get-RemoteConfig
         $NewUser = New-UserDialog -Message "Enter details on new user." -User (New-UserObject)
         if ($NewUser.UserName -eq "") { break }     
         $NewPassword = Get-NewUserPassword 
+        if ($NewUser.UserName -ieq $RemoteConfig.NAVSuperUser) {
+            if ($SelectedTenant.CustomerName -eq "") {
+                Write-Host -ForegroundColor Red "Please complete the Tenant Settings before creating the administrative user!"
+                break
+            }
+            if ($RemoteConfig.PasswordStateAPIKey -gt "") {
+                $Response = Set-NAVPasswordStateUser -Title $SelectedTenant.CustomerName -UserName $NewUser.UserName -FullName $NewUser.FullName -Password $NewPassword
+                $SelectedTenant.PasswordID = $Response.PasswordID
+                $RemoteTenantSettings = Set-NAVRemoteInstanceTenantSettings -Session $Session -Credential $Credential -SelectedTenant $SelectedTenant -DeploymentName $DeploymentName 
+            }   
+        }        
+
         $Result = Invoke-Command -Session $Session -ScriptBlock `
             {
                 param(
@@ -31,6 +48,7 @@
                     Password = (ConvertTo-SecureString -String $NewPassword -AsPlainText -Force) }
                 if ($ChangePasswordAtNextLogOn) { $params.ChangePasswordAtNextLogOn = $true }
                 New-NAVServerUser @params -Force
+                New-NAVServerUserPermissionSet -ServerInstance $ServerInstance -Tenant $TenantId -UserName $User.UserName -PermissionSetId SUPER
                 UnLoad-InstanceAdminTools
             } -ArgumentList (
                 $SelectedTenant.ServerInstance, 
@@ -38,7 +56,7 @@
                 $NewUser, 
                 $NewPassword, 
                 ($RemoteConfig.NAVSuperUser.ToUpper() -eq $User.UserName))
-
+        
         $NewUser | Add-Member -MemberType NoteProperty -Name Password -Value $NewPassword
         Return $NewUser
     }    

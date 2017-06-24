@@ -3,7 +3,8 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SelectedInstance
     )
-
+    
+    $RemoteConfig = Get-RemoteConfig
     $DBAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
     if ($DBAdmin.UserName -gt "" -and $DBAdmin.Password -gt "") {
         $Credential = New-Object System.Management.Automation.PSCredential($DBAdmin.UserName, (ConvertTo-SecureString $DBAdmin.Password -AsPlainText -Force))

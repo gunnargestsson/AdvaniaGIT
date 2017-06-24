@@ -14,7 +14,7 @@
     do {
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
-        $SelectedTenant | Format-Table -Property Id, DatabaseName, CustomerName, LicenseNo, PasswordPid, ClickOnceHost, State -AutoSize 
+        $SelectedTenant | Format-Table -Property Id, DatabaseName, CustomerName, LicenseNo, PasswordId, ClickOnceHost, State -AutoSize 
         $input = Read-Host "Please select action:`
     0 = exit, `
     1 = users, `
@@ -25,12 +25,12 @@
 
         switch ($input) {
             '0' { break }
-            '1' { Configure-NAVRemoteInstanceTenantUsers -Session $Session -SelectedTenant $SelectedTenant }
+            '1' { Configure-NAVRemoteInstanceTenantUsers -Session $Session -SelectedTenant $SelectedTenant -DeploymentName $DeploymentName -Credential $Credential }
             '2' { 
                     if ($SelectedInstance.Multitenant -eq "true") {
                         #Configure-NAVRemoteInstanceTenantDatabase -Session $Session -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential
                     } else {
-                        Configure-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $SelectedInstance -DeploymentName $DeploymentName -Credential $Credential                       
+                        Configure-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $SelectedInstance -DeploymentName $DeploymentName -Credential $Credential
                     }
                 }
             '3' { $SelectedTenant = Configure-NAVRemoteInstanceTenantSettings -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant }

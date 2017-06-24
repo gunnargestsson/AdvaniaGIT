@@ -1,4 +1,4 @@
-﻿4# Import all needed modules
+﻿# Import all needed modules
 Get-Module RemoteManagement | Remove-Module
 Import-Module RemoteManagement -DisableNameChecking | Out-Null
 Get-Module AdvaniaGIT | Remove-Module

@@ -189,14 +189,14 @@
     }
   ],
   "PasswordStateUrl": "https://hulda.advania.is",
-  "PasswordStateAPIKey": "0q2308q120348723048572034785",
+  "PasswordStateAPIKey": "",
   "VMUserPasswordID": "13891",
-  "DBUserPasswordID": "13774",
+  "DBUserPasswordID": "13893",
   "AzureRMSubscriptionName": "Microsoft Azure",
   "AzureRMUserPasswordID": "13888",
   "EncryptionKeyPasswordID": "13940",
-  "NAVPasswordStateListId": "12",
-  "NAVPasswordStateAPIKey": "0a98sd0f9a8098098324", 
+  "NAVPasswordStateListId": "1398",
+  "NAVPasswordStateAPIKey": "", 
   "NAVSuperUser": "ADVANIA",
   "NAVAccountantUser": "ENDURSKODANDI"
 }

@@ -3,6 +3,10 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.Runspaces.PSSession]$Session,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [System.Management.Automation.PSCredential]$Credential,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [String]$DeploymentName,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SelectedTenant
     )
     PROCESS
@@ -13,12 +17,12 @@
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
         $menuItems | Format-Table -Property No, UserName, FullName, AuthenticationEmail, LicenseType, State -AutoSize 
-        $input = Read-Host "Please select user number (0 = exit, n = new user)"
+        $input = Read-Host "Please select user number (0 = exit, + = new user)"
         switch ($input) {
             '0' { break }
-            'n' {
+            '+' {
                     try {
-                        $NewUser = New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant
+                        $NewUser = New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -Credential $Credential -DeploymentName $DeploymentName 
                         Write-Host "User $($NewUser.UserName) created with password $($NewUser.Password)"
                     }
                     catch {
@@ -58,7 +62,7 @@
                                 }
                             '2' { 
                                     try {
-                                        $UpdatedUser = Set-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -SelectedUser $selectedUser
+                                        $UpdatedUser = Set-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -SelectedUser $selectedUser 
                                         Write-Host "User $($selectedUser.UserName) updated"
                                     }
                                     catch {
@@ -82,7 +86,7 @@
                                 }
                         }                    
                     }
-                    until ($input -iin ('0'))
+                    until ($input -iin ('0','1','2','3'))
                 }
             }
         }

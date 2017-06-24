@@ -5,17 +5,24 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$UserName,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [String]$FullName,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$Password
     )
+    $RemoteConfig = Get-RemoteConfig
+    $Headers = @{APIKey=$($RemoteConfig.NAVPasswordStateAPIKey)}
     try {
-        $RemoteConfig = Get-RemoteConfig        
-        $url = "$($RemoteConfig.PasswordStateUrl)/api/passwords/$($PasswordId)?apikey=$($RemoteConfig.NAVPasswordStateAPIKey)"
-        $url += "&PasswordList=$($RemoteConfig.NAVPasswordStateListId)"
-        $url += "&Title=$([System.Web.HttpUtility]::UrlEncode($Title))"
-        $url += "&UserName=$[System.Web.HttpUtility]::UrlEncode($UserName))"
-        $url += "&Password=$[System.Web.HttpUtility]::UrlEncode($Password))"       
-        $ResonseJson = Invoke-WebRequest -Uri $url -UseDefaultCredentials -Method Post
-        $Response = ($ResonseJson | Out-String | ConvertFrom-Json).PasswordID
+        $url = "$($RemoteConfig.PasswordStateUrl)/api/passwordlists/$($RemoteConfig.NAVPasswordStateListId)"
+        $PasswordList = Invoke-RestMethod -Method Get -Uri $url -Headers $Headers -UseDefaultCredentials
+    } catch {
+        Write-Host -ForegroundColor Red "Password State password list no. $($RemoteConfig.NAVPasswordStateListId) is not accessible!"
+        break
+    }
+    try {   
+        $url = "$($RemoteConfig.PasswordStateUrl)/api/passwords"
+        $Body = @{PasswordListID=$($PasswordList.PasswordListID);Title=$Title;UserName=$UserName;password=$Password;Description=$FullName;APIKey=$($RemoteConfig.NAVPasswordStateAPIKey)}
+        $Response = Invoke-RestMethod -Method Post -Uri $url -UseDefaultCredentials -Body (ConvertTo-Json $Body) -ContentType "application/json;charset=utf-8"
+        Write-Host "Password created in $($RemoteConfig.PasswordStateUrl)"
     }
     catch {
         Write-Host -ForegroundColor Red "Failed send password update to Password State Service!"

@@ -6,8 +6,7 @@
     try {
         $RemoteConfig = Get-RemoteConfig
         $url = "$($RemoteConfig.PasswordStateUrl)/api/passwords/$($PasswordId)?apikey=$($RemoteConfig.PasswordStateAPIKey)"
-        $ResonseJson = Invoke-WebRequest -Uri $url -UseDefaultCredentials
-        $Response = $ResonseJson | Out-String | ConvertFrom-Json
+        $Response = Invoke-RestMethod -Method Get -Uri $url -UseDefaultCredentials
     }
     catch
     {
