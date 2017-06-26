@@ -13,7 +13,7 @@ $VMAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
 if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
     $Credential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 } else {
-    $Credential = Get-Credential -Message "Remote Login to Hosts" -ErrorAction Stop    
+    $Credential = Get-Credential -Message "Remote Login to VM Hosts" -ErrorAction Stop    
 }
 
 if (!$Credential.UserName -or !$Credential.Password) {
@@ -52,13 +52,14 @@ do {
                     Clear-Host
                     For ($i=0; $i -le 10; $i++) { Write-Host "" }
                     $selectedDeployment | Format-Table -Property Deployment, Description -AutoSize 
-                    $input = Read-Host "Please select action (1 = configure, 0 = exit)"
+                    $input = Read-Host "Please select action (0 = exit, 1 = configure, 2 = rebuild ClickOnce)"
                     switch ($input) {
                         '0' { break }
                         '1' {
                                 Write-Verbose "Start instances menu"
                                 Configure-NAVRemoteInstances -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $selectedDeployment.Deployment
                             }
+                        '2' { New-NAVDeploymentRemoteClickOnceSites -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                     }
                 }
                 until ($input -iin ('0', '1'))

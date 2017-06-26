@@ -21,6 +21,7 @@
     2 = database, `
     3 = settings, `
     4 = clickonce, `
+    5 = license, `
     Action: "
 
         switch ($input) {
@@ -33,14 +34,22 @@
                         Configure-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $SelectedInstance -DeploymentName $DeploymentName -Credential $Credential
                     }
                 }
-            '3' { $SelectedTenant = Configure-NAVRemoteInstanceTenantSettings -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant }
+            '3' { 
+                    $NewSelectedTenant = Configure-NAVRemoteInstanceTenantSettings -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant 
+                    $TenantSettings = Get-NAVRemoteInstanceTenantSettings -Session $Session -SelectedTenant $SelectedTenant
+                    $SelectedTenant = Combine-Settings $TenantSettings $SelectedTenant
+                }
             '4' { 
                     if ($SelectedInstance.Multitenant -eq "true") {
                         #New-NAVRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant 
                     } else {
-                        New-NAVRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant 
+                        New-NAVDeploymentRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant 
                         $anyKey = Read-Host "Press enter to continue..."
                     }
+                }
+            '5' { 
+                Set-NAVRemoteInstanceTenantLicense -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant
+                $anyKey = Read-Host "Press enter to continue..."
                 }
         }                    
     }

@@ -12,6 +12,7 @@
         [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
         [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
 
+        $Script:OkPressed = 'NO'
         $objForm = New-Object System.Windows.Forms.Form 
         $objForm.Text = $Message
         $objForm.Size = New-Object System.Drawing.Size(300,400) 
@@ -22,6 +23,7 @@
         $OKButton.Size = New-Object System.Drawing.Size(75,23)
         $OKButton.Text = "OK"
         $OKButton.Add_Click({
+            $Script:OkPressed=$OKButton.Text;
             $Script:UserName=$objUserNameTextBox.Text;
             $Script:FullName=$objFullNameTextBox.Text;
             $Script:AuthenticationEMail=$objAuthenticationEMailTextBox.Text;
@@ -106,6 +108,7 @@
         $objForm.KeyPreview = $True
         $objForm.Add_KeyDown({if ($_.KeyCode -eq "Enter") 
             {{
+                $Script:OkPressed=$OKButton.Text;
                 $Script:UserName=$objUserNameTextBox.Text;
                 $Script:FullName=$objFullNameTextBox.Text;
                 $Script:AuthenticationEMail=$objAuthenticationEMailTextBox.Text;
@@ -120,12 +123,14 @@
         $objForm.Add_Shown({$objForm.Activate()})
         [void] $objForm.ShowDialog()
 
+        Remove-Variable objForm
         $NewUser = New-Object -TypeName PSObject
         $NewUser | Add-Member -MemberType NoteProperty -Name UserName -Value $UserName        
         $NewUser | Add-Member -MemberType NoteProperty -Name FullName -Value $FullName
         $NewUser | Add-Member -MemberType NoteProperty -Name AuthenticationEMail -Value $AuthenticationEMail
         $NewUser | Add-Member -MemberType NoteProperty -Name LicenseType -Value $LicenseType
         $NewUser | Add-Member -MemberType NoteProperty -Name State -Value $State
+        $NewUser | Add-Member -MemberType NoteProperty -Name OkPressed -Value $Script:OkPressed
         return $NewUser
     }
 }

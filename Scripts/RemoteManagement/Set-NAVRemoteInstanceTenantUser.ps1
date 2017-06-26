@@ -11,6 +11,7 @@
     {
         $User = New-UserObject -UserName $SelectedUser.UserName -FullName $SelectedUser.FullName -AuthenticationEMail $SelectedUser.AuthenticationEMail -LicenseType $SelectedUser.LicenseType -State $SelectedUser.State
         $User = New-UserDialog -Message "Enter details on user." -User $User -UserNameNotEditable
+        if ($User.OKPressed -ne 'OK') { Return $User }
         $Result = Invoke-Command -Session $Session -ScriptBlock `
             {
                 param(

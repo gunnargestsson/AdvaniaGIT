@@ -23,7 +23,7 @@
             '+' {
                     try {
                         $NewUser = New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -Credential $Credential -DeploymentName $DeploymentName 
-                        Write-Host "User $($NewUser.UserName) created with password $($NewUser.Password)"
+                        if ($NewUser.OKPressed -eq $true) { Write-Host "User $($NewUser.UserName) created with password $($NewUser.Password)" }
                     }
                     catch {
                         Write-Host -ForegroundColor Red "Failed to create new users!"
@@ -63,7 +63,7 @@
                             '2' { 
                                     try {
                                         $UpdatedUser = Set-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -SelectedUser $selectedUser 
-                                        Write-Host "User $($selectedUser.UserName) updated"
+                                        if ($UpdatedUser.OKPressed -eq $true) { Write-Host "User $($selectedUser.UserName) updated" }
                                     }
                                     catch {
                                         Write-Host -ForegroundColor Red "Error updating user $($selectedUser.UserName)"

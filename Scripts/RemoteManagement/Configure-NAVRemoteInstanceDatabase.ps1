@@ -23,7 +23,7 @@
             '1' {                    
                     try {
                         $Database = Set-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $selectedInstance -Database $menuItems -DeploymentName $DeploymentName -Credential $Credential
-                        Write-Host "Database settings updated"
+                        if ($Database.OKPressed -eq $true) { Write-Host "Database settings updated" }
                     }
                     catch {
                         Write-Host -ForegroundColor Red "Failed to update database settings!"

@@ -13,6 +13,7 @@
     )
     PROCESS 
     {
+        $OriginalDatabase = $Database
         $RemoteConfig = Get-RemoteConfig
         $DBAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
         if ($DBAdmin.UserName -gt "") { $Database.DatabaseUserName = $DBAdmin.UserName }
@@ -28,7 +29,7 @@
 
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
         $Database = New-DatabaseDialog -Message "Enter details on database." -Database $Database
-
+        if ($Database.OKPressed -ne 'OK') { return $OriginalDatabase }
         Foreach ($RemoteComputer in $Remotes.Hosts) {
             $Roles = $RemoteComputer.Roles
             if ($Roles -like "*Client*" -or $Roles -like "*NAS*") {

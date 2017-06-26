@@ -24,8 +24,10 @@
                         $selectedTenant | Format-Table -Property Id, DatabaseName, CustomerName, LicenseNo, PasswordPid, ClickOnceHost, State -AutoSize 
                         $input = Read-Host "Please select action:`
     0 = exit, `
-    1 = nav client `
-    2 = web client `
+    1 = web client `
+    2 = nav client `
+    3 = nav debugger `
+    4 = sessions, `
     Action: "
 
                         switch ($input) {
@@ -38,8 +40,14 @@
                                     Start-PasswordStateWebSite -PasswordId $selectedTenant.PasswordId
                                     Start-NAVRemoteWindowsClient -SelectedInstance $selectedInstance -TenantId $selectedTenant.Id
                                 }
-
-
+                            '3' {
+                                    Start-PasswordStateWebSite -PasswordId $selectedTenant.PasswordId
+                                    Start-NAVRemoteWindowsDebugger -SelectedInstance $selectedInstance -TenantId $selectedTenant.Id
+                                }
+                            '4' {
+                                    Get-NAVRemoteInstanceTenantSessions -Credential $Credential -SelectedInstance $selectedInstance -SelectedTenant $selectedTenant
+                                    $anyKey = Read-Host "Press enter to continue..."
+                                }
                         }                    
                     }
                     until ($input -iin ('0'))

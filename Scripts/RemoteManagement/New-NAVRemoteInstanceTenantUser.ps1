@@ -13,7 +13,8 @@
     {
         $RemoteConfig = Get-RemoteConfig
         $NewUser = New-UserDialog -Message "Enter details on new user." -User (New-UserObject)
-        if ($NewUser.UserName -eq "") { break }     
+        if ($NewUser.UserName -eq "") { Return $NewUser }   
+        if ($NewUser.OKPressed -ne 'OK') { Return $NewUser }  
         $NewPassword = Get-NewUserPassword 
         if ($NewUser.UserName -ieq $RemoteConfig.NAVSuperUser) {
             if ($SelectedTenant.CustomerName -eq "") {

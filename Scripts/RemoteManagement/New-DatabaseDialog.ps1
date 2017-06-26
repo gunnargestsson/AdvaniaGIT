@@ -9,7 +9,8 @@
     {
         [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
         [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
-
+        
+        $Script:OkPressed = 'NO'
         $objForm = New-Object System.Windows.Forms.Form 
         $objForm.Text = $Message
         $objForm.Size = New-Object System.Drawing.Size(300,400) 
@@ -20,6 +21,7 @@
         $OKButton.Size = New-Object System.Drawing.Size(75,23)
         $OKButton.Text = "OK"
         $OKButton.Add_Click({
+            $Script:OkPressed=$OKButton.Text;
             $Script:DatabaseName=$objDatabaseNameTextBox.Text;
             $Script:DatabaseServerName=$objDatabaseServerNameTextBox.Text;
             $Script:DatabaseInstanceName=$objDatabaseInstanceNameTextBox.Text;
@@ -101,6 +103,7 @@
         $objForm.KeyPreview = $True
         $objForm.Add_KeyDown({if ($_.KeyCode -eq "Enter") 
             {{
+                $Script:OkPressed=$OKButton.Text;
                 $Script:DatabaseName=$objDatabaseNameTextBox.Text;
                 $Script:DatabaseServerName=$objDatabaseServerNameTextBox.Text;
                 $Script:DatabaseInstanceName=$objDatabaseInstanceNameTextBox.Text;
@@ -114,6 +117,7 @@
 
         $objForm.Add_Shown({$objForm.Activate()})
         [void] $objForm.ShowDialog()
+        Remove-Variable objForm
 
         $NewDatabase = New-Object -TypeName PSObject
         $NewDatabase | Add-Member -MemberType NoteProperty -Name DatabaseName -Value $DatabaseName        
@@ -121,6 +125,7 @@
         $NewDatabase | Add-Member -MemberType NoteProperty -Name DatabaseInstanceName -Value $DatabaseInstanceName
         $NewDatabase | Add-Member -MemberType NoteProperty -Name DatabaseUserName -Value $DatabaseUserName
         $NewDatabase | Add-Member -MemberType NoteProperty -Name DatabasePassword -Value $DatabasePassword
+        $NewDatabase | Add-Member -MemberType NoteProperty -Name OkPressed -Value $Script:OkPressed
         return $NewDatabase
     }
 }

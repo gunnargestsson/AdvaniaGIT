@@ -7,7 +7,6 @@
     $menuItems = @()
     $deploymentNo = 1
     foreach ($deployment in $RemoteConfig.Remotes) {
-        Write-Host $Deployment
         $menuItem = New-Object -TypeName PSObject
         $menuItem | Add-Member -MemberType NoteProperty -Name No -Value $deploymentNo
         $menuItem | Add-Member -MemberType NoteProperty -Name Deployment -Value $deployment.Deployment

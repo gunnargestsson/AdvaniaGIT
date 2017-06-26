@@ -20,7 +20,8 @@
 
         [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
         [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
-                        
+
+        $Script:OkPressed = 'NO'                        
         $objForm = New-Object System.Windows.Forms.Form 
         $objForm.Text = $Message
         $objForm.Size = New-Object System.Drawing.Size(300,500) 
@@ -31,6 +32,7 @@
         $OKButton.Size = New-Object System.Drawing.Size(75,23)
         $OKButton.Text = "OK"
         $OKButton.Add_Click({
+            $Script:OkPressed=$OKButton.Text;
             $Script:Id=$objIdTextBox.Text;
             $Script:CustomerRegistrationNo=$objCustomerRegistrationNoTextBox.Text;
             $Script:CustomerName=$objCustomerNameTextBox.Text;
@@ -137,6 +139,7 @@
         $objForm.KeyPreview = $True
         $objForm.Add_KeyDown({if ($_.KeyCode -eq "Enter") 
             {{
+                $Script:OkPressed=$OKButton.Text;
                 $Script:Id=$objIdTextBox.Text;
                 $Script:CustomerRegistrationNo=$objCustomerRegistrationNoTextBox.Text;
                 $Script:CustomerName=$objCustomerNameTextBox.Text;
@@ -153,6 +156,7 @@
         $objForm.Add_Shown({$objForm.Activate()})
         [void] $objForm.ShowDialog()
 
+        Remove-Variable objForm
         $TenantSettings.Id = $Script:Id
         $TenantSettings.CustomerRegistrationNo = $Script:CustomerRegistrationNo
         $TenantSettings.CustomerName = $Script:CustomerName
@@ -160,6 +164,7 @@
         $TenantSettings.PasswordId = $Script:PasswordId
         $TenantSettings.LicenseNo = $Script:LicenseNo
         $TenantSettings.ClickOnceHost = $Script:ClickOnceHost
+        $TenantSettings | Add-Member -MemberType NoteProperty -Name OkPressed -Value $Script:OkPressed
 
         return $TenantSettings
     }
