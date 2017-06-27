@@ -1,4 +1,4 @@
-﻿Function New-NAVDeploymentRemoteClickOnceSites {
+﻿Function New-NAVDeploymentRemoteLicenses {
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.PSCredential]$Credential,
@@ -19,25 +19,27 @@
                 Write-Host "Updating $($RemoteComputer.HostName)..."
                 $Session = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN 
 
-                # Do some tests and import modules
-                Prepare-NAVRemoteClickOnceSite -Session $Session -RemoteComputer $RemoteComputer 
-
                 Foreach ($SelectedInstance in $Instances) {
                     Foreach ($SelectedTenant in $SelectedInstance.TenantList) {
                         
-                        # Prepare and Clean Up      
-                        Remove-NAVRemoteClickOnceSite -Session $Session -SelectedTenant $SelectedTenant  
-
-                        if ($SelectedTenant.CustomerName -gt "" -and $SelectedTenant.ClickOnceHost -gt "") {
-                            Write-Host "Building ClickOnce Site for $($SelectedTenant.CustomerName)..."
-                            # Create the ClickOnce Site
-                            New-NAVRemoteClickOnceSite -Session $Session -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant -ClickOnceApplicationName $Remotes.ClickOnceApplicationName -ClickOnceApplicationPublisher $Remotes.ClickOnceApplicationPublisher -ClientSettings $RemoteComputer.ClientSettings
+                        if ($SelectedTenant.LicenseNo -gt "" ) {
+                            $FtpFileName = "license/$($SelectedTenant.LicenseNo).flf"
+                            $LocalFileName = Join-Path $env:TEMP "$($SelectedTenant.LicenseNo).flf"
+                            try { Get-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath $FtpFileName -LocalFilePath $LocalFileName }
+                            catch { Write-Host "Unable to download license from $LocalFileName !" }
+                            finally {
+                                if (Test-Path $LocalFileName) {
+                                    $LicenseData = [Byte[]] (Get-Content -Path $LocalFileName -Encoding Byte)
+                                    Remove-Item -Path $LocalFileName -Force -ErrorAction SilentlyContinue
+    
+                                    Set-NAVRemoteInstanceTenantLicense -Session $Session -SelectedTenant $SelectedTenant -LicenseData $LicenseData                         
+                                }
+                            }
                         }
                     }
                 }
                 Remove-PSSession -Session $Session 
             }
         }
-        $anyKey = Read-Host "Press enter to continue..."
     }
 }

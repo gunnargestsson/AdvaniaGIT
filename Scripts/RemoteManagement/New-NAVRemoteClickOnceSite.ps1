@@ -7,6 +7,8 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SelectedTenant,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$ClientSettings,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$ClickOnceApplicationName,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$ClickOnceApplicationPublisher
@@ -16,7 +18,7 @@
         # Create the ClickOnce Site
         $Result = Invoke-Command -Session $Session -ScriptBlock `
             {
-                Param([PSObject]$SelectedInstance, [PSObject]$SelectedTenant, [String]$ClickOnceApplicationName, [String]$ClickOnceApplicationPublisher)
+                Param([PSObject]$SelectedInstance, [PSObject]$SelectedTenant, [PSObject]$ClientSettings, [String]$ClickOnceApplicationName, [String]$ClickOnceApplicationPublisher)
                 Write-Host "Creating Client Configuration..."
                 $clickOnceCodeSigningPfxPasswordAsSecureString = ConvertTo-SecureString -String $SetupParameters.codeSigningCertificatePassword -AsPlainText -Force
                 $clickOnceDeploymentId = "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)"
@@ -44,8 +46,8 @@
                 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicesCertificateValidationEnabled' -NewValue false
                 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicePrincipalNameRequired' -NewValue false
                 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicePrincipalNameRequired' -NewValue false
-                Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServer' -NewValue (Get-HelpServer -mainVersion $SetupParameters.mainVersion)
-                Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServerPort' -NewValue (Get-HelpServerPort -mainVersion $SetupParameters.mainVersion)
+                Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServer' -NewValue $ClientSettings.HelpServer
+                Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServerPort' -NewValue $ClientSettings.HelpServerPort
 
                 Write-Host "Creating ClickOnce Directory..."
                 New-ClickOnceDirectory -ClientUserSettings $clientUserSettings -ClickOnceDirectory $clickOnceDirectory
@@ -110,7 +112,7 @@
                 New-Website -Name "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -PhysicalPath $clickOnceDirectory -HostHeader $SelectedTenant.ClickOnceHost -Force
                 Write-Host "Adding web site binding..."
                 $certificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Thumbprint -eq $SelectedInstance.ServicesCertificateThumbprint} 
-                New-Item -Path "IIS:\SslBindings\!443!$($SelectedTenant.ClickOnceHost)" -Value $certificate -SSLFlags 1 
+                New-Item -Path "IIS:\SslBindings\!443!$($SelectedTenant.ClickOnceHost)" -Value $certificate -SSLFlags 1 -ErrorAction SilentlyContinue
                 New-WebBinding -Name "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Protocol "https" -Port 443 -HostHeader $SelectedTenant.ClickOnceHost -SslFlags 1
 
                 Write-Host "Creating the web, soap and odata redirect..."
@@ -124,6 +126,6 @@
                 Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\Soap" -Value @{enabled="true";destination="$($SelectedInstance.PublicSOAPBaseUrl)";exactDestination="true";httpResponseStatus="Permanent"}
                 Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\OData" -Value @{enabled="true";destination="$($SelectedInstance.PublicODataBaseUrl)";exactDestination="true";httpResponseStatus="Permanent"}
 
-            } -ArgumentList ($SelectedInstance, $SelectedTenant, $ClickOnceApplicationName, $ClickOnceApplicationPublisher) -ErrorAction Stop        
+            } -ArgumentList ($SelectedInstance, $SelectedTenant, $ClientSettings, $ClickOnceApplicationName, $ClickOnceApplicationPublisher) -ErrorAction Stop        
     }
 }

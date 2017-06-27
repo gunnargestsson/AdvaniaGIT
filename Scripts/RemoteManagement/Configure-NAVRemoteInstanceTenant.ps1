@@ -17,29 +17,31 @@
         $SelectedTenant | Format-Table -Property Id, DatabaseName, CustomerName, LicenseNo, PasswordId, ClickOnceHost, State -AutoSize 
         $input = Read-Host "Please select action:`
     0 = exit, `
-    1 = users, `
-    2 = database, `
-    3 = settings, `
-    4 = clickonce, `
-    5 = license, `
+    1 = companies, `
+    2 = users, `
+    3 = database, `
+    4 = settings, `
+    5 = clickonce, `
+    6 = license, `
     Action: "
 
         switch ($input) {
             '0' { break }
-            '1' { Configure-NAVRemoteInstanceTenantUsers -Session $Session -SelectedTenant $SelectedTenant -DeploymentName $DeploymentName -Credential $Credential }
-            '2' { 
+            '1' { Configure-NAVRemoteInstanceTenantCompanies -Session $Session -SelectedTenant $SelectedTenant -DeploymentName $DeploymentName -Credential $Credential }
+            '2' { Configure-NAVRemoteInstanceTenantUsers -Session $Session -SelectedTenant $SelectedTenant -DeploymentName $DeploymentName -Credential $Credential }
+            '3' { 
                     if ($SelectedInstance.Multitenant -eq "true") {
                         #Configure-NAVRemoteInstanceTenantDatabase -Session $Session -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential
                     } else {
                         Configure-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $SelectedInstance -DeploymentName $DeploymentName -Credential $Credential
                     }
                 }
-            '3' { 
+            '4' { 
                     $NewSelectedTenant = Configure-NAVRemoteInstanceTenantSettings -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant 
                     $TenantSettings = Get-NAVRemoteInstanceTenantSettings -Session $Session -SelectedTenant $SelectedTenant
                     $SelectedTenant = Combine-Settings $TenantSettings $SelectedTenant
                 }
-            '4' { 
+            '5' { 
                     if ($SelectedInstance.Multitenant -eq "true") {
                         #New-NAVRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant 
                     } else {
@@ -47,9 +49,9 @@
                         $anyKey = Read-Host "Press enter to continue..."
                     }
                 }
-            '5' { 
-                Set-NAVRemoteInstanceTenantLicense -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant
-                $anyKey = Read-Host "Press enter to continue..."
+            '6' { 
+                    Set-NAVDeploymentRemoteInstanceTenantLicense -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant
+                    $anyKey = Read-Host "Press enter to continue..."
                 }
         }                    
     }

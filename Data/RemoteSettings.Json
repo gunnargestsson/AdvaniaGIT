@@ -14,22 +14,29 @@
           "Roles": "Client,Web,ClickOnce",
           "NAVDVDPath": "C:\\AdvaniaGIT\\2016IS",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
-          "InstanceSettings": [
-            {
-              "PublicODataBaseUrl": "https://azure2016odata.navleiga.is/$($ServerInstance)/OData",
-              "PublicSOAPBaseUrl": "https://azure2016soap.navleiga.is/$($ServerInstance)/WS",
-              "PublicWebBaseUrl": "https://azure2016.navleiga.is/$($ServerInstance)",
-              "PublicWinBaseUrl": "DynamicsNAV://azure2016.navleiga.is:7046/$($ServerInstance)",
-              "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
-              "ClientServicesCredentialType": "NavUserPassword",
-              "EnableSqlConnectionEncryption": "true",
-              "TrustSQLServerCertificate": "false",
-              "SOAPServicesSSLEnabled": "true",
-              "ODataServicesSSLEnabled": "true",
-              "SOAPServicesEnabled": "true",
-              "ODataServicesEnabled": "true"
-            }
-          ]
+          "InstanceSettings": {
+            "PublicODataBaseUrl": "https://azure2016odata.navleiga.is/$($ServerInstance)/OData",
+            "PublicSOAPBaseUrl": "https://azure2016soap.navleiga.is/$($ServerInstance)/WS",
+            "PublicWebBaseUrl": "https://azure2016.navleiga.is/$($ServerInstance)",
+            "PublicWinBaseUrl": "DynamicsNAV://azure2016.navleiga.is:7046/$($ServerInstance)",
+            "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
+            "ClientServicesCredentialType": "NavUserPassword",
+            "EnableSqlConnectionEncryption": "true",
+            "TrustSQLServerCertificate": "false",
+            "SOAPServicesSSLEnabled": "true",
+            "ODataServicesSSLEnabled": "true",
+            "SOAPServicesEnabled": "true",
+            "ODataServicesEnabled": "true"
+          },
+          "ClientSettings": {
+            "ProductName": "Dynamics NAV frá Advania",
+            "HelpServer": "2016help.navleiga.is",
+            "HelpServerPort": "80",
+            "FeedbackLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "CommunityLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "PrivacyLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift",
+            "LegalLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift"
+          }
         },
         {
           "HostName": "NAV2016-02",
@@ -37,22 +44,29 @@
           "Roles": "Client,Web,ClickOnce",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
           "NAVDVDPath": "C:\\AdvaniaGIT\\2016IS",
-          "InstanceSettings": [
-            {
-              "PublicODataBaseUrl": "https://azure2016odata.navleiga.is/$($ServerInstance)/OData",
-              "PublicSOAPBaseUrl": "https://azure2016soap.navleiga.is/$($ServerInstance)/WS",
-              "PublicWebBaseUrl": "https://azure2016.navleiga.is/$($ServerInstance)",
-              "PublicWinBaseUrl": "DynamicsNAV://azure2016.navleiga.is:7046/$($ServerInstance)",
-              "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
-              "ClientServicesCredentialType": "NavUserPassword",
-              "EnableSqlConnectionEncryption": "true",
-              "TrustSQLServerCertificate": "false",
-              "SOAPServicesSSLEnabled": "true",
-              "ODataServicesSSLEnabled": "true",
-              "SOAPServicesEnabled": "true",
-              "ODataServicesEnabled": "true"
-            }
-          ]
+          "InstanceSettings": {
+            "PublicODataBaseUrl": "https://azure2016odata.navleiga.is/$($ServerInstance)/OData",
+            "PublicSOAPBaseUrl": "https://azure2016soap.navleiga.is/$($ServerInstance)/WS",
+            "PublicWebBaseUrl": "https://azure2016.navleiga.is/$($ServerInstance)",
+            "PublicWinBaseUrl": "DynamicsNAV://azure2016.navleiga.is:7046/$($ServerInstance)",
+            "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
+            "ClientServicesCredentialType": "NavUserPassword",
+            "EnableSqlConnectionEncryption": "true",
+            "TrustSQLServerCertificate": "false",
+            "SOAPServicesSSLEnabled": "true",
+            "ODataServicesSSLEnabled": "true",
+            "SOAPServicesEnabled": "true",
+            "ODataServicesEnabled": "true"
+          },
+          "ClientSettings": {
+            "ProductName": "Dynamics NAV frá Advania",
+            "HelpServer": "2016help.navleiga.is",
+            "HelpServerPort": "80",
+            "FeedbackLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "CommunityLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "PrivacyLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift",
+            "LegalLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift"
+          }
         }
       ]
     },
@@ -70,22 +84,29 @@
           "Roles": "Client,Web,ClickOnce",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
           "NAVDVDPath": "C:\\AdvaniaGIT\\2017IS",
-          "InstanceSettings": [
-            {
-              "PublicODataBaseUrl": "https://azure2017odata.navleiga.is/$($ServerInstance)/OData",
-              "PublicSOAPBaseUrl": "https://azure2017soap.navleiga.is/$($ServerInstance)/WS",
-              "PublicWebBaseUrl": "https://azure2017.navleiga.is/$($ServerInstance)",
-              "PublicWinBaseUrl": "DynamicsNAV://azure2017.navleiga.is:7046/$($ServerInstance)",
-              "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
-              "ClientServicesCredentialType": "NavUserPassword",
-              "EnableSqlConnectionEncryption": "true",
-              "TrustSQLServerCertificate": "false",
-              "SOAPServicesSSLEnabled": "true",
-              "ODataServicesSSLEnabled": "true",
-              "SOAPServicesEnabled": "true",
-              "ODataServicesEnabled": "true"
-            }
-          ]
+          "InstanceSettings": {
+            "PublicODataBaseUrl": "https://azure2017odata.navleiga.is/$($ServerInstance)/OData",
+            "PublicSOAPBaseUrl": "https://azure2017soap.navleiga.is/$($ServerInstance)/WS",
+            "PublicWebBaseUrl": "https://azure2017.navleiga.is/$($ServerInstance)",
+            "PublicWinBaseUrl": "DynamicsNAV://azure2017.navleiga.is:7046/$($ServerInstance)",
+            "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
+            "ClientServicesCredentialType": "NavUserPassword",
+            "EnableSqlConnectionEncryption": "true",
+            "TrustSQLServerCertificate": "false",
+            "SOAPServicesSSLEnabled": "true",
+            "ODataServicesSSLEnabled": "true",
+            "SOAPServicesEnabled": "true",
+            "ODataServicesEnabled": "true"
+          },
+          "ClientSettings": {
+            "ProductName": "Dynamics NAV frá Advania",
+            "HelpServer": "2017help.navleiga.is",
+            "HelpServerPort": "80",
+            "FeedbackLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "CommunityLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "PrivacyLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift",
+            "LegalLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift"
+          }
         },
         {
           "HostName": "NAV2017-02",
@@ -93,22 +114,29 @@
           "Roles": "Client,Web,ClickOnce",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
           "NAVDVDPath": "C:\\AdvaniaGIT\\2017IS",
-          "InstanceSettings": [
-            {
-              "PublicODataBaseUrl": "https://azure2017odata.navleiga.is/$($ServerInstance)/OData",
-              "PublicSOAPBaseUrl": "https://azure2017soap.navleiga.is/$($ServerInstance)/WS",
-              "PublicWebBaseUrl": "https://azure2017.navleiga.is/$($ServerInstance)",
-              "PublicWinBaseUrl": "DynamicsNAV://azure2017.navleiga.is:7046/$($ServerInstance)",
-              "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
-              "ClientServicesCredentialType": "NavUserPassword",
-              "EnableSqlConnectionEncryption": "true",
-              "TrustSQLServerCertificate": "false",
-              "SOAPServicesSSLEnabled": "true",
-              "ODataServicesSSLEnabled": "true",
-              "SOAPServicesEnabled": "true",
-              "ODataServicesEnabled": "true"
-            }
-          ]
+          "InstanceSettings": {
+            "PublicODataBaseUrl": "https://azure2017odata.navleiga.is/$($ServerInstance)/OData",
+            "PublicSOAPBaseUrl": "https://azure2017soap.navleiga.is/$($ServerInstance)/WS",
+            "PublicWebBaseUrl": "https://azure2017.navleiga.is/$($ServerInstance)",
+            "PublicWinBaseUrl": "DynamicsNAV://azure2017.navleiga.is:7046/$($ServerInstance)",
+            "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
+            "ClientServicesCredentialType": "NavUserPassword",
+            "EnableSqlConnectionEncryption": "true",
+            "TrustSQLServerCertificate": "false",
+            "SOAPServicesSSLEnabled": "true",
+            "ODataServicesSSLEnabled": "true",
+            "SOAPServicesEnabled": "true",
+            "ODataServicesEnabled": "true"
+          },
+          "ClientSettings": {
+            "ProductName": "Dynamics NAV frá Advania",
+            "HelpServer": "2017help.navleiga.is",
+            "HelpServerPort": "80",
+            "FeedbackLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "CommunityLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "PrivacyLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift",
+            "LegalLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift"
+          }
         }
       ]
     },
@@ -126,22 +154,29 @@
           "Roles": "Client,Web,ClickOnce",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
           "NAVDVDPath": "C:\\AdvaniaGIT\\2016IS",
-          "InstanceSettings": [
-            {
-              "PublicODataBaseUrl": "https://lsazure2016odata.navleiga.is/$($ServerInstance)/OData",
-              "PublicSOAPBaseUrl": "https://lsazure2016soap.navleiga.is/$($ServerInstance)/WS",
-              "PublicWebBaseUrl": "https://lsazure2016.navleiga.is/$($ServerInstance)",
-              "PublicWinBaseUrl": "DynamicsNAV://lsazure2016.navleiga.is:7046/$($ServerInstance)",
-              "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
-              "ClientServicesCredentialType": "NavUserPassword",
-              "EnableSqlConnectionEncryption": "true",
-              "TrustSQLServerCertificate": "false",
-              "SOAPServicesSSLEnabled": "true",
-              "ODataServicesSSLEnabled": "true",
-              "SOAPServicesEnabled": "true",
-              "ODataServicesEnabled": "true"
-            }
-          ]
+          "InstanceSettings": {
+            "PublicODataBaseUrl": "https://lsazure2016odata.navleiga.is/$($ServerInstance)/OData",
+            "PublicSOAPBaseUrl": "https://lsazure2016soap.navleiga.is/$($ServerInstance)/WS",
+            "PublicWebBaseUrl": "https://lsazure2016.navleiga.is/$($ServerInstance)",
+            "PublicWinBaseUrl": "DynamicsNAV://lsazure2016.navleiga.is:7046/$($ServerInstance)",
+            "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
+            "ClientServicesCredentialType": "NavUserPassword",
+            "EnableSqlConnectionEncryption": "true",
+            "TrustSQLServerCertificate": "false",
+            "SOAPServicesSSLEnabled": "true",
+            "ODataServicesSSLEnabled": "true",
+            "SOAPServicesEnabled": "true",
+            "ODataServicesEnabled": "true"
+          },
+          "ClientSettings": {
+            "ProductName": "Dynamics NAV frá Advania",
+            "HelpServer": "2016help.navleiga.is",
+            "HelpServerPort": "80",
+            "FeedbackLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "CommunityLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "PrivacyLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift",
+            "LegalLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift"
+          }
         },
         {
           "HostName": "LSNAV2016-02",
@@ -149,22 +184,29 @@
           "Roles": "Client,Web,ClickOnce",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
           "NAVDVDPath": "C:\\AdvaniaGIT\\2016IS",
-          "InstanceSettings": [
-            {
-              "PublicODataBaseUrl": "https://lsazure2016odata.navleiga.is/$($ServerInstance)/OData",
-              "PublicSOAPBaseUrl": "https://lsazure2016soap.navleiga.is/$($ServerInstance)/WS",
-              "PublicWebBaseUrl": "https://lsazure2016.navleiga.is/$($ServerInstance)",
-              "PublicWinBaseUrl": "DynamicsNAV://lsazure2016.navleiga.is:7046/$($ServerInstance)",
-              "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
-              "ClientServicesCredentialType": "NavUserPassword",
-              "EnableSqlConnectionEncryption": "true",
-              "TrustSQLServerCertificate": "false",
-              "SOAPServicesSSLEnabled": "true",
-              "ODataServicesSSLEnabled": "true",
-              "SOAPServicesEnabled": "true",
-              "ODataServicesEnabled": "true"
-            }
-          ]
+          "InstanceSettings": {
+            "PublicODataBaseUrl": "https://lsazure2016odata.navleiga.is/$($ServerInstance)/OData",
+            "PublicSOAPBaseUrl": "https://lsazure2016soap.navleiga.is/$($ServerInstance)/WS",
+            "PublicWebBaseUrl": "https://lsazure2016.navleiga.is/$($ServerInstance)",
+            "PublicWinBaseUrl": "DynamicsNAV://lsazure2016.navleiga.is:7046/$($ServerInstance)",
+            "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
+            "ClientServicesCredentialType": "NavUserPassword",
+            "EnableSqlConnectionEncryption": "true",
+            "TrustSQLServerCertificate": "false",
+            "SOAPServicesSSLEnabled": "true",
+            "ODataServicesSSLEnabled": "true",
+            "SOAPServicesEnabled": "true",
+            "ODataServicesEnabled": "true"
+          },
+          "ClientSettings": {
+            "ProductName": "Dynamics NAV frá Advania",
+            "HelpServer": "2016help.navleiga.is",
+            "HelpServerPort": "80",
+            "FeedbackLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "CommunityLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/spurt-og-svarad/",
+            "PrivacyLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift",
+            "LegalLink": "https://www.advania.is/hugbunadur-og-lausnir/vidskiptalausnir/microsoft-dynamics-nav-i-askrift/skilmalar-nav-i-askrift"
+          }
         },
         {
           "HostName": "NAV2016-DD01",
@@ -172,18 +214,16 @@
           "Roles": "NAS",
           "EncryptionKeyPath": "C:\\AdvaniaGIT\\AdvaniaNAVDB.key",
           "NAVDVDPath": "C:\\AdvaniaGIT\\2016IS",
-          "InstanceSettings": [
-            {
-              "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
-              "ClientServicesCredentialType": "NavUserPassword",
-              "EnableSqlConnectionEncryption": "true",
-              "TrustSQLServerCertificate": "false",
-              "NASServicesStartupCodeunit": "99001468",
-              "NASServicesRunWithAdminRights": "true",
-              "NASServicesStartupMethod": "LSRSCHEDULER",
-              "NASServicesStartupArgument": "NASID,TYPEFILTER=Datadir,LOG=1,REPEAT=1"
-            }
-          ]
+          "InstanceSettings": {
+            "ServicesCertificateThumbprint": "6AD68C79E4F2E652454F02D4730A528D60672571",
+            "ClientServicesCredentialType": "NavUserPassword",
+            "EnableSqlConnectionEncryption": "true",
+            "TrustSQLServerCertificate": "false",
+            "NASServicesStartupCodeunit": "99001468",
+            "NASServicesRunWithAdminRights": "true",
+            "NASServicesStartupMethod": "LSRSCHEDULER",
+            "NASServicesStartupArgument": "NASID,TYPEFILTER=Datadir,LOG=1,REPEAT=1"
+          }
         }
       ]
     }
