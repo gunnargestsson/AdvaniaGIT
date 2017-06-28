@@ -18,7 +18,7 @@
         # Create the ClickOnce Site
         $Result = Invoke-Command -Session $Session -ScriptBlock `
             {
-                Param([PSObject]$SelectedInstance, [PSObject]$SelectedTenant, [PSObject]$ClientSettings, [String]$ClickOnceApplicationName, [String]$ClickOnceApplicationPublisher)
+                Param([PSObject]$SelectedInstance, [PSObject]$SelectedTenant, [PSObject]$ClientSettings, [String]$ClickOnceApplicationName, [String]$ClickOnceApplicationPublisher, [String]$DnsIdentity)
                 Write-Host "Creating Client Configuration..."
                 $clickOnceCodeSigningPfxPasswordAsSecureString = ConvertTo-SecureString -String $SetupParameters.codeSigningCertificatePassword -AsPlainText -Force
                 $clickOnceDeploymentId = "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)"
@@ -27,15 +27,6 @@
                 $webSiteUrl = ("https://" + $SelectedTenant.ClickOnceHost)
                 [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:ProgramData ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))                       
 
-                for ($i=1
-                    $i -lt ((Split-Path (Split-Path $SelectedInstance.PublicWinBaseUrl -Parent) -Leaf).Split(':').GetValue(0)).Split('.').Count
-                    $i++){
-                    if ($DnsIdentity) {
-                        $DnsIdentity += "." + ((Split-Path (Split-Path $SelectedInstance.PublicWinBaseUrl -Parent) -Leaf).Split(':').GetValue(0)).Split('.').GetValue($i)
-                    } else {
-                        $DnsIdentity = ((Split-Path (Split-Path $SelectedInstance.PublicWinBaseUrl -Parent) -Leaf).Split(':').GetValue(0)).Split('.').GetValue($i)
-                    }
-                    }
                 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue (Split-Path (Split-Path $SelectedInstance.PublicWinBaseUrl -Parent) -Leaf).Split(':').GetValue(0)
                 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesPort' -NewValue (Split-Path (Split-Path $SelectedInstance.PublicWinBaseUrl -Parent) -Leaf).Split(':').GetValue(1)
                 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServerInstance' -NewValue (Split-Path $SelectedInstance.PublicWinBaseUrl -Leaf)
@@ -126,6 +117,6 @@
                 Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\Soap" -Value @{enabled="true";destination="$($SelectedInstance.PublicSOAPBaseUrl)";exactDestination="true";httpResponseStatus="Permanent"}
                 Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\OData" -Value @{enabled="true";destination="$($SelectedInstance.PublicODataBaseUrl)";exactDestination="true";httpResponseStatus="Permanent"}
 
-            } -ArgumentList ($SelectedInstance, $SelectedTenant, $ClientSettings, $ClickOnceApplicationName, $ClickOnceApplicationPublisher) -ErrorAction Stop        
+            } -ArgumentList ($SelectedInstance, $SelectedTenant, $ClientSettings, $ClickOnceApplicationName, $ClickOnceApplicationPublisher, (Get-DnsIdentity -SelectedInstance $SelectedInstance)) -ErrorAction Stop        
     }
 }
