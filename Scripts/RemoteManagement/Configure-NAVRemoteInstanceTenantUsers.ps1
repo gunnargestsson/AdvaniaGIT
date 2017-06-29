@@ -22,7 +22,7 @@
             '0' { break }
             '+' {
                     try {
-                        $NewUser = New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -Credential $Credential -DeploymentName $DeploymentName 
+                        $NewUser = New-NAVDeploymentRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -Credential $Credential -DeploymentName $DeploymentName 
                         if ($NewUser.OKPressed -eq 'OK') { Write-Host "User $($NewUser.UserName) created with password $($NewUser.Password)" }
                     }
                     catch {

@@ -23,6 +23,7 @@
     4 = settings, `
     5 = clickonce, `
     6 = license, `
+    7 = remove `
     Action: "
 
         switch ($input) {
@@ -53,7 +54,16 @@
                     Set-NAVDeploymentRemoteInstanceTenantLicense -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant
                     $anyKey = Read-Host "Press enter to continue..."
                 }
+            '7' { 
+                    if ($SelectedInstance.Multitenant -eq "true") {
+                        #Remove-NAVDeploymentRemoteInstanceTenant -Session $Session -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential
+                    } else {
+                        Remove-NAVDeploymentRemoteInstance -Credential $Credential -SelectedInstance $SelectedInstance -DeploymentName $DeploymentName 
+                    }
+                }
+
+                
         }                    
     }
-    until ($input -iin ('0'))        
+    until ($input -iin ('0', '7'))        
 }

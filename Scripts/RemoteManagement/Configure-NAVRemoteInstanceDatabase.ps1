@@ -22,7 +22,7 @@
             '0' { break }
             '1' {                    
                     try {
-                        $Database = Set-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $selectedInstance -Database $menuItems -DeploymentName $DeploymentName -Credential $Credential
+                        $Database = Set-NAVDeploymentRemoteInstanceDatabase -Session $Session -SelectedInstance $selectedInstance -Database $menuItems -DeploymentName $DeploymentName -Credential $Credential
                         if ($Database.OKPressed -eq $true) { Write-Host "Database settings updated" }
                     }
                     catch {

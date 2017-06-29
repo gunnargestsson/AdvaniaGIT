@@ -4,7 +4,7 @@
       "Deployment": "NAV2016",
       "Description": "NAV 2016 Installation",
       "ClickOnceEndpoint": "advanianav2016.westeurope.cloudapp.azure.com",
-      "ClickOnceHost": "$(ServerInstance).navleiga.is",
+      "ClickOnceHost": "${ServerInstance}.navleiga.is",
       "ClickOnceApplicationName": "Dynamics NAV 2016 frá Advania",
       "ClickOnceApplicationPublisher": "Advania",
       "Hosts": [

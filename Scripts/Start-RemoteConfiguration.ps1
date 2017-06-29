@@ -55,6 +55,7 @@ do {
                     $input = Read-Host "Please select action (0 = exit, + = new instance, 1 = configure, 2 = ClickOnce, 3 = web client, 4 = licenses, 5 = customer list)"
                     switch ($input) {
                         '0' { break }
+                        '+' { New-NAVDeploymentRemoteInstance -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                         '1' { Configure-NAVRemoteInstances -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $selectedDeployment.Deployment }
                         '2' { New-NAVDeploymentRemoteClickOnceSites -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                         '3' { New-NAVRemoteWebInstances -Credential $Credential -DeploymentName $selectedDeployment.Deployment }

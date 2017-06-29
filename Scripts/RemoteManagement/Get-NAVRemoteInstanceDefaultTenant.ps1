@@ -12,9 +12,9 @@
             $tenant | Add-Member -MemberType NoteProperty -Name CustomerRegistrationNo -Value ""
             $tenant | Add-Member -MemberType NoteProperty -Name Id -Value "default"
             $tenant | Add-Member -MemberType NoteProperty -Name PasswordPid -Value ""
-            $tenant | Add-Member -MemberType NoteProperty -Name ServerInstance -Value $ServerInstance.ServerInstance
+            $tenant | Add-Member -MemberType NoteProperty -Name ServerInstance -Value $SelectedInstance.ServerInstance
             $tenant | Add-Member -MemberType NoteProperty -Name LicenseNo -Value ""
-            $tenant | Add-Member -MemberType NoteProperty -Name ClickOnceUrl -Value "" 
+            $tenant | Add-Member -MemberType NoteProperty -Name ClickOnceHost -Value "" 
             $tenant | Add-Member -MemberType NoteProperty -Name CustomerName -Value ""
             $tenant | Add-Member -MemberType NoteProperty -Name CustomerEMail -Value ""
             $tenant | Add-Member -MemberType NoteProperty -Name AadTenantId -Value ""

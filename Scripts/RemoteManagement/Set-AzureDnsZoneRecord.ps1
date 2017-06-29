@@ -7,7 +7,7 @@
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$OldDnsHostName
         )
-    Write-Host "Updating DNS Record..."
+    Write-Host "Updating DNS Record for ${DnsHostName}..."
     $DnsZone = Get-AzureDnsZone  -DnsHostName $DnsHostName 
     if ($OldDnsHostName) { Remove-AzureDnsZoneRecordSet  -DnsZone $DnsZone -DnsHostName $OldDnsHostName }
     if ($DnsHostName) { Remove-AzureDnsZoneRecordSet  -DnsZone $DnsZone -DnsHostName $DnsHostName }

@@ -16,7 +16,7 @@
     $NewTenantSettings = New-TenantSettingsDialog -Message "Edit Tenant Settings" -TenantSettings $TenantSettings -TenantIdNotEditable
     if ($NewTenantSettings.OKPressed -ne 'OK') { Return $SelectedTenant }
     $SelectedTenant = Combine-Settings $NewTenantSettings $SelectedTenant
-    $RemoteTenantSettings = Set-NAVRemoteInstanceTenantSettings -Session $Session -Credential $Credential -SelectedTenant $SelectedTenant -DeploymentName $DeploymentName 
+    $RemoteTenantSettings = Set-NAVDeploymentRemoteInstanceTenantSettings -Session $Session -Credential $Credential -SelectedTenant $SelectedTenant -DeploymentName $DeploymentName 
     Set-AzureDnsZoneRecord -DeploymentName $DeploymentName -DnsHostName $SelectedTenant.ClickOnceHost -OldDnsHostName $OldDnsHostName
     Return $SelectedTenant
     }
