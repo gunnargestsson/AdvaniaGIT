@@ -22,7 +22,7 @@
                 } else {
                     $RemoteSession = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN 
                 }     
-                Set-NAVRemoteInstanceTenantSetting -Session $RemoteSession -SelectedTenand $SelectedTenant   
+                Set-NAVRemoteInstanceTenantSettings -Session $RemoteSession -SelectedTenant $SelectedTenant   
                 if ($Session.ComputerName -ne $RemoteSession.ComputerName) { Remove-PSSession -Session $RemoteSession }
             }
         }

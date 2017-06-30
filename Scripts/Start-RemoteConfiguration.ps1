@@ -52,7 +52,15 @@ do {
                     Clear-Host
                     For ($i=0; $i -le 10; $i++) { Write-Host "" }
                     $selectedDeployment | Format-Table -Property Deployment, Description -AutoSize 
-                    $input = Read-Host "Please select action (0 = exit, + = new instance, 1 = configure, 2 = ClickOnce, 3 = web client, 4 = licenses, 5 = customer list)"
+                    $input = Read-Host "Please select action `
+                    0 = exit,  
+                    + = new instance, `
+                    1 = configure, `
+                    2 = ClickOnce, `
+                    3 = web client, `
+                    4 = licenses, `
+                    5 = customer list`
+                    Action "
                     switch ($input) {
                         '0' { break }
                         '+' { New-NAVDeploymentRemoteInstance -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
@@ -61,7 +69,6 @@ do {
                         '3' { New-NAVRemoteWebInstances -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                         '4' { New-NAVDeploymentRemoteLicenses -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                         '5' { New-NAVDeploymentCustomerList -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
-                        '+' { New-NAVRemoteInstance -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                     }
                 }
                 until ($input -iin ('0', '1'))
