@@ -109,7 +109,13 @@ else
     
     # Start the script
     $ScriptToStart = (Join-Path (Join-path $PSScriptRoot 'CustomActions') $ScriptName)
-    & $ScriptToStart 
+    try { & $ScriptToStart }
+    catch [Exception] {
+      Write-Host $_.Exception.GetType().FullName, $_.Exception.Message
+      $anyKey = Read-Host "Press enter to continue..."
+      break
+    }
+
     Pop-Location
 }
 
