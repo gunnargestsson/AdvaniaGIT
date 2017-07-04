@@ -20,7 +20,7 @@
         # Start Menu
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
-        $menuItems | Format-Table -Property No, Name, Lenght, LastWriteTime -AutoSize | Out-Host
+        $menuItems | Format-Table -Property No, Name, LastWriteTime -AutoSize | Out-Host
         $input = Read-Host "Please select bacpac file number (0 = exit)"
         switch ($input) {
             '0' { break }

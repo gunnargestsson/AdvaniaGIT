@@ -22,6 +22,18 @@ if (!$Credential.UserName -or !$Credential.Password) {
     break
 }
 
+$VMAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
+if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
+    $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
+} else {
+    $VMCredential = Get-Credential -Message "Admin Access to Azure SQL" -ErrorAction Stop    
+}
+
+if (!$VMCredential.UserName -or !$VMCredential.Password) {
+    Write-Host -ForegroundColor Red "Credentials required!"
+    break
+}
+
 $AzureRMAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.AzureRMUserPasswordID
 if ($AzureRMAdmin.UserName -gt "" -and $AzureRMAdmin.Password -gt "") {
     $AzureCredential = New-Object System.Management.Automation.PSCredential($AzureRMAdmin.UserName, (ConvertTo-SecureString $AzureRMAdmin.Password -AsPlainText -Force))
@@ -72,9 +84,16 @@ do {
         '+' { New-AzureSqlDatabase -Credential $Credential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer }
         default {
             $selectedDatabase = $menuItems | Where-Object -Property No -EQ $input
-            if ($selectedDatabase) {                
-                Write-Verbose "Start database menu"
-                #List-NAVRemoteInstances -Credential $Credential -RemoteConfig $RemoteConfig -DatabaseName $selectedDatabase.Database                                 
+            if ($selectedDatabase) { 
+                Clear-Host
+                For ($i=0; $i -le 10; $i++) { Write-Host "" }
+                $selectedDatabase | Format-Table -Property No, DatabaseName, Location, ServerName, ResourceGroupName, ElasticPoolName -AutoSize 
+                $input = Read-Host "Please select action (0 = exit, 1 = export, 2 = delete)"
+                switch ($input) {
+                    '0' { $input = "" }
+                    '1' { New-AzureSqlDatabaseBacpac -Credential $VMCredential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
+                    '2' { Remove-AzureSqlDatabase -Credential $Credential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
+                }
             }
         }
     }
