@@ -1,8 +1,6 @@
 ﻿Function Load-NAVRemoteInstanceTenantsMenu {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [System.Management.Automation.Runspaces.PSSession]$Session,
-        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SelectedInstance
     )
     PROCESS 
