@@ -21,21 +21,26 @@
 
 do {
     $menuItems = Load-Menu
-    Clear
+    Clear-Host
+    For ($i=0; $i -le 10; $i++) { Write-Host "" }
     $menuItems | Format-Table -Property No, ProjectName, InstanceName, State, DatabaseName, Version, Default, BranchId -AutoSize 
-    $input = Read-Host "Please select instance number (q = exit)"
+    $input = Read-Host "Please select instance number (0 = exit)"
     switch ($input) {
-        'q' { break }
+        '0' { break }
         default {
             $selectedInstance = $menuItems | Where-Object -Property No -EQ $input
             if ($selectedInstance) {
                 do {
-                    Clear
+                    Clear-Host
+                    For ($i=0; $i -le 10; $i++) { Write-Host "" }
                     $selectedInstance | Format-Table -Property No, ProjectName, InstanceName, State, DatabaseName, Version, Default, BranchId -AutoSize
-                    $input = Read-Host "Please select action (r = return, d = delete, s = start, x = stop, e = event log)"
+                    $input = Read-Host "Please select action (0 = return, 1 = delete, 2 = start, 3 = stop, 4 = event log)"
                     switch ($input) {
-                        'r' { break }
-                        'd' { 
+                        '0' { 
+                                $input = "q"
+                                break 
+                            }
+                        '1' { 
                                 $InstanceSetupParameters = Create-SetupParameters -InstanceVersion $selectedInstance.Version
                                 Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
                                 if ($selectedInstance.branchId -ne "") {
@@ -54,32 +59,32 @@ do {
                                 UnLoad-InstanceAdminTools
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
-                        's' {
+                        '2' {
                                 $InstanceSetupParameters = Create-SetupParameters -InstanceVersion $selectedInstance.Version
                                 Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
                                 Set-NAVServerInstance -ServerInstance $selectedInstance.instanceName -Start -Force
                                 UnLoad-InstanceAdminTools
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
-                        'x' {
+                        '3' {
                                 $InstanceSetupParameters = Create-SetupParameters -InstanceVersion $selectedInstance.Version
                                 Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
                                 Set-NAVServerInstance -ServerInstance $selectedInstance.instanceName -Stop -Force
                                 UnLoad-InstanceAdminTools
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
-                        'e' {
+                        '4' {
                                 Show-InstanceEvents -InstanceName $selectedInstance.instanceName
                                 $anyKey = Read-Host "Press enter to continue..."
                             }                                
                     }                    
                 }
-                until ($input -iin ('r', 'd', 's', 'e', 'x'))
+                until ($input -iin ('q', '1', '2', '3'))
             }
         }
     }
 }
-until ($input -ieq 'q')
+until ($input -ieq '0')
 
 
 

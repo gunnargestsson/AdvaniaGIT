@@ -1,8 +1,7 @@
 ﻿# Import all needed modules
-Get-Module RemoteManagement | Remove-Module
 Import-Module RemoteManagement -DisableNameChecking | Out-Null
-Get-Module AdvaniaGIT | Remove-Module
 Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
+Import-Module AzureRM
 
 # Get Environment Settings
 $SetupParameters = Get-GITSettings

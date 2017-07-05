@@ -20,45 +20,102 @@
         $menuItems += $database
         $databaseNo ++
     }
-    UnLoad-databaseAdminTools
+    UnLoad-InstanceAdminTools
     Return $menuItems
 }
 
 do {
     $menuItems = Load-Menu
-    Clear
+    Clear-Host
+    For ($i=0; $i -le 10; $i++) { Write-Host "" }
     $menuItems | Format-Table -Property No, ProjectName, DatabaseName, State, InstanceName, Version, Default, BranchId -AutoSize 
-    $input = Read-Host "Please select database number (q = exit)"
+    $input = Read-Host "Please select database number (0 = exit)"
     switch ($input) {
-        'q' { break }
+        '0' { break }
         default {
             $selectedDatabase = $menuItems | Where-Object -Property No -EQ $input
             if ($selectedDatabase) {
                 do {
-                    Clear
+                    Clear-Host
+                    For ($i=0; $i -le 10; $i++) { Write-Host "" }
                     $selectedDatabase | Format-Table -Property No, ProjectName, DatabaseName, State, InstanceName, Version, Default, BranchId -AutoSize 
-                    $input = Read-Host "Please select action (r = return, d = delete)"
+                    $databaseBranchSettings = Get-DatabaseBranchSettings -DatabaseName $selectedDatabase.Name
+                    $InstanceSetupParameters = Create-SetupParameters -InstanceVersion $selectedDatabase.Version
+                    $input = Read-Host "Please select action (0 = return, 1 = remove users, 2 = create backup, 3 = restore backup, 4 = create bacpac, 5 = restore backpac, 6 = delete)"
                     switch ($input) {
-                        'r' { break }
-                        'd' { 
+                        '0' { 
+                                $input = "q"
+                                break 
+                            }
+                        '1' {
+                                if ($selectedDatabase.branchId -eq "") { 
+                                    Write-Host -ForegroundColor Red "Environment must be attached to use this function"
+                                    break
+                                } else {
+                                    Remove-NAVDatabaseUsers -SetupParameters $InstanceSetupParameters -BranchSettings $databaseBranchSettings
+                                }
+                                $anyKey = Read-Host "Press enter to continue..."
+                            }
+                        '2' {
+                                if ($selectedDatabase.branchId -eq "") { 
+                                    Write-Host -ForegroundColor Red "Environment must be attached to use this function"
+                                    break
+                                } else {
+                                    $BackupFileName = Read-Host -Prompt "Type backup file name (default = $($databaseBranchSettings.DatabaseName).bak)"
+                                    if ($BackupFileName -eq "") { $BackupFileName = "$($databaseBranchSettings.DatabaseName).bak" }
+                                    Create-NAVDatabaseBackup -SetupParameters $SetupParameters -BranchSettings $databaseBranchSettings -BackupFilePath (Join-Path $SetupParameters.BackupPath $BackupFileName)
+                                }
+                                $anyKey = Read-Host "Press enter to continue..."
+                            }
+                        '3' {
+                                if ($selectedDatabase.branchId -eq "") { 
+                                    Write-Host -ForegroundColor Red "Environment must be attached to use this function"
+                                    break
+                                } else {
+                                    $SelectedBakFilePath = Get-LocalBakFilePath
+                                    Replace-NAVDatabaseFromBak -SetupParameters $SetupParameters -BranchSettings $databaseBranchSettings -SelectedBackupFile $SelectedBakFilePath.FullName 
+                                }
+                                $anyKey = Read-Host "Press enter to continue..."
+                            }
+                        '4' {
+                                if ($selectedDatabase.branchId -eq "") { 
+                                    Write-Host -ForegroundColor Red "Environment must be attached to use this function"
+                                    break
+                                } else {
+                                    $BacpacFileName = Read-Host -Prompt "Type bacpac file name (default = $($databaseBranchSettings.DatabaseName).bacpac)"
+                                    if ($BacpacFileName -eq "") { $BacpacFileName = "$($databaseBranchSettings.DatabaseName).bacpac" }
+                                    Create-NAVDatabaseBacpac -SetupParameters $SetupParameters -BranchSettings $databaseBranchSettings -BacpacFilePath (Join-Path $SetupParameters.BackupPath $BacpacFileName)
+                                }
+                                $anyKey = Read-Host "Press enter to continue..."
+                            }
+                        '5' {
+                                if ($selectedDatabase.branchId -eq "") { 
+                                    Write-Host -ForegroundColor Red "Environment must be attached to use this function"
+                                    break
+                                } else {
+                                    $SelectedBakFilePath = Convert-NAVBacpacToBak -SetupParameters $SetupParameters -BranchSettings $databaseBranchSettings
+                                    Replace-NAVDatabaseFromBak -SetupParameters $SetupParameters -BranchSettings $databaseBranchSettings -SelectedBackupFile $SelectedBakFilePath 
+                                }
+                                $anyKey = Read-Host "Press enter to continue..."
+                            }
+                        '6' { 
                                 if ($selectedDatabase.branchId -ne "") {
-                                    $InstanceSetupParameters = Create-SetupParameters -InstanceVersion $selectedDatabase.Version
                                     Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
                                     $LocalBranchSettings = Clear-BranchSettings -BranchId $selectedDatabase.branchId 
                                     Remove-NAVEnvironment -BranchSettings $LocalBranchSettings 
                                     UnLoad-InstanceAdminTools
                                 } else {
                                     Write-Host "Removing Database..."
-                                    Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command "DROP DATABASE [$($selectedDatabase.databaseName)]" | Out-Null                                        
+                                    Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command "ALTER DATABASE [$($BranchSettings.DatabaseName)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [$($selectedDatabase.databaseName)]" | Out-Null
                                 }                                
                                 $anyKey = Read-Host "Press enter to continue..."
                             }                               
                     }                    
                 }
-                until ($input -iin ('r', 'd'))
+                until ($input -iin ('q', '1'))
             }
         }
     }
 }
-until ($input -ieq 'q')
+until ($input -ieq '0')
 
