@@ -25,9 +25,11 @@
                 $Response = Set-NAVPasswordStateUser -Title $SelectedTenant.CustomerName -UserName $NewUser.UserName -FullName $NewUser.FullName -Password $NewPassword
                 $SelectedTenant.PasswordID = $Response.PasswordID
                 $RemoteTenantSettings = Set-NAVDeploymentRemoteInstanceTenantSettings -Session $Session -Credential $Credential -SelectedTenant $SelectedTenant -DeploymentName $DeploymentName 
-            }   
-        }        
-        New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -User $NewUser -NewPassword $NewPassword -ChangePasswordAtNextLogOn ($RemoteConfig.NAVSuperUser -ine $User.UserName)
+            }
+            New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -User $NewUser -NewPassword $NewPassword    
+        } else {       
+            New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -User $NewUser -NewPassword $NewPassword -ChangePasswordAtNextLogOn
+        }
         $NewUser | Add-Member -MemberType NoteProperty -Name Password -Value $NewPassword
         Return $NewUser
     }    
