@@ -1,7 +1,7 @@
 ﻿Function Get-NAVRemoteInstanceTenantSessions {
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [System.Management.Automation.PSCredential]$Credential,
+        [System.Management.Automation.Runspaces.PSSession]$Session,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SelectedInstance,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
@@ -9,21 +9,22 @@
     )
     PROCESS 
     {
-        $Session = New-NAVRemoteSession -Credential $Credential -HostName $SelectedInstance.PSComputerName
+
         if ($SelectedTenant) { 
             $TenantId = $SelectedTenant.Id 
         } else {
             $TenantId = 'default'
         }
 
-        Invoke-Command -Session $Session -ScriptBlock `
+        $Result = Invoke-Command -Session $Session -ScriptBlock `
             {
                 param([String]$ServerInstance, [String]$TenantId)
                 Write-Verbose "Import Module from $($SetupParameters.navServicePath)..."
                 Load-InstanceAdminTools -SetupParameters $SetupParameters
-                Get-NAVServerSession -ServerInstance $ServerInstance -Tenant $TenantId
+                $Sessions = Get-NAVServerSession -ServerInstance $ServerInstance -Tenant $TenantId
                 UnLoad-InstanceAdminTools
+                return $Sessions
             } -ArgumentList ($SelectedInstance.ServerInstance, $TenantId)
-        Remove-PSSession $Session
+        return $Result
     }    
 }

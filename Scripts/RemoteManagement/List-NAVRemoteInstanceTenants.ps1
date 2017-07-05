@@ -3,7 +3,9 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.PSCredential]$Credential,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$SelectedInstance
+        [PSObject]$SelectedInstance,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$SelectedTenant
     )
    
     do {
@@ -24,10 +26,10 @@
                         $selectedTenant | Format-Table -Property Id, DatabaseName, CustomerName, LicenseNo, PasswordId, ClickOnceHost, State -AutoSize 
                         $input = Read-Host "Please select action:`
     0 = exit, `
-    1 = web client `
-    2 = nav client `
-    3 = nav debugger `
-    4 = sessions, `
+    1 = Start Web Client `
+    2 = Start NAV Client `
+    3 = Start NAV Debugger `
+    4 = List NAV Sessions
     Action: "
 
                         switch ($input) {
@@ -45,8 +47,7 @@
                                     Start-NAVRemoteWindowsDebugger -SelectedInstance $selectedInstance -TenantId $selectedTenant.Id
                                 }
                             '4' {
-                                    Get-NAVRemoteInstanceTenantSessions -Credential $Credential -SelectedInstance $selectedInstance -SelectedTenant $selectedTenant
-                                    $anyKey = Read-Host "Press enter to continue..."
+                                   List-NAVRemoteInstanceSessions -Credential $Credential -SelectedInstance $selectedInstance -SelectedTenant $SelectedTenant
                                 }
                         }                    
                     }
