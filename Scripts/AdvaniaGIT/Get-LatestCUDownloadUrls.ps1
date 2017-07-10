@@ -30,8 +30,8 @@
                 $cuLink = $Article.Substring($startPos, $endPos - $startPos)
                 $startPos = $Article.IndexOf('">', $endPos + 1)
                 $endPos = $Article.IndexOf(' ', $startPos)
-                $cuLocal = $Article.Substring($startPos + 2, $endPos - $startPos - 2)
-                $DownloadUrls += @{"LocalVersion"=$cuLocal.Substring(0,2); "DownloadUrl"=$cuLink}
+                $cuLocal = $Article.Substring($endPos - 2, 2)
+                $DownloadUrls += @{"LocalVersion"=$cuLocal; "DownloadUrl"=$cuLink}
             }
             return $DownloadUrls
         }
