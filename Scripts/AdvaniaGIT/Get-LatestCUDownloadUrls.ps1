@@ -22,15 +22,13 @@
 
         if ($item.title -like $SearchString) {
             Download-File -Url $item.link -FileName $ArticlePath
-            $Article = Get-Content $ArticlePath | Out-String
+            $Article = (Get-Content $ArticlePath | Out-String).Replace("<span>","")
             $endPos = 1
             while ($Article.IndexOf("http://download.microsoft.com/download", $endPos) -gt 0) {
                 $startPos = $Article.IndexOf('http://download.microsoft.com/download', $endPos)
                 $endPos = $Article.IndexOf('">', $startPos)
                 $cuLink = $Article.Substring($startPos, $endPos - $startPos)
-                $startPos = $Article.IndexOf('">', $endPos + 1)
-                $endPos = $Article.IndexOf(' ', $startPos)
-                $cuLocal = $Article.Substring($endPos - 2, 2)
+                $cuLocal = $Article.Substring($endPos + 2, 2)
                 $DownloadUrls += @{"LocalVersion"=$cuLocal; "DownloadUrl"=$cuLink}
             }
             return $DownloadUrls
