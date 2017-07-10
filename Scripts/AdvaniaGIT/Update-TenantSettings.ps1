@@ -17,7 +17,8 @@
             "CustomerEMail" = $Tenant.CustomerEMail;
             "PasswordId" = $Tenant.PasswordId;
             "LicenseNo" = $Tenant.LicenseNo;
-            "ClickOnceHost" = $Tenant.ClickOnceHost}    
+            "ClickOnceHost" = $Tenant.ClickOnceHost;
+            "Language" = $Tenant.Language}    
     $newTenantSettings += $TenantSettings
     $allTenantSettings.Tenants = $newTenantSettings
     Set-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) -Value ($allTenantSettings | ConvertTo-Json)                

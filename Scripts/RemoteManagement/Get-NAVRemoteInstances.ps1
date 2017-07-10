@@ -20,7 +20,7 @@
                     $TenantList = @()
                     if ($Instance.State -eq "Running") {
                         foreach ($Tenant in (Get-NAVTenant -ServerInstance $Instance.ServerInstance)) {
-                            $TenantSettings = Get-TenantSettings -Tenant $Tenant
+                            $TenantSettings = Get-TenantSettings -SetupParameters $SetupParameters -Tenant $Tenant
                             $TenantList += Combine-Settings $TenantSettings $Tenant 
                         }
                     }

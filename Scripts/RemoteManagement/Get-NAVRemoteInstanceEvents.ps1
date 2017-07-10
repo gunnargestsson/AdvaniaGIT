@@ -20,7 +20,6 @@
                 } -ArgumentList $instanceName
             Remove-PSSession -Session $Session
             $anyKey = Read-Host "Press enter to continue..."
-
         }
     }    
 }

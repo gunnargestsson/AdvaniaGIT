@@ -1,4 +1,6 @@
 ﻿# Import all needed modules
+Get-Module AdvaniaGIT | Remove-Module
+Get-Module RemoteManagement | Remove-Module
 Import-Module RemoteManagement -DisableNameChecking | Out-Null
 Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
 Import-Module AzureRM
@@ -52,12 +54,12 @@ do {
                     $selectedDeployment | Format-Table -Property Deployment, Description -AutoSize 
                     $input = Read-Host "Please select action `
                     0 = exit,  
-                    + = new instance, `
-                    1 = configure, `
-                    2 = ClickOnce, `
-                    3 = web client, `
-                    4 = licenses, `
-                    5 = customer list`
+                    + = Create new instance, `
+                    1 = Configure selected instance, `
+                    2 = Rebuild ClickOnce for deployment, `
+                    3 = Rebuild Web client for deployment, `
+                    4 = Update licenses for deployment, `
+                    5 = Deployment Customer List`
                     Action "
                     switch ($input) {
                         '0' { break }

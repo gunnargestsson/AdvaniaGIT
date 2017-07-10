@@ -10,6 +10,7 @@
     PROCESS 
     {
         # Create the Webclient Site
+        $Language = $SelectedInstance.TenantList[0].Language
         $Result = Invoke-Command -Session $Session -ScriptBlock `
             {
                 Param([PSObject]$SelectedInstance, [PSObject]$ClientSettings, [String]$DnsIdentity)
@@ -18,8 +19,8 @@
                 New-NAVWebServerInstance `
                     -ClientServicesCredentialType $SelectedInstance.ClientServicesCredentialType `
                     -ClientServicesPort $SelectedInstance.ClientServicesPort `
-                    -RegionFormat is-IS `
-                    -Language is-IS `
+                    -RegionFormat $Language `
+                    -Language $Language `
                     -DnsIdentity $DnsIdentity `
                     -Server localhost `
                     -ServerInstance $SelectedInstance.ServerInstance `

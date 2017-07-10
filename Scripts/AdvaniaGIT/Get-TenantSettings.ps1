@@ -2,6 +2,8 @@
 {
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$SetupParameters,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$Tenant,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$SettingsFilePath = "Data\TenantSettings.Json"
@@ -18,9 +20,10 @@
             "CustomerEMail" = "";
             "PasswordId" = "";
             "LicenseNo" = "";
-            "ClickOnceHost" = ""}
+            "ClickOnceHost" = "";
+            "Language" = Get-DefaultInstanceLanguage -SetupParameters $SetupParameters}
         $allTenantSettings.Tenants += $TenantSettings
         Set-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) -Value ($allTenantSettings | ConvertTo-Json)        
-    }    
+    }  
     Return $TenantSettings
 }

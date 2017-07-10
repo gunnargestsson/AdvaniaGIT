@@ -15,7 +15,9 @@
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$LicenseNo,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-        [String]$ClickOnceHost
+        [String]$ClickOnceHost,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [String]$Language
     )
     PROCESS
     {
@@ -60,6 +62,12 @@
         } else {
             $TenantSettings | Add-Member -MemberType NoteProperty -Name ClickOnceHost -Value ""
         }
+        if ($Language) {
+            $TenantSettings | Add-Member -MemberType NoteProperty -Name Language -Value $Language
+        } else {
+            $TenantSettings | Add-Member -MemberType NoteProperty -Name Language -Value ""
+        }
+
                
         return $TenantSettings
     }

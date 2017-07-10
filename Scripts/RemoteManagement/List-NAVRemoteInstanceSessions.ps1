@@ -25,7 +25,7 @@
                         For ($i=0; $i -le 10; $i++) { Write-Host "" }
                         $selectedSession | Format-Table -Property ServerInstanceName, ServerComputerName, UserID, ClientType, ClientComputerName, LoginDatetime -AutoSize 
                         $input = Read-Host "Please select action:`
-    0 = exit, `
+    0 = Exit, `
     1 = Start NAV Debugger `
     Action: "
 

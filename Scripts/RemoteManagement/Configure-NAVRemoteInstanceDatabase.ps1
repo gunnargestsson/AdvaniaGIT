@@ -17,7 +17,7 @@
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
         $menuItems | Format-Table -Property DatabaseName, DatabaseServerName, DatabaseServerInstance, DatabaseUserName -AutoSize 
-        $input = Read-Host "Please select user number (0 = exit, 1 = update)"
+        $input = Read-Host "Please select user number (0 = Exit, 1 = Update Service Configuration)"
         switch ($input) {
             '0' { break }
             '1' {                    

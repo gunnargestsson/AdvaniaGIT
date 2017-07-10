@@ -17,6 +17,7 @@
         $PasswordId = $TenantSettings.PasswordId
         $LicenseNo = $TenantSettings.LicenseNo
         $ClickOnceHost = $TenantSettings.ClickOnceHost
+        $Language = $TenantSettings.Language
 
         [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
         [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
@@ -24,11 +25,11 @@
         $Script:OkPressed = 'NO'                        
         $objForm = New-Object System.Windows.Forms.Form 
         $objForm.Text = $Message
-        $objForm.Size = New-Object System.Drawing.Size(300,500) 
+        $objForm.Size = New-Object System.Drawing.Size(300,550) 
         $objForm.StartPosition = "CenterScreen"
 
         $OKButton = New-Object System.Windows.Forms.Button
-        $OKButton.Location = New-Object System.Drawing.Size(75,430)
+        $OKButton.Location = New-Object System.Drawing.Size(75,480)
         $OKButton.Size = New-Object System.Drawing.Size(75,23)
         $OKButton.Text = "OK"
         $OKButton.Add_Click({
@@ -40,11 +41,12 @@
             $Script:PasswordId=$objPasswordIdTextBox.Text;
             $Script:LicenseNo=$objLicenseNoTextBox.Text;
             $Script:ClickOnceHost=$objClickOnceHostTextBox.Text;
+            $Script:Language=$objLanguageTextBox.Text;
             $objForm.Close()})
         $objForm.Controls.Add($OKButton)
 
         $CancelButton = New-Object System.Windows.Forms.Button
-        $CancelButton.Location = New-Object System.Drawing.Size(150,430)
+        $CancelButton.Location = New-Object System.Drawing.Size(150,480)
         $CancelButton.Size = New-Object System.Drawing.Size(75,23)
         $CancelButton.Text = "Cancel"
         $CancelButton.Add_Click({$objForm.Close()})
@@ -136,6 +138,18 @@
         $objClickOnceHostTextBox.Text = $TenantSettings.ClickOnceHost
         $objForm.Controls.Add($objClickOnceHostTextBox)  
 
+        $objLanguageLabel = New-Object System.Windows.Forms.Label
+        $objLanguageLabel.Location = New-Object System.Drawing.Size(10,370) 
+        $objLanguageLabel.Size = New-Object System.Drawing.Size(280,20) 
+        $objLanguageLabel.Text = "Tenant Language:"
+        $objForm.Controls.Add($objLanguageLabel) 
+
+        $objLanguageTextBox = New-Object System.Windows.Forms.TextBox 
+        $objLanguageTextBox.Location = New-Object System.Drawing.Size(10,390) 
+        $objLanguageTextBox.Size = New-Object System.Drawing.Size(260,20) 
+        $objLanguageTextBox.Text = $TenantSettings.Language
+        $objForm.Controls.Add($objLanguageTextBox)  
+
         $objForm.KeyPreview = $True
         $objForm.Add_KeyDown({if ($_.KeyCode -eq "Enter") 
             {{
@@ -147,6 +161,7 @@
                 $Script:PasswordId=$objPasswordIdTextBox.Text;
                 $Script:LicenseNo=$objLicenseNoTextBox.Text;
                 $Script:ClickOnceHost=$objClickOnceHostTextBox.Text;
+                $Script:Language=$objLanguageTextBox.Text;
                 $objForm.Close()}}})
         $objForm.Add_KeyDown({if ($_.KeyCode -eq "Escape") 
             {$objForm.Close()}})
@@ -164,6 +179,7 @@
         $TenantSettings.PasswordId = $Script:PasswordId
         $TenantSettings.LicenseNo = $Script:LicenseNo
         $TenantSettings.ClickOnceHost = $Script:ClickOnceHost
+        $TenantSettings.Language = $Script:Language
         $TenantSettings | Add-Member -MemberType NoteProperty -Name OkPressed -Value $Script:OkPressed
 
         return $TenantSettings

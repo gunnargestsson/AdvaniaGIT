@@ -16,14 +16,14 @@
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
         $SelectedTenant | Format-Table -Property Id, DatabaseName, CustomerName, LicenseNo, PasswordId, ClickOnceHost, State -AutoSize 
         $input = Read-Host "Please select action:`
-    0 = exit, `
-    1 = companies, `
-    2 = users, `
-    3 = database, `
-    4 = settings, `
-    5 = clickonce, `
-    6 = license, `
-    7 = remove `
+    0 = Exit, `
+    1 = Tenant Companies, `
+    2 = Tenant Users, `
+    3 = Tenant Configuration, `
+    4 = Tenant Settings, `
+    5 = Create/Update Tenant ClickOnce, `
+    6 = Update Tenant License, `
+    7 = Remove Tenant `
     Action: "
 
         switch ($input) {

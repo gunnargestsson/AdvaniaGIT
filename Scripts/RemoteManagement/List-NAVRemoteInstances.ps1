@@ -14,7 +14,7 @@
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
         $menuItems | Format-Table -Property No, HostName, ServerInstance, DatabaseName, Multitenant, Version, State -AutoSize 
-        $input = Read-Host "Please select instance number (0 = exit, + = manage service)"
+        $input = Read-Host "Please select instance number (0 = exit, + = Manage Services)"
         switch ($input) {
             '0' { break }
             '+' { Manage-NAVRemoteInstances -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $DeploymentName }

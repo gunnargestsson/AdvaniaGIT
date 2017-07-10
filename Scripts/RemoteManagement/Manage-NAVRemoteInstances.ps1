@@ -26,35 +26,22 @@
                         For ($i=0; $i -le 10; $i++) { Write-Host "" }
                         $selectedInstance | Format-Table -Property No, HostName, ServerInstance, DatabaseName, Multitenant, Version, State -AutoSize 
                         $input = Read-Host "Please select action:`
-    0 = exit, `
-    1 = force sync, `
-    2 = normal sync, `
-    3 = start, `
-    4 = stop, `
-    5 = event log, `
-    6 = sessions, `
-    Action: "
+    0 = Exit, `
+    1 = Start Force Sync, `
+    2 = Start Normal Sync, `
+    3 = Start Service, `
+    4 = Stop Service, `
+    5 = View Service Event Log, `
+    6 = View Service Sessions, `
+    Select action"
                         switch ($input) {
                             '0' { break }
-                            '1' { 
-                                    Start-NAVRemoteInstanceForceSync -Credential $Credential -SelectedInstances $selectedInstance
-                                }
-                            '2' {                                     
-                                    Start-NAVRemoteInstanceSync -Credential $Credential -SelectedInstances $selectedInstance
-                                }
-                            '3' {
-                                    Start-NAVRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance
-                                }
-                            '4' {
-                                    Stop-NAVRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance
-                                }
-                            '5' {
-                                    Get-NAVRemoteInstanceEvents -Credential $Credential -SelectedInstances $selectedInstance
-                                }
-                            '6' {                                 
-                                    Get-NAVRemoteInstanceTenantSessions -Credential $Credential -SelectedInstance $selectedInstance
-                                    $anyKey = Read-Host "Press enter to continue..."
-                                }
+                            '1' { Start-NAVRemoteInstanceForceSync -Credential $Credential -SelectedInstances $selectedInstance }
+                            '2' { Start-NAVRemoteInstanceSync -Credential $Credential -SelectedInstances $selectedInstance }
+                            '3' { Start-NAVRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance }
+                            '4' { Stop-NAVRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance }
+                            '5' { Get-NAVRemoteInstanceEvents -Credential $Credential -SelectedInstances $selectedInstance }
+                            '6' { Get-NAVRemoteInstanceSessions -Credential $Credential -SelectedInstance $selectedInstance }
                         }                    
                     }
                     until ($input -iin ('0'))
