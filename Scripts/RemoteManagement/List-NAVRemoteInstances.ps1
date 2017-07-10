@@ -34,7 +34,7 @@
     4 = Start Web Client, `
     5 = Start NAV Client, `
     6 = Start NAV Debugger, `
-    Action: "
+    Action"
                         switch ($input) {
                             '0' { break }
                             '1' {

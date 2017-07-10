@@ -7,7 +7,7 @@
     )
     PROCESS 
     {
-        $Session = New-NAVRemoteSession -Credential $Credential -HostName $SelectedInstance[0].PSComputerName 
+        $Session = New-NAVRemoteSession -Credential $Credential -HostName $SelectedInstance.PSComputerName 
         $Sessions = Invoke-Command -Session $Session -ScriptBlock `
             {
                 param([String]$ServerInstance)

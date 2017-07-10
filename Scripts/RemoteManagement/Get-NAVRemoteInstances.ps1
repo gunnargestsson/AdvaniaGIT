@@ -1,5 +1,6 @@
 ﻿Function Get-NAVRemoteInstances {
     param (
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.Runspaces.PSSession]$Session
     )
     PROCESS 

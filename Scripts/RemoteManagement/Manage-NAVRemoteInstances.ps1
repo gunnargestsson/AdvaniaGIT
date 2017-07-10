@@ -33,6 +33,7 @@
     4 = Stop Service, `
     5 = View Service Event Log, `
     6 = View Service Sessions, `
+    7 = Data Upgrade Menu, `
     Select action"
                         switch ($input) {
                             '0' { break }
@@ -41,7 +42,8 @@
                             '3' { Start-NAVRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance }
                             '4' { Stop-NAVRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance }
                             '5' { Get-NAVRemoteInstanceEvents -Credential $Credential -SelectedInstances $selectedInstance }
-                            '6' { Get-NAVRemoteInstanceSessions -Credential $Credential -SelectedInstance $selectedInstance }
+                            '6' { Get-NAVRemoteInstanceSessions -Credential $Credential -SelectedInstance $selectedInstance[0] }
+                            '7' { Manage-NAVRemoteInstanceDataUpgrade -Credential $Credential -SelectedInstance $selectedInstance[0] }
                         }                    
                     }
                     until ($input -iin ('0'))

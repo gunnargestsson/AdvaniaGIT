@@ -24,7 +24,7 @@
     5 = Create/Update Tenant ClickOnce, `
     6 = Update Tenant License, `
     7 = Remove Tenant `
-    Action: "
+    Action "
 
         switch ($input) {
             '0' { break }
