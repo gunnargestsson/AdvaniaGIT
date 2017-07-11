@@ -19,7 +19,7 @@
                     Write-Host "Removing old ClickOnce Site..."
                     Get-ChildItem "IIS:\SslBindings" | Where-Object -Property Sites -eq "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" | Remove-Item -Force
                     $ExistingWebSite | Remove-Website 
-                    Remove-Item -Path $ExistingWebSite.PhysicalPath -Recurse -Force                            
+                    Remove-Item -Path $ExistingWebSite.PhysicalPath -Recurse -Force  -ErrorAction SilentlyContinue                          
                 }                           
             } -ArgumentList $SelectedTenant -ErrorAction Stop
         Return $Result

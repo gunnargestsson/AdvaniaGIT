@@ -7,8 +7,7 @@
     )
     PROCESS 
     { 
-        # Create the ClickOnce Site
-        $Result = Invoke-Command -Session $Session -ScriptBlock `
+        Invoke-Command -Session $Session -ScriptBlock `
             {
                 Param([String]$ServerInstance)
                 Write-Host "Creating Service Instance..."

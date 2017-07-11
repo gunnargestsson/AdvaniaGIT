@@ -1,26 +1,26 @@
 ﻿Function Start-NAVRemoteInstance {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [System.Management.Automation.PSCredential]$Credential,
+        [System.Management.Automation.Runspaces.PSSession]$Session,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SelectedInstances
     )
     PROCESS 
     {
-        # Invoke the "same" command on the remote machine
-        Foreach ($selectedInstance in $SelectedInstances) {
-            $instanceName = $selectedInstance.ServerInstance
-            Write-Host "Starting $instanceName on $($SelectedInstance.HostName):"
-            $Session = New-NAVRemoteSession -Credential $Credential -HostName $SelectedInstance.PSComputerName 
-            Invoke-Command -Session $Session -ScriptBlock `
-                {
-                    param([string] $InstanceName)
-                    Load-InstanceAdminTools -SetupParameters $SetupParameters
-                    $Results = Set-NAVServerInstance -ServerInstance $InstanceName -Start
-                    UnLoad-InstanceAdminTools
-                    Return $Results
-                } -ArgumentList $instanceName
-            Remove-PSSession -Session $Session
-        }
+        # Invoke the "same" command on the remote machine       
+        Invoke-Command -Session $Session -ScriptBlock `
+            {
+                param([PSObject] $SelectedInstances)
+                Load-InstanceAdminTools -SetupParameters $SetupParameters
+                Foreach ($selectedInstance in $SelectedInstances) {
+                    Write-Host "Starting instance $($selectedInstance.ServerInstance)..."
+                    $BranchSetting = @{"instanceName" = $selectedInstance.ServerInstance}
+                    Enable-TcpPortSharingForNAVService -branchSetting $branchSetting
+                    Enable-DelayedStartForNAVService -branchSetting $branchSetting
+                    $Results = Set-NAVServerInstance -ServerInstance $selectedInstance.ServerInstance -Start
+                }
+                UnLoad-InstanceAdminTools
+            } -ArgumentList $SelecteInstances
+        
     }    
 }

@@ -18,7 +18,7 @@
             if ($Roles -like "*Web*") {
                 Write-Host "Updating $($RemoteComputer.HostName)..."
                 $Session = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN 
-
+                Set-NAVRemoteWebClientBinding -Session $Session -ServicesCertificateThumbprint $Instances[0].ServicesCertificateThumbprint
                 Foreach ($SelectedInstance in $Instances) {
     
                     # Remove old Web Instance

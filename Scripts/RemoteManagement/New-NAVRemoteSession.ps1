@@ -21,8 +21,7 @@
             if (!(Test-Path -Path $SetupPath)) {
                 $SetupPath = Join-Path $env:SystemDrive "AdvaniaGIT\Data"
             }
-            $SetupParameters = Get-GITSettings
-            $SetupParameters = (Combine-Settings (Get-Content (Join-Path $SetupPath $SetupParameters.setupPath) | Out-String | ConvertFrom-Json) $SetupParameters)
+            $SetupParameters = Get-GITSettings            
             $SetupParameters | Add-Member "Repository" $SetupPath
             $SetupParameters | Add-Member "Branchname" ""
     

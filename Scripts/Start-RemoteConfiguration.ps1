@@ -59,7 +59,8 @@ do {
                     2 = Rebuild ClickOnce for deployment, `
                     3 = Rebuild Web client for deployment, `
                     4 = Update licenses for deployment, `
-                    5 = Deployment Customer List`
+                    5 = Deployment Customer List to Excel `
+                    6 = Upgrade installation to latest CU `
                     Action "
                     switch ($input) {
                         '0' { break }
@@ -69,6 +70,7 @@ do {
                         '3' { New-NAVRemoteWebInstances -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                         '4' { New-NAVDeploymentRemoteLicenses -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                         '5' { New-NAVDeploymentCustomerList -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
+                        '6' { Upgrade-NAVDeploymentRemoteInstallation -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                     }
                 }
                 until ($input -iin ('0', '1'))
