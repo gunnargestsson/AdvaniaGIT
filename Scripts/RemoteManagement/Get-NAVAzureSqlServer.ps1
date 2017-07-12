@@ -1,4 +1,4 @@
-﻿Function Get-AzureSqlServer {
+﻿Function Get-NAVAzureSqlServer {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$AzureResourceGroup

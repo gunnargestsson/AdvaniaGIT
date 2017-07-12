@@ -12,11 +12,18 @@
         $ConfirmedServerInstance = Read-Host "Type name of the server instance to delete"
         if ($ConfirmedServerInstance -ine $SelectedInstance.ServerInstance) { break }
         $SelectedTenant = Get-NAVRemoteInstanceDefaultTenant -SelectedInstance $SelectedInstance
-        $RemoteConfig = Get-RemoteConfig
+        $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
         if ($SelectedTenant.ClickOnceHost -gt "") {
-            Remove-AzureDnsZoneRecordSet -DnsHostName $SelectedTenant.ClickOnceHost
+            Remove-NAVAzureDnsZoneRecordSet -DnsHostName $SelectedTenant.ClickOnceHost
         }
+        #Remove Key from Azure Key Vault
+        $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName        
+        if ($KeyVault) { Remove-AzureKeyVaultKey -VaultName $KeyVault.VaultName -Name $SelectedInstance.ServerInstance -ErrorAction SilentlyContinue }
+        
+        #Remove AD Application Registration
+        Get-AzureRmADApplication | Where-Object -Property DisplayName -EQ "${DeploymentName}-$($ServerInstance.ServerInstance)" | Remove-AzureRmADApplication -Force -ErrorAction SilentlyContinue
+
         Foreach ($RemoteComputer in $Remotes.Hosts) {
             Write-Host "Updating $($RemoteComputer.HostName)..."
             $Session = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN         

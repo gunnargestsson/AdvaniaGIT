@@ -1,4 +1,4 @@
-﻿Function New-AzureSqlDatabaseBacpac {
+﻿Function New-NAVAzureSqlDatabaseBacpac {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.PSCredential]$Credential,

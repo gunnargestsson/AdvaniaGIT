@@ -11,7 +11,7 @@
     )
     PROCESS 
     {
-        $NewCompany = New-CompanyDialog -Message "Enter new company name." -Company (New-CompanyObject)
+        $NewCompany = New-NAVCompanyDialog -Message "Enter new company name." -Company (New-NAVCompanyObject)
         if ($NewCompany.CompanyName -eq "") { Return $NewCompany }   
         if ($NewCompany.OKPressed -ne 'OK') { Return $NewCompany }  
         $Result = Invoke-Command -Session $Session -ScriptBlock `

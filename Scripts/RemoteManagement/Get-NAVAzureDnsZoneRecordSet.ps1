@@ -1,4 +1,4 @@
-﻿Function Get-AzureDnsZoneRecordSet {
+﻿Function Get-NAVAzureDnsZoneRecordSet {
     param(
 
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]

@@ -1,4 +1,4 @@
-﻿Function Get-RemoteConfig {
+﻿Function Get-NAVRemoteConfig {
     param (
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$SettingsFilePath = "Data\RemoteSettings.Json"

@@ -1,4 +1,4 @@
-﻿Function New-CompanyObject {
+﻿Function New-NAVCompanyObject {
     param(
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$CompanyName

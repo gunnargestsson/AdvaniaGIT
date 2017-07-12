@@ -11,8 +11,8 @@
     )
     PROCESS 
     {
-        $RemoteConfig = Get-RemoteConfig
-        $NewUser = New-UserDialog -Message "Enter details on new user." -User (New-UserObject)
+        $RemoteConfig = Get-NAVRemoteConfig
+        $NewUser = New-NAVUserDialog -Message "Enter details on new user." -User (New-NAVUserObject)
         if ($NewUser.UserName -eq "") { Return $NewUser }   
         if ($NewUser.OKPressed -ne 'OK') { Return $NewUser }  
         $NewPassword = Get-NewUserPassword 

@@ -1,4 +1,4 @@
-﻿Function Load-AzureSqlDatabaseMenu {
+﻿Function Load-NAVAzureSqlDatabaseMenu {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$AzureResourceGroup,

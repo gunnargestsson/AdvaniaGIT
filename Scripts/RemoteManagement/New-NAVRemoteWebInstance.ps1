@@ -43,6 +43,6 @@
                     $WebConfig.Save($WebConfigPath.FullName)
                 UnLoad-InstanceAdminTools
 
-            } -ArgumentList ($SelectedInstance, $ClientSettings, (Get-DnsIdentity -SelectedInstance $SelectedInstance)) -ErrorAction Stop        
+            } -ArgumentList ($SelectedInstance, $ClientSettings, (Get-NAVDnsIdentity -SelectedInstance $SelectedInstance)) -ErrorAction Stop        
     }
 }

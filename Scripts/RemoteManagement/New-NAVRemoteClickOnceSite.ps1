@@ -117,6 +117,6 @@
                 Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\Soap" -Value @{enabled="true";destination="$($SelectedInstance.PublicSOAPBaseUrl)";exactDestination="true";httpResponseStatus="Permanent"}
                 Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\OData" -Value @{enabled="true";destination="$($SelectedInstance.PublicODataBaseUrl)";exactDestination="true";httpResponseStatus="Permanent"}
 
-            } -ArgumentList ($SelectedInstance, $SelectedTenant, $ClientSettings, $ClickOnceApplicationName, $ClickOnceApplicationPublisher, (Get-DnsIdentity -SelectedInstance $SelectedInstance)) -ErrorAction Stop        
+            } -ArgumentList ($SelectedInstance, $SelectedTenant, $ClientSettings, $ClickOnceApplicationName, $ClickOnceApplicationPublisher, (Get-NAVDnsIdentity -SelectedInstance $SelectedInstance)) -ErrorAction Stop        
     }
 }

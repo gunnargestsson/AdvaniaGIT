@@ -1,4 +1,4 @@
-﻿Function New-TenantSettingsObject {
+﻿Function New-NAVTenantSettingsObject {
     param(
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$Id, 

@@ -1,4 +1,4 @@
-﻿Function New-TenantSettingsDialog {
+﻿Function New-NAVTenantSettingsDialog {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$Message,

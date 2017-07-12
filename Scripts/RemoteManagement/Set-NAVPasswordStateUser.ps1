@@ -9,7 +9,7 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$Password
     )
-    $RemoteConfig = Get-RemoteConfig
+    $RemoteConfig = Get-NAVRemoteConfig
     $Headers = @{APIKey=$($RemoteConfig.NAVPasswordStateAPIKey)}
     try {
         $url = "$($RemoteConfig.PasswordStateUrl)/api/passwordlists/$($RemoteConfig.NAVPasswordStateListId)"

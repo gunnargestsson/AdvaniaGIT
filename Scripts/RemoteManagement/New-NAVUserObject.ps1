@@ -1,4 +1,4 @@
-﻿Function New-UserObject {
+﻿Function New-NAVUserObject {
     param(
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$UserName,

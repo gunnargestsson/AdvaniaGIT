@@ -33,10 +33,10 @@
                             '0' { break }
                             '1' {                                    
                                     if ($SelectedTenant) {
-                                        Start-PasswordStateWebSite -PasswordId $SelectedTenant.PasswordId
+                                        Start-NAVPasswordStateWebSite -PasswordId $SelectedTenant.PasswordId
                                         Start-NAVRemoteWindowsDebugger -SelectedInstance $selectedInstance -Server $selectedSession.PSComputerName -TenantId $SelectedTenant.Id
                                     } else {
-                                        Start-PasswordStateWebSite -PasswordId $selectedInstance.TenantList[0].PasswordId
+                                        Start-NAVPasswordStateWebSite -PasswordId $selectedInstance.TenantList[0].PasswordId
                                         Start-NAVRemoteWindowsDebugger -SelectedInstance $selectedInstance -Server $selectedSession.PSComputerName 
                                     }
                                 }

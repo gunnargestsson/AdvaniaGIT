@@ -6,7 +6,7 @@
         [PSObject]$SelectedInstance
     )
 
-    $Database = New-DatabaseObject `
+    $Database = New-NAVDatabaseObject `
         -DatabaseName $SelectedInstance.DatabaseName `
         -DatabaseServerName $SelectedInstance.DatabaseServer `
         -DatabaseInstanceName $SelectedInstance.DatabaseInstance `

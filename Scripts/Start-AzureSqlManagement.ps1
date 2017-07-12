@@ -5,9 +5,9 @@ Import-Module AzureRM
 
 # Get Environment Settings
 $SetupParameters = Get-GITSettings
-$RemoteConfig = Get-RemoteConfig
+$RemoteConfig = Get-NAVRemoteConfig
 
-$DBAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
+$DBAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
 if ($DBAdmin.UserName -gt "" -and $DBAdmin.Password -gt "") {
     $Credential = New-Object System.Management.Automation.PSCredential($DBAdmin.UserName, (ConvertTo-SecureString $DBAdmin.Password -AsPlainText -Force))
 } else {
@@ -21,7 +21,7 @@ if (!$Credential.UserName -or !$Credential.Password) {
     break
 }
 
-$VMAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
+$VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
 if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
     $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 } else {
@@ -33,7 +33,7 @@ if (!$VMCredential.UserName -or !$VMCredential.Password) {
     break
 }
 
-$AzureRMAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.AzureRMUserPasswordID
+$AzureRMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.AzureRMUserPasswordID
 if ($AzureRMAdmin.UserName -gt "" -and $AzureRMAdmin.Password -gt "") {
     $AzureCredential = New-Object System.Management.Automation.PSCredential($AzureRMAdmin.UserName, (ConvertTo-SecureString $AzureRMAdmin.Password -AsPlainText -Force))
 } else {
@@ -57,14 +57,14 @@ if ($DBAdmin.GenericField1 -gt "") {
 }
 
 #Select Azure Resource Group
-if (!$resourceGroup) { $resourceGroup = Get-AzureResourceGroup }
+if (!$resourceGroup) { $resourceGroup = Get-NAVAzureResourceGroup }
 if (!$resourceGroup) {
     Write-Host -ForegroundColor Red "Azure Resource Group required!"
     break
 }
 
 # Select Azure Sql Database Server
-if (!$databaseServer) { $databaseServer = Get-AzureSqlServer -AzureResourceGroup $resourceGroup }
+if (!$databaseServer) { $databaseServer = Get-NAVAzureSqlServer -AzureResourceGroup $resourceGroup }
 if (!$databaseServer) {
     Write-Host -ForegroundColor Red "Azure Sql Database Server required!"
     break
@@ -73,14 +73,14 @@ if (!$databaseServer) {
 
 do {
     # Start Menu
-    $menuItems = Load-AzureSqlDatabaseMenu -AzureResourceGroup $resourceGroup -SqlServer $databaseServer 
+    $menuItems = Load-NAVAzureSqlDatabaseMenu -AzureResourceGroup $resourceGroup -SqlServer $databaseServer 
     Clear-Host
     For ($i=0; $i -le 10; $i++) { Write-Host "" }
     $menuItems | Format-Table -Property No, DatabaseName, Location, ServerName, ResourceGroupName, ElasticPoolName -AutoSize 
-    $input = Read-Host "Please select Database number (0 = exit, + = new from bacpac)"
+    $input = Read-Host "Please select Database number (0 = exit, + = new database from bacpac)"
     switch ($input) {
         '0' { break }
-        '+' { New-AzureSqlDatabase -Credential $Credential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer }
+        '+' { New-NAVAzureSqlDatabase -Credential $Credential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer }
         default {
             $selectedDatabase = $menuItems | Where-Object -Property No -EQ $input
             if ($selectedDatabase) { 
@@ -90,8 +90,8 @@ do {
                 $input = Read-Host "Please select action (0 = exit, 1 = export, 2 = delete)"
                 switch ($input) {
                     '0' { $input = "" }
-                    '1' { New-AzureSqlDatabaseBacpac -Credential $VMCredential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
-                    '2' { Remove-AzureSqlDatabase -Credential $Credential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
+                    '1' { New-NAVAzureSqlDatabaseBacpac -Credential $VMCredential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
+                    '2' { Remove-NAVAzureSqlDatabase -Credential $Credential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
                 }
             }
         }

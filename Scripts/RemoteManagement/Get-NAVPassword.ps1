@@ -1,4 +1,4 @@
-﻿Function Get-Password {
+﻿Function Get-NAVPassword {
     param(
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$Message,

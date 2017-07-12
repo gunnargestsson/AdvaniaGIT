@@ -1,4 +1,4 @@
-﻿Function New-CompanyDialog {
+﻿Function New-NAVCompanyDialog {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$Message,

@@ -1,4 +1,4 @@
-﻿Function New-DatabaseObject {
+﻿Function New-NAVDatabaseObject {
     param(
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$DatabaseName,

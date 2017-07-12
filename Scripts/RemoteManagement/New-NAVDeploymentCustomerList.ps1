@@ -17,7 +17,7 @@
 
         Write-Host "Loading Instances for $DeploymentName..."
 
-        $RemoteConfig = Get-RemoteConfig
+        $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
         $Instances = Load-NAVRemoteInstanceMenu -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $DeploymentName
         Foreach ($SelectedInstance in $Instances) {

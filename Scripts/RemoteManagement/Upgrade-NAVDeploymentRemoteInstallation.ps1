@@ -9,10 +9,10 @@
     {         
         $input = Read-Host -Prompt "Please confirm deployment upgrade by typing the deployment name"
         if ($input -ine $DeploymentName) { break }
-        $RemoteConfig = Get-RemoteConfig
+        $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
         
-        $DBAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
+        $DBAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
         if ($DBAdmin.UserName -gt "" -and $DBAdmin.Password -gt "") {
             $DBCredential = New-Object System.Management.Automation.PSCredential($DBAdmin.UserName, (ConvertTo-SecureString $DBAdmin.Password -AsPlainText -Force))
         } else {
@@ -26,11 +26,11 @@
             break
         }
 
-        $EncryptionAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.EncryptionKeyPasswordID
+        $EncryptionAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.EncryptionKeyPasswordID
         if ($EncryptionAdmin.Password -gt "") {
             $EncryptionKeyPassword = $EncryptionAdmin.Password
         } else {
-            $EncryptionKeyPassword = Get-Password -Message "Enter password for the encryption key:"
+            $EncryptionKeyPassword = Get-NAVPassword -Message "Enter password for the encryption key:"
         }
         if ($EncryptionKeyPassword -eq "") { break }
         
@@ -88,7 +88,7 @@
                 $ServerInstances = $AllServerInstances | Where-Object -Property PSComputerName -EQ $RemoteComputer.FQDN
                 Foreach ($ServerInstance in $ServerInstances) {
                     Set-NAVRemoteInstanceDefaults -Session $Session -ServerInstance $ServerInstance
-                    $Database = New-DatabaseObject -DatabaseName $ServerInstance.DatabaseName -DatabaseServerName $ServerInstance.DatabaseServer -DatabaseInstanceName $ServerInstance.DatabaseInstance -DatabaseUserName $DBAdmin.UserName -DatabasePassword $DBAdmin.Password
+                    $Database = New-NAVDatabaseObject -DatabaseName $ServerInstance.DatabaseName -DatabaseServerName $ServerInstance.DatabaseServer -DatabaseInstanceName $ServerInstance.DatabaseInstance -DatabaseUserName $DBAdmin.UserName -DatabasePassword $DBAdmin.Password
                     Set-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $ServerInstance -Database $Database -EncryptionKeyPath $RemoteComputer.EncryptionKeyPath -EncryptionKeyPassword $EncryptionKeyPassword -InstanceSettings $RemoteComputer.InstanceSettings                    
                     Start-NAVRemoteInstance -Session $Session -SelectedInstances $ServerInstance
                 }

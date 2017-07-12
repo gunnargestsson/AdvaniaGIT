@@ -53,7 +53,7 @@
                                 }
                             '4' {
                                     if ($selectedInstance[0].Multitenant -eq "false") {
-                                        Start-PasswordStateWebSite -PasswordId $selectedInstance.TenantList[0].PasswordId
+                                        Start-NAVPasswordStateWebSite -PasswordId $selectedInstance.TenantList[0].PasswordId
                                         Start-NAVRemoteWebClient -SelectedInstance $selectedInstance[0]
                                     } else {
                                         Write-Host "Instance is multitenant, start client from tenant menu!" -ForegroundColor Red 
@@ -62,7 +62,7 @@
                                 }
                             '5' {
                                     if ($selectedInstance[0].Multitenant -eq "false") {
-                                        Start-PasswordStateWebSite -PasswordId $selectedInstance.TenantList[0].PasswordId
+                                        Start-NAVPasswordStateWebSite -PasswordId $selectedInstance.TenantList[0].PasswordId
                                         Start-NAVRemoteWindowsClient -SelectedInstance $selectedInstance[0]
                                     } else {
                                         Write-Host "Instance is multitenant, start client from tenant menu!" -ForegroundColor Red 
@@ -71,7 +71,7 @@
                                 }
                             '6' {
                                     if ($selectedInstance[0].Multitenant -eq "false") {
-                                        Start-PasswordStateWebSite -PasswordId $selectedInstance.TenantList[0].PasswordId
+                                        Start-NAVPasswordStateWebSite -PasswordId $selectedInstance.TenantList[0].PasswordId
                                         Start-NAVRemoteWindowsDebugger -SelectedInstance $selectedInstance[0]
                                     } else {
                                         Write-Host "Instance is multitenant, start client from tenant menu!" -ForegroundColor Red 

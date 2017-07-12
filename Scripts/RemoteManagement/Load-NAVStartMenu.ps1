@@ -1,4 +1,4 @@
-﻿function Load-StartMenu
+﻿function Load-NAVStartMenu
 {
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]

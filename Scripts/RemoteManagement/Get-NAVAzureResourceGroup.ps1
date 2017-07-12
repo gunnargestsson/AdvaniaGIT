@@ -1,4 +1,8 @@
-﻿Function Get-AzureResourceGroup {
+﻿Function Get-NAVAzureResourceGroup {
+    param (
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [String]$Message
+    )
     $resourceGroups = Get-AzureRmResourceGroup 
     if ($resourceGroups.Count -eq 1) { return $resourceGroups | Select-Object -First 1 }
     $resourceGroupNo = 1
@@ -14,7 +18,8 @@
     do {
         # Start Menu
         Clear-Host
-        For ($i=0; $i -le 10; $i++) { Write-Host "" }        
+        if ($Message) { Write-Host $Message }
+        For ($i=0; $i -le 10; $i++) { Write-Host "" }             
         $menuItems | Format-Table -Property No, Location, ResourceGroupName, Tags -AutoSize | Out-Host
         $input = Read-Host "Please select resource group number (0 = exit)"
         switch ($input) {

@@ -1,4 +1,4 @@
-﻿Function Get-AzureDnsZone {
+﻿Function Get-NAVAzureDnsZone {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$DnsHostName

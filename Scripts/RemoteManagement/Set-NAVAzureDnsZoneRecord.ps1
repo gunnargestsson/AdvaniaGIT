@@ -1,4 +1,4 @@
-﻿Function Set-AzureDnsZoneRecord {
+﻿Function Set-NAVAzureDnsZoneRecord {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$DeploymentName,
@@ -8,16 +8,16 @@
         [String]$OldDnsHostName
         )
     Write-Host "Updating DNS Record for ${DnsHostName}..."
-    $DnsZone = Get-AzureDnsZone  -DnsHostName $DnsHostName 
-    if ($OldDnsHostName) { Remove-AzureDnsZoneRecordSet  -DnsZone $DnsZone -DnsHostName $OldDnsHostName }
-    if ($DnsHostName) { Remove-AzureDnsZoneRecordSet  -DnsZone $DnsZone -DnsHostName $DnsHostName }
+    $DnsZone = Get-NAVAzureDnsZone  -DnsHostName $DnsHostName 
+    if ($OldDnsHostName) { Remove-NAVAzureDnsZoneRecordSet  -DnsZone $DnsZone -DnsHostName $OldDnsHostName }
+    if ($DnsHostName) { Remove-NAVAzureDnsZoneRecordSet  -DnsZone $DnsZone -DnsHostName $DnsHostName }
 
-    $RemoteConfig = Get-RemoteConfig
+    $RemoteConfig = Get-NAVRemoteConfig
     $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
     if (!$Remotes.ClickOnceEndpoint) { Throw "ClickOnce Endpoint not defined for deployment $DeploymentName!" }
 
     if ($DnsHostName -gt "") {
-        New-AzureRmDnsRecordSet -Name $DnsHostName.Split('.').GetValue(0) -ZoneName $DnsZone.Name -ResourceGroupName $DnsZone.ResourceGroupName -Ttl 3600 -RecordType CNAME -DnsRecords (New-AzureRmDnsRecordConfig -Cname $Remotes.ClickOnceEndpoint)
+        $DnsRecord = New-AzureRmDnsRecordSet -Name $DnsHostName.Split('.').GetValue(0) -ZoneName $DnsZone.Name -ResourceGroupName $DnsZone.ResourceGroupName -Ttl 3600 -RecordType CNAME -DnsRecords (New-AzureRmDnsRecordConfig -Cname $Remotes.ClickOnceEndpoint)
     }
 }
            

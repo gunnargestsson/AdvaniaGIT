@@ -1,4 +1,4 @@
-﻿Function Get-AzureSqlElasticPool {
+﻿Function Get-NAVAzureSqlElasticPool {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$AzureResourceGroup,

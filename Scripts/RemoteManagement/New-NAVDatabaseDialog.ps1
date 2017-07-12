@@ -1,4 +1,4 @@
-﻿Function New-DatabaseDialog {
+﻿Function New-NAVDatabaseDialog {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$Message,

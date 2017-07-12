@@ -8,34 +8,34 @@
     PROCESS 
     { 
         #Ask for Instance Name 
-        $SelectedInstance = New-InstanceSettingsDialog -Message "Create new service instance" 
+        $SelectedInstance = New-NAVInstanceSettingsDialog -Message "Create new service instance" 
         if ($SelectedInstance.OKPressed -ne 'OK') { break }
         $ServerInstance = $SelectedInstance.ServerInstance
 
-        $RemoteConfig = Get-RemoteConfig
+        $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
 
-        $Database = New-DatabaseObject 
-        $DBAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
+        $Database = New-NAVDatabaseObject 
+        $DBAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
         if ($DBAdmin.UserName -gt "") { $Database.DatabaseUserName = $DBAdmin.UserName }
         if ($DBAdmin.Password -gt "") { $Database.DatabasePassword = $DBAdmin.Password }
         if ($DBAdmin.GenericField1 -gt "") { $Database.DatabaseServerName = $DBAdmin.GenericField1 }
 
         #Ask Database Settings
-        $Database = New-DatabaseDialog -Message "Enter details on database." -Database $Database
+        $Database = New-NAVDatabaseDialog -Message "Enter details on database." -Database $Database
         if ($Database.OKPressed -ne 'OK') { break }
 
         #Ask for Tenant Settings $SelectedTenant
         $TenantSettings = Get-NAVRemoteInstanceDefaultTenant -SelectedInstance $SelectedInstance 
-        $TenantSettings.ClickOnceHost = $ExecutionContext.InvokeCommand.ExpandString($Remotes.ClickOnceHost)
-        $TenantSettings = Combine-Settings $TenantSettings (New-TenantSettingsObject)
-        $SelectedTenant = New-TenantSettingsDialog -Message "Edit Tenant Settings" -TenantSettings $TenantSettings -TenantIdNotEditable
+        $TenantSettings.ClickOnceHost = "$($ExecutionContext.InvokeCommand.ExpandString($Remotes.ClickOnceHost))".ToLower()
+        $TenantSettings = Combine-Settings $TenantSettings (New-NAVTenantSettingsObject)
+        $SelectedTenant = New-NAVTenantSettingsDialog -Message "Edit Tenant Settings" -TenantSettings $TenantSettings -TenantIdNotEditable
         if ($SelectedTenant.OKPressed -ne 'OK') { break }
         if ($SelectedTenant.CustomerName -eq "") { 
             Write-Host -ForegroundColor Red "Customer Name missing!"
             break
         }
-        $EncryptionAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.EncryptionKeyPasswordID
+        $EncryptionAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.EncryptionKeyPasswordID
         if ($EncryptionAdmin.Password -gt "") {
             $EncryptionKeyPassword = $EncryptionAdmin.Password
         } else {
@@ -62,7 +62,7 @@
                     $NAVSuperUser = $Users | Where-Object -Property UserName -EQ $RemoteConfig.NAVSuperUser
                     if (!$NAVSuperUser) {
                         $NewPassword = Get-NewUserPassword
-                        New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -User (New-UserObject -UserName $RemoteConfig.NAVSuperUser) -NewPassword $NewPassword 
+                        New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -User (New-NAVUserObject -UserName $RemoteConfig.NAVSuperUser) -NewPassword $NewPassword 
                         if ($RemoteConfig.PasswordStateAPIKey -gt "") {
                             $Response = Set-NAVPasswordStateUser -Title $SelectedTenant.CustomerName -UserName $RemoteConfig.NAVSuperUser -FullName "NAV Super User" -Password $NewPassword
                             $SelectedTenant.PasswordID = $Response.PasswordID
@@ -72,9 +72,9 @@
                     $NAVAccountantUser = $Users | Where-Object -Property UserName -EQ $RemoteConfig.NAVAccountantUser
                     if (!$NAVAccountantUser) {
                         $NewPassword = Get-NewUserPassword
-                        New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -User (New-UserObject -UserName $RemoteConfig.NAVAccountantUser) -NewPassword $NewPassword -ChangePasswordAtNextLogOn
+                        New-NAVRemoteInstanceTenantUser -Session $Session -SelectedTenant $SelectedTenant -User (New-NAVUserObject -UserName $RemoteConfig.NAVAccountantUser) -NewPassword $NewPassword -ChangePasswordAtNextLogOn
                     }
-                    Set-AzureDnsZoneRecord -DeploymentName $DeploymentName -DnsHostName $SelectedTenant.ClickOnceHost -OldDnsHostName ""
+                    Set-NAVAzureDnsZoneRecord -DeploymentName $DeploymentName -DnsHostName $SelectedTenant.ClickOnceHost -OldDnsHostName ""
                     $hostNo ++
                 }
                 if (Test-Path $LocalFileName) {

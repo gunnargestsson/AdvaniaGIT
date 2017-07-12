@@ -1,12 +1,14 @@
 ﻿# Import all needed modules
+Get-Module AdvaniaGIT | Remove-Module
+Get-Module RemoteManagement | Remove-Module
 Import-Module RemoteManagement -DisableNameChecking | Out-Null
 Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
 
 # Get Environment Settings
 $SetupParameters = Get-GITSettings
-$RemoteConfig = Get-RemoteConfig
+$RemoteConfig = Get-NAVRemoteConfig
 
-$VMAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
+$VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
 if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
     $Credential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 } else {
@@ -20,7 +22,7 @@ if (!$Credential.UserName -or !$Credential.Password) {
 
 do {
     # Start Menu
-    $menuItems = Load-StartMenu -RemoteConfig $RemoteConfig
+    $menuItems = Load-NAVStartMenu -RemoteConfig $RemoteConfig
     Clear-Host
     For ($i=0; $i -le 10; $i++) { Write-Host "" }
     $menuItems | Format-Table -Property No, Deployment, Description -AutoSize 

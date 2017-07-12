@@ -1,4 +1,4 @@
-﻿Function New-UserDialog {
+﻿Function New-NAVUserDialog {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$Message,

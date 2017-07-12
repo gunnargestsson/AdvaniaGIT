@@ -6,7 +6,7 @@
         [String]$Password
     )
     try {
-        $RemoteConfig = Get-RemoteConfig        
+        $RemoteConfig = Get-NAVRemoteConfig        
         $url = "$($RemoteConfig.PasswordStateUrl)/api/passwords"
         $Body = @{PasswordID=$($PasswordId);Password=$Password;APIKey=$($RemoteConfig.NAVPasswordStateAPIKey)}
         $Response = Invoke-RestMethod -Method Put -Uri $url -UseDefaultCredentials -Body (ConvertTo-Json $Body) -ContentType "application/json;charset=utf-8"

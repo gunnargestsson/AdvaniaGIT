@@ -35,15 +35,15 @@
                         switch ($input) {
                             '0' { break }
                             '1' {
-                                    Start-PasswordStateWebSite -PasswordId $selectedTenant.PasswordId
+                                    Start-NAVPasswordStateWebSite -PasswordId $selectedTenant.PasswordId
                                     Start-NAVRemoteWebClient -SelectedInstance $selectedInstance -TenantId $selectedTenant.Id
                                 }
                             '2' {
-                                    Start-PasswordStateWebSite -PasswordId $selectedTenant.PasswordId
+                                    Start-NAVPasswordStateWebSite -PasswordId $selectedTenant.PasswordId
                                     Start-NAVRemoteWindowsClient -SelectedInstance $selectedInstance -TenantId $selectedTenant.Id
                                 }
                             '3' {
-                                    Start-PasswordStateWebSite -PasswordId $selectedTenant.PasswordId
+                                    Start-NAVPasswordStateWebSite -PasswordId $selectedTenant.PasswordId
                                     Start-NAVRemoteWindowsDebugger -SelectedInstance $selectedInstance -TenantId $selectedTenant.Id
                                 }
                             '4' {

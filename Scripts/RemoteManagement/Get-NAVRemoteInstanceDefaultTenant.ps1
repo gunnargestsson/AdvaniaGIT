@@ -17,6 +17,7 @@
             $tenant | Add-Member -MemberType NoteProperty -Name ClickOnceHost -Value "" 
             $tenant | Add-Member -MemberType NoteProperty -Name CustomerName -Value ""
             $tenant | Add-Member -MemberType NoteProperty -Name CustomerEMail -Value ""
+            $tenant | Add-Member -MemberType NoteProperty -Name Language -Value (Get-Culture).Name
             $tenant | Add-Member -MemberType NoteProperty -Name AadTenantId -Value ""
             $tenant | Add-Member -MemberType NoteProperty -Name AllowAppDatabaseWrite -Value "True"
             $tenant | Add-Member -MemberType NoteProperty -Name AlternateId -Value "@{}"

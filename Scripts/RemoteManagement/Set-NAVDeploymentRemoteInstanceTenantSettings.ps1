@@ -11,7 +11,7 @@
     )
     PROCESS 
     {
-        $RemoteConfig = Get-RemoteConfig
+        $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
         Foreach ($RemoteComputer in $Remotes.Hosts) {
             $Roles = $RemoteComputer.Roles

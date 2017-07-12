@@ -1,4 +1,4 @@
-﻿Function New-InstanceSettingsDialog {
+﻿Function New-NAVInstanceSettingsDialog {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$Message

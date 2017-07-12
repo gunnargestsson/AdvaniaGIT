@@ -1,4 +1,4 @@
-﻿Function New-AzureSqlDatabase {
+﻿Function New-NAVAzureSqlDatabase {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.PSCredential]$Credential,
@@ -12,7 +12,7 @@
     $SelectedBacpac = Get-LocalBacPacFilePath
     if (!(Test-Path -Path $SelectedBacpac.FullName)) { break }
     
-    $SelectedElasticPool = Get-AzureSqlElasticPool -AzureResourceGroup $AzureResourceGroup -SqlServer $SqlServer
+    $SelectedElasticPool = Get-NAVAzureSqlElasticPool -AzureResourceGroup $AzureResourceGroup -SqlServer $SqlServer
     if (!$SelectedElasticPool) { break }
 
     $newDatabaseName = Read-Host -Prompt "Type name for new database (default = $($SelectedBacpac.BaseName))"

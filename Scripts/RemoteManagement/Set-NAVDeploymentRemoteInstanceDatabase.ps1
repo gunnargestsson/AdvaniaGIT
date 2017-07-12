@@ -14,21 +14,21 @@
     PROCESS 
     {
         $OriginalDatabase = $Database
-        $RemoteConfig = Get-RemoteConfig
-        $DBAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
+        $RemoteConfig = Get-NAVRemoteConfig
+        $DBAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
         if ($DBAdmin.UserName -gt "") { $Database.DatabaseUserName = $DBAdmin.UserName }
         if ($DBAdmin.Password -gt "") { $Database.DatabasePassword = $DBAdmin.Password }
         if ($DBAdmin.GenericField1 -gt "") { $Database.DatabaseServerName = $DBAdmin.GenericField1 }
 
-        $EncryptionAdmin = Get-PasswordStateUser -PasswordId $RemoteConfig.EncryptionKeyPasswordID
+        $EncryptionAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.EncryptionKeyPasswordID
         if ($EncryptionAdmin.Password -gt "") {
             $EncryptionKeyPassword = $EncryptionAdmin.Password
         } else {
-            $EncryptionKeyPassword = Get-Password -Message "Enter password for the encryption key:"
+            $EncryptionKeyPassword = Get-NAVPassword -Message "Enter password for the encryption key:"
         }
 
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
-        $Database = New-DatabaseDialog -Message "Enter details on database." -Database $Database
+        $Database = New-NAVDatabaseDialog -Message "Enter details on database." -Database $Database
         if ($Database.OKPressed -ne 'OK') { return $OriginalDatabase }
         Foreach ($RemoteComputer in $Remotes.Hosts) {
             $Roles = $RemoteComputer.Roles

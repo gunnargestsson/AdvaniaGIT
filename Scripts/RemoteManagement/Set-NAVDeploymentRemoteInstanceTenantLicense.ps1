@@ -25,7 +25,7 @@
         $LicenseData = [Byte[]] (Get-Content -Path $LocalFileName -Encoding Byte)
         Remove-Item -Path $LocalFileName -Force -ErrorAction SilentlyContinue
 
-        $RemoteConfig = Get-RemoteConfig
+        $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
         Foreach ($RemoteComputer in $Remotes.Hosts) {
             $Roles = $RemoteComputer.Roles

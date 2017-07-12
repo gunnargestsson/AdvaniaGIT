@@ -19,7 +19,7 @@
                 UnLoad-InstanceAdminTools
                 Return $Users
             } -ArgumentList ($SelectedTenant.ServerInstance, $SelectedTenant.Id, $UserName, $NewPassword)
-        $RemoteConfig = Get-RemoteConfig
+        $RemoteConfig = Get-NAVRemoteConfig
         $TenantSettings = Get-NAVRemoteInstanceTenantSettings -Session $Session -SelectedTenant $SelectedTenant
         if ($TenantSettings.PasswordId -gt "" -and $RemoteConfig.PasswordStateAPIKey -gt "" -and $RemoteConfig.NAVSuperUser -ieq $UserName) {
             Set-NAVPasswordStateId -PasswordId $SelectedTenant.PasswordId -Password $NewPassword

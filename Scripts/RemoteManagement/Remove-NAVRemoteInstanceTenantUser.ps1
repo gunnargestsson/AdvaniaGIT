@@ -9,7 +9,7 @@
     )
     PROCESS 
     {
-        $User = New-UserObject -UserName $SelectedUser.UserName -FullName $SelectedUser.FullName -AuthenticationEMail $SelectedUser.AuthenticationEMail -LicenseType $SelectedUser.LicenseType -State $SelectedUser.State
+        $User = New-NAVUserObject -UserName $SelectedUser.UserName -FullName $SelectedUser.FullName -AuthenticationEMail $SelectedUser.AuthenticationEMail -LicenseType $SelectedUser.LicenseType -State $SelectedUser.State
         $Result = Invoke-Command -Session $Session -ScriptBlock `
             {
                 param(

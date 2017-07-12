@@ -1,4 +1,4 @@
-﻿Function Get-DnsIdentity {
+﻿Function Get-NAVDnsIdentity {
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SelectedInstance
