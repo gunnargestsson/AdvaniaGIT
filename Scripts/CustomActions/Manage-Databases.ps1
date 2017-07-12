@@ -39,8 +39,8 @@ do {
                     Clear-Host
                     For ($i=0; $i -le 10; $i++) { Write-Host "" }
                     $selectedDatabase | Format-Table -Property No, ProjectName, DatabaseName, State, InstanceName, Version, Default, BranchId -AutoSize 
-                    $databaseBranchSettings = Get-DatabaseBranchSettings -DatabaseName $selectedDatabase.Name
-                    $InstanceSetupParameters = Create-SetupParameters -InstanceVersion $selectedDatabase.Version
+                    $databaseBranchSettings = Get-DatabaseBranchSettings -DatabaseName $selectedDatabase.DatabaseName
+                    $InstanceSetupParameters = Create-SetupParameters -SetupParameters $SetupParameters -InstanceVersion $selectedDatabase.Version
                     $input = Read-Host "Please select action (0 = return, 1 = remove users, 2 = create backup, 3 = restore backup, 4 = create bacpac, 5 = restore backpac, 6 = delete)"
                     switch ($input) {
                         '0' { 
