@@ -11,7 +11,9 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$EncryptionKeyPassword,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$InstanceSettings
+        [PSObject]$InstanceSettings,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Switch]$RestartServerInstance
     )
     PROCESS 
     {
@@ -22,11 +24,14 @@
                     [PSObject]$Database,
                     [String]$EncryptionKeyPath,
                     [String]$EncryptionKeyPassword,
-                    [PSObject]$InstanceSettings)
+                    [PSObject]$InstanceSettings,
+                    [Bool]$RestartServerInstance)
                 Write-Verbose "Import Module from $($SetupParameters.navServicePath)..."
                 Load-InstanceAdminTools -SetupParameters $SetupParameters
-                Write-Host "Stopping Instance $ServerInstance..."
-                Set-NAVServerInstance -ServerInstance $ServerInstance -Stop
+                if ($RestartServerInstance) {
+                    Write-Host "Stopping Instance $ServerInstance..."
+                    Set-NAVServerInstance -ServerInstance $ServerInstance -Stop
+                }
                 Write-Host "Updating Settings..."
                 Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DatabaseName -KeyValue $Database.DatabaseName
                 Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DatabaseServer -KeyValue $Database.DatabaseServerName
@@ -57,15 +62,18 @@
                 $branchSetting = @{instanceName = $($ServerInstance)}
                 Enable-TcpPortSharingForNAVService -branchSetting $branchSetting
                 Enable-DelayedStartForNAVService -branchSetting $branchSetting
-                Write-Host "Starting Instance $ServerInstance ..."
-                Set-NAVServerInstance -ServerInstance $ServerInstance -Start
-                Get-NAVTenant -ServerInstance $ServerInstance | Sync-NAVTenant -Mode Sync -Force
+                if ($RestartServerInstance) {
+                    Write-Host "Starting Instance $ServerInstance ..."
+                    Set-NAVServerInstance -ServerInstance $ServerInstance -Start
+                    Get-NAVTenant -ServerInstance $ServerInstance | Sync-NAVTenant -Mode Sync -Force
+                }
                 UnLoad-InstanceAdminTools
             } -ArgumentList (
                 $SelectedInstance.ServerInstance,  
                 $Database,
                 $EncryptionKeyPath,
                 $EncryptionKeyPassword,
-                $InstanceSettings)
+                $InstanceSettings,
+                $RestartServerInstance.IsPresent)
     }
 }

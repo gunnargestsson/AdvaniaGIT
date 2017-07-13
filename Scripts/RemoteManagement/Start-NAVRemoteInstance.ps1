@@ -17,10 +17,10 @@
                     $BranchSetting = @{"instanceName" = $selectedInstance.ServerInstance}
                     Enable-TcpPortSharingForNAVService -branchSetting $branchSetting
                     Enable-DelayedStartForNAVService -branchSetting $branchSetting
-                    $Results = Set-NAVServerInstance -ServerInstance $selectedInstance.ServerInstance -Start
+                    Set-NAVServerInstance -ServerInstance $selectedInstance.ServerInstance -Start
                 }
                 UnLoad-InstanceAdminTools
-            } -ArgumentList $SelecteInstances
+            } -ArgumentList $SelectedInstances
         
     }    
 }

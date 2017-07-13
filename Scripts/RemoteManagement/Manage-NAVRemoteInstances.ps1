@@ -47,6 +47,7 @@
                         }                    
                     }
                     until ($input -iin ('0'))
+                    $input = ""
                 }
             }
         }

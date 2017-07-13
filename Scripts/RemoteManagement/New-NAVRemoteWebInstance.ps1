@@ -25,6 +25,7 @@
                     -Server localhost `
                     -ServerInstance $SelectedInstance.ServerInstance `
                     -WebServerInstance $SelectedInstance.ServerInstance
+
                     $WebConfigPath = Get-ChildItem -Path (Join-Path "C:\inetpub\wwwroot" $SelectedInstance.ServerInstance) -Filter "web.config"
                     [xml]$WebConfig = Get-Content -Path $WebConfigPath.FullName -Encoding UTF8
                     $Properties = Foreach ($ClientSetting in $ClientSettings) { Get-Member -InputObject $ClientSetting -MemberType NoteProperty}
@@ -41,6 +42,38 @@
                         }
                     }
                     $WebConfig.Save($WebConfigPath.FullName)
+
+                    if ($SelectedInstance.AppIdUri -gt "") {
+                        $AzureADDomain = $SelectedInstance.ClientServicesFederationMetadataLocation.split("/").GetValue(3)
+                        Write-Host "Creating Web Client Site for 365$($SelectedInstance.ServerInstance)..."
+                        New-NAVWebServerInstance `
+                        -ClientServicesCredentialType AccessControlService `
+                        -ClientServicesPort $SelectedInstance.ClientServicesPort `
+                        -RegionFormat $Language `
+                        -Language $Language `
+                        -DnsIdentity $DnsIdentity `
+                        -Server localhost `
+                        -ServerInstance $SelectedInstance.ServerInstance `
+                        -WebServerInstance "$($SelectedInstance.ServerInstance)365" `
+                        -AcsUri "https://login.windows.net/common/wsfed?wa=wsignin1.0%26wtrealm=$($SelectedInstance.AppIdUri)%26wreply=$($SelectedInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx"
+
+                        $WebConfigPath = Get-ChildItem -Path (Join-Path "C:\inetpub\wwwroot" "$($SelectedInstance.ServerInstance)365") -Filter "web.config"
+                        [xml]$WebConfig = Get-Content -Path $WebConfigPath.FullName -Encoding UTF8
+                        $Properties = Foreach ($ClientSetting in $ClientSettings) { Get-Member -InputObject $ClientSetting -MemberType NoteProperty}
+                        Foreach ($Property in $Properties.Name) {
+                            $KeyValue = $ExecutionContext.InvokeCommand.ExpandString($ClientSettings.$($Property))                        
+                            $XmlNode = $WebConfig.configuration.DynamicsNAVSettings.SelectSingleNode("add[@key='${Property}']")
+                            if ($XmlNode) {
+                                $XmlNode.SetAttribute("value",$Keyvalue)
+                            } else {
+                                $XmlNode = $WebConfig.CreateNode('element',"add",'')
+                                $XmlNode.SetAttribute("key",$Property)
+                                $XmlNode.SetAttribute("value",$Keyvalue)
+                                $WebConfig.configuration.DynamicsNAVSettings.AppendChild($XmlNode)
+                            }
+                        }
+                        $WebConfig.Save($WebConfigPath.FullName)
+                    }
                 UnLoad-InstanceAdminTools
 
             } -ArgumentList ($SelectedInstance, $ClientSettings, (Get-NAVDnsIdentity -SelectedInstance $SelectedInstance)) -ErrorAction Stop        

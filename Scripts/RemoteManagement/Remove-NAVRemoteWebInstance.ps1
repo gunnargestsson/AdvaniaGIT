@@ -15,6 +15,8 @@
                 Load-InstanceAdminTools -SetupParameters $SetupParameters
                 Write-Host "Removing Web Client Site for ${ServerInstance}..."
                 Get-NAVWebServerInstance -WebServerInstance $ServerInstance | Remove-NAVWebServerInstance -Force
+                Get-NAVWebServerInstance -WebServerInstance "${ServerInstance}365" | Remove-NAVWebServerInstance -Force
+                Get-NAVWebServerInstance -WebServerInstance "365${ServerInstance}" | Remove-NAVWebServerInstance -Force
                 UnLoad-InstanceAdminTools
                 Start-Sleep -Seconds 2
             } -ArgumentList $SelectedInstance.ServerInstance

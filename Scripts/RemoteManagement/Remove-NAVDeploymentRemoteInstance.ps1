@@ -14,9 +14,17 @@
         $SelectedTenant = Get-NAVRemoteInstanceDefaultTenant -SelectedInstance $SelectedInstance
         $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
+
+        #Remove DNS Registration
         if ($SelectedTenant.ClickOnceHost -gt "") {
             Remove-NAVAzureDnsZoneRecordSet -DnsHostName $SelectedTenant.ClickOnceHost
         }
+
+        #Remove Password
+        if ($SelectedTenant.PasswordId -gt "") {
+            Delete-NAVPasswordStateId -PasswordId $SelectedTenant.PasswordId
+        }
+
         #Remove Key from Azure Key Vault
         $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName        
         if ($KeyVault) { Remove-AzureKeyVaultKey -VaultName $KeyVault.VaultName -Name $SelectedInstance.ServerInstance -ErrorAction SilentlyContinue }

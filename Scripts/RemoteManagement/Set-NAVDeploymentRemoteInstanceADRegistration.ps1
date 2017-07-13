@@ -22,14 +22,16 @@
                 Write-Host "Updating $($RemoteComputer.HostName)..."
                 $Session = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN
                 $ServerInstances = Get-NAVRemoteInstances -Session $Session 
-                foreach ($ServerInstance in $ServerInstances) {
+                foreach ($ServerInstance in $ServerInstances | Where-Object -Property ServerInstance -EQ ADIS) {
                     $KeyVaultKey = Get-NAVAzureKeyVaultKey -KeyVault $KeyVault -ServerInstanceName $ServerInstance.ServerInstance
                     $Application = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $ServerInstance -IconFilePath $IconFilePath
+                    #Remove-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ApplicationId $ServerInstance.ADApplicationApplicationId -ObjectId $ServerInstance.ADApplicationObjectId 
+                    #Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ApplicationId $ServerInstance.ADApplicationApplicationId -ObjectId $ServerInstance.ADApplicationObjectId -PermissionsToKeys all -PermissionsToSecrets all -PermissionsToCertificates all -PermissionsToStorage all
                     $ServerInstance = Combine-Settings $ServerInstance $KeyVault -Prefix KeyVault
                     $ServerInstance = Combine-Settings $ServerInstance $KeyVaultKey -Prefix KeyVaultKey
                     $ServerInstance = Combine-Settings $ServerInstance $Application -Prefix ADApplication
                     $ServerInstance | Add-Member -MemberType NoteProperty -Name ADApplicationFederationMetadataLocation -Value "https://login.windows.net/$($Subscription.Account.Id.Split("@").GetValue(1))/federationmetadata/2007-06/federationmetadata.xml"
-                    Set-NAVRemoteInstanceADRegistration -Session $Session -ServerInstance $ServerInstance 
+                    Set-NAVRemoteInstanceADRegistration -Session $Session -ServerInstance $ServerInstance -RestartServerInstance
                 }
                 
                 Remove-PSSession -Session $Session 

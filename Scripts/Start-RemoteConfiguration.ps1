@@ -59,10 +59,10 @@ do {
                     0 = exit,  
                     + = Create new instance, `
                     1 = Configure selected instance, `
-                    2 = Rebuild ClickOnce for deployment, `
-                    3 = Rebuild Web client for deployment, `
-                    4 = Update licenses for deployment, `
-                    5 = Update Azure AD/Office 365 registration for deployment, `
+                    2 = Update Azure AD/Office 365 registration for deployment, `
+                    3 = Rebuild ClickOnce for deployment, `
+                    4 = Rebuild Web client for deployment, `
+                    5 = Update licenses for deployment, `                    
                     6 = Deployment Customer List to Excel `
                     7 = Upgrade installation to latest CU `
                     Action "
@@ -70,10 +70,10 @@ do {
                         '0' { break }
                         '+' { New-NAVDeploymentRemoteInstance -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                         '1' { Configure-NAVRemoteInstances -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $selectedDeployment.Deployment }
-                        '2' { New-NAVDeploymentRemoteClickOnceSites -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
-                        '3' { New-NAVRemoteWebInstances -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
-                        '4' { New-NAVDeploymentRemoteLicenses -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
-                        '5' { Set-NAVDeploymentRemoteInstanceADRegistration -Credential $Credential -DeploymentName $selectedDeployment.Deployment -Subscription $Subscription }
+                        '2' { Set-NAVDeploymentRemoteInstanceADRegistration -Credential $Credential -DeploymentName $selectedDeployment.Deployment -Subscription $Subscription }
+                        '3' { New-NAVDeploymentRemoteClickOnceSites -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
+                        '4' { New-NAVRemoteWebInstances -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
+                        '5' { New-NAVDeploymentRemoteLicenses -Credential $Credential -DeploymentName $selectedDeployment.Deployment }                         
                         '6' { New-NAVDeploymentCustomerList -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                         '7' { Upgrade-NAVDeploymentRemoteInstallation -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
                     }
