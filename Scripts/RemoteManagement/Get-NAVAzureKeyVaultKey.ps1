@@ -7,9 +7,10 @@
     )
     PROCESS 
     {    
-        $KeyVaultKey = Get-AzureKeyVaultKey -VaultName $KeyVault.VaultName -Name [Uri]::EscapeDataString($ServerInstanceName.Replace("_","-"))
+        $KeyName = [Uri]::EscapeDataString($ServerInstanceName.Replace("_","-"))
+        $KeyVaultKey = Get-AzureKeyVaultKey -VaultName $KeyVault.VaultName -Name $KeyName
         if (!$KeyVaultKey) {            
-            $KeyVaultKey = Add-AzureKeyVaultKey -VaultName $KeyVault.VaultName -Name [Uri]::EscapeDataString($ServerInstanceName.Replace("_","-")) -Destination Software 
+            $KeyVaultKey = Add-AzureKeyVaultKey -VaultName $KeyVault.VaultName -Name $KeyName -Destination Software 
         }
         Return $KeyVaultKey
     }
