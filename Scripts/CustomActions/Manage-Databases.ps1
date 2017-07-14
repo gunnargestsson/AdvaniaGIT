@@ -41,22 +41,29 @@ do {
                     $selectedDatabase | Format-Table -Property No, ProjectName, DatabaseName, State, InstanceName, Version, Default, BranchId -AutoSize 
                     $databaseBranchSettings = Get-DatabaseBranchSettings -DatabaseName $selectedDatabase.DatabaseName
                     $InstanceSetupParameters = Create-SetupParameters -SetupParameters $SetupParameters -InstanceVersion $selectedDatabase.Version
-                    $input = Read-Host "Please select action (0 = return, 1 = remove users, 2 = create backup, 3 = restore backup, 4 = create bacpac, 5 = restore backpac, 6 = delete)"
+                    $input = Read-Host "Please select action (
+                    0 = return, 
+                    1 = remove users, 
+                    2 = remove service passwords,
+                    3 = create backup, 
+                    4 = restore backup, 
+                    5 = create bacpac, 
+                    6 = restore backpac, 
+                    7 = delete)"
                     switch ($input) {
                         '0' { 
                                 $input = "q"
                                 break 
                             }
                         '1' {
-                                if ($selectedDatabase.branchId -eq "") { 
-                                    Write-Host -ForegroundColor Red "Environment must be attached to use this function"
-                                    break
-                                } else {
-                                    Remove-NAVDatabaseUsers -SetupParameters $InstanceSetupParameters -BranchSettings $databaseBranchSettings
-                                }
+                                Remove-NAVDatabaseUsers -SetupParameters $InstanceSetupParameters -BranchSettings $databaseBranchSettings
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
                         '2' {
+                                Remove-NAVDatabaseServicePasswords -SetupParameters $InstanceSetupParameters -BranchSettings $databaseBranchSettings
+                                $anyKey = Read-Host "Press enter to continue..."
+                            }
+                        '3' {
                                 if ($selectedDatabase.branchId -eq "") { 
                                     Write-Host -ForegroundColor Red "Environment must be attached to use this function"
                                     break
@@ -67,7 +74,7 @@ do {
                                 }
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
-                        '3' {
+                        '4' {
                                 if ($selectedDatabase.branchId -eq "") { 
                                     Write-Host -ForegroundColor Red "Environment must be attached to use this function"
                                     break
@@ -77,7 +84,7 @@ do {
                                 }
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
-                        '4' {
+                        '5' {
                                 if ($selectedDatabase.branchId -eq "") { 
                                     Write-Host -ForegroundColor Red "Environment must be attached to use this function"
                                     break
@@ -88,7 +95,7 @@ do {
                                 }
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
-                        '5' {
+                        '6' {
                                 if ($selectedDatabase.branchId -eq "") { 
                                     Write-Host -ForegroundColor Red "Environment must be attached to use this function"
                                     break
@@ -98,7 +105,7 @@ do {
                                 }
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
-                        '6' { 
+                        '7' { 
                                 if ($selectedDatabase.branchId -ne "") {
                                     Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
                                     $LocalBranchSettings = Clear-BranchSettings -BranchId $selectedDatabase.branchId 
@@ -112,7 +119,7 @@ do {
                             }                               
                     }                    
                 }
-                until ($input -iin ('q', '1'))
+                until ($input -iin ('q', '7'))
             }
         }
     }

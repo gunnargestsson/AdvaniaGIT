@@ -41,7 +41,7 @@ do {
                                 break 
                             }
                         '1' { 
-                                $InstanceSetupParameters = Create-SetupParameters -InstanceVersion $selectedInstance.Version
+                                $InstanceSetupParameters = Create-SetupParameters -SetupParameters $SetupParameters -InstanceVersion $selectedInstance.Version
                                 Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
                                 if ($selectedInstance.branchId -ne "") {
                                     $LocalBranchSettings = Clear-BranchSettings -BranchId $selectedInstance.branchId 
@@ -60,14 +60,14 @@ do {
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
                         '2' {
-                                $InstanceSetupParameters = Create-SetupParameters -InstanceVersion $selectedInstance.Version
+                                $InstanceSetupParameters = Create-SetupParameters -SetupParameters $SetupParameters -InstanceVersion $selectedInstance.Version
                                 Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
                                 Set-NAVServerInstance -ServerInstance $selectedInstance.instanceName -Start -Force
                                 UnLoad-InstanceAdminTools
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
                         '3' {
-                                $InstanceSetupParameters = Create-SetupParameters -InstanceVersion $selectedInstance.Version
+                                $InstanceSetupParameters = Create-SetupParameters -SetupParameters $SetupParameters -InstanceVersion $selectedInstance.Version
                                 Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
                                 Set-NAVServerInstance -ServerInstance $selectedInstance.instanceName -Stop -Force
                                 UnLoad-InstanceAdminTools

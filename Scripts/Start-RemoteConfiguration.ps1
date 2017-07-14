@@ -68,7 +68,7 @@ do {
                     Action "
                     switch ($input) {
                         '0' { break }
-                        '+' { New-NAVDeploymentRemoteInstance -Credential $Credential -DeploymentName $selectedDeployment.Deployment }
+                        '+' { New-NAVDeploymentRemoteInstance -Credential $Credential -DeploymentName $selectedDeployment.Deployment -Subscription $Subscription }
                         '1' { Configure-NAVRemoteInstances -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $selectedDeployment.Deployment }
                         '2' { Set-NAVDeploymentRemoteInstanceADRegistration -Credential $Credential -DeploymentName $selectedDeployment.Deployment -Subscription $Subscription }
                         '3' { New-NAVDeploymentRemoteClickOnceSites -Credential $Credential -DeploymentName $selectedDeployment.Deployment }

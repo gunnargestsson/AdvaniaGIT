@@ -3,17 +3,22 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.PSCredential]$Credential,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$Subscription,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$DeploymentName
     )
     PROCESS 
     { 
+        $RemoteConfig = Get-NAVRemoteConfig
+        $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
+        $IconFilePath = Get-NAVClickOnceApplicationIcon -Credential $Credential -DeploymentName $DeploymentName 
+        $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName
+        if (!$KeyVault) { break }
+
         #Ask for Instance Name 
         $SelectedInstance = New-NAVInstanceSettingsDialog -Message "Create new service instance" 
         if ($SelectedInstance.OKPressed -ne 'OK') { break }
         $ServerInstance = $SelectedInstance.ServerInstance
-
-        $RemoteConfig = Get-NAVRemoteConfig
-        $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
 
         $Database = New-NAVDatabaseObject 
         $DBAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
@@ -57,6 +62,22 @@
 
                 New-NAVRemoteInstance -Session $Session -ServerInstance $SelectedInstance.ServerInstance 
                 Set-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $SelectedInstance -Database $Database -EncryptionKeyPath $RemoteComputer.EncryptionKeyPath -EncryptionKeyPassword $EncryptionKeyPassword -InstanceSettings $RemoteComputer.InstanceSettings 
+                $NewInstance = Get-NAVRemoteInstance -Session $Session -ServerInstanceName $SelectedInstance.ServerInstance 
+                $CertValue = Get-NAVServiceCertificateValue -Session $Session -ServerInstance $NewInstance 
+                $KeyVaultKey = Get-NAVAzureKeyVaultKey -KeyVault $KeyVault -ServerInstanceName $NewInstance.ServerInstance
+                $Application = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $NewInstance -IconFilePath $IconFilePath -CertValue $CertValue
+                $ServicePrincipal = Get-NAVADServicePrincipal -ADApplication $Application                   
+                Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ServicePrincipalName $ServicePrincipal.ServicePrincipalNames[1] -PermissionsToKeys encrypt,decrypt,get
+                Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ApplicationId $Application.ApplicationId -ObjectId $Application.ObjectId -PermissionsToKeys encrypt,decrypt,get
+                $NewInstance = Combine-Settings $NewInstance $KeyVault -Prefix KeyVault
+                $NewInstance = Combine-Settings $NewInstance $KeyVaultKey -Prefix KeyVaultKey
+                $NewInstance = Combine-Settings $NewInstance $ServicePrincipal -Prefix ServicePrincipal
+                $NewInstance = Combine-Settings $NewInstance $Application -Prefix ADApplication
+                $NewInstance | Add-Member -MemberType NoteProperty -Name ADApplicationFederationMetadataLocation -Value "https://login.windows.net/$($Subscription.Account.Id.Split("@").GetValue(1))/federationmetadata/2007-06/federationmetadata.xml"
+                Set-NAVRemoteInstanceADRegistration -Session $Session -ServerInstance $NewInstance 
+                Start-NAVRemoteInstance -Session $Session -SelectedInstances $NewInstance
+                Start-NAVRemoteInstanceSync -Session $Session -SelectedInstances $NewInstance
+
                 if ($hostNo -eq 1) {
                     $Users = Get-NAVRemoteInstanceTenantUsers -Session $Session -SelectedTenant $SelectedTenant
                     $NAVSuperUser = $Users | Where-Object -Property UserName -EQ $RemoteConfig.NAVSuperUser
@@ -77,9 +98,11 @@
                     Set-NAVAzureDnsZoneRecord -DeploymentName $DeploymentName -DnsHostName $SelectedTenant.ClickOnceHost -OldDnsHostName ""
                     $hostNo ++
                 }
-                if (Test-Path $LocalFileName) {
-                    $LicenseData = [Byte[]] (Get-Content -Path $LocalFileName -Encoding Byte)   
-                    Set-NAVRemoteInstanceTenantLicense -Session $Session -SelectedTenant $SelectedTenant -LicenseData $LicenseData                         
+                if ($LocalFileName) {
+                    if (Test-Path $LocalFileName) {
+                        $LicenseData = [Byte[]] (Get-Content -Path $LocalFileName -Encoding Byte)   
+                        Set-NAVRemoteInstanceTenantLicense -Session $Session -SelectedTenant $SelectedTenant -LicenseData $LicenseData                         
+                    }
                 }
                 $RemoteTenantSettings = Set-NAVRemoteInstanceTenantSettings -Session $Session -SelectedTenant $SelectedTenant 
                 $NewInstance = Get-NAVRemoteInstances -Session $Session | Where-Object -Property ServerInstance -EQ $SelectedInstance.ServerInstance

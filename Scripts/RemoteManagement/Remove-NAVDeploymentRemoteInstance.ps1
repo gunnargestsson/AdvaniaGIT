@@ -14,7 +14,10 @@
         $SelectedTenant = Get-NAVRemoteInstanceDefaultTenant -SelectedInstance $SelectedInstance
         $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
+        $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName
+        if (!$KeyVault) { break }
 
+        Write-Host "Removing Azure registrations..."
         #Remove DNS Registration
         if ($SelectedTenant.ClickOnceHost -gt "") {
             Remove-NAVAzureDnsZoneRecordSet -DnsHostName $SelectedTenant.ClickOnceHost
@@ -24,13 +27,17 @@
         if ($SelectedTenant.PasswordId -gt "") {
             Delete-NAVPasswordStateId -PasswordId $SelectedTenant.PasswordId
         }
-
-        #Remove Key from Azure Key Vault
-        $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName        
-        if ($KeyVault) { Remove-AzureKeyVaultKey -VaultName $KeyVault.VaultName -Name $SelectedInstance.ServerInstance -ErrorAction SilentlyContinue }
         
         #Remove AD Application Registration
-        Get-AzureRmADApplication | Where-Object -Property DisplayName -EQ "${DeploymentName}-$($ServerInstance.ServerInstance)" | Remove-AzureRmADApplication -Force -ErrorAction SilentlyContinue
+        Get-AzureRmADServicePrincipal | Where-Object -Property DisplayName -EQ "${DeploymentName}-$($ServerInstance.ServerInstance)" | foreach {            
+            Remove-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ServicePrincipalName $_.ServicePrincipalNames[1]
+            Remove-AzureRmADServicePrincipal -ObjectId $_.ObjectId -Force -ErrorAction SilentlyContinue
+        }
+        Get-AzureRmADApplication | Where-Object -Property DisplayName -EQ "${DeploymentName}-$($ServerInstance.ServerInstance)" | foreach {
+            Remove-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ApplicationId $_.ApplicationId -ObjectId $_.ObjectId 
+            Set-AzureRmADApplication -ObjectId $_.ObjectId -AvailableToOtherTenants $false
+            Remove-AzureRmADApplication -ObjectId $_.ObjectId -Force -ErrorAction SilentlyContinue
+        }
 
         Foreach ($RemoteComputer in $Remotes.Hosts) {
             Write-Host "Updating $($RemoteComputer.HostName)..."

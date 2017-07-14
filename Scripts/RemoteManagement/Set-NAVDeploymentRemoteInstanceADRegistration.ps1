@@ -18,17 +18,20 @@
         Write-Host "Updating Instance for $DeploymentName..."
         Foreach ($RemoteComputer in $Remotes.Hosts) {
             $Roles = $RemoteComputer.Roles
-            if ($Roles -like "*ClickOnce*") {
+            if ($Roles -like "*Client*" -or $Roles -like "*NAS*") {
                 Write-Host "Updating $($RemoteComputer.HostName)..."
                 $Session = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN
                 $ServerInstances = Get-NAVRemoteInstances -Session $Session 
-                foreach ($ServerInstance in $ServerInstances | Where-Object -Property ServerInstance -EQ ADIS) {
+                foreach ($ServerInstance in $ServerInstances) {                    
+                    $CertValue = Get-NAVServiceCertificateValue -Session $Session -ServerInstance $ServerInstance 
                     $KeyVaultKey = Get-NAVAzureKeyVaultKey -KeyVault $KeyVault -ServerInstanceName $ServerInstance.ServerInstance
-                    $Application = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $ServerInstance -IconFilePath $IconFilePath
-                    #Remove-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ApplicationId $ServerInstance.ADApplicationApplicationId -ObjectId $ServerInstance.ADApplicationObjectId 
-                    #Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ApplicationId $ServerInstance.ADApplicationApplicationId -ObjectId $ServerInstance.ADApplicationObjectId -PermissionsToKeys all -PermissionsToSecrets all -PermissionsToCertificates all -PermissionsToStorage all
+                    $Application = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $ServerInstance -IconFilePath $IconFilePath -CertValue $CertValue
+                    $ServicePrincipal = Get-NAVADServicePrincipal -ADApplication $Application                   
+                    Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ServicePrincipalName $ServicePrincipal.ServicePrincipalNames[1] -PermissionsToKeys encrypt,decrypt,get
+                    Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ApplicationId $Application.ApplicationId -ObjectId $Application.ObjectId -PermissionsToKeys encrypt,decrypt,get
                     $ServerInstance = Combine-Settings $ServerInstance $KeyVault -Prefix KeyVault
                     $ServerInstance = Combine-Settings $ServerInstance $KeyVaultKey -Prefix KeyVaultKey
+                    $ServerInstance = Combine-Settings $ServerInstance $ServicePrincipal -Prefix ServicePrincipal
                     $ServerInstance = Combine-Settings $ServerInstance $Application -Prefix ADApplication
                     $ServerInstance | Add-Member -MemberType NoteProperty -Name ADApplicationFederationMetadataLocation -Value "https://login.windows.net/$($Subscription.Account.Id.Split("@").GetValue(1))/federationmetadata/2007-06/federationmetadata.xml"
                     Set-NAVRemoteInstanceADRegistration -Session $Session -ServerInstance $ServerInstance -RestartServerInstance

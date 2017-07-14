@@ -10,7 +10,9 @@
         if (!$KeyVault) {
             $ResourceGroup = Get-NAVAzureResourceGroup -Message "No Key Vault found for $DeploymentName, Select a resource group for the Key Vault."
             $VaultName = "${DeploymentName}$($ResourceGroup.ResourceGroupName)".Substring(0,24)
-            if ($ResourceGroup) { $KeyVault = New-AzureRmKeyVault -VaultName $VaultName -ResourceGroupName $ResourceGroup.ResourceGroupName -Location $ResourceGroup.Location }
+            if ($ResourceGroup) { 
+                $KeyVault = New-AzureRmKeyVault -VaultName $VaultName -ResourceGroupName $ResourceGroup.ResourceGroupName -Location $ResourceGroup.Location                 
+            }
         }
         Return $KeyVault
     }

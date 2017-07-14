@@ -37,8 +37,8 @@
     Select action"
                         switch ($input) {
                             '0' { break }
-                            '1' { Start-NAVRemoteInstanceForceSync -Credential $Credential -SelectedInstances $selectedInstance }
-                            '2' { Start-NAVRemoteInstanceSync -Credential $Credential -SelectedInstances $selectedInstance }
+                            '1' { Start-NAVDeploymentRemoteInstanceForceSync -Credential $Credential -SelectedInstances $selectedInstance }
+                            '2' { Start-NAVDeploymentRemoteInstanceSync -Credential $Credential -SelectedInstances $selectedInstance }
                             '3' { Start-NAVDeploymentRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance }
                             '4' { Stop-NAVDeploymentRemoteInstance -Credential $Credential -SelectedInstances $selectedInstance }
                             '5' { Get-NAVRemoteInstanceEvents -Credential $Credential -SelectedInstances $selectedInstance }
