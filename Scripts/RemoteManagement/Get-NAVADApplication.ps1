@@ -11,7 +11,7 @@
     )
     PROCESS 
     {    
-        $DisplayName = "${DeploymentName}-$($ServerInstance.ServerInstance)"
+        $DisplayName = [Uri]::EscapeDataString("${DeploymentName}-$($ServerInstance.ServerInstance)".Replace("_","-"))
         $Application = Get-AzureRmADApplication | Where-Object -Property DisplayName -eq $DisplayName
         if (!$Application) {
             $x509 = [System.Security.Cryptography.X509Certificates.X509Certificate2]([System.Convert]::FromBase64String($CertValue))           
