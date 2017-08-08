@@ -30,7 +30,7 @@ if (Test-Path $InstallationPath) {
     foreach ($Directory in $DirectoriesToCopy) {
     $Source = Join-Path $PSScriptRoot $Directory
     $Destination = Join-Path $InstallationPath $Directory
-    Copy-Item -Path $Source -Destination $Destination -Recurse -ErrorAction SilentlyContinue
+    Copy-Item -Path (Join-Path $Source '*.*') -Destination $Destination -Recurse -ErrorAction SilentlyContinue
     }
     foreach ($Directory in $DirectoriesToLink) {
     $Source = Join-Path $PSScriptRoot $Directory
