@@ -22,14 +22,21 @@ $DefaultPath = 'C:\AdvaniaGIT'
 $InstallationPath = Read-Host -Prompt "Enter local path for AdvaniaGIT (default = C:\AdvaniaGIT)"
 if ($InstallationPath -eq "") { $InstallationPath = $DefaultPath }
 New-Item -Path $InstallationPath -ItemType Directory -ErrorAction SilentlyContinue
-if (Test-Path $InstallationPath) {
+if (Test-Path -Path $InstallationPath) {
     Copy-Item -Path (Join-Path $PSScriptRoot 'TestDevel.ps1') -Destination $InstallationPath -Force -ErrorAction SilentlyContinue
     Copy-Item -Path (Join-Path $PSScriptRoot 'README.md') -Destination $InstallationPath -Force -ErrorAction SilentlyContinue
     $DirectoriesToCopy = @('Backup','Data','Database','Demo','License','Log','Source','Workspace')
     $DirectoriesToLink = @('Scripts','SourceTree')
     foreach ($Directory in $DirectoriesToCopy) {
-    $Source = Join-Path $PSScriptRoot $Directory
-    Copy-Item -Path $Source -Destination $InstallationPath -Recurse -ErrorAction SilentlyContinue
+        $Source = Join-Path $PSScriptRoot $Directory
+        $Destination = Join-Path $InstallationPath $Directory
+        New-Item -Path $Destination -ItemType Directory -ErrorAction SilentlyContinue
+        $Items = Get-ChildItem -Path $Source 
+        foreach ($Item in $Items) {
+            if (!(Test-Path -Path (Join-Path $Destination $Item.Name))) {
+                Copy-Item -Path $Item.FullName -Destination $Destination -Recurse -ErrorAction SilentlyContinue 
+            }
+        }
     }
     foreach ($Directory in $DirectoriesToLink) {
     $Source = Join-Path $PSScriptRoot $Directory
