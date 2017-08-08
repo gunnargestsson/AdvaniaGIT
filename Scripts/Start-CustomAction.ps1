@@ -25,7 +25,7 @@ $IsInAdminMode = $myWindowsPrincipal.IsInRole($adminRole)
 
 if ($InAdminMode -eq '$true' -or $InAdminMode -eq $true) {
     Write-Host "Starting Script in Admin Mode..."
-    $ScriptToStart = (Join-path $PSScriptRoot 'Start-CustomAction.ps1')
+    $ScriptToStart = (Join-path $PSScriptRoot $MyInvocation.MyCommand.Name)
     $ArgumentList = "-noprofile -file " + $ScriptToStart + " " + $Repository + " " + $ScriptName + " `$false $Wait" 
     if ($Wait -eq $true -or $Wait -eq '$true') {
         Start-Process powershell -Verb runas -WorkingDirectory $Repository -ArgumentList $ArgumentList -WindowStyle Normal -Wait
