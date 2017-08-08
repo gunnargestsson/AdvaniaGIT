@@ -15,12 +15,14 @@ if ($zipFileVersion -gt $navGITVersion) {
     $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     $SetupParameters.navVersion = $zipFileVersion
     & (Join-path $PSScriptRoot 'Build-NavEnvironment.ps1')
-    & (Join-path $PSScriptRoot 'ImportFrom-NAVtoGIT.ps1')
-    & (Join-path $PSScriptRoot 'Export-GITtoSource.ps1')
+    & (Join-path $PSScriptRoot 'ImportFrom-NAVtoTarget.ps1')
+    if ($SetupParameters.storeAllObjects -ieq "true") {
+        & (Join-path $PSScriptRoot 'Replace-GITwithTarget.ps1')
+    }
 
     Write-Host "Copying source file from work folder..."
     $SourceDestinationFilePath = Join-Path $SetupParameters.SourcePath "$($SetupParameters.navRelease)-$($SetupParameters.navSolution).txt"
-    Copy-Item -Path (Join-Path $SetupParameters.WorkFolder "source.txt") -Destination $SourceDestinationFilePath -Force
+    Copy-Item -Path (Join-Path $SetupParameters.WorkFolder "target.txt") -Destination $SourceDestinationFilePath -Force
 
     Write-Host "Updating Setup.json..."
     $SetupJson = Get-Content $SetupParameters.setupPath | Out-String | ConvertFrom-Json
