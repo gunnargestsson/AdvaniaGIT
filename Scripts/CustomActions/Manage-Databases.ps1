@@ -113,7 +113,7 @@ do {
                                     UnLoad-InstanceAdminTools
                                 } else {
                                     Write-Host "Removing Database..."
-                                    Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command "ALTER DATABASE [$($BranchSettings.DatabaseName)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [$($selectedDatabase.databaseName)]" | Out-Null
+                                    Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command "ALTER DATABASE [$($selectedDatabase.databaseName)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [$($selectedDatabase.databaseName)]" | Out-Null
                                 }                                
                                 $anyKey = Read-Host "Press enter to continue..."
                             }                               
