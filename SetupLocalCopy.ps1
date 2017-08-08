@@ -29,8 +29,7 @@ if (Test-Path $InstallationPath) {
     $DirectoriesToLink = @('Scripts','SourceTree')
     foreach ($Directory in $DirectoriesToCopy) {
     $Source = Join-Path $PSScriptRoot $Directory
-    $Destination = Join-Path $InstallationPath $Directory
-    Copy-Item -Path (Join-Path $Source '*.*') -Destination $Destination -Recurse -ErrorAction SilentlyContinue
+    Copy-Item -Path $Source -Destination $InstallationPath -Recurse -ErrorAction SilentlyContinue
     }
     foreach ($Directory in $DirectoriesToLink) {
     $Source = Join-Path $PSScriptRoot $Directory
@@ -53,10 +52,11 @@ if ($Answer -iin ('Yes','Y','')) {
 }
 
 $DefaultAnswer = 'Y'
-$Answer = Read-Host -Prompt "Perform Remote Administration Module Installation ? (Default = Yes)"
-if ($Answer -iin ('Yes','Y','')) {
+$Answer = Read-Host -Prompt "Perform Remote Administration Module Installation ? (Default = No)"
+if ($Answer -iin ('Yes','Y')) {
     $ScriptToStart = Join-Path $InstallationPath 'Scripts\Install-RemoteManagementModules.ps1'
     & $ScriptToStart
+    Start-Process -FilePath (Join-Path $InstallationPath "Data\RemoteSettings.Json")
 }
 
 $DefaultAnswer = 'Y'
