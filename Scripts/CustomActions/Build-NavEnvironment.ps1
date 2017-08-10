@@ -19,6 +19,8 @@ if ($BranchSettings.instanceName -eq "") {
     $BranchSettings.instanceName = ""    
     Write-Host "Upgrading database..."
     Invoke-NAVDatabaseConversion -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    Write-Host "Simplifying Database..."
+    Set-NAVDatabaseToSimpleRecovery -DatabaseServer $SetupParameters.defaultDatabaseServer -DatabaseInstance $SetupParameters.defaultDatabaseInstance -DatabaseName $ServerInstance
     Write-Host "Compiling Service Objects..."
     Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=Table;Id=2000000004..2000000999" -SynchronizeSchemaChanges No 
     Write-Host "Creatings Service..."
