@@ -29,7 +29,11 @@
     if ($DatabaseInstance -ne "") { $params.DatabaseInstance = $DatabaseInstance }
     New-NAVDatabase @params -Force | Out-Null
     
-    $Server = Get-DatabaseServer -BranchSettings $BranchSettings
+    if ($DatabaseInstance -gt "") {
+        $Server = $DatabaseServer + "\" + $DatabaseInstance
+    } else {
+        $Server = $DatabaseServer
+    }
 
     # Change Database Recovery Model to Simple and shrink the log file
     $command = "ALTER DATABASE [$DatabaseName] SET RECOVERY SIMPLE WITH NO_WAIT"
