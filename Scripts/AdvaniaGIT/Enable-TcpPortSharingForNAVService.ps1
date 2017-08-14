@@ -15,7 +15,6 @@
     $command = 'sc.exe \\$Computer config "$Service" depend= NetTcpPortSharing/HTTP'
     $Output = Invoke-Expression -Command $Command -ErrorAction Stop
     if($LASTEXITCODE -ne 0){
-        Write-Error "$Computer : Failed to set $Service TcpPortSharing.  More details: $Output" -foregroundcolor red 
-        }
-
+        Write-Error "$Computer : Failed to set $Service TcpPortSharing.  More details: $Output"  
+    }
 }
