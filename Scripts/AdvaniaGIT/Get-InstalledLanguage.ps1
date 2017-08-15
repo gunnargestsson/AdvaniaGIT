@@ -6,7 +6,7 @@
     [PSObject]$SetupParameters
     )
 
-    $Languages = (Get-ChildItem $SetupParameters.navServicePath -Filter '??-??' -Directory)
+    $Languages = (Get-ChildItem $SetupParameters.navServicePath -Filter '??-??' -Directory -ErrorAction SilentlyContinue) 
     if ($Languages) {
         $Language = $Languages[0].Name.SubString(3,2).ToUpper()
     } else { 
