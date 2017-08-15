@@ -132,8 +132,10 @@
             }
             Remove-PSSession $Session
         }
-        if (Test-Path $LocalFileName) {
-            Remove-Item -Path $LocalFileName -Force -ErrorAction SilentlyContinue
+        if ($LocalFileName) {
+            if (Test-Path $LocalFileName) {
+                Remove-Item -Path $LocalFileName -Force -ErrorAction SilentlyContinue
+            }
         }
         Write-Host "Instance created.  "
         if (!$NAVAccountantUser) {

@@ -74,7 +74,7 @@
       "Deployment": "NAV2017",
       "Description": "NAV 2017 Installation",
       "ClickOnceEndpoint": "advanianav2017.westeurope.cloudapp.azure.com",
-      "ClickOnceHost": "$(ServerInstance).navleiga.is",
+      "ClickOnceHost": "${ServerInstance}.navleiga.is",
       "ClickOnceApplicationName": "Dynamics NAV 2017 frá Advania",
       "ClickOnceApplicationPublisher": "Advania",
       "Hosts": [
@@ -144,7 +144,7 @@
       "Deployment": "LSNAV2016",
       "Description": "NAV 2016 LS-Retail Installation",
       "ClickOnceEndpoint": "advanialsnav2016.westeurope.cloudapp.azure.com",
-      "ClickOnceHost": "$(ServerInstance).navleiga.is",
+      "ClickOnceHost": "${ServerInstance}.navleiga.is",
       "ClickOnceApplicationName": "Dynamics LS-NAV 2016 frá Advania",
       "ClickOnceApplicationPublisher": "Advania",
       "Hosts": [

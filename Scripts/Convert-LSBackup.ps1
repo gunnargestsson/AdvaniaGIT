@@ -6,7 +6,6 @@ $backupFilePath = 'C:\NAVManagementWorkFolder\BACKUP\w1-ls-nav-9-00-10-release.b
 
 # Import all needed modules
 Get-Module -Name AdvaniaGIT | Remove-Module
-Get-Module -Name Cloud.Ready.Software.NAV | Remove-Module
 Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
 
 if (!(Test-Path -Path $backupFilePath)) { Show-Error -ErrorMessage "File not found!" }
