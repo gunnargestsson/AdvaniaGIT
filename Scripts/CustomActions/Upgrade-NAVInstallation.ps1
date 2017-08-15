@@ -6,7 +6,14 @@ Download-LatestNAVUpdate -SetupParameters $SetupParameters -InstallWorkFolder $I
 
 $zipFileVersion = (Get-ItemProperty -Path (Join-Path $installWorkFolder "ServiceTier\\program files\\Microsoft Dynamics NAV\\$($SetupParameters.mainVersion)\\Service\\Microsoft.Dynamics.Nav.Server.exe")).VersionInfo.FileVersion
 $navInstallationVersion = Get-InstalledBuild -SetupParameters $SetupParameters
-if ($zipFileVersion -gt $navInstallationVersion) {
+if (!$navInstallationVersion) {
+    Write-Host "Starting $($SetupParameters.navRelease) installation ..."
+    Start-Process -FilePath (Join-Path $installWorkFolder "Setup.exe") -Wait
+    Write-Host "Update $($SetupParameters.navRelease) information in AdvaniaGIT ..."
+    Start-Process -FilePath (Join-Path $SetupParameters.rootPath "Data\NAVVersions.json")
+    & (Join-path $PSScriptRoot 'Prepare-NAVEnvironment.ps1')
+}
+elseif ($zipFileVersion -gt $navInstallationVersion) {
     # Stop NAV Servers
     & (Join-path $PSScriptRoot 'Stop-NAVServices.ps1')
 

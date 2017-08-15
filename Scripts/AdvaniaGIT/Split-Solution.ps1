@@ -9,12 +9,18 @@
     [String]$ObjectsFilePath
     )
     if ($SetupParameters.storeAllObjects -eq "false" -or $SetupParameters.storeAllObjects -eq $false) {
-        $BaseObjectsFile = Get-NAVSourceFilePath -SetupParameters $SetupParameters
+        $SourceFilePath = Get-NAVSourceFilePath -SetupParameters $SetupParameters
+        $BaseObjectsFile = (Join-Path $SetupParameters.WorkFolder "Source.txt")
+        Copy-Item -Path $SourceFilePath -Destination $BaseObjectsFile -Force
+        if ($SetupParameters.objectProperties -eq "false") {
+            Write-Host "Clearing object properties..."
+            Set-NAVApplicationObjectProperty -TargetPath $BaseObjectsFile -VersionListProperty '' -DateTimeProperty '' -ModifiedProperty No
+        }
         Test-Path $BaseObjectsFile -ErrorAction Stop | Out-Null
-        $DeltaFolder = Join-Path $SetupParameters.workFolder $SetupParameters.deltasPath
-        $ReverseDeltaFolder = Join-Path $SetupParameters.workFolder $SetupParameters.reverseDeltasPath
-        $DeltasPath = Join-Path $SetupParameters.Repository $SetupParameters.deltasPath
-        $ReverseDeltasPath = Join-Path $SetupParameters.Repository $SetupParameters.reverseDeltasPath
+        $DeltaFolder = Join-Path $SetupParameters.workFolder 'Deltas'
+        $ReverseDeltaFolder = Join-Path $SetupParameters.workFolder 'ReverseDeltas'
+        $DeltasPath = $SetupParameters.deltasPath
+        $ReverseDeltasPath = $SetupParameters.reverseDeltasPath
 
         Write-Host "Comparing Base Objects and Exported Objects..."
         Remove-Item -Path $DeltaFolder -Recurse -ErrorAction SilentlyContinue

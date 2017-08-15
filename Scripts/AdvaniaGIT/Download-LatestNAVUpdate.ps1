@@ -20,6 +20,9 @@
         Write-Host "Downloading installation for $($SetupParameters.navRelease) $($Language)..."
 
         $DownloadUrl = ($DownloadUrls | Where-Object -Property LocalVersion -EQ $Language).DownloadUrl
+        if (!$DownloadUrl) {
+            $DownloadUrl = ($DownloadUrls | Where-Object -Property LocalVersion -EQ "W1").DownloadUrl
+        }
         if ($DownloadUrl) {
             $DownloadFileName = Split-Path $DownloadUrl -Leaf
 

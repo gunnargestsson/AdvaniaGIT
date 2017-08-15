@@ -6,7 +6,7 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SetupParameters
     )
-    $TempSourceFilePath = (Join-Path $SetupParameters.WorkFolder "Source.txt")
+    $TempSourceFilePath = (Join-Path $SetupParameters.LogPath "Source.txt")
     $Sources = @()
     $Sources += (Get-ChildItem -Path $SetupParameters.SourcePath -File).Name
     if ($SetupParameters.ftpServer -ne "") {
