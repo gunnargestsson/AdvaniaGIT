@@ -102,6 +102,7 @@ else
     $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile)
     $Globals | Add-Member DownloadPath  (Join-Path $SetupParameters.rootPath "Download")
     $SetupParameters = Combine-Settings $Globals $SetupParameters
+    if ($BuildSettings) { $SetupParameters = Combine-Settings $BuildSettings $SetupParameters }
 
     New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null

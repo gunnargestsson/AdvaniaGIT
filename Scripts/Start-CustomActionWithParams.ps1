@@ -126,7 +126,8 @@ $SetupParameters | Add-Member "rootPath" $rootPath
 $SetupParameters | Add-Member "sigToolExecutable" $sigToolExecutable
 $SetupParameters | Add-Member "storeAllObjects" $storeAllObjects
 $SetupParameters | Add-Member "uidOffset" $uidOffset
-
+if ($BuildSettings) { $SetupParameters = Combine-Settings $BuildSettings $SetupParameters }
+	
 # Set Branch Settings
 $BranchSettings = New-Object PSObject
 $BranchSettings | Add-Member "databaseName" $databaseName

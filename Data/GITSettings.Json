@@ -2,6 +2,7 @@
   "ftpServer": "ftp://ftp02.hysing.is/",
   "ftpUser": "ftp_sourcetree",
   "ftpPass": "******",
+  "licenseFile": "Advania.flf",
   "workFolder": "C:\\AdvaniaGIT\\Workspace",
   "patchNoFunction": "Display-PatchDayNo",
   "defaultDatabaseServer": "localhost",
