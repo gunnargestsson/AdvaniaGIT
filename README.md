@@ -7,8 +7,8 @@ The installation is basically as follows:
 * Install SQL Server 2016 Developers.  Enable TCP/IP port and set Maximum Memory options
 * Install Dynamics NAV (2016 & 2017) with Developer option
 * Import valid NAV Development license into the master database
-* Install GIT <https://git-for-windows.github.io/ with default options>
-* Install SourceTree <https://www.sourcetreeapp.com/ with default options>
+* Install GIT <https://git-for-windows.github.io/> with default options
+* Install SourceTree <https://www.sourcetreeapp.com/> with default options
 * Start SourceTree and Clone/Pull <https://github.com/gunnargestsson/AdvaniaGIT>
 * Right click SetupLocalCopy.ps1 (in your GIT folder) and select Run with PowerShell
 
