@@ -1,6 +1,9 @@
 ﻿Load-InstanceAdminTools -setupParameters $setupParameters 
 #Import-Module (Join-Path $setupParameters.navServicePath 'Microsoft.Dynamics.Nav.Management.dll') -Scope Local
 
+#Enable the Port Sharing Service
+Enable-TcpPortSharingService
+
 #Stop NAV Server Instances
 Get-NAVServerInstance | Where-Object -Property Version -Like ($SetupParameters.navVersion.Substring(0,2) + "*.0") | Set-NAVServerInstance -Stop
         
