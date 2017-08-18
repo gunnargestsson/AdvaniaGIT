@@ -50,6 +50,13 @@
     <ShowFullOutput>false</ShowFullOutput>
   </CustomAction>
   <CustomAction>
+    <Caption>NAV Modified -&gt; GIT</Caption>
+    <Target>StartPowerShell.cmd</Target>
+    <Parameters>"$REPO" "ImportFrom-ModifiedNAVtoGIT.ps1" $false</Parameters>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>true</ShowFullOutput>
+  </CustomAction>
+  <CustomAction>
     <Caption>NAV -&gt; GIT</Caption>
     <Target>StartPowerShell.cmd</Target>
     <Parameters>"$REPO" "ImportFrom-NAVtoGIT.ps1" $false</Parameters>
