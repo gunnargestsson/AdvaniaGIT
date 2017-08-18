@@ -6,8 +6,8 @@
     $ToolPath = "C:\Program Files (x86)\Microsoft SQL Server\$($SQLVersionNum)0\DAC\bin\SqlPackage.exe" 
     if (Test-Path $ToolPath) { Return $ToolPath }
      
-    $files = Get-Item -Path ${env:ProgramFiles(x86)} -Filter "Microsoft*" | Get-ChildItem -Filter "sqlpackage.exe" -Recurse -ErrorAction SilentlyContinue
-    $files += Get-Item -Path $env:ProgramFiles -Filter "Microsoft*" | Get-ChildItem -Filter "sqlpackage.exe" -Recurse -ErrorAction SilentlyContinue
+    $files = Get-Item -Path ${env:ProgramFiles(x86)} -Filter "Microsoft*" -ErrorAction SilentlyContinue | Get-ChildItem -Filter "sqlpackage.exe" -Recurse -ErrorAction SilentlyContinue
+    $files += Get-Item -Path $env:ProgramFiles -Filter "Microsoft*" -ErrorAction SilentlyContinue | Get-ChildItem -Filter "sqlpackage.exe" -Recurse -ErrorAction SilentlyContinue
 
     if ($Files) {
         foreach ($file in $files) {
