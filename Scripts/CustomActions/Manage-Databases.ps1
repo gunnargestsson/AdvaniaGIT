@@ -48,8 +48,10 @@ do {
                     3 = create backup, 
                     4 = restore backup, 
                     5 = create bacpac, 
-                    6 = restore backpac, 
-                    7 = delete)"
+                    6 = restore backpac,
+                    7 = create navdata,
+                    8 = restore navdata, 
+                    9 = delete)"
                     switch ($input) {
                         '0' { 
                                 $input = "q"
@@ -105,7 +107,30 @@ do {
                                 }
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
-                        '7' { 
+                        '7' {
+                                if ($selectedDatabase.branchId -eq "") { 
+                                    Write-Host -ForegroundColor Red "Environment must be attached to use this function"
+                                    break
+                                } else {
+                                    $NavdataFileName = Read-Host -Prompt "Type navdata file name (default = $($databaseBranchSettings.DatabaseName).navdata)"
+                                    if ($NavdataFileName -eq "") { $NavdataFileName = "$($databaseBranchSettings.DatabaseName).Navdata" }
+                                    Create-NAVDatabaseNavdata -SetupParameters $SetupParameters -BranchSettings $databaseBranchSettings -NavdataFilePath (Join-Path $SetupParameters.BackupPath $NavdataFileName)
+                                }
+                                $anyKey = Read-Host "Press enter to continue..."
+                            }
+                        '8' {
+                                if ($selectedDatabase.branchId -eq "") { 
+                                    Write-Host -ForegroundColor Red "Environment must be attached to use this function"
+                                    break
+                                } else {
+                                    $SelectedBakFilePath = Convert-NAVnavdataToBak -SetupParameters $SetupParameters -BranchSettings $databaseBranchSettings
+                                    Replace-NAVDatabaseFromBak -SetupParameters $SetupParameters -BranchSettings $databaseBranchSettings -SelectedBackupFile $SelectedBakFilePath 
+                                }
+                                $anyKey = Read-Host "Press enter to continue..."
+                            }
+
+                            
+                        '9' { 
                                 if ($selectedDatabase.branchId -ne "") {
                                     Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
                                     $LocalBranchSettings = Clear-BranchSettings -BranchId $selectedDatabase.branchId 
