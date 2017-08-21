@@ -12,6 +12,11 @@
     $LocalBranchSettings.databaseName = ""
     $LocalBranchSettings.databaseServer = ""
     $LocalBranchSettings.instanceName = ""
+    if ($LocalBranchSettings.dockerHostName) {
+        $LocalBranchSettings.dockerHostName = ""
+    } else {
+        $LocalBranchSettings | Add-Member -MemberType NoteProperty -Name dockerHostName -Value ""
+    }
     $BlankBranchSettings = Update-BranchSettings -BranchSettings $LocalBranchSettings    
     Return $ReturnedBranchSettings
 }
