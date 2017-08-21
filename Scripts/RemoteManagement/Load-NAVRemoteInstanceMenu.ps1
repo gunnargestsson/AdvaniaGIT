@@ -25,6 +25,7 @@
                 if (!($Instances | Where-Object -Property ServerInstance -EQ $instance.ServerInstance) -or $IncludeAllHosts) {                   
                     $instance | Add-Member -MemberType NoteProperty -Name No -Value $instanceNo
                     $instance | Add-Member -MemberType NoteProperty -Name HostName -Value $HostName
+                    $instance | Add-Member -MemberType NoteProperty -Name Health -Value (Get-NAVRemoteInstanceHealthCheck -SelectedInstance $instance)
                     $instanceNo ++
                     $Instances += $instance
                 }

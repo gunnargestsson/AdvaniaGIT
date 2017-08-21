@@ -13,7 +13,7 @@
         $menuItems = Load-NAVRemoteInstanceMenu -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $DeploymentName -IncludeAllHosts
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
-        $menuItems | Format-Table -Property No, HostName, ServerInstance, DatabaseName, Multitenant, Version, State -AutoSize 
+        $menuItems | Format-Table -Property No, HostName, ServerInstance, DatabaseName, Multitenant, Version, State, Health -AutoSize 
         $input = Read-Host "Please select instance number (0 = exit, + = Manage Services)"
         switch ($input) {
             '0' { break }
@@ -25,7 +25,7 @@
                     do {
                         Clear-Host
                         For ($i=0; $i -le 10; $i++) { Write-Host "" }
-                        $selectedInstance | Format-Table -Property HostName, ServerInstance, DatabaseName, Multitenant, Version, State -AutoSize 
+                        $selectedInstance | Format-Table -Property HostName, ServerInstance, DatabaseName, Multitenant, Version, State, Health -AutoSize 
                         $input = Read-Host "Please select action:`
     0 = exit, `
     1 = List Tenants, `

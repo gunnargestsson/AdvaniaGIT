@@ -5,13 +5,19 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$HostName,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-        [String]$SetupPath
+        [String]$SetupPath,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Switch]$UnsecureUri
     )
 
     if (!($SetupPath)) {
         $SetupPath = Join-path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) "Data"
     }
-    $WinRmUri = New-Object Uri("https://$($HostName):5986")    
+    if ($UnsecureUri) {
+        $WinRmUri = New-Object Uri("http://$($HostName):5985")    
+    } else {
+        $WinRmUri = New-Object Uri("https://$($HostName):5986")
+    }
     $WinRmOption = New-PSSessionOption –SkipCACheck –SkipCNCheck –SkipRevocationCheck
     $Session = New-PSSession -ConnectionUri $WinRMUri -Credential $Credential -SessionOption $WinRmOption
     Invoke-Command -Session $Session -ScriptBlock `
