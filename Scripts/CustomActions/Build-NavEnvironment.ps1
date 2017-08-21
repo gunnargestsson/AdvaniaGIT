@@ -23,7 +23,7 @@ if ($BranchSettings.instanceName -eq "") {
     Set-NAVDatabaseToSimpleRecovery -DatabaseServer $SetupParameters.defaultDatabaseServer -DatabaseInstance $SetupParameters.defaultDatabaseInstance -DatabaseName $ServerInstance
     Write-Host "Compiling Service Objects..."
     Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=Table;Id=2000000004..2000000999" -SynchronizeSchemaChanges No 
-    Write-Host "Creatings Service..."
+    Write-Host "Creating Service..."
     $DefaultInstanceSettings = Get-DefaultInstanceSettings -SetupParameters $SetupParameters -BranchSettings $BranchSettings
     $BranchSettings.clientServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ClientServicesPort']").Attributes["value"].Value
     $BranchSettings.managementServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ManagementServicesPort']").Attributes["value"].Value
