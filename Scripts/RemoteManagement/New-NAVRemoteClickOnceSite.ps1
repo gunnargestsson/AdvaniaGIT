@@ -22,7 +22,10 @@
                 Write-Host "Creating Client Configuration..."
                 $clickOnceCodeSigningPfxPasswordAsSecureString = ConvertTo-SecureString -String $SetupParameters.codeSigningCertificatePassword -AsPlainText -Force
                 $clickOnceDeploymentId = "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)"
-                $clickOnceDirectory = Join-Path (Join-Path $env:SystemDrive "inetpub\wwwroot\ClickOnce") $clickOnceDeploymentId
+
+                $wwwRootPath = (Get-Item "HKLM:\SOFTWARE\Microsoft\InetStp").GetValue("PathWWWRoot")
+                $wwwRootPath = [System.Environment]::ExpandEnvironmentVariables($wwwRootPath)
+                $clickOnceDirectory = Join-Path (Join-Path $wwwRootPath "ClickOnce") $clickOnceDeploymentId
                 Remove-Item -Path $clickOnceDirectory -Recurse -Force -ErrorAction SilentlyContinue
                 $webSiteUrl = "https://$($SelectedTenant.ClickOnceHost)"
                 [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:ProgramData ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))                       
@@ -121,7 +124,7 @@
                     Write-Host "Creating Client 365 Configuration..."
                     $clickOnceCodeSigningPfxPasswordAsSecureString = ConvertTo-SecureString -String $SetupParameters.codeSigningCertificatePassword -AsPlainText -Force
                     $clickOnceDeploymentId = "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)"
-                    $clickOnceDirectory = Join-Path (Join-Path (Join-Path $env:SystemDrive "inetpub\wwwroot\ClickOnce") $clickOnceDeploymentId) "365"
+                    $clickOnceDirectory = Join-Path $clickOnceDirectory "365"
                     $clickOnceDeploymentId += "365"
                     $AzureADDomain = $SelectedInstance.ClientServicesFederationMetadataLocation.split("/").GetValue(3)
                     Remove-Item -Path $clickOnceDirectory -Recurse -Force -ErrorAction SilentlyContinue

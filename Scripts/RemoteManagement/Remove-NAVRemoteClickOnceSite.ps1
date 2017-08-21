@@ -11,8 +11,11 @@
         $Result = Invoke-Command -Session $Session -ScriptBlock `
             {
                 Param([PSObject]$SelectedTenant)
-                if (!(Test-Path (Join-Path $env:SystemDrive "inetpub\wwwroot\ClickOnce"))) {
-                    New-Item -Path (Join-Path $env:SystemDrive "inetpub\wwwroot\ClickOnce") -ItemType Directory | Out-Null
+                $wwwRootPath = (Get-Item "HKLM:\SOFTWARE\Microsoft\InetStp").GetValue("PathWWWRoot")
+                $wwwRootPath = [System.Environment]::ExpandEnvironmentVariables($wwwRootPath)
+
+                if (!(Test-Path (Join-Path $wwwRootPath "ClickOnce"))) {
+                    New-Item -Path (Join-Path $wwwRootPath "ClickOnce") -ItemType Directory | Out-Null
                 }
                 $ExistingWebSite = Get-Website -Name "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)"
                 if ($ExistingWebSite) {
