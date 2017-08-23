@@ -5,7 +5,8 @@ if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     } 
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
-} else {
+}
+if ($BranchSettings.dockerContainerName -eq "") {
     Load-InstanceAdminTools -SetupParameters $Setupparameters
     if ($BranchSettings.instanceName -eq "") {
         Write-Host "Requesting new NAV Environment for branch" $Setupparameters.Branchname
@@ -72,11 +73,13 @@ if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
         Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFilePath 
     }
     UnLoad-InstanceAdminTools
-}
-if ($Setupparameters.uidOffset) {
-    Write-Host "Set uidoffset in database $($BranchSettings.databaseName) to $($Setupparameters.uidOffset)"
-    $command = 'UPDATE [dbo].[$ndo$dbproperty] SET [uidoffset] = ' + $Setupparameters.uidOffset
-    $Result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command   
+
+    if ($Setupparameters.uidOffset) {
+        Write-Host "Set uidoffset in database $($BranchSettings.databaseName) to $($Setupparameters.uidOffset)"
+        $command = 'UPDATE [dbo].[$ndo$dbproperty] SET [uidoffset] = ' + $Setupparameters.uidOffset
+        $Result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command   
+    }
+
 }
 
 
