@@ -3,11 +3,8 @@ if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
         Write-Host "Starting Docker Image Development Container for Branch ..."
         Start-DockerContainer -SetupParameters $SetupParameters -BranchSettings $BranchSettings
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
-    }
-    if (Test-Path $SetupParameters.LicenseFilePath) {  
-        #Update-DockerNAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFilePath 
-    }
-    
+    } 
+    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
 } else {
     Load-InstanceAdminTools -SetupParameters $Setupparameters
     if ($BranchSettings.instanceName -eq "") {

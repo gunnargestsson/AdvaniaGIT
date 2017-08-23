@@ -5,5 +5,5 @@
     )
 
     $ContainerName = Invoke-Command -Session $Session -ScriptBlock { return $env:COMPUTERNAME }
-    Return $ContainerName.ToString()
+    Return $ContainerName.ToString().ToLower()
 }

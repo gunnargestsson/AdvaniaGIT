@@ -9,8 +9,10 @@
     )
 
     Invoke-Command -Session $Session -ScriptBlock { 
-        param([PSObject]$SetupParameters, [PSObject]$BranchSettings)
+        param([PSObject]$SetupParameters, [PSObject]$BranchSettings, [String]$GeoId, [String]$LocaleName )
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted 
+        Set-WinHomeLocation -GeoId $GeoId
+        Set-WinSystemLocale -SystemLocale $LocaleName
         Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "C:\Run\AdvaniaGIT.zip" -ErrorAction Stop
         if (Test-Path -Path "C:\Run\AdvaniaGIT.zip") {
             Expand-Archive -LiteralPath "C:\Run\AdvaniaGIT.zip" -DestinationPath "C:\"
@@ -28,8 +30,12 @@
             $DockerBranchSettings.branchId = $BranchSettings.branchId
             $DockerBranchSettings.databaseServer = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseServer']").Value
             Update-BranchSettings -BranchSettings $DockerBranchSettings 
+            if (Test-Path "C:\License") {
+                Copy-Item -Path "C:\License\*.flf" -Destination "C:\AdvaniaGIT\License"
+            }
         } else {
             Write-Error "AdvaniaGIT Module Installation failed!" -ErrorAction Stop
         }
-    } -ArgumentList ($SetupParameters, $BranchSettings)
+        
+    } -ArgumentList ($SetupParameters, $BranchSettings, (Get-WinHomeLocation).GeoId, (Get-WinSystemLocale).Name)
 }

@@ -7,15 +7,18 @@
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
     [PSObject]$BranchSettings
     )
-
+    
+    $DockerSettings = Get-DockerSettings 
+    Write-Host "Connecting to repository $($DockerSettings.RepositoryPath)..."
+    docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
+    Write-Host "Preparing Docker Container for Dynamics NAV..."
     $adminUsername = $env:USERNAME
     & (Join-Path (Split-Path $PSScriptRoot -Parent) "RemoteManagement\Get-NAVPassword.ps1")
     $adminPassword = Get-NAVPassword -Message "Enter password for user $adminUsername on the Docker Image" 
-    $DockerSettings = Get-DockerSettings 
-    docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
     $volume = "$($SetupParameters.Repository):C:\GIT"
+    $license = "$($SetupParameters.LicensePath):C:\License"
     $image = $SetupParameters.dockerImage
-    $DockerContainerId = docker.exe run -m 4G -v "$volume" -e ACCEPT_EULA=Y -e username="$adminUsername" -e password="$adminPassword" -e Windowsauth=Y -e ClickOnce=Y --detach $image
+    $DockerContainerId = docker.exe run -m 4G -v "$volume" -v "$license"-e ACCEPT_EULA=Y -e username="$adminUsername" -e password="$adminPassword" -e Windowsauth=Y -e ClickOnce=Y --detach $image
     $Session = New-DockerSession -DockerContainerId $DockerContainerId
     $DockerContainerName = Get-DockerContainerName -Session $Session
     $BranchSettings.instanceName = "NAV" 
@@ -29,13 +32,13 @@
     $WaitForHealty = $true
     $LoopNo = 1
     while ($WaitForHealty -and $LoopNo -lt 20) {        
-        $dockerContainers = Get-DockerContainers | Where-Object -Property Id -ieq $DockerContainerName
-        Write-Host "Container status: $($dockerContainers.Status)..."
-        $WaitForHealty = $dockerContainers.Status -match "(health: starting)"
+        $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $DockerContainerName
+        Write-Host "Container status: $($dockerContainer.Status)..."
+        $WaitForHealty = $dockerContainer.Status -match "(health: starting)"
         if ($WaitForHealty) { Start-Sleep -Seconds 10 }
         $LoopNo ++
     }
-    if (!($dockerContainers.Status -match "(healthy)")) {
+    if (!($dockerContainer.Status -match "(healthy)")) {
         Write-Error "Container $DockerContainerName unable to start !" -ErrorAction Stop
     }
     Update-BranchSettings -BranchSettings $BranchSettings

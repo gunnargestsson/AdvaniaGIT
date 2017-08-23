@@ -6,11 +6,15 @@ if ($SetupParameters.storeAllObjects -eq "false" -or $SetupParameters.storeAllOb
 
 Check-GitNotUnattached
 Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
-Load-ModelTools -SetupParameters $SetupParameters
-$ExportPath = Join-Path $SetupParameters.WorkFolder 'Target.txt'
-Remove-Item -Path $ExportPath -Force -ErrorAction SilentlyContinue
+if ($BranchSettings.dockerContainerId -gt "") {
+    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
+} else { 
+    Load-ModelTools -SetupParameters $SetupParameters
+    $ExportPath = Join-Path $SetupParameters.WorkFolder 'Target.txt'
+    Remove-Item -Path $ExportPath -Force -ErrorAction SilentlyContinue
 
-Export-ModifiedNAVTxtFromApplication -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $ExportPath
-Set-NAVApplicationObjectProperty -TargetPath $ExportPath -ModifiedProperty No
-Split-NAVApplicationObjectFile -Source $ExportPath -Destination $SetupParameters.ObjectsPath -Force
-UnLoad-ModelTools
+    Export-ModifiedNAVTxtFromApplication -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $ExportPath
+    Set-NAVApplicationObjectProperty -TargetPath $ExportPath -ModifiedProperty No
+    Split-NAVApplicationObjectFile -Source $ExportPath -Destination $SetupParameters.ObjectsPath -Force
+    UnLoad-ModelTools
+}
