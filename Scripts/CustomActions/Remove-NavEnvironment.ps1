@@ -7,8 +7,10 @@ if ($BranchSettings.instanceName -ne "") {
     } else {
         $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $BranchSettings.dockerContainerName
         if ($dockerContainer) {
-            docker.exe kill $($BranchSettings.dockerContainerName)
-            docker.exe rm $($BranchSettings.dockerContainerName)
+            Write-Host "Killing and removing Docker Container $($BranchSettings.dockerContainerName)..."
+            $dockerContainerName = docker.exe kill $($BranchSettings.dockerContainerName)
+            $dockerContainerName = docker.exe rm $($BranchSettings.dockerContainerName)
+
         }
         $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId 
     }

@@ -4,9 +4,10 @@ if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
         Start-DockerContainer -SetupParameters $SetupParameters -BranchSettings $BranchSettings
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     } 
-    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
 }
-if ($BranchSettings.dockerContainerName -eq "") {
+if ($BranchSettings.dockerContainerName -gt "") {
+    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
+} else {
     Load-InstanceAdminTools -SetupParameters $Setupparameters
     if ($BranchSettings.instanceName -eq "") {
         Write-Host "Requesting new NAV Environment for branch" $Setupparameters.Branchname
