@@ -13,7 +13,7 @@
         $menuItems = Load-NAVRemoteInstanceMenu -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $DeploymentName
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
-        $menuItems | Format-Table -Property No, ServerInstance, DatabaseName, Multitenant, Version, State -AutoSize 
+        $menuItems | Format-Table -Property No, ServerInstance, DatabaseName, Multitenant, Version, State, Health -AutoSize 
         $input = Read-Host "Please select instance number (0 = Exit)"
         switch ($input) {
             '0' { break }

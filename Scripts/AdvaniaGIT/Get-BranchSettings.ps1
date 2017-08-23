@@ -18,13 +18,17 @@
             "instanceName" = ""; 
             "clientServicesPort" = "7046"; 
             "managementServicesPort" = "7045";
-            "dockerHostName" = ""}
+            "dockerContainerName" = "";
+            "dockerContainerId" = ""}
         $allBranchSettings.Branches += $BranchSettings
         Set-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) -Value ($allBranchSettings | ConvertTo-Json)        
-    }    
-    if (!($BranchSettings | Get-Member -Name dockerHostName)) {
-        $BranchSettings | Add-Member -MemberType NoteProperty -Name dockerHostName -Value ""
+    } else {
+        if (![bool]($BranchSettings.PSObject.Properties.name -match "dockerContainerName")) {
+            $BranchSettings | Add-Member -MemberType NoteProperty -Name dockerContainerName -Value ""
+        }
+        if (![bool]($BranchSettings.PSObject.Properties.name -match "dockerContainerId")) {
+            $BranchSettings | Add-Member -MemberType NoteProperty -Name dockerContainerId -Value ""
+        }
     }
-
     Return $BranchSettings
 }
