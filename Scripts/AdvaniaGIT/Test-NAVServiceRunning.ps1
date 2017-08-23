@@ -16,12 +16,12 @@
             Write-Error "Environment $($BranchSettings.instanceName) is not running!" -ErrorAction Stop
         }
     } else {
-        $result = Invoke-WebRequest -Uri "$($BranchSettings.dockerHostName)/NAV/WebClient/Health/System" -UseBasicParsing -TimeoutSec 10
+        $result = Invoke-WebRequest -Uri "$($BranchSettings.dockerContainerName)/NAV/WebClient/Health/System" -UseBasicParsing -TimeoutSec 10
         if ($result.StatusCode -eq 200 -and ((ConvertFrom-Json $result.Content).result)) {
             # Web Client Health Check Endpoint will test Web Client, Service Tier and Database Connection
-            Write-Host "Docker Image on $($BranchSettings.dockerHostName) is responding correctly..."
+            Write-Host "Docker Image on $($BranchSettings.dockerContainerName) is responding correctly..."
         } else {
-            Write-Error "Docker Image on $($BranchSettings.dockerHostName) is not responding!" -ErrorAction Stop
+            Write-Error "Docker Image on $($BranchSettings.dockerContainerName) is not responding!" -ErrorAction Stop
         }
     }
 }

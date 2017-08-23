@@ -5,7 +5,7 @@ if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     }
     if (Test-Path $SetupParameters.LicenseFilePath) {  
-        Update-DockerNAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFilePath 
+        #Update-DockerNAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFilePath 
     }
     
 } else {

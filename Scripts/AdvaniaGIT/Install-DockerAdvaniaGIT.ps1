@@ -10,6 +10,7 @@
 
     Invoke-Command -Session $Session -ScriptBlock { 
         param([PSObject]$SetupParameters, [PSObject]$BranchSettings)
+        Set-ExecutionPolicy -ExecutionPolicy Unrestricted 
         Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "C:\Run\AdvaniaGIT.zip" -ErrorAction Stop
         if (Test-Path -Path "C:\Run\AdvaniaGIT.zip") {
             Expand-Archive -LiteralPath "C:\Run\AdvaniaGIT.zip" -DestinationPath "C:\"
