@@ -1,7 +1,7 @@
-﻿function Get-RunningDockerContainers
+﻿function Get-DockerContainers
 {    
     $result = @()
-    $result += (docker ps --format "{{.ID}},{{.Image}},{{.Status}}")
+    $result += (docker.exe ps --all --format "{{.ID}},{{.Image}},{{.Status}}")
     if ($result.Length -gt 0) {
         $dockerContainers = @()
         for ($i=0; $i -lt $result.Length; $i++) {

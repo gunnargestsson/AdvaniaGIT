@@ -6,6 +6,7 @@ if ($BranchSettings.instanceName -ne "") {
         UnLoad-InstanceAdminTools
     } else {
         docker.exe kill $($BranchSettings.dockerContainerName)
+        docker.exe rm $($BranchSettings.dockerContainerName)
         $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId 
     }
 }
