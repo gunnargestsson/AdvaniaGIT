@@ -30,9 +30,10 @@
             $DockerBranchSettings.branchId = $BranchSettings.branchId
             $DockerBranchSettings.databaseServer = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseServer']").Value
             Update-BranchSettings -BranchSettings $DockerBranchSettings 
-            if (Test-Path "C:\License") {
-                Copy-Item -Path "C:\License\*.flf" -Destination "C:\AdvaniaGIT\License"
-            }
+            $GITSettings = Get-GITSettings
+            $GITSettings.workFolder = "C:\Host\Workspace"
+            $GITSettings.rootPath = "C:\Host"
+            Update-GITSettings -GITSettings $GITSettings            
         } else {
             Write-Error "AdvaniaGIT Module Installation failed!" -ErrorAction Stop
         }

@@ -52,16 +52,16 @@
   <CustomAction>
     <Caption>NAV Modified -&gt; GIT</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "ImportFrom-ModifiedNAVtoGIT.ps1" $false</Parameters>
+    <Parameters>"$REPO" "ImportFrom-ModifiedNAVtoGIT.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
-    <ShowFullOutput>true</ShowFullOutput>
+    <ShowFullOutput>false</ShowFullOutput>
   </CustomAction>
   <CustomAction>
     <Caption>NAV -&gt; GIT</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "ImportFrom-NAVtoGIT.ps1" $false</Parameters>
+    <Parameters>"$REPO" "ImportFrom-NAVtoGIT.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
-    <ShowFullOutput>true</ShowFullOutput>
+    <ShowFullOutput>false</ShowFullOutput>
   </CustomAction>
   <CustomAction>
     <Caption>Create NAV Backup</Caption>
