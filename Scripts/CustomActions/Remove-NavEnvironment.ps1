@@ -5,7 +5,7 @@ if ($BranchSettings.instanceName -ne "") {
         Remove-NAVEnvironment -BranchSettings $BranchSettings
         UnLoad-InstanceAdminTools
     } else {
-        docker kill $($BranchSettings.dockerContainerName)
+        docker.exe kill $($BranchSettings.dockerContainerName)
         $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId 
     }
 }

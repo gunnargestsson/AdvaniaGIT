@@ -1,8 +1,14 @@
 ﻿function Check-GitCommitted
 {
-    $gitstatus = git.exe status -s
-    if ($gitstatus -gt '')
-    {
-        Write-Error "There are uncommited changes!!!" -ErrorAction Stop
+    try { $gitPath = (Where.exe /q git.exe)  } 
+    catch {}
+    if ($gitPath) {
+        if (Test-Path $gitPath) {
+            $gitstatus = git.exe status -s
+            if ($gitstatus -gt '')
+            {
+                Write-Error "There are uncommited changes!!!" -ErrorAction Stop
+            }
+        }
     }
 }

@@ -12,10 +12,10 @@
     & (Join-Path (Split-Path $PSScriptRoot -Parent) "RemoteManagement\Get-NAVPassword.ps1")
     $adminPassword = Get-NAVPassword -Message "Enter password for user $adminUsername on the Docker Image" 
     $DockerSettings = Get-DockerSettings 
-    docker login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
+    docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
     $volume = "$($SetupParameters.Repository):C:\GIT"
     $image = $SetupParameters.dockerImage
-    $DockerContainerId = docker run -m 4G -v "$volume" -e ACCEPT_EULA=Y -e username="$adminUsername" -e password="$adminPassword" -e Windowsauth=Y -e ClickOnce=Y --detach $image
+    $DockerContainerId = docker.exe run -m 4G -v "$volume" -e ACCEPT_EULA=Y -e username="$adminUsername" -e password="$adminPassword" -e Windowsauth=Y -e ClickOnce=Y --detach $image
     $Session = New-DockerSession -DockerContainerId $DockerContainerId
     $DockerContainerName = Get-DockerContainerName -Session $Session
     $BranchSettings.instanceName = "NAV" 
