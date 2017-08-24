@@ -19,9 +19,10 @@
             Rename-Item -Path "C:\AdvaniaGIT-master" -NewName "C:\AdvaniaGIT"
             Set-Location -Path "C:\AdvaniaGIT\Scripts"
             & .\Install-Modules.ps1
+            Write-Host "Updating BranchSettings.json..."
             $CustomConfigFile =  Join-Path $serviceTierFolder "CustomSettings.config"
             $CustomConfig = [xml](Get-Content $CustomConfigFile)
-            $DockerBranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
+            $DockerBranchSettings = Get-BranchSettings -SetupParameters $SetupParameters -SettingsFilePath "C:\AdvaniaGIT\Data\BranchSettings.Json"
             $DockerBranchSettings.instanceName = $customConfig.SelectSingleNode("//appSettings/add[@key='ServerInstance']").Value
             $DockerBranchSettings.managementServicesPort = $customConfig.SelectSingleNode("//appSettings/add[@key='ManagementServicesPort']").Value
             $DockerBranchSettings.databaseName = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseName']").Value
@@ -29,11 +30,17 @@
             $DockerBranchSettings.clientServicesPort = $customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesPort']").Value
             $DockerBranchSettings.branchId = $BranchSettings.branchId
             $DockerBranchSettings.databaseServer = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseServer']").Value
-            Update-BranchSettings -BranchSettings $DockerBranchSettings 
-            $GITSettings = Get-GITSettings
+            Update-BranchSettings -BranchSettings $DockerBranchSettings -SettingsFilePath "C:\AdvaniaGIT\Data\BranchSettings.Json"
+            Write-Host "Updating GITSettings.json..."
+            $GITSettings = Get-GITSettings -SettingsFilePath "C:\AdvaniaGIT\Data\GITSettings.Json"
             $GITSettings.workFolder = "C:\Host\Workspace"
             $GITSettings.rootPath = "C:\Host"
-            Update-GITSettings -GITSettings $GITSettings            
+            $GITSettings.ftpServer = $SetupParameters.ftpServer
+            $GITSettings.ftpUser = $SetupParameters.ftpUser
+            $GITSettings.ftpPass = $SetupParameters.ftpPass
+            $GITSettings.licenseFile = $SetupParameters.licenseFile
+            $GITSettings.objectsNotToDelete = $SetupParameters.objectsNotToDelete
+            Update-GITSettings -GITSettings $GITSettings -SettingsFilePath "C:\AdvaniaGIT\Data\GITSettings.Json"
         } else {
             Write-Error "AdvaniaGIT Module Installation failed!" -ErrorAction Stop
         }

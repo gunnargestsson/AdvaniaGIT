@@ -5,7 +5,7 @@
     )
                 
     $GITSettings = Get-Content -Path $SettingsFilePath | Out-String | ConvertFrom-Json
-    if (![bool]($GITSettings.PSObject.Properties.name -match "dockerContainerName")) {
+    if (![bool]($GITSettings.PSObject.Properties.name -match "rootPath")) {
             $GITSettings | Add-Member -MemberType NoteProperty -Name rootPath -Value (Split-Path -Parent $GITSettings.workFolder)
         }
     Write-Verbose -Message "Settings loaded"

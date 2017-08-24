@@ -14,9 +14,10 @@
 
     $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId
     Invoke-Command -Session $Session -ScriptBlock {
-        param([String]$Repository,[String]$ScriptName,[String]$BuildFolder,[HashTable]$BuildSettings)
+        param([String]$Repository,[String]$ScriptName,[String]$BuildFolder,[HashTable]$BuildSettings, [String]$LocaleName)
+        Set-WinSystemLocale -SystemLocale $LocaleName
         Set-Location "C:\AdvaniaGIT\Scripts"
         .\Start-CustomAction $Repository $ScriptName $false $false $BuildFolder $BuildSettings
-    } -ArgumentList ("C:\GIT", $ScriptName, $BuildFolder, $BuildSettings)
+    } -ArgumentList ("C:\GIT", $ScriptName, $BuildFolder, $BuildSettings, (Get-WinSystemLocale).Name)
     Remove-PSSession -Session $Session 
 }
