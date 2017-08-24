@@ -15,7 +15,14 @@ if ($BranchSettings.dockerContainerId -gt "") {
     if ($SetupParameters.objectProperties -eq "false") {
         Write-Host "Clearing object properties..."
         Set-NAVApplicationObjectProperty -TargetPath $ExportPath -VersionListProperty '' -DateTimeProperty '' -ModifiedProperty No
+    } elseif ($SetupParameters.datetimeCulture -gt "" -and $SetupParameters.datetimeCulture -ne (Get-Culture).Name) {
+        Write-Host "Converting Date and Time properties from $((Get-Culture).Name) to $($SetupParameters.datetimeCulture)..."
+        $Objects = Get-ChildItem -Path $ExportPath -Filter '*.TXT'
+        foreach ($Object in $Objects) {
+            Convert-NAVObjectsDateTime -FromCulture (Get-Culture).Name -ToCulture $SetupParameters.datetimeCulture -ObjectPath $Object.FullName
+        }
     }
+
     Split-Solution -SetupParameters $SetupParameters -ObjectsFilePath $ExportPath
     UnLoad-ModelTools
 }

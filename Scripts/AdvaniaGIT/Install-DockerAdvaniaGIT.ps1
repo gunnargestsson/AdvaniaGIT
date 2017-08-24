@@ -13,6 +13,7 @@
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted 
         Set-WinHomeLocation -GeoId $GeoId
         Set-WinSystemLocale -SystemLocale $LocaleName
+        Set-Culture -CultureInfo $LocaleName
         Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "C:\Run\AdvaniaGIT.zip" -ErrorAction Stop
         if (Test-Path -Path "C:\Run\AdvaniaGIT.zip") {
             Expand-Archive -LiteralPath "C:\Run\AdvaniaGIT.zip" -DestinationPath "C:\"
@@ -22,15 +23,13 @@
             Write-Host "Updating BranchSettings.json..."
             $CustomConfigFile =  Join-Path $serviceTierFolder "CustomSettings.config"
             $CustomConfig = [xml](Get-Content $CustomConfigFile)
-            $DockerBranchSettings = Get-BranchSettings -SetupParameters $SetupParameters -SettingsFilePath "C:\AdvaniaGIT\Data\BranchSettings.Json"
-            $DockerBranchSettings.instanceName = $customConfig.SelectSingleNode("//appSettings/add[@key='ServerInstance']").Value
-            $DockerBranchSettings.managementServicesPort = $customConfig.SelectSingleNode("//appSettings/add[@key='ManagementServicesPort']").Value
-            $DockerBranchSettings.databaseName = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseName']").Value
-            $DockerBranchSettings.databaseInstance = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseInstance']").Value
-            $DockerBranchSettings.clientServicesPort = $customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesPort']").Value
-            $DockerBranchSettings.branchId = $BranchSettings.branchId
-            $DockerBranchSettings.databaseServer = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseServer']").Value
-            Update-BranchSettings -BranchSettings $DockerBranchSettings -SettingsFilePath "C:\AdvaniaGIT\Data\BranchSettings.Json"
+            $BranchSettings.instanceName = $customConfig.SelectSingleNode("//appSettings/add[@key='ServerInstance']").Value
+            $BranchSettings.managementServicesPort = $customConfig.SelectSingleNode("//appSettings/add[@key='ManagementServicesPort']").Value
+            $BranchSettings.databaseName = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseName']").Value
+            $BranchSettings.databaseInstance = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseInstance']").Value
+            $BranchSettings.clientServicesPort = $customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesPort']").Value
+            $BranchSettings.databaseServer = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseServer']").Value
+            Update-BranchSettings -BranchSettings $BranchSettings -SettingsFilePath "C:\AdvaniaGIT\Data\BranchSettings.Json"
             Write-Host "Updating GITSettings.json..."
             $GITSettings = Get-GITSettings -SettingsFilePath "C:\AdvaniaGIT\Data\GITSettings.Json"
             $GITSettings.workFolder = "C:\Host\Workspace"

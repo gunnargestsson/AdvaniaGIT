@@ -12,10 +12,6 @@
         $SourceFilePath = Get-NAVSourceFilePath -SetupParameters $SetupParameters
         $BaseObjectsFile = (Join-Path $SetupParameters.WorkFolder "Source.txt")
         Copy-Item -Path $SourceFilePath -Destination $BaseObjectsFile -Force
-        if ($SetupParameters.objectProperties -eq "false") {
-            Write-Host "Clearing object properties..."
-            Set-NAVApplicationObjectProperty -TargetPath $BaseObjectsFile -VersionListProperty '' -DateTimeProperty '' -ModifiedProperty No
-        }
         Test-Path $BaseObjectsFile -ErrorAction Stop | Out-Null
         $DeltaFolder = Join-Path $SetupParameters.workFolder 'Deltas'
         $ReverseDeltaFolder = Join-Path $SetupParameters.workFolder 'ReverseDeltas'
