@@ -21,7 +21,7 @@
             "dockerContainerName" = "";
             "dockerContainerId" = ""}
         $allBranchSettings.Branches += $BranchSettings
-        Set-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) -Value ($allBranchSettings | ConvertTo-Json)        
+        Set-Content -Path $SettingsFilePath -Value ($allBranchSettings | ConvertTo-Json)        
     } else {
         if (![bool]($BranchSettings.PSObject.Properties.name -match "dockerContainerName")) {
             $BranchSettings | Add-Member -MemberType NoteProperty -Name dockerContainerName -Value ""
