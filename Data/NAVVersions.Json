@@ -18,7 +18,7 @@
     {
       "mainVersion": "110",
       "navRelease": "2018",
-      "webClientPort": "8091",
+      "webClientPort": "8081",
       "helpServer": "nav110help.advania.is",
       "helpServerPort": "80"
     }
