@@ -1,7 +1,26 @@
 {
   "Releases": 
 	[
-		{"mainVersion": "90", "navRelease": "2016", "webClientPort": "8090", "helpServer": "nav90help.advania.is", "helpServerPort": "80"},
-		{"mainVersion": "100","navRelease": "2017", "webClientPort": "8080", "helpServer": "nav100help.advania.is", "helpServerPort": "80"}
+    {
+      "mainVersion": "90",
+      "navRelease": "2016",
+      "webClientPort": "8090",
+      "helpServer": "nav90help.advania.is",
+      "helpServerPort": "80"
+    },
+    {
+      "mainVersion": "100",
+      "navRelease": "2017",
+      "webClientPort": "8080",
+      "helpServer": "nav100help.advania.is",
+      "helpServerPort": "80"
+    },
+    {
+      "mainVersion": "110",
+      "navRelease": "2018",
+      "webClientPort": "8091",
+      "helpServer": "nav110help.advania.is",
+      "helpServerPort": "80"
+    }
 	]
 }
