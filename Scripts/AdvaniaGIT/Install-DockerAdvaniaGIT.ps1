@@ -29,6 +29,8 @@
             $BranchSettings.databaseInstance = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseInstance']").Value
             $BranchSettings.clientServicesPort = $customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesPort']").Value
             $BranchSettings.databaseServer = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseServer']").Value
+            $BranchSettings.dockerContainerName = ""
+            $BranchSettings.dockerContainerId = ""
             Update-BranchSettings -BranchSettings $BranchSettings -SettingsFilePath "C:\AdvaniaGIT\Data\BranchSettings.Json"
             Write-Host "Updating GITSettings.json..."
             $GITSettings = Get-GITSettings -SettingsFilePath "C:\AdvaniaGIT\Data\GITSettings.Json"

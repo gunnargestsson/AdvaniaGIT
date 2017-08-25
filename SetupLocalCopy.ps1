@@ -56,6 +56,18 @@ $Answer = Read-Host -Prompt "Perform AdvaniaGIT Module Installation ? (Default =
 if ($Answer -iin ('Yes','Y','')) {
     $ScriptToStart = Join-Path $InstallationPath 'Scripts\Install-Modules.ps1'
     & $ScriptToStart
+
+    $GITSettings = Get-Content -Path (Join-Path $InstallationPath "Data\GITSettings.Json") | Out-String | ConvertFrom-Json
+    $GITSettings.workFolder = (Join-Path $InstallationPath "Workspace")
+    $NewGITSettings = Get-Content -Path (Join-Path $PSScriptRoot "Data\GITSettings.Json") | Out-String | ConvertFrom-Json
+    $GITSettings = Combine-Settings $GITSettings $NewGITSettings
+    Set-Content -Path (Join-Path $InstallationPath "Data\GITSettings.Json") -Value ($GITSettings | ConvertTo-Json) 
+
+
+    Write-Host "Please update GITSettings.Json, DockerSettings.json and NAVVersions.Json to match your environment"
+    Start-Process -FilePath (Join-Path $InstallationPath "Data\GITSettings.Json")
+    Start-Process -FilePath (Join-Path $InstallationPath "Data\NAVVersions.Json")
+    Start-Process -FilePath (Join-Path $InstallationPath "Data\DockerSettings.Json")
 }
 
 $DefaultAnswer = 'Y'
@@ -73,12 +85,4 @@ if ($Answer -iin ('Yes','Y','')) {
     & $ScriptToStart
 }
 
-$GITSettings = Get-Content -Path (Join-Path $InstallationPath "Data\GITSettings.Json") | Out-String | ConvertFrom-Json
-$GitSettings.workFolder = (Join-Path $InstallationPath "Workspace")
-Set-Content -Path (Join-Path $InstallationPath "Data\GITSettings.Json") -Value ($GitSettings | ConvertTo-Json) 
-
-
-Write-Host "Please update GITSettings.Json and NAVVersions.Json to match your environment"
-Start-Process -FilePath (Join-Path $InstallationPath "Data\GITSettings.Json")
-Start-Process -FilePath (Join-Path $InstallationPath "Data\NAVVersions.Json")
 $input = Read-Host -Prompt "Press any key to continue..."

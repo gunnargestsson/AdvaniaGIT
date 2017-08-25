@@ -24,5 +24,8 @@
   "tableDataPath": "TableDatas",
   "customReportLayoutsPath": "CustomReportLayouts",
   "webServicesPath": "WebServices",
-  "binaryPath": "Binaries"
+  "binaryPath": "Binaries",
+  "targetPlatform": "DynamicsNAV",
+  "VSCodePath": "AL",
+  "NewSyntaxPrefix": "NewSyntax"
 }
