@@ -1,7 +1,9 @@
 ﻿Function Copy-DockerNAVClient {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$SetupParameters
+        [PSObject]$SetupParameters,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$BranchSettings
     )
     $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId
     Invoke-Command -Session $Session -ScriptBlock {

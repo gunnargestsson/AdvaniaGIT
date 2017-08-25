@@ -1,11 +1,22 @@
-$BaseSetupParameters = Get-BaseBranchSetupParameters -SetupParameters $SetupParameters
-$BaseBranchSettings = Get-BranchSettings -SetupParameters $BaseSetupParameters
-Check-NAVServiceRunning -SetupParameters $BaseSetupParameters -BranchSettings $BaseBranchSettings
+if ($BranchSettings.dockerContainerId -eq "") {
+    $BaseSetupParameters = Get-BaseBranchSetupParameters -SetupParameters $SetupParameters
+    $BaseBranchSettings = Get-BranchSettings -SetupParameters $BaseSetupParameters
+    Check-NAVServiceRunning -SetupParameters $BaseSetupParameters -BranchSettings $BaseBranchSettings
+}
 
-[xml]$clientUserSettings = Get-Content -Path (Join-Path $env:APPDATA ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))
 $clientSettingsPath = (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
-$clientexe = (Join-Path $SetupParameters.navIdePath 'Microsoft.Dynamics.Nav.Client.exe')
-Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $env:COMPUTERNAME
+
+if ($BaseBranchSettings.dockerContainerId -gt "") {
+    Copy-DockerNAVClient -SetupParameters $BaseSetupParameters -BranchSettings $BaseBranchSettings
+    $clientexe = (Join-Path $SetupParameters.LogPath 'ApplicationFiles\Microsoft.Dynamics.Nav.Client.exe')    
+    [xml]$clientUserSettings = Get-Content -Path (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
+    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $BranchSettings.dockerContainerName   
+} else {    
+    [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:APPDATA ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))
+    $clientexe = (Join-Path $SetupParameters.navIdePath 'Microsoft.Dynamics.Nav.Client.exe')
+    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $env:COMPUTERNAME
+}
+
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesPort' -NewValue $BaseBranchSettings.clientServicesPort
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServerInstance' -NewValue $BaseBranchSettings.instanceName
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'UrlHistory' -NewValue ""

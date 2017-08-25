@@ -3,7 +3,7 @@ Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $Branc
 $clientSettingsPath = (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
 
 if ($BranchSettings.dockerContainerId -gt "") {
-    Copy-DockerNAVClient -SetupParameters $SetupParameters
+    Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings
     $clientexe = (Join-Path $SetupParameters.LogPath 'ApplicationFiles\Microsoft.Dynamics.Nav.Client.exe')    
     [xml]$clientUserSettings = Get-Content -Path (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $BranchSettings.dockerContainerName
