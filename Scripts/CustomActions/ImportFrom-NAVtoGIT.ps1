@@ -17,10 +17,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
         Set-NAVApplicationObjectProperty -TargetPath $ExportPath -VersionListProperty '' -DateTimeProperty '' -ModifiedProperty No
     } elseif ($SetupParameters.datetimeCulture -gt "" -and $SetupParameters.datetimeCulture -ne (Get-Culture).Name) {
         Write-Host "Converting Date and Time properties from $((Get-Culture).Name) to $($SetupParameters.datetimeCulture)..."
-        $Objects = Get-ChildItem -Path $ExportPath -Filter '*.TXT'
-        foreach ($Object in $Objects) {
-            Convert-NAVObjectsDateTime -FromCulture (Get-Culture).Name -ToCulture $SetupParameters.datetimeCulture -ObjectPath $Object.FullName
-        }
+        Convert-NAVObjectsDateTime -FromCulture (Get-Culture).Name -ToCulture $SetupParameters.datetimeCulture -ObjectPath (Join-Path $ExportPath "*.TXT")
     }
 
     Split-Solution -SetupParameters $SetupParameters -ObjectsFilePath $ExportPath
