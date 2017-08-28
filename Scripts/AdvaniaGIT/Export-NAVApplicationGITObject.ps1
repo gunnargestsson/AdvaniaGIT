@@ -12,7 +12,9 @@
         # Specifies the filter that selects the objects to export.
         [string] $Filter,
         # Allows the command to skip application objects that are excluded from license, when exporting as txt.
-        [Switch] $ExportTxtSkipUnlicensed
+        [Switch] $ExportTxtSkipUnlicensed,
+        # Allows export with new syntax for TXT2AL conversion
+        [Switch] $ExportWithNewSyntax
     )
 
     $skipUnlicensed = '0'
@@ -21,7 +23,11 @@
         $skipUnlicensed = '1'
     }
 
-    $command = "Command=ExportObjects`,ExportTxtSkipUnlicensed=$skipUnlicensed`,File=`"$Path`"" 
+    if ($ExportWithNewSyntax) {
+        $command = "Command=ExportToNewSyntax`,ExportTxtSkipUnlicensed=$skipUnlicensed`,File=`"$Path`"" 
+    } else {
+        $command = "Command=ExportObjects`,ExportTxtSkipUnlicensed=$skipUnlicensed`,File=`"$Path`"" 
+    }
     if($Filter)
     {
         $command = "$command`,Filter=`"$Filter`""

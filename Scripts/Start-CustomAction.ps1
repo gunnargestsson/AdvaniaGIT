@@ -101,6 +101,11 @@ else
     $Globals | Add-Member LicensePath  (Join-Path $SetupParameters.rootPath "License")
     $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile)
     $Globals | Add-Member DownloadPath  (Join-Path $SetupParameters.rootPath "Download")
+    $Globals | Add-Member NewSyntaxObjectsPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.objectsPath)")
+    $Globals | Add-Member NewSyntaxDeltasPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.deltasPath)")
+    $Globals | Add-Member NewSyntaxReverseDeltasPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.reverseDeltasPath)")
+    $Globals | Add-Member VSCodePath  (Join-Path $Repository $SetupParameters.VSCodePath)
+
     $SetupParameters = Combine-Settings $Globals $SetupParameters
     if ($BuildSettings) { $SetupParameters = Combine-Settings $BuildSettings $SetupParameters }
 

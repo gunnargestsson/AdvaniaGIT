@@ -54,7 +54,10 @@ if ($BranchSettings.dockerContainerName -gt "") {
         Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName SOAPServicesSSLEnabled -KeyValue $false 
         Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName SOAPServicesEnabled -KeyValue $true 
         Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DataCacheSize -KeyValue 7 
-        Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName CompileBusinessApplicationAtStartup -KeyValue $false 
+        Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName CompileBusinessApplicationAtStartup -KeyValue $false
+        if ($DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='DeveloperServicesEnabled']")) {
+            Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DeveloperServicesEnabled -KeyValue $true
+        }
         $BranchSettings.instanceName = $ServerInstance
         Enable-DelayedStartForNAVService -BranchSettings $BranchSettings
         Enable-TcpPortSharingForNAVService -BranchSettings $BranchSettings

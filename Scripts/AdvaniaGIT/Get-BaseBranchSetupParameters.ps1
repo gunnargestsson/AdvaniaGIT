@@ -17,7 +17,7 @@
     Write-Host Switching Repository to $SetupParameters.baseBranch
     $result = git.exe checkout --force $SetupParameters.baseBranch --quiet 
     Write-Host Reading configuration from $SetupParameters.baseBranch
-    $BaseSetupParameters = Get-Content (Join-Path $Repository $SetupParameters.setupPath) | Out-String | ConvertFrom-Json
+    $BaseSetupParameters = Get-Content $SetupParameters.setupPath | Out-String | ConvertFrom-Json
     Write-Host Switching Repository to $sourcebranch
     $result = git.exe checkout --force $sourcebranch --quiet
     return $BaseSetupParameters

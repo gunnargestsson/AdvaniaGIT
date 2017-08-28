@@ -15,10 +15,16 @@ function Update-NAVTxtFromApplication
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$BranchSettings,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [string]$ObjectsPath
+        [string]$ObjectsPath,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Switch] $ExportWithNewSyntax
     )
     Write-Host -Object 'Exporting all files...'
-    Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path (Join-Path -Path $SetupParameters.LogPath 'all.txt') -Filter 'Compiled=0|1' 
+    if ($ExportWithNewSyntax) {
+        Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path (Join-Path -Path $SetupParameters.LogPath 'all.txt') -Filter 'Compiled=0|1' -ExportWithNewSyntax
+    } else {
+        Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path (Join-Path -Path $SetupParameters.LogPath 'all.txt') -Filter 'Compiled=0|1' 
+    }
     Split-NAVApplicationObjectFile -Source (Join-Path -Path $SetupParameters.LogPath 'all.txt') -Destination $ObjectsPath -Force
     Remove-Item (Join-Path -Path $SetupParameters.LogPath 'all.txt')
     Write-Host -Object ''

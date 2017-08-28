@@ -57,6 +57,7 @@ if ($Answer -iin ('Yes','Y','')) {
     $ScriptToStart = Join-Path $InstallationPath 'Scripts\Install-Modules.ps1'
     & $ScriptToStart
 
+    Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
     $GITSettings = Get-Content -Path (Join-Path $InstallationPath "Data\GITSettings.Json") | Out-String | ConvertFrom-Json
     $GITSettings.workFolder = (Join-Path $InstallationPath "Workspace")
     $NewGITSettings = Get-Content -Path (Join-Path $PSScriptRoot "Data\GITSettings.Json") | Out-String | ConvertFrom-Json
