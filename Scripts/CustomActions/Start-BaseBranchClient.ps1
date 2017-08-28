@@ -1,9 +1,9 @@
 if ($BranchSettings.dockerContainerId -eq "") {
     $BaseSetupParameters = Get-BaseBranchSetupParameters -SetupParameters $SetupParameters
-    $BaseBranchSettings = Get-BranchSettings -SetupParameters $BaseSetupParameters
-    Check-NAVServiceRunning -SetupParameters $BaseSetupParameters -BranchSettings $BaseBranchSettings
+    $BaseBranchSettings = Get-BranchSettings -SetupParameters $BaseSetupParameters    
 }
 
+Check-NAVServiceRunning -SetupParameters $BaseSetupParameters -BranchSettings $BaseBranchSettings
 $clientSettingsPath = (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
 
 if ($BaseBranchSettings.dockerContainerId -gt "") {

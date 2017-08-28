@@ -6,6 +6,7 @@ if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
     } 
 }
 if ($BranchSettings.dockerContainerName -gt "") {
+    ReStart-DockerContainer -BranchSettings $BranchSettings
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
 } else {
     Load-InstanceAdminTools -SetupParameters $Setupparameters
@@ -67,6 +68,7 @@ if ($BranchSettings.dockerContainerName -gt "") {
         Get-NAVServerInstance -ServerInstance $ServerInstance | Where-Object -Property State -EQ Running | Sync-NAVTenant -Mode ForceSync -Force
         Write-Host "Creating Web Server Instance..."
         New-NAVWebServerInstance -ClientServicesPort $BranchSettings.clientServicesPort -Server $env:COMPUTERNAME -ServerInstance $ServerInstance -WebServerInstance $ServerInstance -Force
+        Enable-NAVWebClientDesigner -BranchSettings $BranchSettings 
         Update-BranchSettings -BranchSettings $BranchSettings
         Write-Host "Environment build completed..."
     } else {

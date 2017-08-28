@@ -49,6 +49,14 @@
     <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
+    <Caption>Start VS Code</Caption>
+    <Target>StartPowerShell.cmd</Target>
+    <Parameters>"$REPO" "Start-VSCode.ps1"</Parameters>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
+  </CustomAction>  
+  <CustomAction>
     <Caption>Start Debugger</Caption>
     <Target>StartPowerShell.cmd</Target>
     <Parameters>"$REPO" "Start-Debugger.ps1" $false</Parameters>
