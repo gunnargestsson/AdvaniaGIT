@@ -36,15 +36,16 @@
         $ConfigurationSettings = New-Object -TypeName PSObject
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name type -Value "al"
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name request -Value "publish"
-        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name name -Value "publish"
+        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name name -Value "Publish to local server"
         if ($BranchSettings.dockerContainerName -eq "") {
             $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name server -Value "http://localhost"
         } else {
             $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name server -Value "http://$($BranchSettings.dockerContainerName)"
         }
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name serverInstance -Value $BranchSettings.instanceName
-        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name authentication -Value "Windows"
-        $LaunchSettings | Add-Member -MemberType NoteProperty -Name Configuration -Value @($ConfigurationSettings)
+        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name windowsAuthentication -Value "true"
+        $LaunchSettings | Add-Member -MemberType NoteProperty -Name configurations -Value @($ConfigurationSettings)
     }
+    New-Item -Path (Join-Path $SetupParameters.VSCodePath ".vscode") -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     Set-Content -Path $LaunchJsonPath -Value ($LaunchSettings | ConvertTo-Json)
 }

@@ -31,6 +31,8 @@
         if ($AppSettings."$Property" -eq $null) { $AppSettings."$Property" = "" }
     }
 
+    if ($AppSettings.version -eq "") { $AppSettings.version = "1.0.0.0" }
+
     # Add Array Type Objects
     $AppSettings | Add-Member -MemberType NoteProperty -Name capabilities -Value $SetupParameters.appCapabilities
     $AppSettings | Add-Member -MemberType NoteProperty -Name screenshots -Value $SetupParameters.appScreenShots

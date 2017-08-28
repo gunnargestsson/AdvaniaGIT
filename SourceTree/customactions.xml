@@ -6,6 +6,7 @@
     <Parameters>"$REPO" "Build-NavEnvironmentFromGIT.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Build NAV Environment</Caption>
@@ -13,6 +14,7 @@
     <Parameters>"$REPO" "Build-NavEnvironment.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>GIT -&gt; NAV</Caption>
@@ -20,6 +22,7 @@
     <Parameters>"$REPO" "ImportFrom-GITtoNAV.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Start FinSql</Caption>
@@ -27,6 +30,7 @@
     <Parameters>"$REPO" "Start-FinSql.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Start Client</Caption>
@@ -34,6 +38,7 @@
     <Parameters>"$REPO" "Start-Client.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Start Web Client</Caption>
@@ -41,6 +46,7 @@
     <Parameters>"$REPO" "Start-WebClient.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Start Debugger</Caption>
@@ -48,6 +54,7 @@
     <Parameters>"$REPO" "Start-Debugger.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>NAV Modified -&gt; GIT</Caption>
@@ -55,6 +62,7 @@
     <Parameters>"$REPO" "ImportFrom-ModifiedNAVtoGIT.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>NAV -&gt; GIT</Caption>
@@ -62,6 +70,7 @@
     <Parameters>"$REPO" "ImportFrom-NAVtoGIT.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Create NAV Backup</Caption>
@@ -69,6 +78,7 @@
     <Parameters>"$REPO" "Create-NavBackup.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Compile NAV Objects</Caption>
@@ -76,6 +86,7 @@
     <Parameters>"$REPO" "Start-Compile.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Clear Comment Section from NAV Objects</Caption>
@@ -83,6 +94,7 @@
     <Parameters>"$REPO" "Clear-NAVCommentSection.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Run All Automated Tests</Caption>
@@ -90,6 +102,7 @@
     <Parameters>"$REPO" "Start-FullTest.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Run Failed Tests Only</Caption>
@@ -97,6 +110,7 @@
     <Parameters>"$REPO" "Restart-FailedTest.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Run Tests on Modified Objects</Caption>
@@ -104,13 +118,15 @@
     <Parameters>"$REPO" "Start-ModifiedObjectsTest.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
-  </CustomAction>    
+    <IsSilent>true</IsSilent>
+  </CustomAction>
   <CustomAction>
     <Caption>Show Automated Test Results</Caption>
     <Target>StartPowerShell.cmd</Target>
     <Parameters>"$REPO" "Save-TestResultsCsv.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Remove NAV Environment</Caption>
@@ -118,6 +134,7 @@
     <Parameters>"$REPO" "Remove-NavEnvironment.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>GIT -&gt; Source.txt</Caption>
@@ -125,6 +142,7 @@
     <Parameters>"$REPO" "Export-GITtoSource.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>GIT -&gt; Modified.txt</Caption>
@@ -132,6 +150,7 @@
     <Parameters>"$REPO" "Export-GITtoModified.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>NAV -&gt; AllObjects.fob</Caption>
@@ -139,6 +158,7 @@
     <Parameters>"$REPO" "Export-NavFob.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Add Target.txt to GIT</Caption>
@@ -146,6 +166,7 @@
     <Parameters>"$REPO" "ImportFrom-TargetToGIT.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Replace GIT with Target.txt</Caption>
@@ -153,6 +174,7 @@
     <Parameters>"$REPO" "Replace-GITwithTarget.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Create Deltas in Work Folder (Source vs. Modified)</Caption>
@@ -160,6 +182,7 @@
     <Parameters>"$REPO" "Create-Deltas.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Create Code Deltas in Work Folder (Source vs. Modified)</Caption>
@@ -167,6 +190,7 @@
     <Parameters>"$REPO" "Create-CodeDeltas.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Create Reverse Deltas in Work Folder (Modified vs. Source)</Caption>
@@ -174,6 +198,7 @@
     <Parameters>"$REPO" "Create-ReverseDeltas.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Build Deltas &amp; Reverse Deltas in GIT</Caption>
@@ -181,6 +206,7 @@
     <Parameters>"$REPO" "Build-DeltasInGIT.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Merge Deltas in Work Folder with Source to create Target</Caption>
@@ -188,6 +214,7 @@
     <Parameters>"$REPO" "Merge-Deltas.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Build Target from base branch and delta branches (including GIT Delta)</Caption>
@@ -195,6 +222,7 @@
     <Parameters>"$REPO" "Build-Target.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Build Source from base branch and delta branches (excluding GIT Delta)</Caption>
@@ -202,6 +230,7 @@
     <Parameters>"$REPO" "Build-Source.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Export NAV Permission Sets to GIT</Caption>
@@ -209,6 +238,7 @@
     <Parameters>"$REPO" "Export-PermissionSets.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Create Extension in GIT</Caption>
@@ -216,6 +246,7 @@
     <Parameters>"$REPO" "Create-Extension.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Publish Extension to Default Server Instance</Caption>
@@ -223,6 +254,7 @@
     <Parameters>"$REPO" "Publish-Extension.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Unpublish Extension from Default Server Instance</Caption>
@@ -230,6 +262,7 @@
     <Parameters>"$REPO" "Unpublish-Extension.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Base Branch Server Instance - Publish Extension</Caption>
@@ -237,6 +270,7 @@
     <Parameters>"$REPO" "Publish-ExtensionToBaseBranch.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Base Branch Server Instance - Unpublish Extension</Caption>
@@ -244,6 +278,7 @@
     <Parameters>"$REPO" "Unpublish-ExtensionFromBaseBranch.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Base Branch - Start Client</Caption>
@@ -251,6 +286,7 @@
     <Parameters>"$REPO" "Start-BaseBranchClient.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Base Branch - Start Web Client</Caption>
@@ -258,6 +294,7 @@
     <Parameters>"$REPO" "Start-BaseBranchWebClient.ps1" $false</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Manage Instances</Caption>
@@ -265,6 +302,7 @@
     <Parameters>"$REPO" "Manage-Instances.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Manage Databases</Caption>
@@ -272,6 +310,7 @@
     <Parameters>"$REPO" "Manage-Databases.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Upgrade NAV Installation</Caption>
@@ -279,6 +318,7 @@
     <Parameters>"$REPO" "Upgrade-NAVInstallation.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
   <CustomAction>
     <Caption>Update GIT from latest CU</Caption>
@@ -286,5 +326,46 @@
     <Parameters>"$REPO" "Update-NAVSource.ps1" $true $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
+  </CustomAction>
+  <CustomAction>
+    <Caption>Export NAV New Syntax to GIT</Caption>
+    <Target>StartPowerShell.cmd</Target>
+    <Parameters>"$REPO" "ImportFrom-NAVNewSyntaxToGIT.ps1" $true $true</Parameters>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
+  </CustomAction>
+  <CustomAction>
+    <Caption>Build New Syntax Deltas &amp; Reverse Deltas in GIT</Caption>
+    <Target>StartPowerShell.cmd</Target>
+    <Parameters>"$REPO" "Build-NAVNewSyntaxDeltasInGIT.ps1" $false</Parameters>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
+  </CustomAction>
+  <CustomAction>
+    <Caption>Convert New Syntax Deltas to AL</Caption>
+    <Target>StartPowerShell.cmd</Target>
+    <Parameters>"$REPO" "Convert-NAVNewSyntaxDeltasToAL.ps1" $false $true</Parameters>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
+  </CustomAction>
+  <CustomAction>
+    <Caption>Open VS Code with current branch as master</Caption>
+    <Target>StartPowerShell.cmd</Target>
+    <Parameters>"$REPO" "Start-VSCodeOnCurrentBranch.ps1" $false</Parameters>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>false</ShowFullOutput>
+    <IsSilent>true</IsSilent>
+  </CustomAction>
+  <CustomAction>
+    <Caption>Open VS Code with base branch as master</Caption>
+    <Target>StartPowerShell.cmd</Target>
+    <Parameters>"$REPO" "Start-VSCodeOnBaseBranch.ps1" $false</Parameters>
+    <OpenInSeparateWindow>false</OpenInSeparateWindow>
+    <ShowFullOutput>true</ShowFullOutput>
+    <IsSilent>true</IsSilent>
   </CustomAction>
 </ArrayOfCustomAction>

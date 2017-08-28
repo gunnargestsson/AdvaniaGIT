@@ -7,6 +7,6 @@ Update-NAVLaunchJson -SetupParameters $SetupParameters -BranchSettings $BaseBran
 $VSCodePaths = @((Join-Path $env:ProgramFiles "Microsoft VS Code\Code.exe"); (Join-Path ${env:ProgramFiles(x86)} "Microsoft VS Code\Code.exe"))
 foreach ($VSCodePath in $VSCodePaths) {
     if (Test-Path $VSCodePath) {
-        & $VSCodePath "$($SetupParameters.VSCodePath)"
+        Start-Process -FilePath $VSCodePath -ArgumentList "$($SetupParameters.VSCodePath)"
     }
 }
