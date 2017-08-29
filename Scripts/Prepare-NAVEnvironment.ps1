@@ -5,7 +5,7 @@ Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
 Enable-TcpPortSharingService
 UnLoad-InstanceAdminTools
 
-$versions = Get-ChildItem (Join-Path $env:ProgramFiles 'Microsoft Dynamics NAV') | Select-Object -Property Name
+$versions = Get-ChildItem (Join-Path $env:ProgramFiles 'Microsoft Dynamics NAV\*\Service\NavAdminTool.ps1') | Select-Object -Property FullName | Split-Path -Parent | Split-Path -Parent | Split-Path -Leaf
 foreach ($version in $versions) {
     if ($version.Name -gt 71 -or $version.Name.Length -gt 2) {
         Write-Host "Stopping Services for version $($version.Name.Substring(0,$version.Name.Length - 1))"
