@@ -6,7 +6,7 @@ if ($SetupParameters.patchNoFunction -ne "") {
 
 if ($BranchSettings.dockerContainerId -gt "") {
     Copy-DockerFinSql -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-    $finsqlexe = (Join-Path $SetupParameters.LogPath 'ApplicationFiles\finsql.exe')    
+    $finsqlexe = (Join-Path $SetupParameters.LogPath 'RoleTailored Client\finsql.exe')    
 } else {    
     $finsqlexe = (Join-Path $SetupParameters.navIdePath 'finsql.exe')
 }

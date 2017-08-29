@@ -4,7 +4,7 @@ $clientSettingsPath = (Join-Path $SetupParameters.LogPath 'ClientUserSettings.co
 
 if ($BranchSettings.dockerContainerId -gt "") {
     Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-    $clientexe = (Join-Path $SetupParameters.LogPath 'ApplicationFiles\Microsoft.Dynamics.Nav.Client.exe')    
+    $clientexe = (Join-Path $SetupParameters.LogPath 'RoleTailored Client\Microsoft.Dynamics.Nav.Client.exe')    
     [xml]$clientUserSettings = Get-Content -Path (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $BranchSettings.dockerContainerName
 } else {    

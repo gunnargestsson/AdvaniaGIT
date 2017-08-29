@@ -18,7 +18,7 @@
     $volume = "$($SetupParameters.Repository):C:\GIT"
     $rootPath = "$($SetupParameters.rootPath):C:\Host"
     $image = $SetupParameters.dockerImage
-    $DockerContainerId = docker.exe run -m 4G -v "$volume" -v "$rootPath" -e ACCEPT_EULA=Y -e username="$adminUsername" -e password="$adminPassword" -e Windowsauth=Y -e ClickOnce=Y --detach $image
+    $DockerContainerId = docker.exe run -m 4G -v "$volume" -v "$rootPath" -e ACCEPT_EULA=Y -e username="$adminUsername" -e password="$adminPassword" -e auth=Windows --detach $image
     Write-Host "Docker Container $DockerContainerId starting..."
     $Session = New-DockerSession -DockerContainerId $DockerContainerId
     $DockerContainerName = Get-DockerContainerName -Session $Session
@@ -27,7 +27,9 @@
     $BranchSettings.databaseServer = $DockerContainerName
     $BranchSettings.databaseName = "CRONUS"
     $BranchSettings.dockerContainerName = $DockerContainerName
-    $BranchSettings.dockerContainerId = $DockerContainerId    
+    $BranchSettings.dockerContainerId = $DockerContainerId
+    $BranchSettings.managementServicesPort = "7045"
+    $BranchSettings.clientServicesPort = "7046"
     $result = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
 
     $WaitForHealty = $true
