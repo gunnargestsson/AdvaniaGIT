@@ -35,7 +35,7 @@
   <CustomAction>
     <Caption>Start Client</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Start-Client.ps1" $false</Parameters>
+    <Parameters>"$REPO" "Start-Client.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
     <IsSilent>true</IsSilent>
@@ -55,7 +55,7 @@
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
     <IsSilent>true</IsSilent>
-  </CustomAction>  
+  </CustomAction>
   <CustomAction>
     <Caption>Start Debugger</Caption>
     <Target>StartPowerShell.cmd</Target>
