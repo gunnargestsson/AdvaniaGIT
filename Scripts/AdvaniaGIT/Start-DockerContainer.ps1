@@ -13,7 +13,6 @@
     docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
     Write-Host "Preparing Docker Container for Dynamics NAV..."
     $adminUsername = $env:USERNAME
-    & (Join-Path (Split-Path $PSScriptRoot -Parent) "RemoteManagement\Get-NAVPassword.ps1")
     $adminPassword = Get-NAVPassword -Message "Enter password for user $adminUsername on the Docker Image" 
     $volume = "$($SetupParameters.Repository):C:\GIT"
     $rootPath = "$($SetupParameters.rootPath):C:\Host"

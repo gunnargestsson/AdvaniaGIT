@@ -29,11 +29,6 @@
     $DirListing = (($StreamReader.ReadToEnd()) -split [Environment]::NewLine)
     $StreamReader.Close()
 
-    # Remove first two elements ( . and .. ) and last element (\n)
-    If ($DirListing.Length -gt 3) {
-        $DirListing = $DirListing[2..($DirListing.Length-2)]
-    }
-
     # Close the FTP connection so only one is open at a time
     $FTPResponse.Close()
     
