@@ -17,6 +17,7 @@
     $volume = "$($SetupParameters.Repository):C:\GIT"
     $rootPath = "$($SetupParameters.rootPath):C:\Host"
     $image = $SetupParameters.dockerImage
+    docker.exe pull $image
     $DockerContainerId = docker.exe run -m 4G -v "$volume" -v "$rootPath" -e ACCEPT_EULA=Y -e username="$adminUsername" -e password="$adminPassword" -e auth=Windows --detach $image
     Write-Host "Docker Container $DockerContainerId starting..."
     $Session = New-DockerSession -DockerContainerId $DockerContainerId
