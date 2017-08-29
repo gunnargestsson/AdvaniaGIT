@@ -8,6 +8,8 @@ if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
 if ($BranchSettings.dockerContainerName -gt "") {
     ReStart-DockerContainer -BranchSettings $BranchSettings
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
+    Copy-DockerALExtension -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    Install-ALforVSCode -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 } else {
     Load-InstanceAdminTools -SetupParameters $Setupparameters
     if ($BranchSettings.instanceName -eq "") {
