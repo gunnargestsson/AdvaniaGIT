@@ -163,7 +163,7 @@
   <CustomAction>
     <Caption>NAV -&gt; AllObjects.fob</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Export-NavFob.ps1" $false</Parameters>
+    <Parameters>"$REPO" "Export-NavFob.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
     <IsSilent>true</IsSilent>

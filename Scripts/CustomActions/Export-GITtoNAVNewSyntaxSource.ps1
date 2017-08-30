@@ -4,15 +4,11 @@ if ($SetupParameters.storeAllObjects -eq "false" -or $SetupParameters.storeAllOb
     break
 }
 
-if ($BranchSettings.dockerContainerId -gt "") {
-    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
-} else {    
-    Load-ModelTools -SetupParameters $SetupParameters
-    $ObjectFileName = (Join-Path $SetupParameters.workFolder 'Source.txt')
-    if (Test-Path $ObjectFileName)
-    {
-        Remove-Item -Path $ObjectFileName  -Force
-    }
-    Join-NAVApplicationObjectFile -Source (Join-Path $SetupParameters.NewSyntaxObjectsPath '*.txt') -Destination $ObjectFileName -Force
-    UnLoad-ModelTools
+Load-ModelTools -SetupParameters $SetupParameters
+$ObjectFileName = (Join-Path $SetupParameters.workFolder 'Source.txt')
+if (Test-Path $ObjectFileName)
+{
+    Remove-Item -Path $ObjectFileName  -Force
 }
+Join-NAVApplicationObjectFile -Source (Join-Path $SetupParameters.NewSyntaxObjectsPath '*.txt') -Destination $ObjectFileName -Force
+UnLoad-ModelTools
