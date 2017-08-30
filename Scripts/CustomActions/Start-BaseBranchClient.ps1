@@ -1,16 +1,14 @@
-if ($BranchSettings.dockerContainerId -eq "") {
-    $BaseSetupParameters = Get-BaseBranchSetupParameters -SetupParameters $SetupParameters
-    $BaseBranchSettings = Get-BranchSettings -SetupParameters $BaseSetupParameters    
-}
+$BaseSetupParameters = Get-BaseBranchSetupParameters -SetupParameters $SetupParameters
+$BaseBranchSettings = Get-BranchSettings -SetupParameters $BaseSetupParameters    
 
 Check-NAVServiceRunning -SetupParameters $BaseSetupParameters -BranchSettings $BaseBranchSettings
 $clientSettingsPath = (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
 
 if ($BaseBranchSettings.dockerContainerId -gt "") {
-    Copy-DockerNAVClient -SetupParameters $BaseSetupParameters -BranchSettings $BaseBranchSettings
-    $clientexe = (Join-Path $SetupParameters.LogPath 'ApplicationFiles\Microsoft.Dynamics.Nav.Client.exe')    
+    Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BaseBranchSettings
+    $clientexe = (Join-Path $SetupParameters.LogPath 'RoleTailored Client\Microsoft.Dynamics.Nav.Client.exe')    
     [xml]$clientUserSettings = Get-Content -Path (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
-    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $BranchSettings.dockerContainerName   
+    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $BaseBranchSettings.dockerContainerName   
 } else {    
     [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:APPDATA ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))
     $clientexe = (Join-Path $SetupParameters.navIdePath 'Microsoft.Dynamics.Nav.Client.exe')
@@ -20,7 +18,6 @@ if ($BaseBranchSettings.dockerContainerId -gt "") {
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesPort' -NewValue $BaseBranchSettings.clientServicesPort
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServerInstance' -NewValue $BaseBranchSettings.instanceName
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'UrlHistory' -NewValue ""
-Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'UnknownSpnHint' -NewValue ""
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'TenantId' -NewValue ""
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesCredentialType' -NewValue Windows
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicesCertificateValidationEnabled' -NewValue false

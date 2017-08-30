@@ -7,18 +7,15 @@
         [PSObject]$SetupParameters
     )
 
-    Check-GitNotUnattached 
-    Check-GitCommitted
-
     if (!$SetupParameters.baseBranch -or $SetupParameters.baseBranch -eq "") {
         Write-Error "Base Branch not configured in $($SetupParameters.setupPath)!" -ErrorAction Stop
     }
-    $sourcebranch = git.exe rev-parse --abbrev-ref HEAD 
-    Write-Host Switching Repository to $SetupParameters.baseBranch
-    $result = git.exe checkout --force $SetupParameters.baseBranch --quiet 
-    Write-Host Reading configuration from $SetupParameters.baseBranch
-    $BaseSetupParameters = Get-Content $SetupParameters.setupPath | Out-String | ConvertFrom-Json
-    Write-Host Switching Repository to $sourcebranch
-    $result = git.exe checkout --force $sourcebranch --quiet
-    return $BaseSetupParameters
+    $BaseBranchSetup = "$($SetupParameters.baseBranch):$(Split-Path $SetupParameters.SetupPath -Leaf)"
+    $BaseSetupParameters = git.exe show $BaseBranchSetup
+    #for ($i=1;$i -lt $BaseSetupParameters.Length;$i++) {
+    #    if (($BaseSetupParameters | Select-Object -Index $i) -match "{") {
+    #        return $BaseSetupParameters | Select-Object -Skip $i | Out-String | ConvertFrom-Json
+    #    }
+    #}
+    return $BaseSetupParameters | Out-String | ConvertFrom-Json
 }
