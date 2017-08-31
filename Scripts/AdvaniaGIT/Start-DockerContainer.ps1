@@ -37,7 +37,7 @@
     while ($WaitForHealty -and $LoopNo -lt 20) {        
         $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $DockerContainerName
         Write-Host "Container status: $($dockerContainer.Status)..."
-        $WaitForHealty = $dockerContainer.Status -match "(health: starting)"
+        $WaitForHealty = $dockerContainer.Status -match "(health: starting)" -or $dockerContainer.Status -match "(unhealthy)"
         if ($WaitForHealty) { Start-Sleep -Seconds 10 }
         $LoopNo ++
     }

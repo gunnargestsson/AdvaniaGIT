@@ -144,7 +144,7 @@ do {
                             }                               
                     }                    
                 }
-                until ($input -iin ('q', '7'))
+                until ($input -iin ('q', '9'))
             }
         }
     }
