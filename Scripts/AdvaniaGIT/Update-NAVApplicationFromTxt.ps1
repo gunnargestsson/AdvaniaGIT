@@ -15,6 +15,11 @@
 
     )
     $CultureInfo = [System.Globalization.CultureInfo]::GetCultureInfo((Get-Culture).Name)
+    if ($SetupParameters.datetimeCulture) {
+        $RepositoryCultureInfo = [System.Globalization.CultureInfo]::GetCultureInfo($SetupParameters.datetimeCulture)
+    } else {
+        $RepositoryCultureInfo = [System.Globalization.CultureInfo]::GetCultureInfo((Get-Culture).Name)
+    }
     $Server = Get-DatabaseServer -BranchSettings $BranchSettings
     $Database = $BranchSettings.databaseName
     $FileObjects = Get-NAVApplicationObjectProperty -Source $ObjectsPath -ErrorAction Stop
@@ -61,10 +66,18 @@
         {
             $FileObjectsHash.Add("$Type-$Id",$true)
             $NAVObject = Get-SQLCommandResult -Server $Server -Database $Database -Command "select [Type],[ID],[Version List],[Modified],[Name],[Date],[Time] from Object where [Type]=$Type and [ID]=$Id"
+            $FileObjectDateTime = Get-Date
+            $skipObject = ([datetime]::TryParseExact("$($FileObject.Date) $($FileObject.Time)","$($RepositoryCultureInfo.DateTimeFormat.ShortDatePattern) $($RepositoryCultureInfo.DateTimeFormat.LongTimePattern)".Replace("yyyy","yy"),[System.Globalization.CultureInfo]::InvariantCulture,[System.Globalization.DateTimeStyles]::None,[ref]$FileObjectDateTime))
+            if (!$skipObject) {
+                $skipObject = ([datetime]::TryParseExact("$($FileObject.Date) $($FileObject.Time)","$($RepositoryCultureInfo.DateTimeFormat.ShortDatePattern) $($RepositoryCultureInfo.DateTimeFormat.LongTimePattern)",[System.Globalization.CultureInfo]::InvariantCulture,[System.Globalization.DateTimeStyles]::None,[ref]$FileObjectDateTime))
+            }
+            $NavObjectDateTime = Get-Date
+            $skipObject = $skipObject -and ([datetime]::TryParse("$($NAVObject.Date.ToString($CultureInfo.DateTimeFormat.ShortDatePattern, $CultureInfo)) $($NAVObject.Time.ToString($CultureInfo.DateTimeFormat.LongTimePattern, $CultureInfo))",[ref]$NavObjectDateTime))
+
             if (($FileObject.Modified -eq $NAVObject.Modified -or $FileObject.Modified -eq ($NAVObject.Modified -eq 1)) -and
                 ($FileObject.VersionList -eq $NAVObject.'Version List') -and
-                ($FileObject.Time.TrimStart(' ').TrimStart('0')  -eq $NAVObject.Time.ToString($CultureInfo.DateTimeFormat.LongTimePattern, $CultureInfo)) -and
-                ($FileObject.Date -eq $NAVObject.Date.ToString($CultureInfo.DateTimeFormat.ShortDatePattern, $CultureInfo)) -and
+                ($FileObjectDateTime -eq $NavObjectDateTime) -and
+                ($skipObject) -and
                 (!$All)
             )
             {
