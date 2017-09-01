@@ -14,6 +14,7 @@
         [switch]$MarkToDelete
 
     )
+    $CultureInfo = [System.Globalization.CultureInfo]::GetCultureInfo((Get-Culture).Name)
     $Server = Get-DatabaseServer -BranchSettings $BranchSettings
     $Database = $BranchSettings.databaseName
     $FileObjects = Get-NAVApplicationObjectProperty -Source $ObjectsPath -ErrorAction Stop
@@ -62,8 +63,8 @@
             $NAVObject = Get-SQLCommandResult -Server $Server -Database $Database -Command "select [Type],[ID],[Version List],[Modified],[Name],[Date],[Time] from Object where [Type]=$Type and [ID]=$Id"
             if (($FileObject.Modified -eq $NAVObject.Modified -or $FileObject.Modified -eq ($NAVObject.Modified -eq 1)) -and
                 ($FileObject.VersionList -eq $NAVObject.'Version List') -and
-                ($FileObject.Time.TrimStart(' ').TrimStart('0')  -eq $NAVObject.Time.ToString('H:mm:ss')) -and
-                ($FileObject.Date -eq $NAVObject.Date.ToString('dd.MM.yy')) -and
+                ($FileObject.Time.TrimStart(' ').TrimStart('0')  -eq $NAVObject.Time.ToString($CultureInfo.DateTimeFormat.LongTimePattern, $CultureInfo)) -and
+                ($FileObject.Date -eq $NAVObject.Date.ToString($CultureInfo.DateTimeFormat.ShortDatePattern, $CultureInfo)) -and
                 (!$All)
             )
             {
@@ -91,7 +92,7 @@
                         }
                         else
                         {
-                            Write-Verbose -Message "$($FileObject.ObjectType) $($FileObject.Id) differs: Modified=$($FileObject.Modified -eq $NAVObject.Modified) Version=$($FileObject.VersionList -eq $NAVObject.'Version List') Time=$($FileObject.Time.TrimStart(' ') -eq $NAVObject.Time.ToString('H:mm:ss')) Date=$($FileObject.Date -eq $NAVObject.Date.ToString('dd.MM.yy'))"
+                            Write-Verbose -Message "$($FileObject.ObjectType) $($FileObject.Id) differs: Modified=$($FileObject.Modified -eq $NAVObject.Modified) Version=$($FileObject.VersionList -eq $NAVObject.'Version List') Time=$($FileObject.Time.TrimStart(' ') -eq $NAVObject.Time.ToString($CultureInfo.DateTimeFormat.LongTimePattern, $CultureInfo)) Date=$($FileObject.Date -eq $NAVObject.Date.ToString($CultureInfo.DateTimeFormat.ShortDatePattern, $CultureInfo))"
                         }
                     }
                 }
