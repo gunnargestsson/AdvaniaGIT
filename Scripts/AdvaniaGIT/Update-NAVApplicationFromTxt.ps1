@@ -72,7 +72,11 @@
                 $skipObject = ([datetime]::TryParseExact("$($FileObject.Date) $($FileObject.Time)","$($RepositoryCultureInfo.DateTimeFormat.ShortDatePattern) $($RepositoryCultureInfo.DateTimeFormat.LongTimePattern)",[System.Globalization.CultureInfo]::InvariantCulture,[System.Globalization.DateTimeStyles]::None,[ref]$FileObjectDateTime))
             }
             $NavObjectDateTime = Get-Date
-            $skipObject = $skipObject -and ([datetime]::TryParse("$($NAVObject.Date.ToString($CultureInfo.DateTimeFormat.ShortDatePattern, $CultureInfo)) $($NAVObject.Time.ToString($CultureInfo.DateTimeFormat.LongTimePattern, $CultureInfo))",[ref]$NavObjectDateTime))
+            if ($NAVObject.Date -ne $null -and $NAVObject.Time -ne $null) {
+                $skipObject = $skipObject -and ([datetime]::TryParse("$($NAVObject.Date.ToString($CultureInfo.DateTimeFormat.ShortDatePattern, $CultureInfo)) $($NAVObject.Time.ToString($CultureInfo.DateTimeFormat.LongTimePattern, $CultureInfo))",[ref]$NavObjectDateTime))
+            } else {
+                $skipObject = $false
+            }
 
             if (($FileObject.Modified -eq $NAVObject.Modified -or $FileObject.Modified -eq ($NAVObject.Modified -eq 1)) -and
                 ($FileObject.VersionList -eq $NAVObject.'Version List') -and
