@@ -4,6 +4,6 @@
             $SQLServer,
             $SQLDb
         )
-        $CompanyName = Get-SQLCommandResult -Server $SQLServer -Database $SQLDb -Command "select TOP 1 [Name] from [Company] where [Name] like 'CRONUS%'"
+        $CompanyName = Get-SQLCommandResult -Server $SQLServer -Database $SQLDb -Command "select TOP 1 [Name] from [Company]"
         return $CompanyName.Name
     }
