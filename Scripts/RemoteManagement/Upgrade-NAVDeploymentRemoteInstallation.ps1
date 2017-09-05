@@ -79,6 +79,24 @@
             }            
         }
 
+        #Update Web Service 3 Config
+        Foreach ($RemoteComputer in $Remotes.Hosts) {
+            Write-Host "Upgrading Web Services 3 Config on $($RemoteComputer.HostName)..."
+            $Session = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN
+            Upgrade-NAVRemoteWebService3 -Session $Session 
+            Remove-PSSession $Session
+        }
+
+        #Update Advania Electronic Gateway Config
+        Foreach ($RemoteComputer in $Remotes.Hosts) {
+            if ($Roles -like "*Client*") {
+                Write-Host "Upgrading Advania Electronic Gateway on $($RemoteComputer.HostName)..."            
+                $Session = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN         
+                Upgrade-NAVRemoteAdvaniaGatewayConfig -Session $Session                
+                Remove-PSSession $Session
+            }            
+        }
+
         #Start Instances
         Foreach ($RemoteComputer in $Remotes.Hosts) {
             Write-Host "Starting Server Instances on $($RemoteComputer.HostName)..."

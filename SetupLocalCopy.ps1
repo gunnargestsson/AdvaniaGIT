@@ -82,6 +82,7 @@ if ($Answer -iin ('Yes','Y')) {
 $DefaultAnswer = 'Y'
 $Answer = Read-Host -Prompt "Perform NAV Environment Configuration (required after NAV installation) ? (Default = Yes)"
 if ($Answer -iin ('Yes','Y','')) {
+    $SetupParameters = Get-Content -Path (Join-Path $InstallationPath "Data\GITSettings.Json") | Out-String | ConvertFrom-Json
     $ScriptToStart = Join-Path $InstallationPath 'Scripts\Prepare-NAVEnvironment.ps1'
     & $ScriptToStart
 }
