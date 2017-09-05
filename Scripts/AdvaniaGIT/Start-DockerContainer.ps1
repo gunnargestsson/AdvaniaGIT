@@ -22,15 +22,6 @@
     Write-Host "Docker Container $DockerContainerId starting..."
     $Session = New-DockerSession -DockerContainerId $DockerContainerId
     $DockerContainerName = Get-DockerContainerName -Session $Session
-    $BranchSettings.instanceName = "NAV" 
-    $BranchSettings.databaseInstance = ""
-    $BranchSettings.databaseServer = $DockerContainerName
-    $BranchSettings.databaseName = "CRONUS"
-    $BranchSettings.dockerContainerName = $DockerContainerName
-    $BranchSettings.dockerContainerId = $DockerContainerId
-    $BranchSettings.managementServicesPort = "7045"
-    $BranchSettings.clientServicesPort = "7046"
-    $result = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
 
     $WaitForHealty = $true
     $LoopNo = 1
@@ -44,6 +35,17 @@
     if (!($dockerContainer.Status -match "(healthy)")) {
         Write-Error "Container $DockerContainerName unable to start !" -ErrorAction Stop
     }
+
+    $BranchSettings.instanceName = "NAV" 
+    $BranchSettings.databaseInstance = ""
+    $BranchSettings.databaseServer = $DockerContainerName
+    $BranchSettings.databaseName = "CRONUS"
+    $BranchSettings.dockerContainerName = $DockerContainerName
+    $BranchSettings.dockerContainerId = $DockerContainerId
+    $BranchSettings.managementServicesPort = "7045"
+    $BranchSettings.clientServicesPort = "7046"
+    $result = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
+
     Update-BranchSettings -BranchSettings $BranchSettings
     Remove-PSSession -Session $Session 
 }

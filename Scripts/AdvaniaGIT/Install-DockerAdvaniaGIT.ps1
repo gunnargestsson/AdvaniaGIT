@@ -8,15 +8,16 @@
         [PSObject]$BranchSettings
     )
 
+    Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "$($SetupParameters.LogPath)\AdvaniaGIT.zip" -ErrorAction Stop
     Invoke-Command -Session $Session -ScriptBlock { 
         param([PSObject]$SetupParameters, [PSObject]$BranchSettings, [String]$GeoId, [String]$LocaleName )
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted 
         Set-WinHomeLocation -GeoId $GeoId
         Set-WinSystemLocale -SystemLocale $LocaleName
         Set-Culture -CultureInfo $LocaleName
-        Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "C:\Run\AdvaniaGIT.zip" -ErrorAction Stop
-        if (Test-Path -Path "C:\Run\AdvaniaGIT.zip") {
-            Expand-Archive -LiteralPath "C:\Run\AdvaniaGIT.zip" -DestinationPath "C:\"
+        $AdvaniaGITZip = Join-Path (Join-Path "C:\Host\Log" (Split-Path $SetupParameters.LogPath -Leaf)) "AdvaniaGIT.zip"
+        if (Test-Path -Path $AdvaniaGITZip) {
+            Expand-Archive -LiteralPath $AdvaniaGITZip -DestinationPath "C:\"
             Rename-Item -Path "C:\AdvaniaGIT-master" -NewName "C:\AdvaniaGIT"
             Set-Location -Path "C:\AdvaniaGIT\Scripts"
             & .\Install-Modules.ps1
@@ -42,6 +43,7 @@
             $GITSettings.licenseFile = $SetupParameters.licenseFile
             $GITSettings.objectsNotToDelete = $SetupParameters.objectsNotToDelete
             Update-GITSettings -GITSettings $GITSettings -SettingsFilePath "C:\AdvaniaGIT\Data\GITSettings.Json"
+            Remove-Item -Path $AdvaniaGITZip -Force -ErrorAction SilentlyContinue
         } else {
             Write-Error "AdvaniaGIT Module Installation failed!" -ErrorAction Stop
         }
