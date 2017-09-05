@@ -5,7 +5,6 @@
     )
                 
     $DockerSettings = Get-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) | Out-String | ConvertFrom-Json
-    $DockerSettings |  add-member "rootPath" (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
-    Write-Verbose -Message "Settings loaded"
+    Write-Verbose -Message "Docker Settings loaded"
     Return $DockerSettings
 }
