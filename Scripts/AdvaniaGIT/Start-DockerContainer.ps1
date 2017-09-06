@@ -45,7 +45,7 @@
     $BranchSettings.managementServicesPort = "7045"
     $BranchSettings.clientServicesPort = "7046"
     $result = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
-
+    Edit-DockerHostRegiststration -AddHostName $DockerContainerName -AddIpAddress (Get-DockerIPAddress -Session $Session)
     Update-BranchSettings -BranchSettings $BranchSettings
     Remove-PSSession -Session $Session 
 }

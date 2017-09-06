@@ -19,7 +19,9 @@ if ($BranchSettings.instanceName -ne "") {
             $dockerContainerName = docker.exe rm $($BranchSettings.dockerContainerName)
 
         }
-        $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId 
+        Edit-DockerHostRegiststration -RemoveHostName $BranchSettings.dockerContainerName 
+        $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId
+        
     }
 }
 
