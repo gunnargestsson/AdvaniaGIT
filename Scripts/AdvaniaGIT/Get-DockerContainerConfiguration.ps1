@@ -1,4 +1,4 @@
-﻿function Get-DockerConfiguration
+﻿function Get-DockerContainerConfiguration
 {
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]

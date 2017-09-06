@@ -145,7 +145,7 @@ $BranchSettings | Add-Member "dockerContainerName" $dockerContainerName
    
 if ($BranchSettings.dockerContainerName -ne $null) {
     if ($BranchSettings.dockerContainerName -gt "") {
-        $DockerContainerConfiguration = Get-DockerConfiguration -DockerContainerName $BranchSettings.dockerContainerName 
+        $DockerContainerConfiguration = Get-DockerContainerConfiguration -DockerContainerName $BranchSettings.dockerContainerName 
     }
 }
 
