@@ -67,6 +67,9 @@ else
 
     # Find Branch Settings
     $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
+    if ($BranchSettings.dockerContainerName -gt "") {
+        $DockerContainerConfiguration = Get-DockerConfiguration -DockerContainerName $BranchSettings.dockerContainerName 
+    }
     
     # Set Global Parameters
     $Globals = New-Object -TypeName PSObject

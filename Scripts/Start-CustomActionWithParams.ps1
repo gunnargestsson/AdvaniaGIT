@@ -57,6 +57,8 @@
 [String]$databaseInstance,
 [String]$databaseServer,
 [String]$clientServicesPort,
+[String]$dockerContainerId,
+[String]$dockerContainerName,
 [String]$BuildFolder,
 [HashTable]$BuildSettings
 )
@@ -138,7 +140,15 @@ $BranchSettings | Add-Member "instanceName" $instanceName
 $BranchSettings | Add-Member "databaseInstance" $databaseInstance
 $BranchSettings | Add-Member "databaseServer" $databaseServer
 $BranchSettings | Add-Member "clientServicesPort" $clientServicesPort
+$BranchSettings | Add-Member "dockerContainerId" $dockerContainerId
+$BranchSettings | Add-Member "dockerContainerName" $dockerContainerName
    
+if ($BranchSettings.dockerContainerName -ne $null) {
+    if ($BranchSettings.dockerContainerName -gt "") {
+        $DockerContainerConfiguration = Get-DockerConfiguration -DockerContainerName $BranchSettings.dockerContainerName 
+    }
+}
+
 New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
 New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     
