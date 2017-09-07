@@ -114,6 +114,9 @@ $SetupParameters | Add-Member "ftpServer" $ftpServer
 $SetupParameters | Add-Member "ftpUser" $ftpUser
 $SetupParameters | Add-Member "licenseFile" $licenseFile
 $SetupParameters | Add-Member "mainVersion" $mainVersion
+if ($mainVersion -ne $null) {
+    $SetupParameters | Add-Member "developerService" ([int]$mainVersion -gt 100)
+}
 $SetupParameters | Add-Member "navIdePath" $navIdePath
 $SetupParameters | Add-Member "navRelease" $navRelease
 $SetupParameters | Add-Member "navServicePath" $navServicePath

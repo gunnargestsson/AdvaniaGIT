@@ -58,6 +58,11 @@ if ($BranchSettings.dockerContainerName -gt "") {
         Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName SOAPServicesEnabled -KeyValue $true 
         Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DataCacheSize -KeyValue 7 
         Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName CompileBusinessApplicationAtStartup -KeyValue $false
+        Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName PublicWebBaseUrl -KeyValue "http://$($env:COMPUTERNAME):$(Get-WebClientPort -MainVersion $SetupParameters.mainVersion)/${ServerInstance}/WebClient"
+        if ($SetupParameters.developerService) {
+            Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DeveloperServicesEnabled -KeyValue $true 
+            Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DefaultClient -KeyValue 'Web'
+        }
         if ($DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='DeveloperServicesEnabled']")) {
             Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DeveloperServicesEnabled -KeyValue $true
         }

@@ -59,6 +59,7 @@ else
     # Find NAV major version based on the repository NAV version - client
     $mainVersion =  ($SetupParameters.navVersion).Split('.').GetValue(0) + ($SetupParameters.navVersion).Split('.').GetValue(1)
     $SetupParameters | Add-Member "mainVersion" $mainVersion
+    $SetupParameters | Add-Member "developerService" ([int]$SetupParameters.mainVersion -gt 100)
     $SetupParameters | Add-Member "navIdePath" (Get-NAVClientPath -SetupParameters $SetupParameters)
     $SetupParameters | Add-Member "navServicePath" (Get-NAVServicePath -SetupParameters $SetupParameters)
     
