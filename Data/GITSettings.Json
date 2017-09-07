@@ -25,6 +25,7 @@
   "customReportLayoutsPath": "CustomReportLayouts",
   "webServicesPath": "WebServices",
   "binaryPath": "Binaries",
+  "testObjectsPath": "TestObjects",
   "targetPlatform": "DynamicsNAV",
   "VSCodePath": "AL",
   "NewSyntaxPrefix": "NewSyntax"
