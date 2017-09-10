@@ -43,7 +43,7 @@
   <CustomAction>
     <Caption>Start Web Client</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Start-WebClient.ps1" $false</Parameters>
+    <Parameters>"$REPO" "Start-WebClient.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
     <IsSilent>true</IsSilent>
@@ -291,7 +291,7 @@
   <CustomAction>
     <Caption>Base Branch - Start Client</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Start-BaseBranchClient.ps1" $false</Parameters>
+    <Parameters>"$REPO" "Start-BaseBranchClient.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
     <IsSilent>true</IsSilent>
@@ -299,7 +299,7 @@
   <CustomAction>
     <Caption>Base Branch - Start Web Client</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Start-BaseBranchWebClient.ps1" $false</Parameters>
+    <Parameters>"$REPO" "Start-BaseBranchWebClient.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
     <IsSilent>true</IsSilent>
