@@ -59,20 +59,22 @@
             $Session = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN         
             $Roles = $RemoteComputer.Roles
             if ($Roles -like "*Client*" -or $Roles -like "*NAS*") {
-
+                 
+                $DefaultServerInstance = Get-NAVRemoteInstances -Session $Session  | Where-Object -Property Default -eq True
                 New-NAVRemoteInstance -Session $Session -ServerInstance $SelectedInstance.ServerInstance 
                 Set-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $SelectedInstance -Database $Database -EncryptionKeyPath $RemoteComputer.EncryptionKeyPath -EncryptionKeyPassword $EncryptionKeyPassword -InstanceSettings $RemoteComputer.InstanceSettings 
                 $NewInstance = Get-NAVRemoteInstance -Session $Session -ServerInstanceName $SelectedInstance.ServerInstance 
                 $CertValue = Get-NAVServiceCertificateValue -Session $Session -ServerInstance $NewInstance 
                 $KeyVaultKey = Get-NAVAzureKeyVaultKey -KeyVault $KeyVault -ServerInstanceName $NewInstance.ServerInstance
                 $Application = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $NewInstance -IconFilePath $IconFilePath -CertValue $CertValue
+                $DefaultApplication = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $DefaultServerInstance -IconFilePath $IconFilePath -CertValue $CertValue
                 $ServicePrincipal = Get-NAVADServicePrincipal -ADApplication $Application                   
                 Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ServicePrincipalName $ServicePrincipal.ServicePrincipalNames[1] -PermissionsToKeys encrypt,decrypt,get
                 Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ApplicationId $Application.ApplicationId -ObjectId $Application.ObjectId -PermissionsToKeys encrypt,decrypt,get
                 $NewInstance = Combine-Settings $NewInstance $KeyVault -Prefix KeyVault
                 $NewInstance = Combine-Settings $NewInstance $KeyVaultKey -Prefix KeyVaultKey
                 $NewInstance = Combine-Settings $NewInstance $ServicePrincipal -Prefix ServicePrincipal
-                $NewInstance = Combine-Settings $NewInstance $Application -Prefix ADApplication
+                $NewInstance = Combine-Settings $NewInstance $DefaultApplication -Prefix ADApplication
                 $NewInstance | Add-Member -MemberType NoteProperty -Name ADApplicationFederationMetadataLocation -Value "https://login.windows.net/$($Subscription.Account.Id.Split("@").GetValue(1))/federationmetadata/2007-06/federationmetadata.xml"
                 Set-NAVRemoteInstanceADRegistration -Session $Session -ServerInstance $NewInstance 
                 Start-NAVRemoteInstance -Session $Session -SelectedInstances $NewInstance
