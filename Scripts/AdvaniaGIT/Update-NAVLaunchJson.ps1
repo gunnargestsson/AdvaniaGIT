@@ -42,7 +42,7 @@
         } else {
             $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name server -Value "http://$($BranchSettings.dockerContainerName)"
         }
-        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name port -Value (Get-InstanceSettings -SetupParameters $SetupParameters -BranchSettings $BranchSettings).DocumentElement.appSettings.SelectSingleNode("add[@key='DeveloperServicesPort']").Attributes["value"].Value
+        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name port -Value $BranchSettings.developerServicePort
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name tenant -Value "Default"
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name serverInstance -Value $BranchSettings.instanceName
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name windowsAuthentication -Value "true"

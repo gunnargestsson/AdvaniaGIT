@@ -14,6 +14,7 @@
     $LocalBranchSettings.instanceName = ""
     $LocalBranchSettings.dockerContainerName = ""
     $LocalBranchSettings.dockerContainerId = ""
+    $LocalBranchSettings.developerServicePort = ""
     $BlankBranchSettings = Update-BranchSettings -BranchSettings $LocalBranchSettings    
     Return $ReturnedBranchSettings
 }

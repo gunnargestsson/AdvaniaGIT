@@ -45,6 +45,7 @@
     $BranchSettings.dockerContainerId = $DockerContainerId
     $BranchSettings.clientServicesPort = $DockerSettings.BranchSettings.clientServicesPort
     $BranchSettings.managementServicesPort = $DockerSettings.BranchSettings.managementServicesPort
+    $BranchSettings.developerServicePort = $DockerSettings.BranchSettings.developerServicePort
     $BranchSettings.databaseInstance = $DockerSettings.BranchSettings.databaseInstance
     $BranchSettings.databaseName = $DockerSettings.BranchSettings.databaseName
     $BranchSettings.instanceName = $DockerSettings.BranchSettings.instanceName
