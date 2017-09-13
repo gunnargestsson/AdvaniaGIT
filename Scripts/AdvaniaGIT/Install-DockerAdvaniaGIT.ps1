@@ -9,7 +9,7 @@
     )
 
     Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "$($SetupParameters.LogPath)\AdvaniaGIT.zip" -ErrorAction Stop
-    $DockerBranchSettings = Invoke-Command -Session $Session -ScriptBlock { 
+    $DockerSettings = Invoke-Command -Session $Session -ScriptBlock { 
         param([PSObject]$SetupParameters, [PSObject]$BranchSettings, [String]$GeoId, [String]$LocaleName )
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted 
         Set-WinHomeLocation -GeoId $GeoId
@@ -20,7 +20,7 @@
             Expand-Archive -LiteralPath $AdvaniaGITZip -DestinationPath "C:\"
             Rename-Item -Path "C:\AdvaniaGIT-master" -NewName "C:\AdvaniaGIT"
             Set-Location -Path "C:\AdvaniaGIT\Scripts"
-            & .\Install-Modules.ps1
+            & .\Install-Modules.ps1 | Out-Null
             Write-Host "Updating BranchSettings.json..."
             $CustomConfigFile =  Join-Path $serviceTierFolder "CustomSettings.config"
             $CustomConfig = [xml](Get-Content $CustomConfigFile)
@@ -47,7 +47,10 @@
         } else {
             Write-Error "AdvaniaGIT Module Installation failed!" -ErrorAction Stop
         }
-        Return $BranchSettings
+        $DockerSettings = New-Object -TypeName PSObject
+        $DockerSettings | Add-Member -MemberType NoteProperty -Name GITSettings -Value $GITSettings
+        $DockerSettings | Add-Member -MemberType NoteProperty -Name BranchSettings -Value $BranchSettings
+        Return $DockerSettings
     } -ArgumentList ($SetupParameters, $BranchSettings, (Get-WinHomeLocation).GeoId, (Get-WinSystemLocale).Name)
-    Return $DockerBranchSettings
+    Return $DockerSettings
 }

@@ -36,17 +36,18 @@
         Write-Error "Container $DockerContainerName unable to start !" -ErrorAction Stop
     }
 
-    $DockerBranchSettings = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
+
+    $DockerSettings = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
     Edit-DockerHostRegiststration -AddHostName $DockerContainerName -AddIpAddress (Get-DockerIPAddress -Session $Session)
 
-    $BranchSettings.instanceName = $DockerBranchSettings.instanceName
-    $BranchSettings.databaseInstance = $DockerBranchSettings.databaseInstance
     $BranchSettings.databaseServer = $DockerContainerName
-    $BranchSettings.databaseName = $DockerBranchSettings.databaseName 
     $BranchSettings.dockerContainerName = $DockerContainerName
     $BranchSettings.dockerContainerId = $DockerContainerId
-    $BranchSettings.managementServicesPort = $DockerBranchSettings.managementServicesPort
-    $BranchSettings.clientServicesPort = $DockerBranchSettings.clientServicesPort 
+    $BranchSettings.clientServicesPort = $DockerSettings.BranchSettings.clientServicesPort
+    $BranchSettings.managementServicesPort = $DockerSettings.BranchSettings.managementServicesPort
+    $BranchSettings.databaseInstance = $DockerSettings.BranchSettings.databaseInstance
+    $BranchSettings.databaseName = $DockerSettings.BranchSettings.databaseName
+    $BranchSettings.instanceName = $DockerSettings.BranchSettings.instanceName
 
     Update-BranchSettings -BranchSettings $BranchSettings
     Remove-PSSession -Session $Session 
