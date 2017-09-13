@@ -42,7 +42,7 @@
                                 }
                             '2' {
                                     if ($selectedInstance[0].Multitenant -eq "false") {
-                                        List-NAVRemoteInstanceSessions -Credential $Credential -SelectedInstance $selectedInstance[0]
+                                        List-NAVRemoteInstanceSessions -Credential $Credential -SelectedInstances $selectedInstance
                                     } else {
                                         Write-Host "Instance is multitenant, view sessions from tenant menu!" -ForegroundColor Red 
                                         $anyKey = Read-Host "Press enter to continue..."

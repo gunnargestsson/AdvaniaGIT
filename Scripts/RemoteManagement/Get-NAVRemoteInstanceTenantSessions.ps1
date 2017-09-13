@@ -21,7 +21,7 @@
                 param([String]$ServerInstance, [String]$TenantId)
                 Write-Verbose "Import Module from $($SetupParameters.navServicePath)..."
                 Load-InstanceAdminTools -SetupParameters $SetupParameters
-                $Sessions = Get-NAVServerSession -ServerInstance $ServerInstance -Tenant $TenantId
+                $Sessions = Get-NAVServerSession -ServerInstance $ServerInstance -Tenant $TenantId | Where-Object -Property ServerComputerName -EQ $env:COMPUTERNAME
                 UnLoad-InstanceAdminTools
                 return $Sessions
             } -ArgumentList ($SelectedInstance.ServerInstance, $TenantId)
