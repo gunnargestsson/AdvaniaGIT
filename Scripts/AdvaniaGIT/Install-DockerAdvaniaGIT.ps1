@@ -29,7 +29,7 @@
             $BranchSettings.databaseName = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseName']").Value
             $BranchSettings.databaseInstance = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseInstance']").Value
             $BranchSettings.clientServicesPort = $customConfig.SelectSingleNode("//appSettings/add[@key='ClientServicesPort']").Value
-            $BranchSettings.developerServicePort = $customConfig.SelectSingleNode("//appSettings/add[@key='developerServicePort']").Value
+            $BranchSettings.developerServicesPort = $customConfig.SelectSingleNode("//appSettings/add[@key='DeveloperServicesPort']").Value
             $BranchSettings.databaseServer = $customConfig.SelectSingleNode("//appSettings/add[@key='DatabaseServer']").Value
             $BranchSettings.dockerContainerName = ""
             $BranchSettings.dockerContainerId = ""

@@ -10,7 +10,7 @@ function Get-DatabaseBranchSettings
     $allBranchSettings = Get-Content -Path $SettingsFilePath | Out-String | ConvertFrom-Json
     $branchSettings = ($allBranchSettings.Branches | Where-Object -Property databaseName -EQ $DatabaseName)
     if ($branchSettings -eq $null) {
-        $branchSettings = @{"branchId" = ""; "databaseServer" = ""; "databaseInstance" = ""; "databaseName" = ""; "instanceName" = ""; "clientServicesPort" = "7046"; "managementServicesPort" = "7045"; "developerServicePort" = "7049"; "dockerContainerName" = ""; "dockerContainerId" = ""}
+        $branchSettings = @{"branchId" = ""; "databaseServer" = ""; "databaseInstance" = ""; "databaseName" = ""; "instanceName" = ""; "clientServicesPort" = "7046"; "managementServicesPort" = "7045"; "developerServicesPort" = "7049"; "dockerContainerName" = ""; "dockerContainerId" = ""}
     }    
     Return $BranchSettings
 }
