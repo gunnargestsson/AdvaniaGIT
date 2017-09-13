@@ -363,7 +363,7 @@
   <CustomAction>
     <Caption>Open VS Code with current branch as master</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Start-VSCodeOnCurrentBranch.ps1" $false</Parameters>
+    <Parameters>"$REPO" "Start-VSCodeOnCurrentBranch.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>false</ShowFullOutput>
     <IsSilent>true</IsSilent>
@@ -371,7 +371,7 @@
   <CustomAction>
     <Caption>Open VS Code with base branch as master</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Start-VSCodeOnBaseBranch.ps1" $false</Parameters>
+    <Parameters>"$REPO" "Start-VSCodeOnBaseBranch.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
     <IsSilent>true</IsSilent>
