@@ -36,16 +36,18 @@
         Write-Error "Container $DockerContainerName unable to start !" -ErrorAction Stop
     }
 
-    $BranchSettings.instanceName = "NAV" 
-    $BranchSettings.databaseInstance = ""
+    $DockerBranchSettings = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
+    Edit-DockerHostRegiststration -AddHostName $DockerContainerName -AddIpAddress (Get-DockerIPAddress -Session $Session)
+
+    $BranchSettings.instanceName = $DockerBranchSettings.instanceName
+    $BranchSettings.databaseInstance = $DockerBranchSettings.databaseInstance
     $BranchSettings.databaseServer = $DockerContainerName
-    $BranchSettings.databaseName = "CRONUS"
+    $BranchSettings.databaseName = $DockerBranchSettings.databaseName 
     $BranchSettings.dockerContainerName = $DockerContainerName
     $BranchSettings.dockerContainerId = $DockerContainerId
-    $BranchSettings.managementServicesPort = "7045"
-    $BranchSettings.clientServicesPort = "7046"
-    $result = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
-    Edit-DockerHostRegiststration -AddHostName $DockerContainerName -AddIpAddress (Get-DockerIPAddress -Session $Session)
+    $BranchSettings.managementServicesPort = $DockerBranchSettings.managementServicesPort
+    $BranchSettings.clientServicesPort = $DockerBranchSettings.clientServicesPort 
+
     Update-BranchSettings -BranchSettings $BranchSettings
     Remove-PSSession -Session $Session 
 }

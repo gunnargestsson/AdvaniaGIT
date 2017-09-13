@@ -9,7 +9,7 @@
     )
 
     Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "$($SetupParameters.LogPath)\AdvaniaGIT.zip" -ErrorAction Stop
-    Invoke-Command -Session $Session -ScriptBlock { 
+    $DockerBranchSettings = Invoke-Command -Session $Session -ScriptBlock { 
         param([PSObject]$SetupParameters, [PSObject]$BranchSettings, [String]$GeoId, [String]$LocaleName )
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted 
         Set-WinHomeLocation -GeoId $GeoId
@@ -47,6 +47,7 @@
         } else {
             Write-Error "AdvaniaGIT Module Installation failed!" -ErrorAction Stop
         }
-        
+        Return $BranchSettings
     } -ArgumentList ($SetupParameters, $BranchSettings, (Get-WinHomeLocation).GeoId, (Get-WinSystemLocale).Name)
+    Return $DockerBranchSettings
 }
