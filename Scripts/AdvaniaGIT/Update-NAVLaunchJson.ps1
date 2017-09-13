@@ -42,10 +42,10 @@
         } else {
             $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name server -Value "http://$($BranchSettings.dockerContainerName)"
         }
-        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name port -Value $BranchSettings.developerServicesPort
+        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name port -Value [int]$BranchSettings.developerServicesPort
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name tenant -Value "Default"
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name serverInstance -Value $BranchSettings.instanceName
-        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name windowsAuthentication -Value "true"
+        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name authentication -Value "Windows"
         $LaunchSettings | Add-Member -MemberType NoteProperty -Name configurations -Value @($ConfigurationSettings)
     }
     New-Item -Path (Join-Path $SetupParameters.VSCodePath ".vscode") -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
