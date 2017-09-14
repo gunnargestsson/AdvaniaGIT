@@ -8,6 +8,8 @@ if (!$InstallFolder) {
   $Installfolder = $PSScriptRoot
 }
 
+$toolsFolder = Join-Path (Split-Path $Installfolder -Parent) "Tools"
+
 
 # Install Powershell Path for the Installation Folder
 if (-not (([Environment]::GetEnvironmentVariable('PSModulePath','Machine')) -like "*$Installfolder*")) 
@@ -23,6 +25,19 @@ if (-not (([Environment]::GetEnvironmentVariable('PSModulePath','Machine')) -lik
 } else 
 {
     Write-Host -Object "PSModulePath already includes $Installfolder, skipping the setting" -ForegroundColor Green
+}
+
+# Install Powershell Path for the Tools Folder
+if (-not (([Environment]::GetEnvironmentVariable('Path','Machine')) -like "*$toolsFolder*")) 
+{
+    Write-Host -Object "Extending Path with $toolsFolder" -ForegroundColor Green
+    $env:Path = $env:Path + ';' + $toolsFolder
+    Write-Host -Object "Extending Computer wide Path with $toolsFolder" -ForegroundColor Green
+    [Environment]::SetEnvironmentVariable('Path',[Environment]::GetEnvironmentVariable('Path','Machine')+';'+$toolsFolder,'Machine')
+
+} else 
+{
+    Write-Host -Object "Path already includes $toolsFolder, skipping the setting" -ForegroundColor Green
 }
 
 
