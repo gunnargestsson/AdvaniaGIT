@@ -12,10 +12,12 @@
         $wwwRootPath = [System.Environment]::ExpandEnvironmentVariables($wwwRootPath)
         $Source = Join-Path $wwwRootPath "http\*.vsix"
         $Extension = Get-Item -Path $Source
-        if (Test-Path -Path $Extension) {
-            Write-Host "Copying AL Extension to Host Computer..."
-            $Destination = Join-Path "C:\Host\Log" $LogFolder
-            Copy-Item -Path $Extension.FullName -Destination $Destination -Recurse -Force
+        if ($Extension) {
+            if (Test-Path -Path $Extension) {
+                Write-Host "Copying AL Extension to Host Computer..."
+                $Destination = Join-Path "C:\Host\Log" $LogFolder
+                Copy-Item -Path $Extension.FullName -Destination $Destination -Recurse -Force
+            }
         }
     } -ArgumentList (Split-Path $SetupParameters.LogPath -Leaf)
     Remove-PSSession $Session
