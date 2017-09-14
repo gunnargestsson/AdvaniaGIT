@@ -46,7 +46,7 @@ if ($BranchSettings.dockerContainerName -gt "") {
           ManagementServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ManagementServicesPort']").Attributes["value"].Value
           ClientServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ClientServicesPort']").Attributes["value"].Value
           SOAPServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='SOAPServicesPort']").Attributes["value"].Value
-          ODataServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ODataServicesPort']").Attributes["value"].Value
+          ODataServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ODataServicesPort']").Attributes["value"].Value          
         }
         if ($BranchSettings.databaseInstance -ne "") { $params.DatabaseInstance = $BranchSettings.databaseInstance }
         New-NAVServerInstance @params -Force -ServiceAccount NetworkService -ErrorAction Stop
@@ -62,9 +62,11 @@ if ($BranchSettings.dockerContainerName -gt "") {
         if ($SetupParameters.developerService) {
             Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DeveloperServicesEnabled -KeyValue $true 
             Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DefaultClient -KeyValue 'Web'
+            $BranchSettings.developerServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='DeveloperServicesPort']").Attributes["value"].Value
         }
         if ($DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='DeveloperServicesEnabled']")) {
             Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DeveloperServicesEnabled -KeyValue $true
+            $BranchSettings.developerServicesPort = ""
         }
         $BranchSettings.instanceName = $ServerInstance
         Enable-DelayedStartForNAVService -BranchSettings $BranchSettings
