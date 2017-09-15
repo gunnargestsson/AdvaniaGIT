@@ -32,7 +32,7 @@ function Get-SQLCommandResult
 
     $SqlConnection = New-Object -TypeName System.Data.SqlClient.SqlConnection
     if ($Username) {
-        $SqlConnection.ConnectionString = "Server = $Server; Database = $Database; Integrated Security = False;User ID= $Username;Password=$Password"
+        $SqlConnection.ConnectionString = "Server = $Server; Database = $Database; Integrated Security = False;User ID= $Username;Password='$Password'"
     } else {
         $SqlConnection.ConnectionString = "Server = $Server; Database = $Database; Integrated Security = True"
     }
