@@ -34,6 +34,8 @@
     4 = Start Web Client, `
     5 = Start NAV Client, `
     6 = Start NAV Debugger, `
+    7 = Start Force Sync, `
+    8 = Start Normal Sync, `
     Action"
                         switch ($input) {
                             '0' { break }
@@ -78,6 +80,8 @@
                                         $anyKey = Read-Host "Press enter to continue..."
                                     }
                                 }
+                            '7' { Start-NAVDeploymentRemoteInstanceForceSync -Credential $Credential -SelectedInstances $selectedInstance }
+                            '8' { Start-NAVDeploymentRemoteInstanceSync -Credential $Credential -SelectedInstances $selectedInstance }
                             }                    
                     }
                     until ($input -iin ('0'))
