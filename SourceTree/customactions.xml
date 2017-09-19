@@ -219,7 +219,7 @@
   <CustomAction>
     <Caption>Merge Deltas in Work Folder with Source to create Target</Caption>
     <Target>StartPowerShell.cmd</Target>
-    <Parameters>"$REPO" "Merge-Deltas.ps1" $false</Parameters>
+    <Parameters>"$REPO" "Merge-Deltas.ps1" $true</Parameters>
     <OpenInSeparateWindow>false</OpenInSeparateWindow>
     <ShowFullOutput>true</ShowFullOutput>
     <IsSilent>true</IsSilent>
