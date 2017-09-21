@@ -58,7 +58,7 @@ do {
                     $input = Read-Host "Please select action `
                     0 = exit,  
                     + = Create new instance, `
-                    1 = Configure selected instance, `
+                    1 = Configure instances for deployment, `
                     2 = Update Azure AD/Office 365 registration for deployment, `
                     3 = Rebuild ClickOnce for deployment, `
                     4 = Rebuild Web client for deployment, `

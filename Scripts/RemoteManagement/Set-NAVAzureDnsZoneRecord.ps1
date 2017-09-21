@@ -9,6 +9,7 @@
         )
     Write-Host "Updating DNS Record for ${DnsHostName}..."
     $DnsZone = Get-NAVAzureDnsZone  -DnsHostName $DnsHostName 
+    if (!$DnsZone) { break }
     if ($OldDnsHostName) { Remove-NAVAzureDnsZoneRecordSet  -DnsZone $DnsZone -DnsHostName $OldDnsHostName }
     if ($DnsHostName) { Remove-NAVAzureDnsZoneRecordSet  -DnsZone $DnsZone -DnsHostName $DnsHostName }
 

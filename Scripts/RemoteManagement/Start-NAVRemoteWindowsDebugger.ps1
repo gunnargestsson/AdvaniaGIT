@@ -36,6 +36,6 @@
     Set-Content -Path $clientSettingsPath -Value $clientUserSettings.OuterXml -Force
     $params = @()
     $params += @('-settings:"' + $clientSettingsPath + '"') 
-    $params += " `"DynamicsNAV://///debug`""   
+    $params += " `"DynamicsNAV://///debug?tenant=$TenantId`""   
     Start-Process -FilePath $clientexe -ArgumentList $params
 }

@@ -1,4 +1,6 @@
 ﻿# Import all needed modules
+Get-Module RemoteManagement | Remove-Module
+Get-Module AdvaniaGIT | Remove-Module
 Import-Module RemoteManagement -DisableNameChecking | Out-Null
 Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
 Import-Module AzureRM
@@ -77,21 +79,23 @@ do {
     Clear-Host
     For ($i=0; $i -le 10; $i++) { Write-Host "" }
     $menuItems | Format-Table -Property No, DatabaseName, Location, ServerName, ResourceGroupName, ElasticPoolName -AutoSize 
-    $input = Read-Host "Please select Database number (0 = exit, + = new database from bacpac)"
+    $input = Read-Host "Please select Database number (0 = exit, + = new database from bacpac, t = new tenant database)"
     switch ($input) {
         '0' { break }
         '+' { New-NAVAzureSqlDatabase -Credential $Credential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer }
+        't' { New-NAVAzureTenantSqlDatabase -Credential $VMCredential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer }
         default {
             $selectedDatabase = $menuItems | Where-Object -Property No -EQ $input
             if ($selectedDatabase) { 
                 Clear-Host
                 For ($i=0; $i -le 10; $i++) { Write-Host "" }
                 $selectedDatabase | Format-Table -Property No, DatabaseName, Location, ServerName, ResourceGroupName, ElasticPoolName -AutoSize 
-                $input = Read-Host "Please select action (0 = exit, 1 = export, 2 = delete)"
+                $input = Read-Host "Please select action (0 = exit, 1 = export, 2 = import navdata, 3 = delete)"
                 switch ($input) {
                     '0' { $input = "" }
                     '1' { New-NAVAzureSqlDatabaseBacpac -Credential $VMCredential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
-                    '2' { Remove-NAVAzureSqlDatabase -Credential $Credential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
+                    '2' { Import-NAVDataToAzureSQL -Credential $VMCredential -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
+                    '3' { Remove-NAVAzureSqlDatabase -Credential $Credential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
                 }
             }
         }

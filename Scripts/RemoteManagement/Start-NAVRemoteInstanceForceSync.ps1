@@ -14,9 +14,11 @@
                 {
                     param([string] $InstanceName)
                     Load-InstanceAdminTools -SetupParameters $SetupParameters
-                    $Results = Get-NAVTenant -ServerInstance $InstanceName | Sync-NAVTenant -Mode ForceSync -Force
+                    foreach ($Tenant in Get-NAVTenant -ServerInstance $InstanceName) {
+                        Write-Host "Running Focer Sync for $($Tenant.Id)..."
+                        Sync-NAVTenant -ServerInstance $InstanceName -Tenant $Tenant.Id -Mode ForceSync -Force
+                    }
                     UnLoad-InstanceAdminTools
-                    Return $Results
                 } -ArgumentList $instanceName            
             Remove-PSSession -Session $Session
         }

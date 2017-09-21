@@ -25,7 +25,7 @@
         ServiceAccount = $ServiceAccount 
         DataFilesDestinationPath = $DataFilesDestinationPath 
         LogFilesDestinationPath = $LogFilesDestinationPath 
-        Timeout = 360 }
+        Timeout = 0 }
     if ($DatabaseInstance -ne "") { $params.DatabaseInstance = $DatabaseInstance }
     New-NAVDatabase @params -Force -ErrorAction Stop | Out-Null   
 }
