@@ -17,7 +17,9 @@
     if ($NewTenantSettings.OKPressed -ne 'OK') { Return $SelectedTenant }
     $SelectedTenant = Combine-Settings $NewTenantSettings $SelectedTenant
     $RemoteTenantSettings = Set-NAVDeploymentRemoteInstanceTenantSettings -Session $Session -Credential $Credential -SelectedTenant $SelectedTenant -DeploymentName $DeploymentName 
-    Set-NAVAzureDnsZoneRecord -DeploymentName $DeploymentName -DnsHostName $SelectedTenant.ClickOnceHost -OldDnsHostName $OldDnsHostName
+    if ($SelectedTenant.ClickOnceHost -gt "") {
+        Set-NAVAzureDnsZoneRecord -DeploymentName $DeploymentName -DnsHostName $SelectedTenant.ClickOnceHost -OldDnsHostName $OldDnsHostName
+    }
     Return $SelectedTenant
     }
 

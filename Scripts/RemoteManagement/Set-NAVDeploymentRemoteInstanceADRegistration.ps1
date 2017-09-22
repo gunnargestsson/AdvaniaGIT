@@ -33,7 +33,7 @@
                 $CertValue = Get-NAVServiceCertificateValue -Session $Session -ServerInstance $DefaultServerInstance 
                 $KeyVaultKey = Get-NAVAzureKeyVaultKey -KeyVault $KeyVault -ServerInstanceName $DefaultServerInstance.ServerInstance
                 $DefaultApplication = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $DefaultServerInstance -IconFilePath $IconFilePath -CertValue $CertValue
-                if ($ServerInstances.Length -ne $null) {
+                if ($ServerInstances.Length -eq 0 -or $DefaultServerInstance.ServerInstance -eq $ServerInstances.ServerInstance ) {
                     $ServicePrincipal = Get-NAVADServicePrincipal -ADApplication $DefaultApplication
                     Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ServicePrincipalName $ServicePrincipal.ServicePrincipalNames[1] -PermissionsToKeys encrypt,decrypt,get
                     Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ApplicationId $DefaultApplication.ApplicationId -ObjectId $DefaultApplication.ObjectId -PermissionsToKeys encrypt,decrypt,get

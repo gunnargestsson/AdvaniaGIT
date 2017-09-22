@@ -13,13 +13,15 @@
     do {
         Write-Host "Loading Remote Tenant Menu..."   
         
-        $menuItems = Load-NAVRemoteInstanceTenantsMenu -Session $Session -SelectedInstance $SelectedInstance
+        $menuItems = Load-NAVRemoteInstanceTenantsMenu -SelectedInstance $SelectedInstance
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
         $menuItems | Format-Table -Property No, Id, DatabaseName, CustomerName, LicenseNo, PasswordId, ClickOnceHost, State -AutoSize 
-        $input = Read-Host "Please select tenant number (0 = exit)"
+        $input = Read-Host "Please select tenant number (0 = exit, - = configure applicaion, + = new tenant)"
         switch ($input) {
             '0' { break }
+            '-' { Configure-NAVRemoteInstanceApplication -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance }
+            '+' { New-NAVDeploymentRemoteInstanceTenant -Credential $Credential -DeploymentName $DeploymentName }
             default {
                 $selectedTenant = $menuItems | Where-Object -Property No -EQ $input                
                 if ($selectedTenant) {                    

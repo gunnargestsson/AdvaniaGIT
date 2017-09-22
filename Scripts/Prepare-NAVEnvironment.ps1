@@ -5,6 +5,7 @@ Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
 Enable-TcpPortSharingService
 UnLoad-InstanceAdminTools
 
+$setupParameters = New-Object -TypeName PSObject
 $setupParameters | Add-Member -MemberType NoteProperty -Name navServicePath -Value ""
 $setupParameters | Add-Member -MemberType NoteProperty -Name navIdePath -Value ""
 $versions = Get-ChildItem (Join-Path $env:ProgramFiles 'Microsoft Dynamics NAV\*\Service\Microsoft.Dynamics.Nav.Management.psm1') | Select-Object -Property FullName | Split-Path -Parent | Split-Path -Parent | Split-Path -Leaf

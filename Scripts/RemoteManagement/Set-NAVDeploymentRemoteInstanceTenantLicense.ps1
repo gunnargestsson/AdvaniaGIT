@@ -12,7 +12,13 @@
     PROCESS 
     {
         if ($SelectedTenant.LicenseNo -eq "") {
-            Throw "License Number is not defined in Tenant Settings!"
+            Write-Host -ForegroundColor Red "License Number is not defined in Tenant Settings, removing license from database!"
+            $UserName = $Credential.UserName
+            $Password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password))
+            $Result = Get-SQLCommandResult -Server $SelectedTenant.DatabaseServer -Database $SelectedTenant.DatabaseName -Command "UPDATE [dbo].[`$ndo`$dbproperty] SET [license] = null" -Username $UserName -Password $Password -ErrorAction SilentlyContinue
+            $Result = Get-SQLCommandResult -Server $SelectedTenant.DatabaseServer -Database $SelectedTenant.DatabaseName -Command "UPDATE [dbo].[`$ndo`$tenantproperty] SET [license] = null" -Username $UserName -Password $Password -ErrorAction SilentlyContinue
+            Write-Host -ForegroundColor DarkGreen "Restart Service Instance for changes to take effect"
+            break
         }
         $FtpFileName = "license/$($SelectedTenant.LicenseNo).flf"
         $LocalFileName = Join-Path $env:TEMP "$($SelectedTenant.LicenseNo).flf"
