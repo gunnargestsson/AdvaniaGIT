@@ -49,7 +49,7 @@
                 Write-Host "Adjusting the application manifest (Microsoft.Dynamics.Nav.Client.exe.manifest)..."
                 $applicationFilesDirectory = Join-Path $clickOnceDirectory 'Deployment\ApplicationFiles'
                 $applicationManifestFile = Join-Path $applicationFilesDirectory 'Microsoft.Dynamics.Nav.Client.exe.manifest'
-                $applicationIdentityName = "$clickOnceDeploymentId application identity"
+                $applicationIdentityName = "$ClickOnceApplicationPublisher_$clickOnceDeploymentId"
                 $NAVClientFile = (Join-Path $applicationFilesDirectory 'Microsoft.Dynamics.Nav.Client.exe')
                 $applicationIdentityVersion = (Get-ItemProperty -Path $NAVClientFile).VersionInfo.FileVersion
 
@@ -68,7 +68,7 @@
 
                 Write-Host "Adjusting the deployment manifest (Microsoft.Dynamics.Nav.Client.application)..."
                 $deploymentManifestFile = Join-Path $clickOnceDirectory 'Deployment\Microsoft.Dynamics.Nav.Client.application'
-                $deploymentIdentityName = "$clickOnceDeploymentId deployment identity" 
+                $deploymentIdentityName = "$ClickOnceApplicationPublisher_$clickOnceDeploymentId"
                 $deploymentIdentityVersion = $applicationIdentityVersion
                 $deploymentManifestUrl = ($webSiteUrl + "/Deployment/Microsoft.Dynamics.Nav.Client.application")
                 $applicationManifestUrl = ($webSiteUrl + "/Deployment/ApplicationFiles/Microsoft.Dynamics.Nav.Client.exe.manifest")

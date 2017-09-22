@@ -13,6 +13,8 @@
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
 
         $Instances = Load-NAVRemoteInstanceMenu -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $DeploymentName
+        $Instances = Get-NAVSelectedInstances -ServerInstances $Instances
+        if (!$Instances) { break }
         Foreach ($RemoteComputer in $Remotes.Hosts) {
             $Roles = $RemoteComputer.Roles
             if ($Roles -like "*ClickOnce*") {

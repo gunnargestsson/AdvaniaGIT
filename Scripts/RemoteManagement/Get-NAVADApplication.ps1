@@ -28,7 +28,7 @@
             $RequiredResourceAccess.ResourceAccess = $ResourceAccess
             $RequiredResourceAccess.ResourceAppId = '00000002-0000-0000-c000-000000000000'
             Set-AzureADApplication -ObjectId $ObjectId -RequiredResourceAccess $RequiredResourceAccess
-            $Application = Get-AzureRmADApplication | Where-Object -Property DisplayName -eq $DisplayName
+            $Application = Get-AzureRmADApplication -DisplayNameStartWith $DisplayName
         }
         Return $Application
     }
