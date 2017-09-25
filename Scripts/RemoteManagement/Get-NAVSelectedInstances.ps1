@@ -7,7 +7,8 @@
   
     $instanceNo = 1
     $menuItems = @()
-    Write-Host "Loading Remote Instance Menu..."   
+    Write-Host "Loading Remote Instance Menu..."
+    if ($ServerInstances.Length -eq $null) { return $ServerInstances }
     foreach ($instance in $ServerInstances) {
         if (!($instance | Get-Member | Where-Object -Property Name -EQ No)) {
             $instance | Add-Member -MemberType NoteProperty -Name No -Value $instanceNo

@@ -83,7 +83,7 @@ do {
     switch ($input) {
         '0' { break }
         '+' { New-NAVAzureSqlDatabase -Credential $Credential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer }
-        't' { New-NAVAzureTenantSqlDatabase -Credential $VMCredential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer }
+        't' { New-NAVAzureTenantSqlDatabase -Credential $VMCredential -DBCredential $Credential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer }
         default {
             $selectedDatabase = $menuItems | Where-Object -Property No -EQ $input
             if ($selectedDatabase) { 

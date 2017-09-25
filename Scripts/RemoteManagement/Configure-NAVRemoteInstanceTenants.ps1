@@ -21,7 +21,7 @@
         switch ($input) {
             '0' { break }
             '-' { Configure-NAVRemoteInstanceApplication -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance }
-            '+' { New-NAVDeploymentRemoteInstanceTenant -Credential $Credential -DeploymentName $DeploymentName }
+            '+' { New-NAVDeploymentRemoteInstanceTenant -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance }
             default {
                 $selectedTenant = $menuItems | Where-Object -Property No -EQ $input                
                 if ($selectedTenant) {                    
@@ -30,6 +30,6 @@
             }
         }                       
     }
-    until ($input -ieq '0')
+    until ($input -iin ('0','+'))
     
 }

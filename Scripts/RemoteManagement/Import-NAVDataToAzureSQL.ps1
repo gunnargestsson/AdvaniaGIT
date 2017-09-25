@@ -8,17 +8,25 @@
         [PSObject]$DatabaseName
     )
 
+    $navVersion = Get-NAVVersionSelection
+    $SetupParameters = New-Object -TypeName PSObject
+    $SetupParameters | Add-Member -MemberType NoteProperty -Name navServicePath -Value (Join-Path $env:ProgramFiles "Microsoft Dynamics NAV\$($navVersion.mainVersion)\Service")
+    $SetupParameters | Add-Member -MemberType NoteProperty -Name navIdePath -Value (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV\$($navVersion.mainVersion)\Roletailored Client")
+    $SetupParameters | Add-Member -MemberType NoteProperty -Name LogPath -Value $env:TEMP
+    if (!(Test-Path -Path (Join-Path $SetupParameters.navServicePath 'Microsoft.Dynamics.Nav.Management.psm1'))) { exit }
+
     $UserName = $Credential.UserName
     $Password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password))   
-    $Result = Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $DatabaseName -Command "SELECT COUNT([object_id]) as [ReadyForImport] from sys.tables where name = '`$ndo`$tenantproperty'" -Username $UserName -Password $Password    
+    $Result = Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $DatabaseName -Command "SELECT COUNT([object_id]) as [ReadyForImport] from sys.tables where name = '`$ndo`$dboproperty'" -Username $UserName -Password $Password
     if ($Result.ReadyForImport -eq 0) {
-        Write-Host -ForegroundColor Red "Database $DatabaseName has not been initiated by NAV.  Please Mount Database before importing..."
+        $BranchSettings = New-Object -TypeName PSObject
+        $BranchSettings | Add-Member databaseServer "$($SqlServer.ServerName).database.windows.net"
+        $BranchSettings | Add-Member databaseInstance ""
+        $BranchSettings | Add-Member databaseName $DatabaseName
+        $BranchSettings | Add-Member instanceName ""
+        Invoke-NAVDatabaseConversion -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Username $UserName -Password $Password
+        #Write-Host -ForegroundColor Red "Database $DatabaseName has not been initiated by NAV.  Please Mount Database before importing..."
     } else {
-
-        $navVersion = Get-NAVVersionSelection 
-        $SetupParameters = New-Object -TypeName PSObject
-        $SetupParameters | Add-Member -MemberType NoteProperty -Name navServicePath -Value (Join-Path $env:ProgramFiles "Microsoft Dynamics NAV\$($navVersion.mainVersion)\Service")
-        if (!(Test-Path -Path (Join-Path $SetupParameters.navServicePath 'Microsoft.Dynamics.Nav.Management.psm1'))) { exit }
 
         $SelectedNavdataFile = Get-LocalNavdataFilePath
         if (!$SelectedNavdataFile) { break }
@@ -26,35 +34,13 @@
             Load-InstanceAdminTools -SetupParameters $SetupParameters
             $WhatToLoad = Read-Host -Prompt "What to import ? (All, Tenant, Company)"
             if ($WhatToLoad -ilike "A*") {
-                Import-NAVData `
-                    -DatabaseServer "$($SqlServer.ServerName).database.windows.net" `
-                    -DatabaseName $DatabaseName `
-                    -DatabaseCredentials $Credential `
-                    -FilePath $SelectedNavdataFile.FullName `
-                    -IncludeApplication `
-                    -IncludeApplicationData `
-                    -IncludeGlobalData `
-                    -AllCompanies `
-                    -Force
+                Import-NAVData -DatabaseServer "$($SqlServer.ServerName).database.windows.net" -DatabaseName $DatabaseName -DatabaseCredentials $Credential -FilePath $SelectedNavdataFile.FullName -IncludeApplication -IncludeApplicationData -IncludeGlobalData -AllCompanies -Force
             } 
             if ($WhatToLoad -ilike "T*") {
-                Import-NAVData `
-                    -DatabaseServer "$($SqlServer.ServerName).database.windows.net" `
-                    -DatabaseName $DatabaseName `
-                    -DatabaseCredentials $Credential `
-                    -FilePath $SelectedNavdataFile.FullName `
-                    -IncludeGlobalData `
-                    -AllCompanies `
-                    -Force
+                Import-NAVData -DatabaseServer "$($SqlServer.ServerName).database.windows.net" -DatabaseName $DatabaseName -DatabaseCredentials $Credential -FilePath $SelectedNavdataFile.FullName -IncludeGlobalData -AllCompanies -Force
             } 
             if ($WhatToLoad -ilike "C*") {
-                Import-NAVData `
-                    -DatabaseServer "$($SqlServer.ServerName).database.windows.net" `
-                    -DatabaseName $DatabaseName `
-                    -DatabaseCredentials $Credential `
-                    -FilePath $SelectedNavdataFile.FullName `
-                    -AllCompanies `
-                    -Force
+                Import-NAVData -DatabaseServer "$($SqlServer.ServerName).database.windows.net" -DatabaseName $DatabaseName -DatabaseCredentials $Credential -FilePath $SelectedNavdataFile.FullName -AllCompanies -Force
             }         
         }    
     }

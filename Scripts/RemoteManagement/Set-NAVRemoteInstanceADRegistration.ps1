@@ -33,6 +33,7 @@
                     Set-NAVServerInstance -ServerInstance $ServerInstance.ServerInstance -Start
                     Get-NAVTenant -ServerInstance $ServerInstance.ServerInstance | Sync-NAVTenant -Mode Sync -Force
                 }
+
                 UnLoad-InstanceAdminTools
             } -ArgumentList ($ServerInstance,$RestartServerInstance.IsPresent)
     }

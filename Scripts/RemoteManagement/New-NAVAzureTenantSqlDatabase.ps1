@@ -3,6 +3,8 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.PSCredential]$Credential,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [System.Management.Automation.PSCredential]$DBCredential,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$AzureResourceGroup,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SqlServer
@@ -27,7 +29,7 @@
 
     $UserName = $Credential.UserName
     $Password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password))
-    $Result = Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $newDatabaseName -Command "CREATE USER $($Credential.UserName) FROM LOGIN $($Credential.UserName);" -Username $UserName -Password $Password
-    $Result = Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $newDatabaseName -Command "ALTER ROLE db_owner ADD MEMBER $($Credential.UserName);" -Username $UserName -Password $Password
+    $Result = Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $newDatabaseName -Command "CREATE USER $($DbCredential.UserName) FROM LOGIN $($DbCredential.UserName);" -Username $UserName -Password $Password
+    $Result = Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $newDatabaseName -Command "ALTER ROLE db_owner ADD MEMBER $($DbCredential.UserName);" -Username $UserName -Password $Password
     
 }

@@ -3,7 +3,9 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [System.Management.Automation.PSCredential]$Credential,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [String]$DeploymentName
+        [String]$DeploymentName,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$SelectedInstance
     )
     PROCESS 
     { 
@@ -21,12 +23,20 @@
         if ($Database.OKPressed -ne 'OK') { break }
 
         #Ask for Tenant Settings $SelectedTenant
-        $TenantSettings = Get-NAVRemoteInstanceDefaultTenant -SelectedInstance $SelectedInstance 
+        $TenantSettings = New-NAVTenantSettingsObject -Id New_Tenant -ServerInstance $SelectedInstance.ServerInstance -Language (Get-Culture).Name 
+        Get-NAVRemoteInstanceDefaultTenant -SelectedInstance $SelectedInstance 
         $TenantSettings = Combine-Settings $TenantSettings (New-NAVTenantSettingsObject)
         $SelectedTenant = New-NAVTenantSettingsDialog -Message "Edit New Tenant Settings" -TenantSettings $TenantSettings
         if ($SelectedTenant.OKPressed -ne 'OK') { break }
-        if ($SelectedTenant.CustomerName -eq "") { 
-            Write-Host -ForegroundColor Red "Customer Name missing!"
+
+        if ($SelectedTenant.CustomerName -eq "") {
+            Write-Host -ForegroundColor Red "Customer Name not configured.  Configure with Tenant Settings."
+            break
+        } elseif ($SelectedTenant.ClickOnceHost -eq "") {
+            Write-Host -ForegroundColor Red "ClickOnce Host not configured.  Configure with Tenant Settings."
+            break
+        } elseif (!(Resolve-DnsName -Name $SelectedTenant.ClickOnceHost -ErrorAction SilentlyContinue)) {
+            Write-Host -ForegroundColor Red "Host $($SelectedTenant.ClickOnceHost) not found in Dns!"
             break
         }
 
@@ -36,16 +46,41 @@
             try { Get-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath $FtpFileName -LocalFilePath $LocalFileName }
             catch { Write-Host "Unable to download license from $LocalFileName !" }
         } 
+
+        if ($SelectedInstance.EncryptionProvider -eq "AzureKeyVault") {
+            Write-Host "Creating Encryption key for tenant..."
+            $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName
+            $TenantKeyVaultKey = Get-NAVAzureKeyVaultKey -KeyVault $KeyVault -ServerInstanceName $SelectedTenant.ServerInstance -TenantId $SelectedTenant.Id
+            $AzureKeyVaultSettings = New-Object -TypeName PSObject
+            $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientId -Value $SelectedInstance.AzureKeyVaultClientId
+            $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateStoreLocation -Value $SelectedInstance.AzureKeyVaultClientCertificateStoreLocation
+            $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateStoreName -Value $SelectedInstance.AzureKeyVaultClientCertificateStoreName
+            $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateThumbprint -Value $SelectedInstance.AzureKeyVaultClientCertificateThumbprint
+            $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultKeyUri -Value $TenantKeyVaultKey.Id
+        }
+
         $hostNo = 1
         Foreach ($RemoteComputer in $Remotes.Hosts) {
             Write-Host "Updating $($RemoteComputer.HostName)..."
             $Session = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN         
             $Roles = $RemoteComputer.Roles
-            if ($Roles -like "*Client*" -or $Roles -like "*NAS*") {
-                Mount-NAVRemoteInstanceTenant -Session $Session -SelectedTenant $SelectedTenant -Database $Database
-                Start-NAVRemoteInstanceTenantSync -Session $Session -SelectedTenant $SelectedTenant
-                $RemoteTenantSettings = Set-NAVRemoteInstanceTenantSettings -Session $Session -SelectedTenant $SelectedTenant 
-                break
+            if ($Roles -like "*Client*" -or $Roles -like "*NAS*") {                
+                if ($hostNo -eq 1) {
+                    Mount-NAVRemoteInstanceTenant -Session $Session -SelectedTenant $SelectedTenant -Database $Database -AzureKeyVaultSettings $AzureKeyVaultSettings
+                    Start-NAVRemoteInstanceTenantSync -Session $Session -SelectedTenant $SelectedTenant
+                    $RemoteTenantSettings = Set-NAVRemoteInstanceTenantSettings -Session $Session -SelectedTenant $SelectedTenant 
+                    $hostNo ++
+                }                
+            }
+            if ($Roles -like "*ClickOnce*") {
+                # Prepare and Clean Up      
+                Remove-NAVRemoteClickOnceSite -Session $Session -SelectedTenant $SelectedTenant  
+
+                # Do some tests and import modules
+                Prepare-NAVRemoteClickOnceSite -Session $Session -RemoteComputer $RemoteComputer 
+
+                # Create the ClickOnce Site
+                New-NAVRemoteClickOnceSite -Session $Session -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant -ClickOnceApplicationName $Remotes.ClickOnceApplicationName -ClickOnceApplicationPublisher $Remotes.ClickOnceApplicationPublisher -ClientSettings $RemoteComputer.ClientSettings
             }
             Remove-PSSession $Session
         }
