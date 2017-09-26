@@ -17,15 +17,10 @@
 
     $UserName = $Credential.UserName
     $Password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password))   
-    $Result = Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $DatabaseName -Command "SELECT COUNT([object_id]) as [ReadyForImport] from sys.tables where name = '`$ndo`$dboproperty'" -Username $UserName -Password $Password
-    if ($Result.ReadyForImport -eq 0) {
-        $BranchSettings = New-Object -TypeName PSObject
-        $BranchSettings | Add-Member databaseServer "$($SqlServer.ServerName).database.windows.net"
-        $BranchSettings | Add-Member databaseInstance ""
-        $BranchSettings | Add-Member databaseName $DatabaseName
-        $BranchSettings | Add-Member instanceName ""
-        Invoke-NAVDatabaseConversion -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Username $UserName -Password $Password
-        #Write-Host -ForegroundColor Red "Database $DatabaseName has not been initiated by NAV.  Please Mount Database before importing..."
+    $Result = Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $DatabaseName -Command "SELECT COUNT([object_id]) as [ReadyForImport] from sys.tables where name = '`$ndo`$dbproperty'" -Username $UserName -Password $Password
+    if ($Result.ReadyForImport -eq 0) {    
+        Write-Host -ForegroundColor Red "Database $DatabaseName has not been initiated by NAV.  Import not possible..."
+        break
     } else {
 
         $SelectedNavdataFile = Get-LocalNavdataFilePath
@@ -34,10 +29,10 @@
             Load-InstanceAdminTools -SetupParameters $SetupParameters
             $WhatToLoad = Read-Host -Prompt "What to import ? (All, Tenant, Company)"
             if ($WhatToLoad -ilike "A*") {
-                Import-NAVData -DatabaseServer "$($SqlServer.ServerName).database.windows.net" -DatabaseName $DatabaseName -DatabaseCredentials $Credential -FilePath $SelectedNavdataFile.FullName -IncludeApplication -IncludeApplicationData -IncludeGlobalData -AllCompanies -Force
+                Import-NAVData -DatabaseServer "$($SqlServer.ServerName).database.windows.net" -DatabaseName $DatabaseName -DatabaseCredentials $Credential -FilePath $SelectedNavdataFile.FullName -IncludeApplication -IncludeApplicationData -IncludeGlobalData -AllCompanies -Force 
             } 
             if ($WhatToLoad -ilike "T*") {
-                Import-NAVData -DatabaseServer "$($SqlServer.ServerName).database.windows.net" -DatabaseName $DatabaseName -DatabaseCredentials $Credential -FilePath $SelectedNavdataFile.FullName -IncludeGlobalData -AllCompanies -Force
+                Import-NAVData -DatabaseServer "$($SqlServer.ServerName).database.windows.net" -DatabaseName $DatabaseName -DatabaseCredentials $Credential -FilePath $SelectedNavdataFile.FullName -IncludeGlobalData -AllCompanies -Force 
             } 
             if ($WhatToLoad -ilike "C*") {
                 Import-NAVData -DatabaseServer "$($SqlServer.ServerName).database.windows.net" -DatabaseName $DatabaseName -DatabaseCredentials $Credential -FilePath $SelectedNavdataFile.FullName -AllCompanies -Force

@@ -8,7 +8,7 @@
     )
     $allTenantSettings = Get-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) | Out-String | ConvertFrom-Json
     $newTenantSettings = @()
-    $allTenantSettings.Tenants | foreach { if ($_.ServerInstance -ne $Tenant.ServerInstance -and $_Id -ne $Tenant.Id) {$newTenantSettings += $_}}
+    $allTenantSettings.Tenants | foreach { if ($_.ServerInstance -ne $Tenant.ServerInstance -or $_.Id -ne $Tenant.Id) {$newTenantSettings += $_}}    
     $TenantSettings = @{
             "Id" = $Tenant.Id; 
             "ServerInstance" = $Tenant.ServerInstance;
@@ -24,5 +24,4 @@
     Set-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) -Value ($allTenantSettings | ConvertTo-Json)                
     Return $TenantSettings
 }
-
 

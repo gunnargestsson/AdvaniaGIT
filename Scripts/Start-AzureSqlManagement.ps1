@@ -90,12 +90,11 @@ do {
                 Clear-Host
                 For ($i=0; $i -le 10; $i++) { Write-Host "" }
                 $selectedDatabase | Format-Table -Property No, DatabaseName, Location, ServerName, ResourceGroupName, ElasticPoolName -AutoSize 
-                $input = Read-Host "Please select action (0 = exit, 1 = export, 2 = import navdata, 3 = delete)"
+                $input = Read-Host "Please select action (0 = exit, 1 = export, 2 = delete)"
                 switch ($input) {
                     '0' { $input = "" }
                     '1' { New-NAVAzureSqlDatabaseBacpac -Credential $VMCredential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
-                    '2' { Import-NAVDataToAzureSQL -Credential $VMCredential -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
-                    '3' { Remove-NAVAzureSqlDatabase -Credential $Credential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
+                    '2' { Remove-NAVAzureSqlDatabase -Credential $Credential -AzureResourceGroup  $resourceGroup -SqlServer $databaseServer -DatabaseName $selectedDatabase.DatabaseName }
                 }
             }
         }

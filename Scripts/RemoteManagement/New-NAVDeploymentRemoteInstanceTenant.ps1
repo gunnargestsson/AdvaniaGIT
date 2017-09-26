@@ -67,10 +67,10 @@
             if ($Roles -like "*Client*" -or $Roles -like "*NAS*") {                
                 if ($hostNo -eq 1) {
                     Mount-NAVRemoteInstanceTenant -Session $Session -SelectedTenant $SelectedTenant -Database $Database -AzureKeyVaultSettings $AzureKeyVaultSettings
-                    Start-NAVRemoteInstanceTenantSync -Session $Session -SelectedTenant $SelectedTenant
-                    $RemoteTenantSettings = Set-NAVRemoteInstanceTenantSettings -Session $Session -SelectedTenant $SelectedTenant 
+                    Start-NAVRemoteInstanceTenantSync -Session $Session -SelectedTenant $SelectedTenant                    
                     $hostNo ++
-                }                
+                }
+                $RemoteTenantSettings = Set-NAVRemoteInstanceTenantSettings -Session $Session -SelectedTenant $SelectedTenant 
             }
             if ($Roles -like "*ClickOnce*") {
                 # Prepare and Clean Up      

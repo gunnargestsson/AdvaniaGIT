@@ -8,7 +8,11 @@
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$SettingsFilePath = "Data\TenantSettings.Json"
     )
-    $instanceName = $Tenant.ServerInstance.Substring(27,$Tenant.ServerInstance.Length - 27)
+    if ($Tenant.ServerInstance -like "*`$*") {
+        $instanceName = $Tenant.ServerInstance.Substring(27,$Tenant.ServerInstance.Length - 27)
+    } else {
+        $instanceName = $Tenant.ServerInstance
+    }
     $allTenantSettings = Get-Content -Path (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) $SettingsFilePath) | Out-String | ConvertFrom-Json
     $TenantSettings = ($allTenantSettings.Tenants | Where-Object -Property ServerInstance -EQ $instanceName | Where-Object -Property Id -EQ $Tenant.Id)
     if ($TenantSettings -eq $null) {

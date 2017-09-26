@@ -23,7 +23,8 @@
     4 = Tenant Settings, `
     5 = Create/Update Tenant ClickOnce, `
     6 = Update Tenant License, `
-    7 = Remove Tenant `
+    7 = Import Data (todo) `
+    8 = Remove Tenant `
     Action "
 
         switch ($input) {
@@ -54,7 +55,7 @@
                     Set-NAVDeploymentRemoteInstanceTenantLicense -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant
                     $anyKey = Read-Host "Press enter to continue..."
                 }
-            '7' { 
+            '8' { 
                     if ($SelectedInstance.Multitenant -eq "true") {
                         #Remove-NAVDeploymentRemoteInstanceTenant -Session $Session -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential
                     } else {

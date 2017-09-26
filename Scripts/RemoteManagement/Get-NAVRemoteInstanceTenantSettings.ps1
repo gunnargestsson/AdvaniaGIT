@@ -12,7 +12,7 @@
                 param([String]$ServerInstance, [String]$TenantId)
                 $Tenant = New-Object -TypeName PSObject
                 $Tenant | Add-Member -MemberType NoteProperty -Name Id -Value $TenantId
-                $Tenant | Add-Member -MemberType NoteProperty -Name ServerInstance -Value "MicrosoftDynamicsNavServer`$$ServerInstance"
+                $Tenant | Add-Member -MemberType NoteProperty -Name ServerInstance -Value $ServerInstance
                 $TenantSettings = Get-TenantSettings -SetupParameters $SetupParameters -Tenant $Tenant
                 Return $TenantSettings
             } -ArgumentList ($SelectedTenant.ServerInstance, $SelectedTenant.Id)
