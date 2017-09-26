@@ -24,7 +24,6 @@
 
         #Ask for Tenant Settings $SelectedTenant
         $TenantSettings = New-NAVTenantSettingsObject -Id New_Tenant -ServerInstance $SelectedInstance.ServerInstance -Language (Get-Culture).Name 
-        Get-NAVRemoteInstanceDefaultTenant -SelectedInstance $SelectedInstance 
         $TenantSettings = Combine-Settings $TenantSettings (New-NAVTenantSettingsObject)
         $SelectedTenant = New-NAVTenantSettingsDialog -Message "Edit New Tenant Settings" -TenantSettings $TenantSettings
         if ($SelectedTenant.OKPressed -ne 'OK') { break }

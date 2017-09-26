@@ -8,7 +8,7 @@
         $tenantNo = 1
         $tenants = @()        
         Foreach ($tenant in $SelectedInstance.TenantList) {
-          $tenant | Add-Member -MemberType NoteProperty -Name No -Value $tenantNo
+          $tenant | Add-Member -MemberType NoteProperty -Name No -Value $tenantNo -Force
           $tenantNo ++
           $tenants += $tenant
         }

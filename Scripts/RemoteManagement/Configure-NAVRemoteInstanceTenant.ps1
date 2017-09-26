@@ -23,8 +23,7 @@
     4 = Tenant Settings, `
     5 = Create/Update Tenant ClickOnce, `
     6 = Update Tenant License, `
-    7 = Import Data (todo) `
-    8 = Remove Tenant `
+    7 = Remove Tenant `
     Action "
 
         switch ($input) {
@@ -33,7 +32,8 @@
             '2' { Configure-NAVRemoteInstanceTenantUsers -Session $Session -SelectedTenant $SelectedTenant -DeploymentName $DeploymentName -Credential $Credential }
             '3' { 
                     if ($SelectedInstance.Multitenant -eq "true") {
-                        #Configure-NAVRemoteInstanceTenantDatabase -Session $Session -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential
+                        Write-Host -ForegroundColor Red "To update tenant configureation, remove tenant and mount it again"
+                        $anyKey = Read-Host "Press enter to continue..."                        
                     } else {
                         Configure-NAVRemoteInstanceDatabase -Session $Session -SelectedInstance $SelectedInstance -DeploymentName $DeploymentName -Credential $Credential
                     }
@@ -44,23 +44,20 @@
                     $SelectedTenant = Combine-Settings $TenantSettings $SelectedTenant
                 }
             '5' { 
-                    if ($SelectedInstance.Multitenant -eq "true") {
-                        #New-NAVRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant 
-                    } else {
-                        New-NAVDeploymentRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant 
-                        $anyKey = Read-Host "Press enter to continue..."
-                    }
+                    New-NAVDeploymentRemoteClickOnceSite -Credential $Credential -DeploymentName $DeploymentName -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant 
+                    $anyKey = Read-Host "Press enter to continue..."
                 }
             '6' { 
                     Set-NAVDeploymentRemoteInstanceTenantLicense -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant
                     $anyKey = Read-Host "Press enter to continue..."
                 }
-            '8' { 
+            '7' { 
                     if ($SelectedInstance.Multitenant -eq "true") {
-                        #Remove-NAVDeploymentRemoteInstanceTenant -Session $Session -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential
+                        Dismount-NAVRemoteInstanceTenant -Session $Session -SelectedTenant $SelectedTenant 
                     } else {
                         Remove-NAVDeploymentRemoteInstance -Credential $Credential -SelectedInstance $SelectedInstance -DeploymentName $DeploymentName 
                     }
+                    Return '0'
                 }
 
                 
