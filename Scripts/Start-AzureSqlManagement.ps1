@@ -82,7 +82,7 @@ do {
     $input = Read-Host "Please select Database number (0 = exit, + = new database from bacpac, t = new tenant database)"
     switch ($input) {
         '0' { break }
-        '+' { New-NAVAzureSqlDatabase -Credential $Credential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer }
+        '+' { New-NAVAzureSqlDatabase -Credential $VMCredential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer -dbOwner $Credential.UserName }
         't' { New-NAVAzureTenantSqlDatabase -Credential $VMCredential -DBCredential $Credential -AzureResourceGroup $resourceGroup -SqlServer $databaseServer }
         default {
             $selectedDatabase = $menuItems | Where-Object -Property No -EQ $input

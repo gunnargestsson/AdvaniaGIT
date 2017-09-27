@@ -5,7 +5,9 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$AzureResourceGroup,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$SqlServer
+        [PSObject]$SqlServer,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$dbOwner
 
     )
     
@@ -36,4 +38,8 @@
     Start-Process -FilePath $SqlPackagePath -ArgumentList @Arguments -NoNewWindow -Wait -ErrorAction Stop
     Write-Host "Add database to Elastic Pool..."
     Set-AzureRmSqlDatabase -DatabaseName $newDatabaseName -ResourceGroupName $AzureResourceGroup.ResourceGroupName -ServerName $SqlServer.ServerName -ElasticPoolName $SelectedElasticPool.ElasticPoolName 
+    Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $newDatabaseName -Command "CREATE USER ${dbOwner} FROM LOGIN ${dbOwner};" -Username $UserName -Password $Password
+    Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $newDatabaseName -Command "ALTER ROLE db_owner ADD MEMBER ${dbOwner};" -Username $UserName -Password $Password
+    $AnyKey = Read-Host -Prompt "Press Enter to continue..."
+
 }
