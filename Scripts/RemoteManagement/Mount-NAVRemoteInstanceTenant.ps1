@@ -7,7 +7,11 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$Database,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$AzureKeyVaultSettings 
+        [PSObject]$AzureKeyVaultSettings,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Boolean]$AllowAppDatabaseWrite = $false,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Boolean]$NasServicesEnabled = $false
     )
     PROCESS 
     {
@@ -16,43 +20,45 @@
                 param(                    
                     [PSObject]$SelectedTenant,
                     [PSObject]$Database,
-                    [PSObject]$AzureKeyVaultSettings 
+                    [PSObject]$AzureKeyVaultSettings,
+                    [Boolean]$AllowAppDatabaseWrite,
+                    [Boolean]$NasServicesEnabled
+
                     )
                 Write-Verbose "Import Module from $($SetupParameters.navServicePath)..."
                 Load-InstanceAdminTools -SetupParameters $SetupParameters
 
                 $DatabaseCredentials = New-Object System.Management.Automation.PSCredential($Database.DatabaseUserName, (ConvertTo-SecureString $Database.DatabasePassword -AsPlainText -Force))
+                Write-Host "Mounting $($Database.DatabaseName)..."
+                $Param = @{
+                    ServerInstance = $SelectedTenant.ServerInstance
+                    Id = $SelectedTenant.Id
+                    DatabaseName = $Database.DatabaseName
+                    DatabaseServer = $Database.DatabaseServerName
+                    DatabaseCredentials = $DatabaseCredentials
+                    AlternateId = @($SelectedTenant.ClickOnceHost)
+                }
 
                 if ($AzureKeyVaultSettings) {
-                    Mount-NAVTenant `
-                        -ServerInstance $SelectedTenant.ServerInstance `
-                        -Id $SelectedTenant.Id `
-                        -DatabaseName $Database.DatabaseName `
-                        -DatabaseServer $Database.DatabaseServerName `
-                        -AllowAppDatabaseWrite `
-                        -AlternateId @($SelectedTenant.ClickOnceHost) `
-                        -NasServicesEnabled `
-                        -RunNasWithAdminRights `
-                        -DatabaseCredentials $DatabaseCredentials `
-                        -EncryptionProvider AzureKeyVault `
-                        -AzureKeyVaultSettings (New-Object Microsoft.Dynamics.Nav.Types.AzureKeyVaultSettings($AzureKeyVaultSettings.AzureKeyVaultClientId,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreLocation,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreName,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateThumbprint,$AzureKeyVaultSettings.AzureKeyVaultKeyUri))
-                } else {
-                    Mount-NAVTenant `
-                        -ServerInstance $SelectedTenant.ServerInstance `
-                        -Id $SelectedTenant.Id `
-                        -DatabaseName $Database.DatabaseName `
-                        -DatabaseServer $Database.DatabaseServerName `
-                        -AllowAppDatabaseWrite `
-                        -AlternateId @($SelectedTenant.ClickOnceHost) `
-                        -NasServicesEnabled `
-                        -RunNasWithAdminRights `
-                        -DatabaseCredentials $DatabaseCredentials
+                    $Param.EncryptionProvider = "AzureKeyVault"
+                    $Param.AzureKeyVaultSettings = (New-Object Microsoft.Dynamics.Nav.Types.AzureKeyVaultSettings($AzureKeyVaultSettings.AzureKeyVaultClientId,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreLocation,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreName,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateThumbprint,$AzureKeyVaultSettings.AzureKeyVaultKeyUri))
                 }
+                if ($AllowAppDatabaseWrite -or $Param.Id -ieq "setup") {
+                    $Param.AllowAppDatabaseWrite = $true
+                }
+                if ($NasServicesEnabled) {
+                    $Param.NasServicesEnabled = $true
+                    $Param.RunNasWithAdminRights = $true
+                }
+                Mount-NAVTenant @Param
+
 
                 UnLoad-InstanceAdminTools
             } -ArgumentList (
                 $SelectedTenant, 
                 $Database,
-                $AzureKeyVaultSettings)
+                $AzureKeyVaultSettings,
+                $AllowAppDatabaseWrite,
+                $NasServicesEnabled)
     }    
 }

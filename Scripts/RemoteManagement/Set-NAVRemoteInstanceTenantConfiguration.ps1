@@ -8,7 +8,13 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$AzureKeyVaultSettings,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [System.Management.Automation.PSCredential]$DatabaseCredential
+        [System.Management.Automation.PSCredential]$DatabaseCredential,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$RemoteComputer,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Boolean]$AllowAppDatabaseWrite = $false,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Boolean]$NasServicesEnabled = $false
     )
     PROCESS 
     {
@@ -33,26 +39,41 @@
                 param(                    
                     [PSObject]$SelectedTenant,
                     [PSObject]$AzureKeyVaultSettings,
-                    [System.Management.Automation.PSCredential]$DatabaseCredentials
+                    [System.Management.Automation.PSCredential]$DatabaseCredentials,
+                    [Boolean]$AllowAppDatabaseWrite,
+                    [Boolean]$NasServicesEnabled
                     )
 
-                Mount-NAVTenant `
-                    -ServerInstance $SelectedTenant.ServerInstance `
-                    -Id $SelectedTenant.Id `
-                    -DatabaseName $SelectedTenant.DatabaseName `
-                    -DatabaseServer $SelectedTenant.DatabaseServerName `
-                    -AllowAppDatabaseWrite `
-                    -AlternateId @($SelectedTenant.ClickOnceHost) `
-                    -NasServicesEnabled `
-                    -RunNasWithAdminRights `
-                    -DatabaseCredentials $DatabaseCredentials `
-                    -EncryptionProvider AzureKeyVault `
-                    -AzureKeyVaultSettings (New-Object Microsoft.Dynamics.Nav.Types.AzureKeyVaultSettings($AzureKeyVaultSettings.AzureKeyVaultClientId,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreLocation,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreName,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateThumbprint,$AzureKeyVaultSettings.AzureKeyVaultKeyUri))
-
+                $Param = @{
+                    ServerInstance = $SelectedTenant.ServerInstance
+                    Id = $SelectedTenant.Id
+                    DatabaseName = $SelectedTenant.DatabaseName
+                    DatabaseServer = $SelectedTenant.DatabaseServerName
+                    DatabaseCredentials = $DatabaseCredentials
+                    AlternateId = @($SelectedTenant.ClickOnceHost)
+                    EncryptionProvider = "AzureKeyVault"
+                    AzureKeyVaultSettings = (New-Object Microsoft.Dynamics.Nav.Types.AzureKeyVaultSettings($AzureKeyVaultSettings.AzureKeyVaultClientId,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreLocation,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreName,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateThumbprint,$AzureKeyVaultSettings.AzureKeyVaultKeyUri))
+                }
+              
+                if ($AzureKeyVaultSettings) {
+                    $Param.EncryptionProvider = "AzureKeyVault"
+                    $Param.AzureKeyVaultSettings = (New-Object Microsoft.Dynamics.Nav.Types.AzureKeyVaultSettings($AzureKeyVaultSettings.AzureKeyVaultClientId,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreLocation,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreName,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateThumbprint,$AzureKeyVaultSettings.AzureKeyVaultKeyUri))
+                }
+                if ($AllowAppDatabaseWrite -or $Param.Id -ieq "setup") {
+                    $Param.AllowAppDatabaseWrite = $true
+                }
+                if ($NasServicesEnabled) {
+                    $Param.NasServicesEnabled = $true
+                    $Param.RunNasWithAdminRights = $true
+                }
+                Mount-NAVTenant @Param
+                
             } -ArgumentList (
                 $tenant, 
                 $AzureKeyVaultSettings,
-                $DatabaseCredential)
+                $DatabaseCredential,
+                $AllowAppDatabaseWrite,
+                $NasServicesEnabled)
         }
 
         $Result = Invoke-Command -Session $Session -ScriptBlock `

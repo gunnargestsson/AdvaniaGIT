@@ -31,7 +31,22 @@
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateThumbprint -Value $ServerInstance.ServicesCertificateThumbprint
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultKeyUri -Value ""
             $TenantKeyList = Create-NAVAzureKeyVaultTenantKeys -KeyVault $KeyVault -ServerInstance $ServerInstances 
-            Set-NAVRemoteInstanceTenantConfiguration -Session $Session -TenantList $TenantKeyList -AzureKeyVaultSettings $AzureKeyVaultSettings -DatabaseCredential $DatabaseCredential
+            $Param = @{
+                Session = $Session
+                TenantList = $TenantKeyList
+                AzureKeyVaultSettings = $AzureKeyVaultSettings
+                DatabaseCredential = $DatabaseCredential
+                RemoteComputer = $RemoteComputer
+            }
+
+            if ($ServerInstance.NASServicesRunWithAdminRights -ieq "true") {
+                $Param.NasServicesEnabled = $true
+            }
+
+            if ($RemoteComputer.TenantSettings.AllowAppDatabaseWrite -ieq "true") {
+                $Param.AllowAppDatabaseWrite = $true
+            }
+            Set-NAVRemoteInstanceTenantConfiguration @Param
             Start-NAVRemoteInstanceTenantsSync -Session $Session -SelectedInstanceName $ServerInstance.ServerInstance
         }
     }

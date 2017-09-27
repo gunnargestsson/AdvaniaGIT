@@ -65,7 +65,21 @@
             $Roles = $RemoteComputer.Roles
             if ($Roles -like "*Client*" -or $Roles -like "*NAS*") {                
                 if ($hostNo -eq 1) {
-                    Mount-NAVRemoteInstanceTenant -Session $Session -SelectedTenant $SelectedTenant -Database $Database -AzureKeyVaultSettings $AzureKeyVaultSettings
+                    $Param = @{
+                        Session = $Session
+                        SelectedTenant = $SelectedTenant
+                        Database = $Database
+                        AzureKeyVaultSettings = $AzureKeyVaultSettings
+                    }
+
+                    if ($SelectedInstance.NASServicesRunWithAdminRights -ieq "true") {
+                        $Param.NasServicesEnabled = $true
+                    }
+
+                    if ($RemoteComputer.TenantSettings.AllowAppDatabaseWrite -ieq "true" -or $SelectedTenant.Id -ieq "setup") {
+                        $Param.AllowAppDatabaseWrite = $true
+                    }
+                    Mount-NAVRemoteInstanceTenant @Param
                     Start-NAVRemoteInstanceTenantSync -Session $Session -SelectedTenant $SelectedTenant                    
                     $hostNo ++
                 }
