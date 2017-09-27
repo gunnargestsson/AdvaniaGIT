@@ -16,7 +16,7 @@
     PROCESS 
     {
         # Create the ClickOnce Site        
-        $Result = Invoke-Command -Session $Session -ScriptBlock `
+        $ClickOncesite = Invoke-Command -Session $Session -ScriptBlock `
             {
                 Param([PSObject]$SelectedInstance, [PSObject]$SelectedTenant, [PSObject]$ClientSettings, [String]$ClickOnceApplicationName, [String]$ClickOnceApplicationPublisher, [String]$DnsIdentity)
                                
@@ -106,8 +106,9 @@
                 Write-Host "Creating the web site..."
                 New-Website -Name "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -PhysicalPath $clickOnceDirectory -HostHeader $SelectedTenant.ClickOnceHost -Force
                 Write-Host "Adding web site binding..."
-                $certificateSubject = "CN=*.$($SelectedTenant.ClickOnceHost.Split(".")[1]).$($SelectedTenant.ClickOnceHost.Split(".")[2])"
+                $certificateSubject = "CN=*.$($SelectedTenant.ClickOnceHost.Split(".")[1]).$($SelectedTenant.ClickOnceHost.Split(".")[2])*"
                 $certificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object -Property Subject -like $certificateSubject
+                Write-Host "Found Certificate $($certificate.Thumbprint) for $($SelectedTenant.ClickOnceHost)..."
                 New-Item -Path "IIS:\SslBindings\!443!$($SelectedTenant.ClickOnceHost)" -Value $certificate -SSLFlags 1 -ErrorAction SilentlyContinue
                 New-WebBinding -Name "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Protocol "https" -Port 443 -HostHeader $SelectedTenant.ClickOnceHost -SslFlags 1
 
@@ -201,11 +202,11 @@
                     Copy-Item $sourceFile -destination $targetFile
 
                     Write-Host "Creating the ClickOnce and Web 365 Sites"
-                    New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "365" -PhysicalPath $clickOnceDirectory                   
-                    New-Item -Path (Join-Path $clickOnceDirectory "web365") -ItemType Directory -ErrorAction SilentlyContinue
-                    New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "Web365" -PhysicalPath (Join-Path $clickOnceDirectory "web365")
+                    New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "365" -PhysicalPath $clickOnceDirectory
+                    New-Item -Path (Join-Path (Split-Path $clickOnceDirectory -Parent) "web365") -ItemType Directory -ErrorAction SilentlyContinue
+                    New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "Web365" -PhysicalPath (Join-Path (Split-Path $clickOnceDirectory -Parent) "web365")
                     Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\Web365" -Value @{enabled="true";destination="$($SelectedInstance.PublicWebBaseUrl)365?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
                 }
-            } -ArgumentList ($SelectedInstance, $SelectedTenant, $ClientSettings, $ClickOnceApplicationName, $ClickOnceApplicationPublisher, (Get-NAVDnsIdentity -SelectedInstance $SelectedInstance)) -ErrorAction Stop        
+            } -ArgumentList ($SelectedInstance, $SelectedTenant, $ClientSettings, $ClickOnceApplicationName, $ClickOnceApplicationPublisher, (Get-NAVDnsIdentity -SelectedInstance $SelectedInstance))
     }
 }
