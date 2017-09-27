@@ -14,7 +14,7 @@
                 param([PSObject]$Tenant, [byte[]]$LicenseData) 
                 Write-Verbose "Import Module from $($SetupParameters.navServicePath)..."
                 Load-InstanceAdminTools -SetupParameters $SetupParameters
-                $MultiTenant = (Get-NAVServerConfiguration -ServerInstance Kappi -AsXml).DocumentElement.appSettings.SelectSingleNode("add[@key='Multitenant']").Attributes["value"].Value
+                $MultiTenant = (Get-NAVServerConfiguration -ServerInstance $Tenant.ServerInstance -AsXml).DocumentElement.appSettings.SelectSingleNode("add[@key='Multitenant']").Attributes["value"].Value
                 if ($MultiTenant -ieq "true") {
                     Write-Host "Updating application license for $($Tenant.ServerInstance)..."
                     Import-NAVServerLicense $Tenant.ServerInstance -LicenseData $LicenseData -Database 'NavDatabase'
