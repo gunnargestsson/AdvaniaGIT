@@ -28,6 +28,9 @@
         $SelectedTenant = New-NAVTenantSettingsDialog -Message "Edit New Tenant Settings" -TenantSettings $TenantSettings
         if ($SelectedTenant.OKPressed -ne 'OK') { break }
 
+        if ($SelectedTenant.ClickOnceHost) {
+            Set-NAVAzureDnsZoneRecord -DeploymentName $DeploymentName -DnsHostName $SelectedTenant.ClickOnceHost -OldDnsHostName ""
+        }
         if ($SelectedTenant.CustomerName -eq "") {
             Write-Host -ForegroundColor Red "Customer Name not configured.  Configure with Tenant Settings."
             break

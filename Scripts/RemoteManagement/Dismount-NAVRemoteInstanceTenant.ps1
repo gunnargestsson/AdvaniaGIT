@@ -20,5 +20,12 @@
                 UnLoad-InstanceAdminTools
             } -ArgumentList $SelectedTenant
         }
+        if ($SelectedTenant.ClickOnceHost) {
+            $DnsZone = Get-NAVAzureDnsZone -DnsHostName $SelectedTenant.ClickOnceHost
+            if ($DnsZone) {
+                Remove-NAVAzureDnsZoneRecordSet -DnsZone $DnsZone -DnsHostName $SelectedTenant.ClickOnceHost 
+            }
+        }
+
     }    
 }
