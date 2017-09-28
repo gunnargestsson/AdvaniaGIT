@@ -54,6 +54,7 @@ $ServerInstance = Get-NAVRemoteInstances -Session $Session1
 
 $Tenants = Get-Content -Path $Settings.FullName -Encoding UTF8 | Out-String | ConvertFrom-Json
 foreach ($Tenant in $Tenants) {
+    Set-NAVAzureDnsZoneRecord -DeploymentName $DeploymentName -DnsHostName $Tenant.'Alternate Id' -OldDnsHostName ""
     Write-Host "Mounting Tenant $($Tenant.'Tenant ID')..."
     $Database = New-NAVDatabaseObject -DatabaseName "Tenant-$($Tenant.'Customer Registration No.')"
     if ($DBAdmin.UserName -gt "") { $Database.DatabaseUserName = $DBAdmin.UserName }
