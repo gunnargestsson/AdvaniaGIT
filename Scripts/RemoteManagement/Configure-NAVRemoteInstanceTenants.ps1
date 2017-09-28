@@ -25,7 +25,7 @@
             default {
                 $selectedTenant = $menuItems | Where-Object -Property No -EQ $input                
                 if ($selectedTenant) {                    
-                    $input = Configure-NAVRemoteInstanceTenant -Session $Session -SelectedInstance $SelectedInstance -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential
+                    Configure-NAVRemoteInstanceTenant -Session $Session -SelectedInstance $SelectedInstance -SelectedTenant $selectedTenant -DeploymentName $DeploymentName -Credential $Credential
                 }
             }
         }                       

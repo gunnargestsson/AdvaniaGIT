@@ -57,10 +57,7 @@
                     } else {
                         Remove-NAVDeploymentRemoteInstance -Credential $Credential -SelectedInstance $SelectedInstance -DeploymentName $DeploymentName 
                     }
-                    Return '0'
                 }
-
-                
         }                    
     }
     until ($input -iin ('0', '7'))        
