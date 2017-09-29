@@ -23,7 +23,9 @@ $InstallationPath = Read-Host -Prompt "Enter local path for AdvaniaGIT (default 
 if ($InstallationPath -eq "") { $InstallationPath = $DefaultPath }
 New-Item -Path $InstallationPath -ItemType Directory -ErrorAction SilentlyContinue
 if (Test-Path -Path $InstallationPath) {
-    Copy-Item -Path (Join-Path $PSScriptRoot 'TestDevel.ps1') -Destination $InstallationPath -Force -ErrorAction SilentlyContinue
+    if (!(Test-Path (Join-Path $PSScriptRoot 'TestDevel.ps1')) {
+        Copy-Item -Path (Join-Path $PSScriptRoot 'TestDevel.ps1') -Destination $InstallationPath -ErrorAction SilentlyContinue
+    }
     Copy-Item -Path (Join-Path $PSScriptRoot 'README.md') -Destination $InstallationPath -Force -ErrorAction SilentlyContinue
     $DirectoriesToCopy = @('Backup','Data','Database','Demo','License','Log','Source','Workspace')
     $DirectoriesToLink = @('Scripts','SourceTree')
@@ -39,9 +41,9 @@ if (Test-Path -Path $InstallationPath) {
         }
     }
     foreach ($Directory in $DirectoriesToLink) {
-    $Source = Join-Path $PSScriptRoot $Directory
-    $Destination = Join-Path $InstallationPath $Directory
-    New-Item -Path $Destination -ItemType SymbolicLink -Value $Source -ErrorAction SilentlyContinue 
+        $Source = Join-Path $PSScriptRoot $Directory
+        $Destination = Join-Path $InstallationPath $Directory
+        New-Item -Path $Destination -ItemType SymbolicLink -Value $Source -ErrorAction SilentlyContinue 
     }
 }
 else
