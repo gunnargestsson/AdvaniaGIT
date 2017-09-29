@@ -19,10 +19,7 @@ do {
         $input = Read-Host "Press enter to continue..."
     } else {
         switch ($input) {
-            '0' { 
-                    $input = "q"
-                    break 
-                }
+            '0' { exit }
             '1' { & (Join-Path $PSScriptRoot ImportFrom-NAVNewSyntaxToGIT.ps1) }
             '2' { & (Join-Path $PSScriptRoot Build-NAVNewSyntaxDeltasInGIT.ps1) }
             '3' { & (Join-Path $PSScriptRoot Convert-NAVNewSyntaxDeltasToAL.ps1) }

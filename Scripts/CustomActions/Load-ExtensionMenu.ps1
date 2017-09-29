@@ -20,10 +20,7 @@ do {
         $input = Read-Host "Press enter to continue..."
     } else {
         switch ($input) {
-            '0' { 
-                    $input = "q"
-                    break 
-                }
+            '0' { exit }
             '1' { & (Join-Path $PSScriptRoot Create-Extension.ps1) }
             '2' { & (Join-Path $PSScriptRoot Publish-Extension.ps1) }
             '3' { & (Join-Path $PSScriptRoot Unpublish-Extension.ps1) }

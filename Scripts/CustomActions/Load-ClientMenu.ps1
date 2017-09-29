@@ -21,10 +21,7 @@ do {
         $input = Read-Host "Press enter to continue..."
     } else {
         switch ($input) {
-            '0' { 
-                    $input = "q"
-                    break 
-                }
+            '0' { exit }
             '1' { & (Join-Path $PSScriptRoot Start-FinSql.ps1) }
             '2' { & (Join-Path $PSScriptRoot Start-Client.ps1) }
             '3' { & (Join-Path $PSScriptRoot Start-WebClient.ps1) }

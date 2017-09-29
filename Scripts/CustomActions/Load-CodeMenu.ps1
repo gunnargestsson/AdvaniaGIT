@@ -30,10 +30,7 @@ do {
         $input = Read-Host "Press enter to continue..."
     } else {
         switch ($input) {
-            '0' { 
-                    $input = "q"
-                    break 
-                }
+            '0' { exit }
             '1' { & (Join-Path $PSScriptRoot ImportFrom-GITtoNAV.ps1) }
             '2' { & (Join-Path $PSScriptRoot ImportFrom-ModifiedNAVtoGIT.ps1) }
             '3' { & (Join-Path $PSScriptRoot ImportFrom-NAVtoGIT.ps1) }            
