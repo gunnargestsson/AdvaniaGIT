@@ -12,6 +12,7 @@ do {
         3 = Start Web Client
         4 = Start VS Code 
         5 = Start Debugger
+        6 = Compile all objects
         7 = Base Branch - Start Client
         8 = Base Branch - Start Web Client
         "
