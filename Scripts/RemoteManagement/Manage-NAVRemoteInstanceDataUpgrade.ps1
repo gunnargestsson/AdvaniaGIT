@@ -17,16 +17,18 @@
     1 = Start Data Upgrade with Company Initialization, `
     2 = Start Data Upgrade without Company Initialization, `
     3 = Restart Data Upgrade, `
-    4 = Get Data Upgrade Status, `
-    5 = Get Data Upgrade Details, `
+    4 = Stop Data Upgrade, `
+    5 = Get Data Upgrade Status, `
+    6 = Get Data Upgrade Details, `
     Select action"
         switch ($input) {
             '0' { break }
             '1' { Start-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance }
             '2' { Start-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance -SkipCompanyInitialization }
             '3' { Resume-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance }
-            '4' { Get-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance }
-            '5' { Get-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance -Details }
+            '4' { Stop-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance }
+            '5' { Get-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance }
+            '6' { Get-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance -Details }
         }                    
     }
     until ($input -iin ('0'))    

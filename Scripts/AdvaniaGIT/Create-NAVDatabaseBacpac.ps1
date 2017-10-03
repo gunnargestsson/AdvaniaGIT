@@ -15,6 +15,9 @@
     $command = "DROP USER [NT AUTHORITY\NETWORK SERVICE]"
     $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
 
+    $command = "DELETE FROM [dbo].[Session Event]; DELETE FROM [dbo].[Active Session]; DELETE FROM [dbo].[Server Instance]"
+    $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
+
     $SqlPackagePath = Get-SqlPackagePath
 
     Write-Host "Starting Database Export (will take some time)..."

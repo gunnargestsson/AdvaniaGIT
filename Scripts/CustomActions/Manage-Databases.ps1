@@ -48,7 +48,7 @@ do {
                     3 = create backup, 
                     4 = restore backup, 
                     5 = create bacpac, 
-                    6 = restore backpac,
+                    6 = restore bacpac,
                     7 = create navdata,
                     8 = restore navdata, 
                     9 = delete)"

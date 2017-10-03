@@ -37,6 +37,8 @@
                     DatabaseServer = $Database.DatabaseServerName
                     DatabaseCredentials = $DatabaseCredentials
                     AlternateId = @($SelectedTenant.ClickOnceHost)
+                    OverwriteTenantIdInDatabase = $true
+                    Force = $true
                 }
 
                 if ($AzureKeyVaultSettings) {
@@ -51,7 +53,7 @@
                     $Param.RunNasWithAdminRights = $true
                 }
                 Mount-NAVTenant @Param
-
+                Sync-NAVTenant -ServerInstance $SelectedTenant.ServerInstance -Tenant $SelectedTenant.Id -Mode Sync -Force
 
                 UnLoad-InstanceAdminTools
             } -ArgumentList (
