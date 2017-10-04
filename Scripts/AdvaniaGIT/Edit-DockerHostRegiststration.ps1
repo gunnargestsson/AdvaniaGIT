@@ -22,6 +22,7 @@
     if ($AddHostName -ne $null -and $AddIpAddress -ne $null) {
         $newHostsContent += "${AddIpAddress}    ${AddHostName}" + "`r`n"
     }
-
-    Set-Content -Encoding Ascii -Path $hostsPath -Value $newHostsContent 
+    if ($newHostsContent.Length -gt 0) {
+        Set-Content -Encoding Ascii -Path $hostsPath -Value $newHostsContent 
+    }
 }
