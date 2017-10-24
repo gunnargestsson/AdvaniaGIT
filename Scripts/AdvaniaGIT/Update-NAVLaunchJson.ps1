@@ -35,7 +35,7 @@
         # Add Configuration Settings Objects
         $ConfigurationSettings = New-Object -TypeName PSObject
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name type -Value "al"
-        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name request -Value "publish"
+        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name request -Value "launch"
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name name -Value "Publish to local server"
         if ($BranchSettings.dockerContainerName -eq "") {
             $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name server -Value "http://localhost"
