@@ -25,7 +25,8 @@ do {
             '3' { & (Join-Path $PSScriptRoot Convert-NAVNewSyntaxDeltasToAL.ps1) }
             '4' { & (Join-Path $PSScriptRoot Start-VSCodeOnCurrentBranch.ps1) }
             '5' { & (Join-Path $PSScriptRoot Start-VSCodeOnBaseBranch.ps1) }
-        }                    
+        } 
+        $anyKey = Read-Host -Prompt "Press enter to continue..."                   
     }
 }
 until ($input -ieq '0')        
