@@ -15,5 +15,5 @@
         Start-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Language is-IS -ContinueOnError -FunctionExecutionMode Parallel -Force
     }
     Get-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Progress
-
+    Set-NAVServerInstance -ServerInstance $BranchSettings.instanceName -Restart
 }
