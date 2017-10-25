@@ -12,7 +12,7 @@
     $hostsPath = Get-Item -Path (Join-Path $env:SystemRoot "System32\Drivers\etc\hosts")
     $newHostsContent = @()
     if ($hostsPath.Length -eq 0) {
-        $newHostsContent += "127.0.0.1 localhost"
+        $newHostsContent += "127.0.0.1    localhost"
     }     
     if ($hostsPath.Length -gt 0) {
         $hostsContent = Get-Content -Path $hostsPath -Encoding Ascii
@@ -28,6 +28,7 @@
         $newHostsContent += "${AddIpAddress}    ${AddHostName}" + "`r`n"
     }
     if ($newHostsContent.Length -gt 0) {
+        Remove-Item -Path $hostsPath -Force -ErrorAction SilentlyContinue
         Set-Content -Encoding Ascii -Path $hostsPath -Value $newHostsContent 
     }
 }
