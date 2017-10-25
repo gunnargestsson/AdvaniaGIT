@@ -17,11 +17,41 @@ do {
         Write-Host -ForegroundColor Red "Menu is running on branch $($SetupParameters.Branchname) but you have switched to branch $currentbranch"
         $input = Read-Host "Press enter to continue..."
     } else {
+        if ($SetupParameters.testCompanyName) {
+            $companyName = $SetupParameters.testCompanyName
+        } else {
+            $companyName = Get-FirstCompanyName -SQLServer (Get-DatabaseServer -BranchSettings $BranchSettings) -SQLDb $BranchSettings.databaseName
+        }
+
         switch ($input) {
             '0' { exit }
-            '1' { & (Join-Path $PSScriptRoot Start-FullTest.ps1) }
-            '2' { & (Join-Path $PSScriptRoot Restart-FailedTest.ps1) }
-            '3' { & (Join-Path $PSScriptRoot Start-ModifiedObjectsTest.ps1) }
+            '1' { 
+
+                $CompanyRegistrationNo = Initialize-NAVTestCompanyRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName
+                Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName 
+                & (Join-Path $PSScriptRoot Prepare-NAVUnitTest.ps1) 
+                & (Join-path $PSScriptRoot Start-TestClient.ps1)
+                Set-NAVCompanyInfoRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName -RegistrationNo $CompanyRegistrationNo
+            
+                }
+            '2' { 
+
+                $CompanyRegistrationNo = Initialize-NAVTestCompanyRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName
+                Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName -OnlyFailingTests
+                & (Join-Path $PSScriptRoot Prepare-NAVUnitTest.ps1) 
+                & (Join-path $PSScriptRoot Start-TestClient.ps1)
+                Set-NAVCompanyInfoRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName -RegistrationNo $CompanyRegistrationNo
+
+                }
+            '3' { 
+
+                $CompanyRegistrationNo = Initialize-NAVTestCompanyRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName
+                Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName -ForModifiedObjects
+                & (Join-Path $PSScriptRoot Prepare-NAVUnitTest.ps1) 
+                & (Join-path $PSScriptRoot Start-TestClient.ps1)
+                Set-NAVCompanyInfoRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName -RegistrationNo $CompanyRegistrationNo
+
+                } 
             '4' { & (Join-Path $PSScriptRoot Save-TestResultsCsv.ps1) }
 
         }                    
