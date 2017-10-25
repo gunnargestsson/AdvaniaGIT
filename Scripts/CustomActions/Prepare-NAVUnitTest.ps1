@@ -2,6 +2,6 @@
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
 } else {    
     Load-InstanceAdminTools -SetupParameters $SetupParameters
-    $CompanyRegistrationNo = Initialize-NAVTestCompany -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    Initialize-NAVTestCompany -SetupParameters $SetupParameters -BranchSettings $BranchSettings
     UnLoad-InstanceAdminTools
 }
