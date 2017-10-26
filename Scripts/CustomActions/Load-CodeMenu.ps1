@@ -1,5 +1,4 @@
-﻿Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-
+﻿
 do {
     Clear-Host
     Write-Host ""

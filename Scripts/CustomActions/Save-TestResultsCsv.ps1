@@ -5,7 +5,7 @@ if ($SetupParameters.testCompanyName) {
     $companyName = Get-FirstCompanyName -SQLServer (Get-DatabaseServer -BranchSettings $BranchSettings) -SQLDb $BranchSettings.databaseName
 }
 $ResultTableName = Get-DatabaseTableName -CompanyName $companyName -TableName 'CAL Test Result'
-$OutFile = Join-Path $LogPath ((Split-Path $SetupParameters.LogPath -Leaf) + ".csv")
+$OutFile = Join-Path $SetupParameters.LogPath "CALTestResult.csv"
 Save-NAVTestResultCsv -SQLServer (Get-DatabaseServer -BranchSettings $BranchSettings) -SQLDb $BranchSettings.databaseName -ResultTableName $ResultTableName -OutFile $OutFile 
 
 & $OutFile
