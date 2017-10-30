@@ -92,7 +92,7 @@
             if ($Roles -like "*Client*") {
                 Write-Host "Upgrading Advania Electronic Gateway on $($RemoteComputer.HostName)..."            
                 $Session = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN         
-                Upgrade-NAVRemoteAdvaniaGatewayConfig -Session $Session                
+                Upgrade-NAVRemoteAdvaniaGatewayConfig -Session $Session -FTPServer $SetupParameters.ftpServer -FTPUserName $SetupParameters.ftpUser -FTPPassWord $SetupParameters.ftpPass
                 Remove-PSSession $Session
             }            
         }
