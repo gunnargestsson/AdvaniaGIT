@@ -183,13 +183,10 @@
         }
         if (($ObjToImport.Type -eq 7) -and ($ObjToImport.Id -lt 1050))
         {
-            Write-Host -Object "Menusuite with ID < 1050 skipped... (Id=$($ObjToImport.Id))"
+            $Result = Get-SQLCommandResult -Server $Server -Database $Database -Command "DELETE from Object where [Type]=7 and [ID]=$($ObjToImport.Id)"
         }
-        else 
-        {
-            Write-Verbose -Message "Importing $($ObjToImport.FileName.FileName)"
-            Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $ObjToImport.FileName.FileName -ImportAction Overwrite -SynchronizeSchemaChanges Force
-        }
+        Write-Verbose -Message "Importing $($ObjToImport.FileName.FileName)"
+        Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $ObjToImport.FileName.FileName -ImportAction Overwrite -SynchronizeSchemaChanges Force
         Invoke-PostImportCompilation -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Object $ObjToImport
     }
 

@@ -5,7 +5,9 @@
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
     [PSObject]$SetupParameters,
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-    [PSObject]$BranchSettings
+    [PSObject]$BranchSettings,
+    [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+    [String]$AdminPassword
     )
     
     $DockerSettings = Get-DockerSettings 
@@ -13,12 +15,14 @@
     docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
     Write-Host "Preparing Docker Container for Dynamics NAV..."
     $adminUsername = $env:USERNAME
-    $adminPassword = Get-NAVPassword -Message "Enter password for user $adminUsername on the Docker Image" 
+    if ($AdminPassword -eq $null -or $AdminPassword -eq "") {
+        $AdminPassword = Get-NAVPassword -Message "Enter password for user $adminUsername on the Docker Image" 
+    }
     $volume = "$($SetupParameters.Repository):C:\GIT"
     $rootPath = "$($SetupParameters.rootPath):C:\Host"
     $image = $SetupParameters.dockerImage
     docker.exe pull $image
-    $DockerContainerId = docker.exe run -m 5G -v "$volume" -v "$rootPath" -e ACCEPT_EULA=Y -e username="$adminUsername" -e password="$adminPassword" -e auth=Windows -e Windowsauth=Y --detach $image
+    $DockerContainerId = docker.exe run -m 5G -v "$volume" -v "$rootPath" -e ACCEPT_EULA=Y -e username="$adminUsername" -e password="$AdminPassword" -e auth=Windows -e Windowsauth=Y --detach $image
     Write-Host "Docker Container $DockerContainerId starting..."
     $Session = New-DockerSession -DockerContainerId $DockerContainerId
     $DockerContainerName = Get-DockerContainerName -Session $Session

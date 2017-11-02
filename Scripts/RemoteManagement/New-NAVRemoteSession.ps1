@@ -23,9 +23,13 @@
     Invoke-Command -Session $Session -ScriptBlock `
         {
             param([string] $SetupPath)
-            Import-Module AdvaniaGIT -DisableNameChecking | Out-Null 
+            Import-Module AdvaniaGIT -DisableNameChecking | Out-Null             
             if (!(Test-Path -Path $SetupPath)) {
-                $SetupPath = Join-Path $env:SystemDrive "AdvaniaGIT\Data"
+                if (Test-Path -Path (Split-Path $SetupPath -Parent)) {
+                    New-Item -Path $SetupPath -ItemType Directory
+                } else {
+                    $SetupPath = Join-Path $env:SystemDrive "AdvaniaGIT\Data"
+                }
             }
             $SetupParameters = Get-GITSettings            
             $SetupParameters | Add-Member "Repository" $SetupPath
@@ -72,7 +76,7 @@
             if (Test-Path (Join-Path (Split-Path $SetupPath -Parent) "mage.exe")) {
                 $SetupParameters | Add-Member MageExeLocation (Join-Path (Split-Path $SetupPath -Parent) "mage.exe")
             }
-        } -ArgumentList $SetupPath
+        } -ArgumentList $SetupPath | Out-Null
         
     Return $Session
 }
