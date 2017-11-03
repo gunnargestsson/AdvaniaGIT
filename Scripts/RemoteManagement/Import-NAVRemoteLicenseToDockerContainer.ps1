@@ -1,4 +1,4 @@
-﻿Function Import-NAVLicenseToDockerContainer
+﻿Function Import-NAVRemoteLicenseToDockerContainer
 {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
