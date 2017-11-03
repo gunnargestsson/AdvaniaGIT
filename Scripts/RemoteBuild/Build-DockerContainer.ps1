@@ -34,24 +34,40 @@ New-NAVRemoteBranchSettingsObject -Session $Session -BranchSetup $BranchSetup
 
 New-NAVRemoteDockerContainer -Session $Session -BranchSetup $BranchSetup -AdminPassword ([Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($VMCredential.Password)))
 
-Write-Host "Uploading Objects from GIT..."
-Compress-Archive -Path (Join-Path $BranchPath "Objects") -DestinationPath (Join-Path $WorkFolder 'Objects.zip') -Force
-Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder 'Objects.zip') -DestinationFile (Join-Path $WorkFolder 'Objects.zip') 
-Remove-Item -Path (Join-Path $WorkFolder 'Objects.zip')  -Force -ErrorAction SilentlyContinue
+$ObjectsAvailable = (Test-Path -Path (Join-Path $BranchPath "Objects"))
+if ($ObjectsAvailable) {
+    Write-Host "Uploading Objects from GIT..."
+    Compress-Archive -Path (Join-Path $BranchPath "Objects") -DestinationPath (Join-Path $WorkFolder 'Objects.zip') -Force
+    Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder 'Objects.zip') -DestinationFile (Join-Path $WorkFolder 'Objects.zip') 
+    Remove-Item -Path (Join-Path $WorkFolder 'Objects.zip')  -Force -ErrorAction SilentlyContinue
+}
 
-Write-Host "Uploading Test Objects from GIT..."
-Compress-Archive -Path (Join-Path $BranchPath "TestToolKit") -DestinationPath (Join-Path $WorkFolder 'TestToolKit.zip') -Force
-Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder 'TestToolKit.zip') -DestinationFile (Join-Path $WorkFolder 'TestToolKit.zip') 
-Remove-Item -Path (Join-Path $WorkFolder 'TestToolKit.zip')  -Force -ErrorAction SilentlyContinue
+$TestsAvailable = (Test-Path -Path (Join-Path $BranchPath "TestToolKit"))
+if ($TestsAvailable) {
+    Write-Host "Uploading Test Objects from GIT..."
+    Compress-Archive -Path (Join-Path $BranchPath "TestToolKit") -DestinationPath (Join-Path $WorkFolder 'TestToolKit.zip') -Force
+    Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder 'TestToolKit.zip') -DestinationFile (Join-Path $WorkFolder 'TestToolKit.zip') 
+    Remove-Item -Path (Join-Path $WorkFolder 'TestToolKit.zip')  -Force -ErrorAction SilentlyContinue
+}
 
 Write-Host "Update NAV license in Docker Container..."
 Copy-FileToRemoteMachine -Session $Session -SourceFile $LicenseFile -DestinationFile (Join-Path $WorkFolder 'license.flf')
 Import-NAVRemoteLicenseToDockerContainer -Session $Session -LicenseFile (Join-Path $WorkFolder 'license.flf') 
 
 Write-Host "Importing objects into Docker Container..."
-Import-NAVRemoteObjectsToDockerContainer -Session $Session -DestinationZipFile (Join-Path $WorkFolder 'Objects.zip') 
-Import-NAVRemoteObjectsToDockerContainer -Session $Session -DestinationZipFile (Join-Path $WorkFolder 'TestToolKit.zip') 
+if ($ObjectsAvailable) {
+    Import-NAVRemoteObjectsToDockerContainer -Session $Session -DestinationZipFile (Join-Path $WorkFolder 'Objects.zip') 
+}
+if ($TestsAvailable) {
+    Import-NAVRemoteObjectsToDockerContainer -Session $Session -DestinationZipFile (Join-Path $WorkFolder 'TestToolKit.zip') 
+}
 
 Write-Host "Compiling all objects in Docker Container..."
 Compile-NAVRemoteObjectsInDockerContainer -Session $Session 
 
+Write-Host "Create NAV users..."
+New-NAVRemoteDockerContainerUser -Session $Session -UserName $VMAdmin.UserName
+New-NAVRemoteDockerContainerUser -Session $Session 
+
+Write-Host "Starting all unit tests in Docker Container..."
+Start-NAVRemoteUnitTestsDockerContainer -Session $Session 

@@ -17,7 +17,7 @@
         {
             param([String]$LicenseFileName)           
             $LicenseFilePath = Join-Path "C:\GIT" $LicenseFileName
-            Import-Module AdvaniaGIT
+            Import-Module AdvaniaGIT | Out-Null
             $SetupParameters = Get-GITSettings
             $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
             Load-InstanceAdminTools -SetupParameters $SetupParameters

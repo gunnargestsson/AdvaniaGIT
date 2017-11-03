@@ -20,10 +20,12 @@
         {
             param([PSObject]$BranchSetup)
             
-            Import-Module AdvaniaGIT
+            Import-Module AdvaniaGIT | Out-Null
             $SetupParameters = Combine-Settings $BranchSetup (Get-GITSettings)
             $SetupParameters | Add-Member "navIdePath" (Get-Item -Path 'C:\Program Files (x86)\Microsoft Dynamics NAV\*\RoleTailored Client').FullName
             $SetupParameters | Add-Member "navServicePath" (Get-Item -Path 'C:\Program Files\Microsoft Dynamics NAV\*\Service').FullName
+            $SetupParameters | Add-Member "navRelease" (Get-NAVRelease -mainVersion (Split-Path -Path (Get-Item -Path 'C:\Program Files\Microsoft Dynamics NAV\*').FullName -Leaf))
+            $SetupParameters | Add-Member "mainVersion" (Split-Path -Path (Get-Item -Path 'C:\Program Files\Microsoft Dynamics NAV\*').FullName -Leaf)
             $SetupParameters | Add-Member "logPath" (Join-Path "C:\Host\Log" (New-Guid))
             New-Item -Path $SetupParameters.logPath -ItemType Directory 
             Set-Content -Path "C:\AdvaniaGIT\Data\GITSettings.Json" -Value ($SetupParameters | ConvertTo-Json)             

@@ -10,7 +10,7 @@
         $Session = New-DockerSession -DockerContainerId $BranchSettings.DockerContainerId
         Invoke-Command -Session $Session -ScriptBlock `
         {            
-            Import-Module AdvaniaGIT
+            Import-Module AdvaniaGIT | Out-Null
             $SetupParameters = Get-GITSettings
             $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
             Load-IdeTools -SetupParameters $SetupParameters

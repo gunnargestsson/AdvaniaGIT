@@ -12,7 +12,9 @@
     
     $DockerSettings = Get-DockerSettings 
     Write-Host "Connecting to repository $($DockerSettings.RepositoryPath)..."
-    docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
+    if ($DockerSettings.RepositoryPassword -gt "") {
+        docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
+    }
     Write-Host "Preparing Docker Container for Dynamics NAV..."
     $adminUsername = $env:USERNAME
     if ($AdminPassword -eq $null -or $AdminPassword -eq "") {

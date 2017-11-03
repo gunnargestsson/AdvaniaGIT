@@ -20,7 +20,7 @@
         {
             param([String]$ObjectsFolderPath)           
             $ObjectsPath = Join-Path "C:\GIT" $ObjectsFolderPath
-            Import-Module AdvaniaGIT
+            Import-Module AdvaniaGIT | Out-Null
             $SetupParameters = Get-GITSettings
             Load-ModelTools -SetupParameters $SetupParameters
             $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
@@ -30,11 +30,11 @@
             if ($Fobs) {
                 foreach ($Fob in $Fobs) {
                     Write-Host "Importing $($Fob.FullName)..."
-                    Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $Fob.FullName -ImportAction Overwrite -SynchronizeSchemaChanges Force
+                    Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $Fob.FullName -ImportAction Overwrite -SynchronizeSchemaChanges Force 
                 }
             }
 
-            Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath (Join-path $ObjectsPath "*.TXT")
+            Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath (Join-path $ObjectsPath "*.TXT") -SkipDeleteCheck
             Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Wait
             UnLoad-ModelTools 
         } -ArgumentList $DestinationFileName
