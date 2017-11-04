@@ -2,14 +2,20 @@
 {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [System.Management.Automation.Runspaces.PSSession]$Session
+        [System.Management.Automation.Runspaces.PSSession]$Session,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [String]$UserName,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [String]$Password
     )
 
     Invoke-Command -Session $Session -ScriptBlock `
     {
+        param([String]$UserName,[String]$Password)
         $Session = New-DockerSession -DockerContainerId $BranchSettings.DockerContainerId
         Invoke-Command -Session $Session -ScriptBlock `
         {            
+            param([String]$UserName,[String]$Password)
             Import-Module AdvaniaGIT | Out-Null
             $SetupParameters = Get-GITSettings
             $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
@@ -27,7 +33,8 @@
 
             $startDate = Get-Date
             Write-Host "Running Test Runner Page" -ForegroundColor Green
-            Invoke-WebRequest -Uri "http://$($env:COMPUTERNAME)/nav/Default.aspx?page=130409" -OutFile (Join-Path $env:TEMP "TestResults.html") -TimeoutSec 0 -UseDefaultCredentials
+            $Credential = New-Object System.Management.Automation.PSCredential($UserName, (ConvertTo-SecureString $Password -AsPlainText -Force))
+            Invoke-WebRequest -Uri "http://$($env:COMPUTERNAME)/nav/Default.aspx?page=130409" -OutFile (Join-Path $env:TEMP "TestResults.html") -TimeoutSec 0 -Credential $Credential
 
             $ResultTableName = Get-DatabaseTableName -CompanyName $companyName -TableName 'CAL Test Result'
             $Command = "select count([No_]) as [No. of Tests],CASE [Result] WHEN 0 THEN 'Passed' WHEN 1 THEN 'Failed' WHEN 2 THEN 'Inconclusive' ELSE 'Incomplete' END as [Result] from [$ResultTableName] group by [Result]"
@@ -42,7 +49,7 @@
 
             Set-NAVCompanyInfoRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName -RegistrationNo $CompanyRegistrationNo
 
-        } 
+        } -ArgumentList ($UserName, $Password)
         Remove-PSSession $Session
-    } 
+    } -ArgumentList ($UserName, $Password)
 }

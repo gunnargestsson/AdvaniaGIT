@@ -65,9 +65,15 @@ if ($TestsAvailable) {
 Write-Host "Compiling all objects in Docker Container..."
 Compile-NAVRemoteObjectsInDockerContainer -Session $Session 
 
+$CertificateInfo = Get-NAVPasswordStateUser -PasswordId '13774'
+Copy-NAVRemoteCertificateToWorkfolder -Session $Session -CertificatePath $CertificateInfo.GenericField2 -Workfolder $WorkFolder
+Set-NAVRemoteDockerContainerServerInstanceToNAVUserPassword -Session $Session -CertificateFileName (Join-Path $WorkFolder (Split-Path $CertificateInfo.GenericField2 -Leaf)) -CertificatePassword $CertificateInfo.Password 
+
 Write-Host "Create NAV users..."
-New-NAVRemoteDockerContainerUser -Session $Session -UserName $VMAdmin.UserName
-New-NAVRemoteDockerContainerUser -Session $Session 
+$NavUser = "TestUser"
+$NavPassword = Get-NewUserPassword 
+
+New-NAVRemoteDockerContainerUser -Session $Session -UserName $NavUser -Password $NavPassword
 
 Write-Host "Starting all unit tests in Docker Container..."
-Start-NAVRemoteUnitTestsDockerContainer -Session $Session 
+Start-NAVRemoteUnitTestsDockerContainer -Session $Session -UserName $NavUser -Password $NavPassword
