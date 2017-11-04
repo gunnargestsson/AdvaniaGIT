@@ -28,7 +28,8 @@
             $SetupParameters | Add-Member "mainVersion" (Split-Path -Path (Get-Item -Path 'C:\Program Files\Microsoft Dynamics NAV\*').FullName -Leaf)
             $SetupParameters | Add-Member "logPath" (Join-Path "C:\Host\Log" (New-Guid))
             New-Item -Path $SetupParameters.logPath -ItemType Directory 
-            Set-Content -Path "C:\AdvaniaGIT\Data\GITSettings.Json" -Value ($SetupParameters | ConvertTo-Json)             
+            Set-Content -Path "C:\AdvaniaGIT\Data\GITSettings.Json" -Value ($SetupParameters | ConvertTo-Json)
+                        
         } -ArgumentList $BranchSetup
         Remove-PSSession $Session
     } -ArgumentList ($BranchSetup, $AdminPassword)

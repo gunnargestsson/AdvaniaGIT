@@ -12,7 +12,7 @@ $VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
 if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
     $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 } else {
-    $VMCredential = Get-Credential -Message "Admin Access to Azure SQL" -ErrorAction Stop    
+    $VMCredential = Get-Credential -Message "Admin Access to Build machine" -ErrorAction Stop    
 }
 
 if (!$VMCredential.UserName -or !$VMCredential.Password) {
@@ -65,15 +65,8 @@ if ($TestsAvailable) {
 Write-Host "Compiling all objects in Docker Container..."
 Compile-NAVRemoteObjectsInDockerContainer -Session $Session 
 
-$CertificateInfo = Get-NAVPasswordStateUser -PasswordId '13774'
-Copy-NAVRemoteCertificateToWorkfolder -Session $Session -CertificatePath $CertificateInfo.GenericField2 -Workfolder $WorkFolder
-Set-NAVRemoteDockerContainerServerInstanceToNAVUserPassword -Session $Session -CertificateFileName (Join-Path $WorkFolder (Split-Path $CertificateInfo.GenericField2 -Leaf)) -CertificatePassword $CertificateInfo.Password 
-
-Write-Host "Create NAV users..."
-$NavUser = "TestUser"
-$NavPassword = Get-NewUserPassword 
-
-New-NAVRemoteDockerContainerUser -Session $Session -UserName $NavUser -Password $NavPassword
+Write-Host "Prepare Unit Test Execution..."
+New-NAVRemoteDockerContainerWindowsUser -Session $Session -UserName ContainerAdministrator
 
 Write-Host "Starting all unit tests in Docker Container..."
-Start-NAVRemoteUnitTestsDockerContainer -Session $Session -UserName $NavUser -Password $NavPassword
+Start-NAVRemoteUnitTestsOnDockerContainer -Session $Session 
