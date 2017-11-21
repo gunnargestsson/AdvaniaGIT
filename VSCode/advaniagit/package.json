@@ -77,7 +77,8 @@
         "onCommand:advaniagit.UpdateNAVSource",
         "onCommand:advaniagit.UpgradeNAVInstallation",
         "onCommand:advaniagit.UploadNAVDatabaseBackup",
-        "onCommand:advaniagit.RemoveNAVObjectsProperties"
+        "onCommand:advaniagit.RemoveNAVObjectsProperties",
+        "onCommand:advaniagit.DeleteOldLogs"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -320,6 +321,11 @@
             {
                 "title": "Remove Object Properties from modified objects",
                 "command": "advaniagit.RemoveNAVObjectsProperties",
+                "category": "AdvaniaGIT"
+            },
+            {
+                "title": "Delete AdvaniaGIT Log folders more than seven days old",
+                "command": "advaniagit.DeleteOldLogs",
                 "category": "AdvaniaGIT"
             }
         ]

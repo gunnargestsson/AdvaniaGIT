@@ -207,6 +207,11 @@ export function RemoveNAVObjectsProperties(Repository) {
     StartAction(Repository,`Remove-NAVObjectsProperties.ps1`);
 }
 
+export function DeleteOldLogs(Repository) {
+    StartAction(Repository,`Delete-OldLogs.ps1`);
+}
+
+
 function StartAction(Repository, Action) {
     console.log(`Starting: ${Action}`);
     Repository = FindGITFolder(Repository);
