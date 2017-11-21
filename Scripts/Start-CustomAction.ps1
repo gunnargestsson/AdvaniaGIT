@@ -115,7 +115,7 @@ else
 
     New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-    if ($IsInAdminMode -and $env:TERM_PROGRAM -eq $null) { For ($i=0; $i -le 10; $i++) { Write-Host "" }}
+    if ($IsInAdminMode ) { Add-BlankLines }
     
     # Start the script
     $ScriptToStart = (Join-Path (Join-path $PSScriptRoot 'CustomActions') $ScriptName)

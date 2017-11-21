@@ -24,5 +24,8 @@ if ($BranchSettings.dockerContainerId -gt "") {
     }
     Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Wait
     Import-PermissionSets -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-    Set-NAVLastCommitId -BranchSettings $BranchSettings -LastCommitID (Get-GitLastCommitId)
+    $lastCommitIDd = Get-GitLastCommitId
+    if ($lastCommitIDd -gt '') {
+        Set-NAVLastCommitId -BranchSettings $BranchSettings -LastCommitID (Get-GitLastCommitId)
+    }
 }

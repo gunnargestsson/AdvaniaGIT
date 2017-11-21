@@ -20,7 +20,7 @@
     do {
         # Start Menu
         Clear-Host
-        For ($i=0; $i -le 10; $i++) { Write-Host "" }
+        Add-BlankLines
         $menuItems | Format-Table -Property No, mainVersion, navRelease -AutoSize | Out-Host
         $input = Read-Host "Please select NAV version (0 = exit)"
         switch ($input) {
