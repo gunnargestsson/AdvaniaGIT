@@ -3,8 +3,8 @@
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
     "version": "0.0.1",
-    "publisher": "Advania",
-    "icon": "https://github.com/gunnargestsson/AdvaniaGIT/blob/master/VSCode/advaniagit/img/icon.png",
+    "publisher": "advaniagit",
+    "icon": "img/icon.png",
     "license": "GPL 3.0",
     "private": true,
     "engines": {
