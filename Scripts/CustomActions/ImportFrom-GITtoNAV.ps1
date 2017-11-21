@@ -11,8 +11,18 @@ if ($BranchSettings.dockerContainerId -gt "") {
         Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
         Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path (Join-Path $SetupParameters.WorkFolder "Source.txt") -ImportAction Overwrite -SynchronizeSchemaChanges Force 
     } else {
-    Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $ObjectsPath -MarkToDelete
+        $lastNAVCommitId = Get-NAVLastCommitId -BranchSettings $BranchSettings
+        if ($lastNAVCommitId -gt '') {
+           $ObjectList = Get-GitModifiedFiles -GitCommitId $lastNAVCommitId
+           if ($ObjectList -ne $null) {
+               Copy-NAVObjectsToWorkspace -SetupParameters $SetupParameters -ObjectList $ObjectList
+               Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath (Join-Path $SetupParameters.workFolder 'Objects')
+            }
+        } else {
+           Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $ObjectsPath -MarkToDelete
+        }
     }
     Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Wait
-    Import-PermissionSets -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
+    Import-PermissionSets -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    Set-NAVLastCommitId -BranchSettings $BranchSettings -LastCommitID (Get-GitLastCommitId)
 }
