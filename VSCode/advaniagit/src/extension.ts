@@ -76,6 +76,8 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.StartVSCode', () => {actions.StartVSCode(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.StartVSCodeOnBaseBranch', () => {actions.StartVSCodeOnBaseBranch(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.StartVSCodeOnCurrentBranch', () => {actions.StartVSCodeOnCurrentBranch(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.UpdateLaunchJsonForBaseBranch', () => {actions.UpdateLaunchJsonForBaseBranch(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.UpdateLaunchJsonForCurrentBranch', () => {actions.UpdateLaunchJsonForCurrentBranch(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.StartWebClient', () => {actions.StartWebClient(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.StopNAVServices', () => {actions.StopNAVServices(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.SyncRemoteNAVInstance', () => {actions.SyncRemoteNAVInstance(vscode.workspace.rootPath)}),
@@ -83,6 +85,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.UnpublishExtensionFromBaseBranch', () => {actions.UnpublishExtensionFromBaseBranch(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.UpdateNAVSource', () => {actions.UpdateNAVSource(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.UpgradeNAVInstallation', () => {actions.UpgradeNAVInstallation(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.RemoveNAVObjectsProperties', () => {actions.RemoveNAVObjectsProperties(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.UploadNAVDatabaseBackup', () => {actions.UploadNAVDatabaseBackup(vscode.workspace.rootPath)})
     ];
     
