@@ -30,3 +30,8 @@ Initial release of AdvaniaGIT SCM Extension for Visual Studio Code
 ### 0.0.2
 
 Update AdvaniaGIT SCM Extension for Visual Studio Code with new actions
+
+### 0.0.3
+
+Bugfix for new branch command
+
