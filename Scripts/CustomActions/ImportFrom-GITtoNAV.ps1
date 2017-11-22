@@ -9,7 +9,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
         $ObjectList = Get-GitModifiedFiles -GitCommitId $lastNAVCommitId
         if ($ObjectList -ne $null) {
             Copy-NAVObjectsToWorkspace -SetupParameters $SetupParameters -ObjectList $ObjectList
-            Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath (Join-Path $SetupParameters.workFolder 'Objects')
+            Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath (Join-Path $SetupParameters.workFolder 'Objects') -SkipDeleteCheck
         }
     } elseif ($SetupParameters.objectProperties -eq "false") {
         & (Join-Path $PSScriptRoot 'Export-GITtoSource.ps1')
