@@ -86,8 +86,11 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.UpdateNAVSource', () => {actions.UpdateNAVSource(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.UpgradeNAVInstallation', () => {actions.UpgradeNAVInstallation(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.RemoveNAVObjectsProperties', () => {actions.RemoveNAVObjectsProperties(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.UploadNAVDatabaseBackup', () => {actions.UploadNAVDatabaseBackup(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.DeleteOldLogs', () => {actions.DeleteOldLogs(vscode.workspace.rootPath)}),
-        vscode.commands.registerCommand('advaniagit.UploadNAVDatabaseBackup', () => {actions.UploadNAVDatabaseBackup(vscode.workspace.rootPath)})
+        vscode.commands.registerCommand('advaniagit.ImportFromAllGITtoNAV', () => {actions.ImportFromAllGITtoNAV(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.CreateNewBranchId', () => {actions.CreateNewBranchId(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.NewGITBranch', () => {actions.NewGITBranch(vscode.workspace.rootPath)})
     ];
     
     context.subscriptions.concat(commandList);

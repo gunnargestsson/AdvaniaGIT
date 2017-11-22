@@ -67,6 +67,7 @@
         "onCommand:advaniagit.StartDebugger",
         "onCommand:advaniagit.StartFinSql",
         "onCommand:advaniagit.StartTestClient",
+        "onCommand:advaniagit.StartVSCode",
         "onCommand:advaniagit.UpdateLaunchJsonForBaseBranch",
         "onCommand:advaniagit.UpdateLaunchJsonForCurrentBranch",
         "onCommand:advaniagit.StartWebClient",
@@ -78,7 +79,10 @@
         "onCommand:advaniagit.UpgradeNAVInstallation",
         "onCommand:advaniagit.UploadNAVDatabaseBackup",
         "onCommand:advaniagit.RemoveNAVObjectsProperties",
-        "onCommand:advaniagit.DeleteOldLogs"
+        "onCommand:advaniagit.DeleteOldLogs",
+        "onCommand:advaniagit.ImportFromAllGITtoNAV",
+        "onCommand:advaniagit.CreateNewBranchId",
+        "onCommand:advaniagit.NewGITBranch"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -99,7 +103,7 @@
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "GIT > NAV",
+                "title": "Import GIT Objects to NAV Environment",
                 "command": "advaniagit.ImportFromGITtoNAV",
                 "category": "AdvaniaGIT"
             },
@@ -124,12 +128,12 @@
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "NAV Modified > GIT",
+                "title": "Export NAV Modified objects to GIT",
                 "command": "advaniagit.ImportFromModifiedNAVtoGIT",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "NAV > GIT",
+                "title": "Export NAV objects to GIT",
                 "command": "advaniagit.ImportFromNAVtoGIT",
                 "category": "AdvaniaGIT"
             },
@@ -174,27 +178,27 @@
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "GIT > Source.txt",
+                "title": "Export GIT Objects to Source.txt in Work Folder",
                 "command": "advaniagit.ExportGITtoSource",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "GIT > Modified.txt",
+                "title": "Export GIT Objects to Modified.txt in Work Folder",
                 "command": "advaniagit.ExportGITtoModified",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "NAV > AllObjects.fob",
+                "title": "Export AllObjects.fob from NAV Environment",
                 "command": "advaniagit.ExportNavFob",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "Add Target.txt to GIT",
+                "title": "Add Target.txt from Work Folder to GIT",
                 "command": "advaniagit.ImportFromTargetToGIT",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "Replace GIT with Target.txt",
+                "title": "Replace GIT with Target.txt from Work Folder",
                 "command": "advaniagit.ReplaceGITwithTarget",
                 "category": "AdvaniaGIT"
             },
@@ -239,37 +243,37 @@
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "Create Extension in GIT",
+                "title": "Create Extension V1 in GIT",
                 "command": "advaniagit.CreateExtension",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "Publish Extension to Default Server Instance",
+                "title": "Publish Extension V1 to Default Server Instance",
                 "command": "advaniagit.PublishExtension",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "Unpublish Extension from Default Server Instance",
+                "title": "Unpublish Extension V1 from Default Server Instance",
                 "command": "advaniagit.UnpublishExtension",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "Base Branch Server Instance  Publish Extension",
+                "title": "Base Branch Server Instance - Publish Extension V1",
                 "command": "advaniagit.PublishExtensionToBaseBranch",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "Base Branch Server Instance  Unpublish Extension",
+                "title": "Base Branch Server Instance - Unpublish Extension V1",
                 "command": "advaniagit.UnpublishExtensionFromBaseBranch",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "Base Branch  Start Client",
+                "title": "Base Branch - Start Client",
                 "command": "advaniagit.StartBaseBranchClient",
                 "category": "AdvaniaGIT"
             },
             {
-                "title": "Base Branch  Start Web Client",
+                "title": "Base Branch - Start Web Client",
                 "command": "advaniagit.StartBaseBranchWebClient",
                 "category": "AdvaniaGIT"
             },
@@ -326,6 +330,26 @@
             {
                 "title": "Delete AdvaniaGIT Log folders more than seven days old",
                 "command": "advaniagit.DeleteOldLogs",
+                "category": "AdvaniaGIT"
+            },
+            {
+                "title": "Import All GIT Objects to NAV Environment",
+                "command": "advaniagit.ImportFromAllGITtoNAV",
+                "category": "AdvaniaGIT"
+            },
+            {
+                "title": "Create new Branch Id in Setup.json",
+                "command": "advaniagit.CreateNewBranchId",
+                "category": "AdvaniaGIT"
+            },
+            {
+                "title": "Open Visual Studio Code in AL folder",
+                "command": "advaniagit.StartVSCode",
+                "category": "AdvaniaGIT"
+            },
+            {
+                "title": "Create new GIT branch...",
+                "command": "advaniagit.NewGITBranch",
                 "category": "AdvaniaGIT"
             }
         ]

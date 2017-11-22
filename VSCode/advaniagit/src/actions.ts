@@ -131,7 +131,16 @@ export function PublishExtensionToBaseBranch(Repository) {
     StartAction(Repository,`Publish-ExtensionToBaseBranch.ps1`);
 }
 export function RemoveNavEnvironment(Repository) {
-    StartAction(Repository,`Remove-NavEnvironment.ps1`);
+    vscode.window.showInputBox({
+        placeHolder: "<Confirm environment removal by pressing Enter>",
+        prompt: "Environment Removal will delete the SQL Database and the Container (Press 'Enter' to confirm or 'Escape' to cancel)" }
+    ).then((value: string) => {
+        if (value == ``) {
+            StartAction(Repository,`Remove-NavEnvironment.ps1`);               
+        } else {
+            vscode.window.showInformationMessage('Branch removal canceled')
+        }
+    })
 }
 export function ReplaceGITwithTarget(Repository) {
     StartAction(Repository,`Replace-GITwithTarget.ps1`);
@@ -211,11 +220,40 @@ export function DeleteOldLogs(Repository) {
     StartAction(Repository,`Delete-OldLogs.ps1`);
 }
 
+export function ImportFromAllGITtoNAV(Repository) {
+    StartAction(Repository,`ImportFrom-AllGITtoNAV.ps1`);
+}
+
+export function CreateNewBranchId(Repository) {
+    StartAction(Repository,`Create-NewBranchId.ps1`);
+}
+
+export function NewGITBranch(Repository) {
+    vscode.window.showInputBox({
+        placeHolder: "<branchname>",
+        prompt: "Please provide a branch name (Press 'Enter' to confirm or 'Escape' to cancel)" }
+    ).then((value: string) => {
+        if (value != ``) {
+            const buildSettings = `@{newBranch=\"${value}\"}`
+            StartActionWithBuildSettings(Repository,`New-GITBranch.ps1`,buildSettings);
+            vscode.workspace.openTextDocument(path.join(Repository,`setup.json`)).then(doc => {
+                vscode.window.showTextDocument(doc);
+            });
+            vscode.window.showInformationMessage('Branch created, setup.json updated and opened');
+        }
+    })
+}
 
 function StartAction(Repository, Action) {
     console.log(`Starting: ${Action}`);
     Repository = FindGITFolder(Repository);
     terminal.PSTerminal.sendText(`Start-AdvaniaGITAction -Repository ${Repository} -ScriptName \"${Action}\" -Wait $false`);
+}
+
+function StartActionWithBuildSettings(Repository, Action, BuildSettings) {
+    console.log(`Starting: ${Action}`);
+    Repository = FindGITFolder(Repository);
+    terminal.PSTerminal.sendText(`Start-AdvaniaGITAction -Repository ${Repository} -ScriptName \"${Action}\" -BuildSettings ${BuildSettings} -Wait $false`);
 }
 
 function FindGITFolder(Repository): String {
