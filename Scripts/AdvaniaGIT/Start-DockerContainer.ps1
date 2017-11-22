@@ -15,11 +15,16 @@
     if ($DockerSettings.RepositoryPassword -gt "") {
         docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
     }
-    Write-Host "Preparing Docker Container for Dynamics NAV..."
-    $adminUsername = $env:USERNAME
-    if ($AdminPassword -eq $null -or $AdminPassword -eq "") {
-        $AdminPassword = Get-NAVPassword -Message "Enter password for user $adminUsername on the Docker Image" 
+
+    if ($AdminPassword -eq "") {
+        $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName "$($env:USERDOMAIN)\$($env:USERNAME)" 
+        $adminUsername = $DockerCredentials.UserName
+        $AdminPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
+    } else {
+        $adminUsername = $env:USERNAME        
     }
+
+    Write-Host "Preparing Docker Container for Dynamics NAV..."    
     $volume = "$($SetupParameters.Repository):C:\GIT"
     $rootPath = "$($SetupParameters.rootPath):C:\Host"
     $image = $SetupParameters.dockerImage
