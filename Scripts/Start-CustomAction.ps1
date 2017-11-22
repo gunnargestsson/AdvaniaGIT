@@ -111,7 +111,7 @@ else
     $Globals | Add-Member VSCodePath  (Join-Path $Repository $SetupParameters.VSCodePath)
 
     $SetupParameters = Combine-Settings $Globals $SetupParameters
-    if ($BuildSettings) { $SetupParameters = Combine-Settings $BuildSettings $SetupParameters }
+    if ($BuildSettings) { $SetupParameters = Combine-Settings (New-Object -TypeName PSObject -Property $BuildSettings) $SetupParameters }
 
     New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
