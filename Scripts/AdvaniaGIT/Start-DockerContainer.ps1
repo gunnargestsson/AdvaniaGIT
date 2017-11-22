@@ -13,11 +13,17 @@
     $DockerSettings = Get-DockerSettings 
     Write-Host "Connecting to repository $($DockerSettings.RepositoryPath)..."
     if ($DockerSettings.RepositoryPassword -gt "") {
-        docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
+        try {
+            docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
+        }
+        catch {
+            Write-Host -ForegroundColor Red "Unable to login to docker repository: $($DockerSettings.RepositoryPath)"
+        }
+
     }
 
     if ($AdminPassword -eq "") {
-        $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName "$($env:USERDOMAIN)\$($env:USERNAME)" 
+        $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $env:USERNAME
         $adminUsername = $DockerCredentials.UserName
         $AdminPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
     } else {
