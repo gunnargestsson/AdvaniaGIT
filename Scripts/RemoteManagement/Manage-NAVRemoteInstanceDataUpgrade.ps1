@@ -28,7 +28,7 @@
             '3' { Resume-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance }
             '4' { Stop-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance }
             '5' { Get-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance }
-            '6' { Get-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance -Details }
+            '6' { Get-NAVRemoteInstanceDataUpgrade -Session $Session -SelectedInstance $SelectedInstance -Details $true }
         }                    
     }
     until ($input -iin ('0'))    
