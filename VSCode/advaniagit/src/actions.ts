@@ -233,7 +233,7 @@ export function NewGITBranch(Repository) {
         placeHolder: "<branchname>",
         prompt: "Please provide a branch name (Press 'Enter' to confirm or 'Escape' to cancel)" }
     ).then((value: string) => {
-        if (value != ``) {
+        if (value != `` && value != null) {
             const buildSettings = `@{newBranch=\"${value}\"}`
             StartActionWithBuildSettings(Repository,`New-GITBranch.ps1`,buildSettings);
             vscode.workspace.openTextDocument(path.join(Repository,`setup.json`)).then(doc => {

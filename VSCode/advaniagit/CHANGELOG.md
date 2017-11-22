@@ -15,3 +15,5 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add new command to open VS code in the AL folder
 - Add confirmation for the NAV Environment Remove command
 
+## [0.0.3]
+- Bugfix for the command that creates a new branch
