@@ -21,3 +21,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.0.4]
 - Add new command to load container management menu
 - Add new command to import NAV Container Helper module <https://github.com/Microsoft/navcontainerhelper>
+
+### [0.0.5]
+- Add new commands to copy source.txt between work folder and repository

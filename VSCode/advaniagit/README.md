@@ -38,3 +38,7 @@ Bugfix for new branch command
 ### 0.0.4
 
 New commands to manage containers and to load the NAV Container Helper <https://github.com/Microsoft/navcontainerhelper>
+
+### 0.0.5
+
+New commands to copy source.txt between work folder and repository

@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -34,6 +34,8 @@
         "onCommand:advaniagit.ExportGITtoNAVNewSyntaxModified",
         "onCommand:advaniagit.ExportGITtoNAVNewSyntaxSource",
         "onCommand:advaniagit.ExportGITtoSource",
+        "onCommand:advaniagit.ExportGITSourceToSource",
+        "onCommand:advaniagit.ExportSourceToGITSource",
         "onCommand:advaniagit.ExportNavFob",
         "onCommand:advaniagit.ExportPermissionSets",
         "onCommand:advaniagit.ImportNavFob",
@@ -361,6 +363,16 @@
             {
                 "title": "Install Microsoft NAV Container Helper Module",
                 "command": "advaniagit.InstallNAVContainerHelper",
+                "category": "AdvaniaGIT"
+            },
+            {
+                "title": "Export Source.txt from GIT to Work Folder",
+                "command": "advaniagit.ExportGITSourceToSource",
+                "category": "AdvaniaGIT"
+            },
+            {
+                "title": "Import Source.txt from Work Folder to GIT",
+                "command": "advaniagit.ExportSourceToGITSource",
                 "category": "AdvaniaGIT"
             }
         ]

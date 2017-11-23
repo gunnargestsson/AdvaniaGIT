@@ -40,6 +40,8 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.ExportGITtoNAVNewSyntaxModified', () => {actions.ExportGITtoNAVNewSyntaxModified(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ExportGITtoNAVNewSyntaxSource', () => {actions.ExportGITtoNAVNewSyntaxSource(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ExportGITtoSource', () => {actions.ExportGITtoSource(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.ExportGITSourceToSource', () => {actions.ExportGITSourceToSource(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.ExportSourceToGITSource', () => {actions.ExportSourceToGITSource(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ExportNavFob', () => {actions.ExportNavFob(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ExportPermissionSets', () => {actions.ExportPermissionSets(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportNavFob', () => {actions.ImportNavFob(vscode.workspace.rootPath)}),

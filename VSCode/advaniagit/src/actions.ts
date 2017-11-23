@@ -231,6 +231,14 @@ export function CreateNewBranchId(Repository) {
     StartAction(Repository,`Create-NewBranchId.ps1`);
 }
 
+export function ExportGITSourceToSource(Repository) {
+    StartAction(Repository,`Export-GITSourceToSource.ps1`);
+}
+
+export function ExportSourceToGITSource(Repository) {
+    StartAction(Repository,`Export-SourceToGITSource.ps1`);
+}
+
 export function NewGITBranch(Repository) {
     vscode.window.showInputBox({
         placeHolder: "<branchname>",
