@@ -91,9 +91,20 @@
     $DockerContainerName = ($DockerConfig | ConvertFrom-Json).Config[0].HostName
     $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $DockerContainerName
 
+    $WaitForHealty = $true
+    $LoopNo = 1
+    while ($WaitForHealty -and $LoopNo -lt 20) {        
+        $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $DockerContainerName
+        Write-Host "Container status: $($dockerContainer.Status)..."
+        $WaitForHealty = $dockerContainer.Status -match "(health: starting)"
+        if ($WaitForHealty) { Start-Sleep -Seconds 10 }
+        $LoopNo ++
+    }
+
     if (!($dockerContainer.Status -match "(healthy)")) {
         $logs = docker.exe logs $DockerContainerName
-        Write-Host -ForegroundColor Red $logs
+        Write-Host -ForegroundColor Red "$([string]::Join("`r`n",$logs))"
+        Write-Host -ForegroundColor Red "Status: $($dockerContainer.Status)"
         Write-Error "Container $DockerContainerName unable to start !" -ErrorAction Stop
     }
 
