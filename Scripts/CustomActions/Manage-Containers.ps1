@@ -51,21 +51,15 @@ do {
                             }
                         '2' {
                                 Write-Host "Killing Docker Container $($selectedContainer.Name)..."
-                                try {
-                                    $dockerContainerName = docker.exe kill $($selectedContainer.Name)
-                                }
-                                catch {}
+                                $dockerContainerName = docker.exe kill $($selectedContainer.Name)
                             }
                         '3' {
                                 
                                 Write-Host "Killing and removing Docker Container $($selectedContainer.Name)..."
-                                try {
-                                    if ($selectedContainer.State.Contains("Up")) {
-                                        $dockerContainerName = docker.exe kill $($selectedContainer.Name)
-                                    }
-                                    $dockerContainerName = docker.exe rm $($selectedContainer.Name)
+                                if ($selectedContainer.Status.Contains("Up")) {
+                                    $dockerContainerName = docker.exe kill $($selectedContainer.Name)
                                 }
-                                catch {}
+                                $dockerContainerName = docker.exe rm $($selectedContainer.Name)
                                 Edit-DockerHostRegiststration -RemoveHostName $selectedContainer.Name
                                 if ($selectedContainer.branchId -gt "") { 
                                     $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId
