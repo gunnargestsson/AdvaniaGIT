@@ -31,29 +31,73 @@
     }
 
     Write-Host "Preparing Docker Container for Dynamics NAV..."    
-    $volume = "$($SetupParameters.Repository):C:\GIT"
-    $rootPath = "$($SetupParameters.rootPath):C:\Host"
-    $image = $SetupParameters.dockerImage
-    docker.exe pull $image
-    $DockerContainerId = docker.exe run -m 5G -v "$volume" -v "$rootPath" -e ACCEPT_EULA=Y -e username="$adminUsername" -e password="$AdminPassword" -e auth=Windows --detach $image
-    Write-Host "Docker Container $DockerContainerId starting..."
-    $Session = New-DockerSession -DockerContainerId $DockerContainerId
-    $DockerContainerName = Get-DockerContainerName -Session $Session
+    
+    $imageName = $SetupParameters.dockerImage
+    docker.exe pull $imageName
 
+    $volume = "$($SetupParameters.Repository):C:\GIT"
+    $rootPath = "$($SetupParameters.rootPath):C:\Host"    
+    $memoryLimit = "3G"
+    $genericTag = (docker.exe inspect $imageName | ConvertFrom-Json).Config.Labels.tag
+
+    $parameters = @(
+                "--env auth=Windows"
+                "--env username=$adminUsername",
+                "--env ExitOnError=N",
+                "--env ACCEPT_EULA=Y",
+                "--memory $memoryLimit",
+                "--volume `"$volume`"",
+                "--volume `"$rootPath`"",
+                "--restart always"
+                )
+
+    Write-Host "Docker Container starting..."
+
+    if ([System.Version]$genericTag -ge [System.Version]"0.0.3.0") {
+        $passwordKeyHostFile = Join-Path $($SetupParameters.LogPath) "aes.key"
+        $logFolder = Split-Path $SetupParameters.LogPath -Leaf
+        $passwordKeyFile = Join-Path (Join-Path (Join-Path "C:\Host" (Split-Path (Split-Path $SetupParameters.LogPath -Parent) -Leaf)) $logFolder) "aes.key"
+        $passwordKey = New-Object Byte[] 16
+        [Security.Cryptography.RNGCryptoServiceProvider]::Create().GetBytes($passwordKey)
+        Set-Content -Path $passwordKeyHostFile -Value $passwordKey
+        $encPassword = ConvertFrom-SecureString -SecureString (ConvertTo-SecureString -String $AdminPassword -AsPlainText -Force) -Key $passwordKey
+            
+        $parameters += @(
+                            "--env securePassword=$encPassword",
+                            "--env passwordKeyFile=""$passwordKeyFile""",
+                            "--env removePasswordKeyFile=Y"
+                        )            
+        $DockerContainerId = Start-DockerRun -accept_eula -accept_outdated -imageName $imageName -parameters $parameters
+    } else {
+        $parameters += "--env password=""$AdminPassword"""
+        $DockerContainerId = Start-DockerRun -accept_eula -accept_outdated -imageName $imageName -parameters $parameters
+    }
+
+    $NoOfLogLines = 0
     $WaitForHealty = $true
     $LoopNo = 1
-    while ($WaitForHealty -and $LoopNo -lt 20) {        
-        $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $DockerContainerName
-        Write-Host "Container status: $($dockerContainer.Status)..."
-        $WaitForHealty = $dockerContainer.Status -match "(health: starting)" -or $dockerContainer.Status -match "(unhealthy)"
-        if ($WaitForHealty) { Start-Sleep -Seconds 10 }
+    while ($WaitForHealty -and $LoopNo -lt 100) {
+        $log = (docker.exe logs $DockerContainerId) | Select-Object -Skip $NoOfLogLines
+        $NoOfLogLines += $log.Count
+        if ($log.Count -gt 0) {
+            Write-Host "$([string]::Join("`r`n",$log))"
+            $WaitForHealty = (!($log.Contains("Ready for connections!")))
+        }
+        if ($WaitForHealty) { Start-Sleep -Seconds 4 }
         $LoopNo ++
-    }
+    }       
+
+    $DockerConfig = docker.exe inspect $DockerContainerId
+    $DockerContainerName = ($DockerConfig | ConvertFrom-Json).Config[0].HostName
+    $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $DockerContainerName
+
     if (!($dockerContainer.Status -match "(healthy)")) {
+        $logs = docker.exe logs $DockerContainerName
+        Write-Host -ForegroundColor Red $logs
         Write-Error "Container $DockerContainerName unable to start !" -ErrorAction Stop
     }
 
-
+    $Session = New-DockerSession -DockerContainerId $DockerContainerId
     $DockerSettings = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
     Edit-DockerHostRegiststration -AddHostName $DockerContainerName -AddIpAddress (Get-DockerIPAddress -Session $Session)
 
@@ -69,4 +113,7 @@
 
     Update-BranchSettings -BranchSettings $BranchSettings
     Remove-PSSession -Session $Session 
+    if ($passwordKeyHostFile) {
+        Remove-Item -Path $passwordKeyHostFile -Force -ErrorAction SilentlyContinue
+    }
 }
