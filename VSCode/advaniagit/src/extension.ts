@@ -57,6 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.LoadTestMenu', () => {actions.LoadTestMenu(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ManageDatabases', () => {actions.ManageDatabases(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ManageInstances', () => {actions.ManageInstances(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.ManageContainers', () => {actions.ManageContainers(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.MergeDeltas', () => {actions.MergeDeltas(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.PrepareNAVEnvironment', () => {actions.PrepareNAVEnvironment(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.PrepareNAVUnitTest', () => {actions.PrepareNAVUnitTest(vscode.workspace.rootPath)}),
@@ -90,7 +91,8 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.DeleteOldLogs', () => {actions.DeleteOldLogs(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportFromAllGITtoNAV', () => {actions.ImportFromAllGITtoNAV(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateNewBranchId', () => {actions.CreateNewBranchId(vscode.workspace.rootPath)}),
-        vscode.commands.registerCommand('advaniagit.NewGITBranch', () => {actions.NewGITBranch(vscode.workspace.rootPath)})
+        vscode.commands.registerCommand('advaniagit.NewGITBranch', () => {actions.NewGITBranch(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.InstallNAVContainerHelper', () => {actions.InstallNAVContainerHelper()})        
     ];
     
     context.subscriptions.concat(commandList);

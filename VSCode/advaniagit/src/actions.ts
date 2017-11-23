@@ -115,6 +115,9 @@ export function ManageDatabases(Repository) {
 export function ManageInstances(Repository) {
     StartAction(Repository,`Manage-Instances.ps1`);
 }
+export function ManageContainers(Repository) {
+    StartAction(Repository,`Manage-Containers.ps1`);
+}
 export function MergeDeltas(Repository) {
     StartAction(Repository,`Merge-Deltas.ps1`);
 }
@@ -242,6 +245,10 @@ export function NewGITBranch(Repository) {
             vscode.window.showInformationMessage('Branch created, setup.json updated and opened');
         }
     })
+}
+
+export function InstallNAVContainerHelper() {
+    terminal.PSTerminal.sendText(`Install-Module NAVContainerHelper -force`);
 }
 
 function StartAction(Repository, Action) {

@@ -35,3 +35,6 @@ Update AdvaniaGIT SCM Extension for Visual Studio Code with new actions
 
 Bugfix for new branch command
 
+### 0.0.4
+
+New commands to manage containers and to load the NAV Container Helper <https://github.com/Microsoft/navcontainerhelper>

@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -51,6 +51,7 @@
         "onCommand:advaniagit.LoadTestMenu",
         "onCommand:advaniagit.ManageDatabases",
         "onCommand:advaniagit.ManageInstances",
+        "onCommand:advaniagit.ManageContainers",        
         "onCommand:advaniagit.MergeDeltas",
         "onCommand:advaniagit.PrepareNAVEnvironment",
         "onCommand:advaniagit.PrepareNAVUnitTest",
@@ -82,7 +83,8 @@
         "onCommand:advaniagit.DeleteOldLogs",
         "onCommand:advaniagit.ImportFromAllGITtoNAV",
         "onCommand:advaniagit.CreateNewBranchId",
-        "onCommand:advaniagit.NewGITBranch"
+        "onCommand:advaniagit.NewGITBranch",
+        "onCommand:advaniagit.InstallNAVContainerHelper"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -288,6 +290,10 @@
                 "category": "AdvaniaGIT"
             },
             {
+                "title": "Manage Containers",
+                "command": "advaniagit.ManageContainers",
+                "category": "AdvaniaGIT"
+            },            {
                 "title": "Upgrade NAV Installation",
                 "command": "advaniagit.UpgradeNAVInstallation",
                 "category": "AdvaniaGIT"
@@ -350,6 +356,11 @@
             {
                 "title": "Create new GIT branch...",
                 "command": "advaniagit.NewGITBranch",
+                "category": "AdvaniaGIT"
+            },
+            {
+                "title": "Install Microsoft NAV Container Helper Module",
+                "command": "advaniagit.InstallNAVContainerHelper",
                 "category": "AdvaniaGIT"
             }
         ]
