@@ -25,6 +25,7 @@ Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Ser
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServer' -NewValue (Get-HelpServer -mainVersion $SetupParameters.mainVersion)
 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServerPort' -NewValue (Get-HelpServerPort -mainVersion $SetupParameters.mainVersion)
 Set-Content -Path $clientSettingsPath -Value $clientUserSettings.OuterXml -Force
+Set-Content -Path (Join-Path (Split-Path -Path $clientexe -Parent) 'ClientUserSettings.config') -Value $clientUserSettings.OuterXml -Force
 $params = @()
 $params += @('-settings:"' + $clientSettingsPath + '"')
 Write-Host "Running: `"$clientexe`" $params" -ForegroundColor Green
