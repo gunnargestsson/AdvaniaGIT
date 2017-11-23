@@ -31,7 +31,7 @@
             if (Test-Path $zipFile) {
                 Write-Host "$DownloadFileName already downloaded..."
             } else {
-                Download-File -Url $DownloadUrl -FileName $zipFile
+                Download-NAVFile -Url $DownloadUrl -FileName $zipFile
             }
 
             Write-Host "Extracting $zipFile to $($InstallWorkFolder)..."        

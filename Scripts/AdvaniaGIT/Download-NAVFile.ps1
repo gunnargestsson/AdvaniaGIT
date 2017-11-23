@@ -1,4 +1,4 @@
-﻿Function Download-File
+﻿Function Download-NAVFile
 {
     param (
         [String]$Url,

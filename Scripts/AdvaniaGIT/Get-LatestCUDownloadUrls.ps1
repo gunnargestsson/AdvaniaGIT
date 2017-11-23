@@ -11,7 +11,7 @@
     # Download RSS Feed
     $FeedFilePath = (Join-Path $SetupParameters.LogPath "Feed.xml")
     $ArticlePath = (Join-Path $SetupParameters.LogPath "Article.html")
-    Download-File -Url $FeedUrl -FileName $FeedFilePath
+    Download-NAVFile -Url $FeedUrl -FileName $FeedFilePath
     [xml]$Content = Get-Content $FeedFilePath 
     $Feed = $Content.rss.channel
 
@@ -21,7 +21,7 @@
         Write-Verbose "Found article $($item.title)..."
 
         if ($item.title -like $SearchString) {
-            Download-File -Url $item.link -FileName $ArticlePath
+            Download-NAVFile -Url $item.link -FileName $ArticlePath
             $Article = (Get-Content $ArticlePath | Out-String).Replace("<span>","")
             $endPos = 1
             while ($Article.IndexOf("http://download.microsoft.com/download", $endPos) -gt 0) {
