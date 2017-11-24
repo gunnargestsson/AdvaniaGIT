@@ -24,3 +24,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### [0.0.5]
 - Add new commands to copy source.txt between work folder and repository
+
+### [0.0.6]
+- Add new command that will build deltas based on the source from last build
+- Add new commands to load NAV modules; model, apps, ide, instance, and instance app
+- Rename command group from AdvaniaGIT to Advania to not mix with standard GIT commands in search

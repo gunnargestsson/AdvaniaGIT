@@ -9,7 +9,9 @@ function Build-NAVObjects
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
     [String]$TargetFileName,
     [Parameter(Mandatory=$false, ValueFromPipelineByPropertyname=$true)]
-    [String]$IncludeCustomization
+    [String]$IncludeCustomization,
+    [Parameter(Mandatory=$false, ValueFromPipelineByPropertyname=$true)]
+    [String]$SaveSourceFileName
     )
 
     Load-ModelTools -setupParameters $SetupParameters
@@ -106,6 +108,11 @@ function Build-NAVObjects
             Write-Verbose "Copying file $AppName $Delta into $ObjectName..."
             Copy-Item -Path $Delta.FullName -Destination $ObjectName -Force
         }
+    }
+
+    if ($SaveSourceFileName -ne $null -and $SaveSourceFileName -gt "") {
+        Write-Host Saving build as $SaveSourceFileName
+        Join-NAVApplicationObjectFile -Source (Join-Path $SourceFolder '*.txt') -Destination $SaveSourceFileName -Force
     }
 
     if ($IncludeCustomization -eq $true) 

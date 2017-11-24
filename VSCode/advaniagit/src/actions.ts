@@ -7,6 +7,9 @@ import * as fs from "fs";
 export function BuildDeltasInGIT(Repository) {
     StartAction(Repository,`Build-DeltasInGIT.ps1`);
 }
+export function BuildDeltasFromSource(Repository) {
+    StartAction(Repository,`Build-DeltasFromSource.ps1`);
+}
 export function BuildNavEnvironment(Repository) {
     StartAction(Repository,`Build-NavEnvironment.ps1`);
 }
@@ -214,15 +217,12 @@ export function UpdateLaunchJsonForBaseBranch(Repository) {
 export function UpdateLaunchJsonForCurrentBranch(Repository) {
     StartAction(Repository,`Update-LaunchJsonForCurrentBranch.ps1`);
 }
-
 export function RemoveNAVObjectsProperties(Repository) {
     StartAction(Repository,`Remove-NAVObjectsProperties.ps1`);
 }
-
 export function DeleteOldLogs(Repository) {
     StartAction(Repository,`Delete-OldLogs.ps1`);
 }
-
 export function ImportFromAllGITtoNAV(Repository) {
     StartAction(Repository,`ImportFrom-AllGITtoNAV.ps1`);
 }
@@ -230,15 +230,12 @@ export function ImportFromAllGITtoNAV(Repository) {
 export function CreateNewBranchId(Repository) {
     StartAction(Repository,`Create-NewBranchId.ps1`);
 }
-
 export function ExportGITSourceToSource(Repository) {
     StartAction(Repository,`Export-GITSourceToSource.ps1`);
 }
-
 export function ExportSourceToGITSource(Repository) {
     StartAction(Repository,`Export-SourceToGITSource.ps1`);
 }
-
 export function NewGITBranch(Repository) {
     vscode.window.showInputBox({
         placeHolder: "<branchname>",
@@ -254,9 +251,23 @@ export function NewGITBranch(Repository) {
         }
     })
 }
-
 export function InstallNAVContainerHelper() {
     terminal.PSTerminal.sendText(`Install-Module NAVContainerHelper -force`);
+}
+export function LoadAppsTools(Repository) {
+    StartAction(Repository,`Load-AppsTools.ps1`);
+}
+export function LoadIdeTools(Repository) {
+    StartAction(Repository,`Load-IdeTools.ps1`);
+}
+export function LoadInstanceAdminTools(Repository) {
+    StartAction(Repository,`Load-InstanceAdminTools.ps1`);
+}
+export function LoadInstanceAppTools(Repository) {
+    StartAction(Repository,`Load-InstanceAppTools.ps1`);
+}
+export function LoadModelTools(Repository) {
+    StartAction(Repository,`Load-ModelTools.ps1`);
 }
 
 function StartAction(Repository, Action) {

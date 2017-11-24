@@ -21,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
     // The commandId parameter must match the command field in package.json
     let commandList = [
         vscode.commands.registerCommand('advaniagit.BuildDeltasInGIT', () => {actions.BuildDeltasInGIT(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.BuildDeltasFromSource', () => {actions.BuildDeltasFromSource(vscode.workspace.rootPath)}),        
         vscode.commands.registerCommand('advaniagit.BuildNavEnvironment', () => {actions.BuildNavEnvironment(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.BuildNavEnvironmentFromGIT', () => {actions.BuildNavEnvironmentFromGIT(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.BuildNAVNewSyntaxDeltasInGIT', () => {actions.BuildNAVNewSyntaxDeltasInGIT(vscode.workspace.rootPath)}),
@@ -93,8 +94,12 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.DeleteOldLogs', () => {actions.DeleteOldLogs(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportFromAllGITtoNAV', () => {actions.ImportFromAllGITtoNAV(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateNewBranchId', () => {actions.CreateNewBranchId(vscode.workspace.rootPath)}),
-        vscode.commands.registerCommand('advaniagit.NewGITBranch', () => {actions.NewGITBranch(vscode.workspace.rootPath)}),
-        vscode.commands.registerCommand('advaniagit.InstallNAVContainerHelper', () => {actions.InstallNAVContainerHelper()})        
+        vscode.commands.registerCommand('advaniagit.LoadAppsTools', () => {actions.LoadAppsTools(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.LoadIdeTools', () => {actions.LoadIdeTools(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.LoadInstanceAdminTools', () => {actions.LoadInstanceAdminTools(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.LoadInstanceAppTools', () => {actions.LoadInstanceAppTools(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.LoadModelTools', () => {actions.LoadModelTools(vscode.workspace.rootPath)}),       
+        vscode.commands.registerCommand('advaniagit.InstallNAVContainerHelper', () => {actions.InstallNAVContainerHelper()})
     ];
     
     context.subscriptions.concat(commandList);

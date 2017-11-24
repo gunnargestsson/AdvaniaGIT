@@ -1,0 +1,1 @@
+﻿Load-InstanceAdminTools -SetupParameters $SetupParameters

@@ -1,0 +1,1 @@
+﻿Load-IdeTools -SetupParameters $SetupParameters

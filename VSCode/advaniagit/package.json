@@ -1,9 +1,9 @@
 {
-    "name": "advaniagit",
-    "displayName": "AdvaniaGIT",
+    "name": "Advania",
+    "displayName": "Advania",
     "description": "AdvaniaGIT SCM",
-    "version": "0.0.5",
-    "publisher": "advaniagit",
+    "version": "0.0.6",
+    "publisher": "Advania",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
     "private": true,
@@ -15,6 +15,7 @@
     ],
     "activationEvents": [
         "onCommand:advaniagit.BuildDeltasInGIT",
+        "onCommand:advaniagit.BuildDeltasFromSource",
         "onCommand:advaniagit.BuildNavEnvironment",
         "onCommand:advaniagit.BuildNavEnvironmentFromGIT",
         "onCommand:advaniagit.BuildNAVNewSyntaxDeltasInGIT",
@@ -86,6 +87,11 @@
         "onCommand:advaniagit.ImportFromAllGITtoNAV",
         "onCommand:advaniagit.CreateNewBranchId",
         "onCommand:advaniagit.NewGITBranch",
+        "onCommand:advaniagit.LoadAppsTools",
+        "onCommand:advaniagit.LoadIdeTools",
+        "onCommand:advaniagit.LoadInstanceAminTools",
+        "onCommand:advaniagit.LoadInstanceAppTools",
+        "onCommand:advaniagit.LoadModelTool",
         "onCommand:advaniagit.InstallNAVContainerHelper"
     ],
     "main": "./out/extension",
@@ -94,286 +100,316 @@
             {
                 "title": "Check NAV Environment",
                 "command": "advaniagit.CheckNAVEnvironment",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Build & Update NAV Environment",
                 "command": "advaniagit.BuildNavEnvironmentFromGIT",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Build NAV Environment",
                 "command": "advaniagit.BuildNavEnvironment",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Import GIT Objects to NAV Environment",
                 "command": "advaniagit.ImportFromGITtoNAV",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Start FinSql",
                 "command": "advaniagit.StartFinSql",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Start Client",
                 "command": "advaniagit.StartClient",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Start Web Client",
                 "command": "advaniagit.StartWebClient",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Start Debugger",
                 "command": "advaniagit.StartDebugger",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Export NAV Modified objects to GIT",
                 "command": "advaniagit.ImportFromModifiedNAVtoGIT",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Export NAV objects to GIT",
                 "command": "advaniagit.ImportFromNAVtoGIT",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Create NAV Backup",
                 "command": "advaniagit.CreateNavBackup",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Compile NAV Objects",
                 "command": "advaniagit.StartCompile",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Clear Comment Section from NAV Objects",
                 "command": "advaniagit.ClearNAVCommentSection",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Run All Automated Tests",
                 "command": "advaniagit.StartFullTest",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Run Failed Tests Only",
                 "command": "advaniagit.RestartFailedTest",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Run Tests on Modified Objects",
                 "command": "advaniagit.StartModifiedObjectsTest",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Show Automated Test Results",
                 "command": "advaniagit.SaveTestResultsCsv",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Remove NAV Environment",
                 "command": "advaniagit.RemoveNavEnvironment",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Export GIT Objects to Source.txt in Work Folder",
                 "command": "advaniagit.ExportGITtoSource",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Export GIT Objects to Modified.txt in Work Folder",
                 "command": "advaniagit.ExportGITtoModified",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Export AllObjects.fob from NAV Environment",
                 "command": "advaniagit.ExportNavFob",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Add Target.txt from Work Folder to GIT",
                 "command": "advaniagit.ImportFromTargetToGIT",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Replace GIT with Target.txt from Work Folder",
                 "command": "advaniagit.ReplaceGITwithTarget",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Create Deltas in Work Folder (Source vs. Modified)",
                 "command": "advaniagit.CreateDeltas",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Create Code Deltas in Work Folder (Source vs. Modified)",
                 "command": "advaniagit.CreateCodeDeltas",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Create Reverse Deltas in Work Folder (Modified vs. Source)",
                 "command": "advaniagit.CreateReverseDeltas",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
-                "title": "Build Deltas & Reverse Deltas in GIT",
+                "title": "Build Deltas & Reverse Deltas in GIT based on base branch",
                 "command": "advaniagit.BuildDeltasInGIT",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Merge Deltas in Work Folder with Source to create Target",
                 "command": "advaniagit.MergeDeltas",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Build Target from base branch and delta branches (including GIT Delta)",
                 "command": "advaniagit.BuildTarget",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Build Source from base branch and delta branches (excluding GIT Delta)",
                 "command": "advaniagit.BuildSource",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Export NAV Permission Sets to GIT",
                 "command": "advaniagit.ExportPermissionSets",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Create Extension V1 in GIT",
                 "command": "advaniagit.CreateExtension",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Publish Extension V1 to Default Server Instance",
                 "command": "advaniagit.PublishExtension",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Unpublish Extension V1 from Default Server Instance",
                 "command": "advaniagit.UnpublishExtension",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Base Branch Server Instance - Publish Extension V1",
                 "command": "advaniagit.PublishExtensionToBaseBranch",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Base Branch Server Instance - Unpublish Extension V1",
                 "command": "advaniagit.UnpublishExtensionFromBaseBranch",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Base Branch - Start Client",
                 "command": "advaniagit.StartBaseBranchClient",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Base Branch - Start Web Client",
                 "command": "advaniagit.StartBaseBranchWebClient",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Manage Instances",
                 "command": "advaniagit.ManageInstances",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Manage Databases",
                 "command": "advaniagit.ManageDatabases",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Manage Containers",
                 "command": "advaniagit.ManageContainers",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },            {
                 "title": "Upgrade NAV Installation",
                 "command": "advaniagit.UpgradeNAVInstallation",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Update GIT from latest CU",
                 "command": "advaniagit.UpdateNAVSource",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Export NAV New Syntax to GIT",
                 "command": "advaniagit.ImportFromNAVNewSyntaxToGIT",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Build New Syntax Deltas & Reverse Deltas in GIT",
                 "command": "advaniagit.BuildNAVNewSyntaxDeltasInGIT",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Convert New Syntax Deltas to AL",
                 "command": "advaniagit.ConvertNAVNewSyntaxDeltasToAL",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Update Launch.Json with current branch environment",
                 "command": "advaniagit.UpdateLaunchJsonForCurrentBranch",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Update Launch.Json with base branch environment",
                 "command": "advaniagit.UpdateLaunchJsonForBaseBranch",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Remove Object Properties from modified objects",
                 "command": "advaniagit.RemoveNAVObjectsProperties",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Delete AdvaniaGIT Log folders more than seven days old",
                 "command": "advaniagit.DeleteOldLogs",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Import All GIT Objects to NAV Environment",
                 "command": "advaniagit.ImportFromAllGITtoNAV",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Create new Branch Id in Setup.json",
                 "command": "advaniagit.CreateNewBranchId",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Open Visual Studio Code in AL folder",
                 "command": "advaniagit.StartVSCode",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Create new GIT branch...",
                 "command": "advaniagit.NewGITBranch",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
+            },
+            {
+                "title": "Install NAV Model Tools Module",
+                "command": "advaniagit.LoadModelTools",
+                "category": "Advania"
+            },
+            {
+                "title": "Install NAV Instance Administration Module",
+                "command": "advaniagit.LoadInstanceAdminTools",
+                "category": "Advania"
+            },
+            {
+                "title": "Install NAV Instance App Module",
+                "command": "advaniagit.LoadInstanceAppTools",
+                "category": "Advania"
+            },
+            {
+                "title": "Install NAV Client App Module",
+                "command": "advaniagit.LoadAppsTools",
+                "category": "Advania"
+            },
+            {
+                "title": "Install NAV Client Ide Module",
+                "command": "advaniagit.LoadIdeTools",
+                "category": "Advania"
             },
             {
                 "title": "Install Microsoft NAV Container Helper Module",
                 "command": "advaniagit.InstallNAVContainerHelper",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Export Source.txt from GIT to Work Folder",
                 "command": "advaniagit.ExportGITSourceToSource",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
             },
             {
                 "title": "Import Source.txt from Work Folder to GIT",
                 "command": "advaniagit.ExportSourceToGITSource",
-                "category": "AdvaniaGIT"
+                "category": "Advania"
+            },
+            {
+                "title": "Build Deltas & Reverse Deltas in GIT based on Source objects from last build",
+                "command": "advaniagit.BuildDeltasFromSource",
+                "category": "Advania"
             }
         ]
     },

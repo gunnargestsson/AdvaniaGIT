@@ -21,24 +21,4 @@ NAV 2018 with Docker config <https://github.com/gunnargestsson/nav2018>
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
-### 0.0.1
-
-Initial release of AdvaniaGIT SCM Extension for Visual Studio Code
-
-### 0.0.2
-
-Update AdvaniaGIT SCM Extension for Visual Studio Code with new actions
-
-### 0.0.3
-
-Bugfix for new branch command
-
-### 0.0.4
-
-New commands to manage containers and to load the NAV Container Helper <https://github.com/Microsoft/navcontainerhelper>
-
-### 0.0.5
-
-New commands to copy source.txt between work folder and repository
+See Changlog for update details

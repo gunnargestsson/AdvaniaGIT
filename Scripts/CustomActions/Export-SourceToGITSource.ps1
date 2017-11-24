@@ -7,5 +7,5 @@ if (Test-Path $ObjectFileName) {
     Copy-Item -Path $ObjectFileName -Destination $SourceObjects -Force
     Write-Host "Source.txt copied from the Work Folder"
 } else {
-    Write-Host -ForegroundColor Red "Source.txt not found in Work Folder!"
+    Write-Error -ForegroundColor Red "Source.txt not found in Work Folder!" -ErrorAction Stop    
 }

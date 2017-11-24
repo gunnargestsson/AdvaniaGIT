@@ -1,0 +1,1 @@
+﻿Load-InstanceAppTools -SetupParameters $SetupParameters
