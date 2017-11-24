@@ -1,9 +1,9 @@
 {
-    "name": "Advania",
-    "displayName": "Advania",
+    "name": "AdvaniaGIT",
+    "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
     "version": "0.0.6",
-    "publisher": "Advania",
+    "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
     "private": true,
