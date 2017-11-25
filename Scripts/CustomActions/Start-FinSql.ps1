@@ -5,15 +5,14 @@ if ($SetupParameters.patchNoFunction -ne "") {
 }
 
 if ($BranchSettings.dockerContainerId -gt "") {
-    if (!(Test-Path (Join-Path $SetupParameters.LogPath 'RoleTailored Client\finsql.exe'))) {
-        Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-    }
-    $finsqlexe = (Join-Path $SetupParameters.LogPath 'RoleTailored Client\finsql.exe')    
+    $clientPath = Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    $finsqlexe = Join-Path $clientPath '\finsql.exe'
+    $IdFile = Join-Path $clientPath 'finsqlsettings.zup'
 } else {    
     $finsqlexe = (Join-Path $SetupParameters.navIdePath 'finsql.exe')
+    $IdFile = "$($SetupParameters.navRelease)-$($SetupParameters.projectName).zup"
 }
 
-$IdFile = Join-Path $SetupParameters.LogPath "finsqlsettings.zup"
 $params="database=`"$($BranchSettings.databaseName)`",servername=`"$(Get-DatabaseServer -BranchSettings $BranchSettings)`",ID=`"$($IdFile)`""
 
 Write-Host "Running: `"$finsqlexe`" $params" -ForegroundColor Green

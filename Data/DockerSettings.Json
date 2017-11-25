@@ -1,5 +1,6 @@
 {
   "RepositoryPath": "navdocker.azurecr.io",
   "RepositoryUserName": "",
-  "RepositoryPassword": ""
+  "RepositoryPassword": "",
+  "ClientFolders":[]
 }

@@ -1,16 +1,14 @@
 Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 
-$clientSettingsPath = (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
-
 if ($BranchSettings.dockerContainerId -gt "") {
-    if (!(Test-Path (Join-Path $SetupParameters.LogPath 'RoleTailored Client\Microsoft.Dynamics.Nav.Client.exe'))) {
-        Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-    }
-    $clientexe = (Join-Path $SetupParameters.LogPath 'RoleTailored Client\Microsoft.Dynamics.Nav.Client.exe')    
+    $clientPath = Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    $clientexe = Join-Path $clientPath 'Microsoft.Dynamics.Nav.Client.exe'
+    $clientSettingsPath = Join-Path $clientPath 'ClientUserSettings.config'
     [xml]$clientUserSettings = Get-Content -Path (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $BranchSettings.dockerContainerName
 } else {    
     $clientexe = (Join-Path $SetupParameters.navIdePath 'Microsoft.Dynamics.Nav.Client.exe')
+    $clientSettingsPath = (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
     [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:ProgramData ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $env:COMPUTERNAME
 }
