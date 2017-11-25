@@ -175,8 +175,14 @@ export function StartDebugger(Repository) {
 export function StartFinSql(Repository) {
     StartAction(Repository,`Start-FinSql.ps1`);
 }
-export function StartTestClient(Repository) {
-    StartAction(Repository,`Start-TestClient.ps1`);
+export function StartFullTestsExecution(Repository) {
+    StartAction(Repository,`Start-FullTestsExecution.ps1`);
+}
+export function StartModifiedObjectsTestsExecution(Repository) {
+    StartAction(Repository,`Start-ModifiedObjectsTestsExecution.ps1`);
+}
+export function StartFailedTestsExecution(Repository) {
+    StartAction(Repository,`Start-FailedTestsExecution.ps1`);
 }
 export function StartVSCode(Repository) {
     StartAction(Repository,`Start-VSCode.ps1`);
@@ -235,6 +241,9 @@ export function ExportGITSourceToSource(Repository) {
 }
 export function ExportSourceToGITSource(Repository) {
     StartAction(Repository,`Export-SourceToGITSource.ps1`);
+}
+export function NewFilesEncodingSettings(Repository) {
+    StartAction(Repository,`New-FilesEncodingSettings.ps1`);
 }
 export function NewGITBranch(Repository) {
     vscode.window.showInputBox({

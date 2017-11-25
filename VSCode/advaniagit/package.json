@@ -2,7 +2,7 @@
     "name": "AdvaniaGIT",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -70,7 +70,9 @@
         "onCommand:advaniagit.StartCompile",
         "onCommand:advaniagit.StartDebugger",
         "onCommand:advaniagit.StartFinSql",
-        "onCommand:advaniagit.StartTestClient",
+        "onCommand:advaniagit.StartFullTestsExecution",
+        "onCommand:advaniagit.StartFailedTestsExecution",
+        "onCommand:advaniagit.StartModifiedObjectsTestsExecution",
         "onCommand:advaniagit.StartVSCode",
         "onCommand:advaniagit.UpdateLaunchJsonForBaseBranch",
         "onCommand:advaniagit.UpdateLaunchJsonForCurrentBranch",
@@ -87,6 +89,7 @@
         "onCommand:advaniagit.ImportFromAllGITtoNAV",
         "onCommand:advaniagit.CreateNewBranchId",
         "onCommand:advaniagit.NewGITBranch",
+        "onCommand:advaniagit.NewFilesEncodingSettings",
         "onCommand:advaniagit.LoadAppsTools",
         "onCommand:advaniagit.LoadIdeTools",
         "onCommand:advaniagit.LoadInstanceAminTools",
@@ -164,17 +167,17 @@
             },
             {
                 "title": "Run All Automated Tests",
-                "command": "advaniagit.StartFullTest",
+                "command": "advaniagit.StartFullTestsExecution",
                 "category": "Advania"
             },
             {
                 "title": "Run Failed Tests Only",
-                "command": "advaniagit.RestartFailedTest",
+                "command": "advaniagit.StartFailedTestsExecution",
                 "category": "Advania"
             },
             {
                 "title": "Run Tests on Modified Objects",
-                "command": "advaniagit.StartModifiedObjectsTest",
+                "command": "advaniagit.StartModifiedObjectsTestsExecution",
                 "category": "Advania"
             },
             {
@@ -409,6 +412,11 @@
             {
                 "title": "Build Deltas & Reverse Deltas in GIT based on Source objects from last build",
                 "command": "advaniagit.BuildDeltasFromSource",
+                "category": "Advania"
+            },
+            {
+                "title": "Add VS Code Workspace Settings for NAV Objects code page",
+                "command": "advaniagit.NewFilesEncodingSettings",
                 "category": "Advania"
             }
         ]
