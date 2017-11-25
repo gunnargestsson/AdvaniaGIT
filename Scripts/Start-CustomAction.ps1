@@ -101,6 +101,8 @@ else
     $Globals | Add-Member CustomReportLayoutsPath  (Join-Path $Repository $SetupParameters.customReportLayoutsPath)
     $Globals | Add-Member WebServicesPath  (Join-Path $Repository $SetupParameters.webServicesPath)
     $Globals | Add-Member BinaryPath  (Join-Path $Repository $SetupParameters.binaryPath)
+    $Globals | Add-Member testObjectsPath  (Join-Path $Repository $SetupParameters.testObjectsPath)
+    $Globals | Add-Member buildSourcePath  (Join-Path $Repository $SetupParameters.buildSourcePath)
     $Globals | Add-Member LogPath  (Join-Path $SetupParameters.rootPath "Log\$([GUID]::NewGuid().GUID)")
     $Globals | Add-Member LicensePath  (Join-Path $SetupParameters.rootPath "License")
     $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile)
@@ -116,6 +118,7 @@ else
     New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     if ($IsInAdminMode ) { Add-BlankLines }
+    $env:WorkFolder = $SetupParameters.WorkFolder
     
     # Start the script
     $ScriptToStart = (Join-Path (Join-path $PSScriptRoot 'CustomActions') $ScriptName)

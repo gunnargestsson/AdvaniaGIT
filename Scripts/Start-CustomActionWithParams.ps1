@@ -25,6 +25,8 @@
 [String]$LicensePath,
 [String]$LicenseFilePath,
 [String]$DownloadPath,
+[String]$testObjectsPath,
+[String]$buildSourcePath,
 [String]$baseBranch,
 [String]$branchId,
 [String]$Branchname,
@@ -101,6 +103,9 @@ $SetupParameters | Add-Member "LogPath" $LogPath
 $SetupParameters | Add-Member "LicensePath" $LicensePath
 $SetupParameters | Add-Member "LicenseFilePath" $LicenseFilePath
 $SetupParameters | Add-Member "DownloadPath"  $DownloadPath
+$SetupParameters | Add-Member "testObjectsPath" $testObjectsPath
+$SetupParameters | Add-Member "buildSourcePath" $buildSourcePath
+
 $SetupParameters | Add-Member "baseBranch" $baseBranch
 $SetupParameters | Add-Member "branchId" $branchId
 $SetupParameters | Add-Member "Branchname" $Branchname
