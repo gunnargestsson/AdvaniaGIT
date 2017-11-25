@@ -1,4 +1,4 @@
-$SourceObjects = Join-Path $SetupParameters.buildSource 'Source.txt'
+$SourceObjects = Join-Path $SetupParameters.buildSourcePath 'Source.txt'
 if (Test-Path $SourceObjects) {
     $ObjectFileName = (Join-Path $SetupParameters.workFolder 'Source.txt')
     Copy-Item -Path $SourceObjects -Destination $ObjectFileName -Force
