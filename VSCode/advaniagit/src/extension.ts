@@ -21,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
     // The commandId parameter must match the command field in package.json
     let commandList = [
         vscode.commands.registerCommand('advaniagit.BuildDeltasInGIT', () => {actions.BuildDeltasInGIT(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.BuildDeltasFromSourceInGIT', () => {actions.BuildDeltasFromSourceInGIT(vscode.workspace.rootPath)}),        
         vscode.commands.registerCommand('advaniagit.BuildDeltasFromSource', () => {actions.BuildDeltasFromSource(vscode.workspace.rootPath)}),        
         vscode.commands.registerCommand('advaniagit.BuildNavEnvironment', () => {actions.BuildNavEnvironment(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.BuildNavEnvironmentFromGIT', () => {actions.BuildNavEnvironmentFromGIT(vscode.workspace.rootPath)}),

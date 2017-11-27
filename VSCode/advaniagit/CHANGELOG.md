@@ -33,3 +33,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### [0.0.7]
 - Add new command to add files.encoding settings to the workspace.  Required to see non-us characters in the text editor
 - Fix commands for unit tests execution
+
+### [0.0.8]
+- Add new command to build deltas and reverse deltas from last build source

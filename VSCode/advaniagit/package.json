@@ -2,7 +2,7 @@
     "name": "AdvaniaGIT",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -15,6 +15,7 @@
     ],
     "activationEvents": [
         "onCommand:advaniagit.BuildDeltasInGIT",
+        "onCommand:advaniagit.BuildDeltasFromSourceInGIT",
         "onCommand:advaniagit.BuildDeltasFromSource",
         "onCommand:advaniagit.BuildNavEnvironment",
         "onCommand:advaniagit.BuildNavEnvironmentFromGIT",
@@ -233,6 +234,11 @@
             {
                 "title": "Build Deltas & Reverse Deltas in GIT based on base branch",
                 "command": "advaniagit.BuildDeltasInGIT",
+                "category": "Advania"
+            },
+            {
+                "title": "Build Deltas & Reverse Deltas in GIT from last build source",
+                "command": "advaniagit.BuildDeltasFromSourceInGIT",
                 "category": "Advania"
             },
             {

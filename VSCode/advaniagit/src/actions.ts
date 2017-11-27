@@ -7,6 +7,9 @@ import * as fs from "fs";
 export function BuildDeltasInGIT(Repository) {
     StartAction(Repository,`Build-DeltasInGIT.ps1`);
 }
+export function BuildDeltasFromSourceInGIT(Repository) {
+    StartAction(Repository,`Build-DeltasFromSourceInGIT.ps1`);
+}
 export function BuildDeltasFromSource(Repository) {
     StartAction(Repository,`Build-DeltasFromSource.ps1`);
 }
