@@ -46,8 +46,8 @@ do {
             '11' { & (Join-Path $PSScriptRoot Create-Deltas.ps1) }
             '12' { & (Join-Path $PSScriptRoot Create-CodeDeltas.ps1) }
             '13' { & (Join-Path $PSScriptRoot Create-ReverseDeltas.ps1) }
-            '14' { & (Join-Path $PSScriptRoot Build-DeltasFromSourceInGIT.ps1) }
-            '15' { & (Join-Path $PSScriptRoot Build-DeltasInGIT.ps1) }
+            '14' { & (Join-Path $PSScriptRoot Build-DeltasInGIT.ps1) }
+            '15' { & (Join-Path $PSScriptRoot Build-DeltasFromSourceInGIT.ps1) }
             '16' { & (Join-Path $PSScriptRoot Merge-Deltas.ps1) }
             '17' { & (Join-Path $PSScriptRoot Build-Target.ps1) }
             '18' { & (Join-Path $PSScriptRoot Build-Source.ps1) }
