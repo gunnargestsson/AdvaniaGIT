@@ -11,6 +11,11 @@
 
     if (Test-Path (Join-Path $wwwRootPath "$($BranchSettings.instanceName)\navsettings.json")) {
         $navSettings = Get-Content -Path (Join-Path $wwwRootPath "$($BranchSettings.instanceName)\navsettings.json") -Encoding UTF8 | Out-String | ConvertFrom-Json
+        $navWebSettings = $navSettings.NAVWebSettings
+        if (![bool]($navWebSettings.PSObject.Properties.name -match "Designer")) {
+            $navWebSettings | Add-Member -MemberType NoteProperty -Name Designer -Value ""
+            $navSettings.NAVWebSettings = $navWebSettings
+        }
         $navSettings.NAVWebSettings.Designer = "true"
         Set-Content -Path (Join-Path $wwwRootPath "$($BranchSettings.instanceName)\navsettings.json") -Encoding UTF8 -Value (ConvertTo-Json $navSettings)
     } else {

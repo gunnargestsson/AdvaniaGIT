@@ -48,7 +48,14 @@ do {
                                     Remove-NAVEnvironment -BranchSettings $LocalBranchSettings 
                                 } else {
                                         Write-Host "Removing Web Server Instance..."
-                                        Get-NAVWebServerInstance -WebServerInstance $selectedInstance.instanceName | Remove-NAVWebServerInstance  -Force
+                                        $webServerInstance = Get-NAVWebServerInstance -WebServerInstance $selectedInstance.instanceName 
+                                        if ($webServerInstance) {
+                                            if ([bool]($webServerInstance.PSObject.Properties.name -match "ConfigurationFile")) {
+                                                Remove-NAVWebServerInstance -WebServerInstance $selectedInstance.instanceName
+                                            } else {
+                                                $webServerInstance | Remove-NAVWebServerInstance -Force
+                                            }
+                                        }
                                         Write-Host "Removing Server Instance..."
                                         Get-NAVServerInstance -ServerInstance $selectedInstance.instanceName | Remove-NAVServerInstance -Force
                                         if ($selectedInstance.databaseName -ne "") {
@@ -62,14 +69,14 @@ do {
                         '2' {
                                 $InstanceSetupParameters = Create-SetupParameters -SetupParameters $SetupParameters -InstanceVersion $selectedInstance.Version
                                 Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
-                                Set-NAVServerInstance -ServerInstance $selectedInstance.instanceName -Start -Force
+                                Set-NAVServerInstance -ServerInstance $selectedInstance.instanceName -Start
                                 UnLoad-InstanceAdminTools
                                 $anyKey = Read-Host "Press enter to continue..."
                             }
                         '3' {
                                 $InstanceSetupParameters = Create-SetupParameters -SetupParameters $SetupParameters -InstanceVersion $selectedInstance.Version
                                 Load-InstanceAdminTools -SetupParameters $InstanceSetupParameters
-                                Set-NAVServerInstance -ServerInstance $selectedInstance.instanceName -Stop -Force
+                                Set-NAVServerInstance -ServerInstance $selectedInstance.instanceName -Stop
                                 UnLoad-InstanceAdminTools
                                 $anyKey = Read-Host "Press enter to continue..."
                             }

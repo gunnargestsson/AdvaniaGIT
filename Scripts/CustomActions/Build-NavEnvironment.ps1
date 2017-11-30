@@ -76,7 +76,7 @@ if ($BranchSettings.dockerContainerName -gt "") {
         Write-Host "Syncronizing Database..."
         Get-NAVServerInstance -ServerInstance $ServerInstance | Where-Object -Property State -EQ Running | Sync-NAVTenant -Mode ForceSync -Force
         Write-Host "Creating Web Server Instance..."
-        New-NAVWebServerInstance -ClientServicesPort $BranchSettings.clientServicesPort -Server $env:COMPUTERNAME -ServerInstance $ServerInstance -WebServerInstance $ServerInstance -Force
+        New-NAVWebServerInstance -ClientServicesPort $BranchSettings.clientServicesPort -Server $env:COMPUTERNAME -ServerInstance $ServerInstance -WebServerInstance $ServerInstance
         Enable-NAVWebClientDesigner -BranchSettings $BranchSettings
         Enable-NAVWebClientPersonalization -BranchSettings $BranchSettings
         Update-BranchSettings -BranchSettings $BranchSettings
