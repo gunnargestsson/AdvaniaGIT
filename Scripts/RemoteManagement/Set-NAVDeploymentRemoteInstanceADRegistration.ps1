@@ -42,6 +42,7 @@
                     $DefaultServerInstance = Combine-Settings $DefaultServerInstance $KeyVault -Prefix KeyVault
                     $DefaultServerInstance = Combine-Settings $DefaultServerInstance $KeyVaultKey -Prefix KeyVaultKey
                     $DefaultServerInstance = Combine-Settings $DefaultServerInstance $ServicePrincipal -Prefix ServicePrincipal
+                    $DefaultServerInstance = Combine-Settings $DefaultServerInstance $DefaultApplication -Prefix GlobalADApplication
                     $DefaultServerInstance = Combine-Settings $DefaultServerInstance $DefaultApplication -Prefix ADApplication
                     $DefaultServerInstance | Add-Member -MemberType NoteProperty -Name ADApplicationFederationMetadataLocation -Value "https://login.windows.net/$($Subscription.Account.Id.Split("@").GetValue(1))/federationmetadata/2007-06/federationmetadata.xml"
                     Set-NAVRemoteInstanceADRegistration -Session $Session -ServerInstance $DefaultServerInstance -RestartServerInstance
@@ -58,10 +59,11 @@
                     $ServerInstance = Combine-Settings $ServerInstance $KeyVault -Prefix KeyVault
                     $ServerInstance = Combine-Settings $ServerInstance $KeyVaultKey -Prefix KeyVaultKey
                     $ServerInstance = Combine-Settings $ServerInstance $ServicePrincipal -Prefix ServicePrincipal
-                    $ServerInstance = Combine-Settings $ServerInstance $DefaultApplication -Prefix ADApplication
+                    $ServerInstance = Combine-Settings $ServerInstance $DefaultApplication -Prefix GlobalADApplication
+                    $ServerInstance = Combine-Settings $ServerInstance $Application -Prefix ADApplication
                     $ServerInstance | Add-Member -MemberType NoteProperty -Name ADApplicationFederationMetadataLocation -Value "https://login.windows.net/$($Subscription.Account.Id.Split("@").GetValue(1))/federationmetadata/2007-06/federationmetadata.xml"
                     Set-NAVRemoteInstanceADRegistration -Session $Session -ServerInstance $ServerInstance -RestartServerInstance
-                    if ($instanceNo -eq 1) { Set-NAVRemoteInstanceTenantAzureKeyVaultSettings -Session $Session -ServerInstance $DefaultServerInstance -KeyVault $KeyVault -RemoteConfig $RemoteConfig -RemoteComputer $RemoteComputer }
+                    if ($instanceNo -eq 1) { Set-NAVRemoteInstanceTenantAzureKeyVaultSettings -Session $Session -ServerInstance $ServerInstance -KeyVault $KeyVault -RemoteConfig $RemoteConfig -RemoteComputer $RemoteComputer }
                 }
                 
                 Remove-PSSession -Session $Session 

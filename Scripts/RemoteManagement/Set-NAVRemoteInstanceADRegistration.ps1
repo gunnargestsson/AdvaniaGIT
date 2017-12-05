@@ -22,7 +22,7 @@
                 Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName AppIdUri -KeyValue ($ServerInstance.ADApplicationIdentifierUris | Select-Object -First 1)
                 Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName ClientServicesFederationMetadataLocation -KeyValue $ServerInstance.ADApplicationFederationMetadataLocation
                 Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName EncryptionProvider -KeyValue AzureKeyVault
-                Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName AzureKeyVaultClientId -KeyValue $ServerInstance.ADApplicationApplicationId
+                Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName AzureKeyVaultClientId -KeyValue $ServerInstance.GlobalADApplicationApplicationId
                 Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName AzureKeyVaultClientCertificateStoreLocation -KeyValue LocalMachine
                 Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName AzureKeyVaultClientCertificateStoreName -KeyValue My
                 Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName AzureKeyVaultClientCertificateThumbprint -KeyValue $ServerInstance.ServicesCertificateThumbprint

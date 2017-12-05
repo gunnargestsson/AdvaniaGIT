@@ -30,7 +30,7 @@
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateStoreName -Value My
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateThumbprint -Value $ServerInstance.ServicesCertificateThumbprint
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultKeyUri -Value ""
-            $TenantKeyList = Create-NAVAzureKeyVaultTenantKeys -KeyVault $KeyVault -ServerInstance $ServerInstances 
+            $TenantKeyList = Create-NAVAzureKeyVaultTenantKeys -KeyVault $KeyVault -ServerInstance $ServerInstance
             $Param = @{
                 Session = $Session
                 TenantList = $TenantKeyList
