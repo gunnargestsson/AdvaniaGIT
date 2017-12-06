@@ -1,7 +1,9 @@
 ﻿Function Get-NAVAzureDbTemplates {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$AzureResourceGroup
+        [PSObject]$AzureResourceGroup,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [String]$ContainerName
     )
 
     $RemoteConfig = Get-NAVRemoteConfig
@@ -19,6 +21,10 @@
         $menuItem | Add-Member -MemberType NoteProperty -Name Access -Value $StorageAccountAccess
         $menuItems += $menuItem
         $storageContainerNo ++
+    }
+
+    if ($ContainerName -ne $null) {
+        return $menuItems | Where-Object -Property Name -EQ $ContainerName
     }
 
     do {

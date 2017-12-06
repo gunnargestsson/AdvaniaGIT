@@ -38,19 +38,19 @@
                             '1' {                                    
                                     if ($SelectedTenant) {
                                         Start-NAVPasswordStateWebSite -PasswordId $SelectedTenant.PasswordId
-                                        Start-NAVRemoteWindowsDebugger -SelectedInstance $selectedInstance -Server $selectedSession.PSComputerName -TenantId $SelectedTenant.Id
+                                        Start-NAVRemoteWindowsDebugger -SelectedInstance $selectedInstance -Server (Get-NAVRemoteSessionFQDN -ServerInstanceSession $selectedSession) -TenantId $SelectedTenant.Id
                                     } else {
                                         Start-NAVPasswordStateWebSite -PasswordId $selectedInstance.TenantList[0].PasswordId
-                                        Start-NAVRemoteWindowsDebugger -SelectedInstance $selectedInstance -Server $selectedSession.PSComputerName 
+                                        Start-NAVRemoteWindowsDebugger -SelectedInstance $selectedInstance -Server (Get-NAVRemoteSessionFQDN -ServerInstanceSession $selectedSession)
                                     }
                                 }
                             '2' {                                    
                                     if ($SelectedTenant) {
                                         Start-NAVPasswordStateWebSite -PasswordId $SelectedTenant.PasswordId
-                                        Start-NAVRemoteWindowsClient -SelectedInstance $selectedInstance -Server $selectedSession.PSComputerName -TenantId $SelectedTenant.Id
+                                        Start-NAVRemoteWindowsClient -SelectedInstance $selectedInstance -Server (Get-NAVRemoteSessionFQDN -ServerInstanceSession $selectedSession) -TenantId $SelectedTenant.Id
                                     } else {
                                         Start-NAVPasswordStateWebSite -PasswordId $selectedInstance.TenantList[0].PasswordId
-                                        Start-NAVRemoteWindowsClient -SelectedInstance $selectedInstance -Server $selectedSession.PSComputerName 
+                                        Start-NAVRemoteWindowsClient -SelectedInstance $selectedInstance -Server (Get-NAVRemoteSessionFQDN -ServerInstanceSession $selectedSession) 
                                     }
                                 }
                         }                    
