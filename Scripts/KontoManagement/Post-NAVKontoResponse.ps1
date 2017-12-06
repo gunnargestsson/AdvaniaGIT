@@ -16,7 +16,7 @@
             $url = "$Url?"
         }
         $Url = $Url + "username=$($Credentials.UserName)&api_key=$($Credentials.Password)"
-        $Response = Invoke-RestMethod -Method Post -Uri $url -Body $Content 
+        $Response = Invoke-RestMethod -Method Post -Uri $url -Body $Content -ContentType "application/json;charset=utf-8"
     }
     catch
     {

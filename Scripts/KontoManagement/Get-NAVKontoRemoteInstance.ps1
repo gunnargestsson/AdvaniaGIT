@@ -1,23 +1,23 @@
 ﻿Function Get-NAVKontoRemoteInstance {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [String]$DeploymentName
+        [String]$DeploymentName,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [String]$InstanceName
     )
 
     $RemoteConfig = Get-NAVRemoteConfig
-    $VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
-    if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
-        $Credential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
-    } else {
-        $Credential = Get-Credential -Message "Remote Login to Hosts" -ErrorAction Stop    
-    }
-
+    $Credential = Get-NAVKontoRemoteCredentials
+    
     if (!$Credential.UserName -or !$Credential.Password) {
         Write-Host -ForegroundColor Red "Credentials required!"
         break
     }
 
     $NavInstances = Load-NAVRemoteInstanceMenu -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $DeploymentName 
+    if ($InstanceName -ne $null) {
+        return $NavInstances | Where-Object -Property ServerInstance -eq $InstanceName
+    }
     if ($NavInstances.Count -eq 1) { return $NavInstances | Select-Object -First 1 }
     $NavInstanceNo = 1
     $menuItems = @()
