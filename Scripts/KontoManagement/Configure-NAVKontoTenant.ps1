@@ -13,13 +13,19 @@
         Clear-Host
         For ($i=0; $i -le 10; $i++) { Write-Host "" }
         $Tenantconfig | Format-Table -Property Registration_No, Name, State, CompanyList, UserList -AutoSize 
-        $input = Read-Host "Please select action (0 = exit, 1 = create NAV tenant, 2 = rename NAV company, 3 = Create NAV users, 4 = Create company setup)"
+        $input = Read-Host "Please select action (0 = exit, 1 = create NAV tenant, 2 = rename NAV company, 3 = Create NAV users, 4 = Create company setup, 5 = all steps)"
         switch ($input) {
             '0' { break }
             '1' { Create-NAVKontoTenant -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig }
             '2' { Create-NAVKontoCompany -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig }
             '3' { Create-NAVKontoUsers -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig }
             '4' { Create-NAVKontoCompanyData  -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig }
+            '5' {
+                    Create-NAVKontoTenant -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig 
+                    Create-NAVKontoCompany -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig 
+                    Create-NAVKontoUsers -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig
+                    Create-NAVKontoCompanyData  -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig
+                }
         }
         $Tenantconfig = $null
     }

@@ -8,8 +8,6 @@
         [PSObject]$TenantConfig
     )
 
-    #$RemoteConfig = Get-NAVRemoteConfig
-    #$Credential = Get-NAVKontoRemoteCredentials
     $Session = Get-NAVKontoRemoteSession -Provider $Provider
 
     $SelectedTenant = Get-NAVRemoteInstanceTenantSettings -Session $Session -SelectedTenant $TenantConfig
@@ -18,15 +16,19 @@
         $response = Read-Host "Press Enter to continue"
         return
     }
+    Remove-PSSession -Session $Session 
+
     $AdminUser = Get-NAVPasswordStateNAVUser -PasswordId $SelectedTenant.PasswordId 
     if ($AdminUser.UserName -gt "" -and $AdminUser.Password -gt "") {
-        $Credential = New-Object System.Management.Automation.PSCredential($AdminUser.UserName, (ConvertTo-SecureString $AdminUser.Password -AsPlainText -Force))
+        $Credential = New-Object System.Management.Automation.PSCredential("$($TenantConfig.registration_no)\$($AdminUser.UserName)", (ConvertTo-SecureString $AdminUser.Password -AsPlainText -Force))
     } else {
         $Credential = Get-Credential -Message "Remote Login to Hosts" -ErrorAction Stop    
     }    
 
-    $key = [Text.Encoding]::UTF8.GetBytes("<get from passwordstate>")
-    #$TenantConfig.bank_password = Decrypt-Rijndael256ECB -Key $Key -CipherText $TenantConfig.bank_password
+    $KontoEncryption = Get-NAVPasswordStateUser -PasswordId $Provider.ProviderDataHashKey
+
+    $key = [Text.Encoding]::UTF8.GetBytes($KontoEncryption.Password)
+    $TenantConfig.bank_password = Decrypt-Rijndael256ECB -Key $Key -CipherText $TenantConfig.bank_password
 
     Write-Host "Executing SetTenantConfiguration..."
     $Company = [System.Uri]::EscapeDataString($TenantConfig.CompanyList[0])
@@ -42,16 +44,17 @@
     } catch {
         $Success = $false
         $ResponseMessage = "Unable to connect to NAV Tenant as $($Credential.UserName) via : $Url"
+        $ErrorMessage = $_.Exception.Message
     }
     if ($Success) {
         Write-Host "Execution succesful!"
         $TenantConfig = Update-NAVKontoTenantConfig -Provider $Provider -Accountant $Accountant -TenantConfig $TenantConfig -Availability "Available"
     } else {        
         Write-Host -ForegroundColor Red "Execution failes: $ResponseMessage"
+        Write-Host ""
+        Write-Host -ForegroundColor Red $ErrorMessage
+        Write-host ""
         $TenantConfig = Update-NAVKontoTenantConfig -Provider $Provider -Accountant $Accountant -TenantConfig $TenantConfig -Availability "Unavailable"
     }
     $response = Read-Host -Prompt "Press Enter to continue"
-
-    Remove-PSSession -Session $Session 
-
 }
