@@ -1,0 +1,16 @@
+﻿{
+    "Providers":  [
+                      {
+                          "Deployment":  "NAVSPLA2016",
+                          "Description":  "NAV 2016 SPLA Advania service",
+                          "ProviderId":  "2a041bec-cfa2-11e7-bb79-0050560102f2",
+                          "ProviderAuthentication":  "17107",
+                          "ProviderDataHashKey":  "17108",
+                          "KontoServiceUrl":  "http://dev.konto.is/api/v1/",
+                          "ClickOnceUrl":  "",
+                          "TenantTemplateContainer":  "",
+                          "DefaultUsers":  [],
+                          "Accountants":  []
+                      }
+                  ]
+}
