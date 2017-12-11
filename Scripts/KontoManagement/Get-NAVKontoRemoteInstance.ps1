@@ -15,7 +15,7 @@
     }
 
     $NavInstances = Load-NAVRemoteInstanceMenu -Credential $Credential -RemoteConfig $RemoteConfig -DeploymentName $DeploymentName 
-    if ($InstanceName -ne $null) {
+    if (![string]::IsNullOrEmpty($InstanceName)) {
         return $NavInstances | Where-Object -Property ServerInstance -eq $InstanceName
     }
     if ($NavInstances.Count -eq 1) { return $NavInstances | Select-Object -First 1 }
