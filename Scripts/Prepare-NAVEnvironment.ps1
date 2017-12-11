@@ -16,17 +16,17 @@ foreach ($version in $versions) {
     Load-InstanceAdminTools -setupParameters $setupParameters 
 
     #Stop NAV Server Instances
-    Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Substring(0,$version.Length - 1) + "*.0") | Set-NAVServerInstance -Stop
+    Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Substring(0,$version.Length - 1) + ".*.0") | Set-NAVServerInstance -Stop
         
     #Update Startup Type and Dependency on NAV Server Instances
-    Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Substring(0,$version.Length - 1) + "*.0") | foreach {
+    Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Substring(0,$version.Length - 1) + ".*.0") | foreach {
         $branchSetting = @{instanceName = $($_.ServerInstance)}
         Enable-TcpPortSharingForNAVService -branchSetting $branchSetting
         Enable-DelayedStartForNAVService -branchSetting $branchSetting
     }
     #Update Advania.Electronic.Gateway.Config
     if ($SetupParameters.ftpServer -gt "") {
-        try { Get-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath "Advania.Electronic.Gateway.Config" -LocalFilePath (Join-Path $setupParameters.navServicePath "Advania.Electronic.Gateway.Config") }
+        try { Get-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath "Advania.Electronic.Gateway.Config.Json" -LocalFilePath (Join-Path $setupParameters.navServicePath "Advania.Electronic.Gateway.Config.Json") }
         catch { }
     }
 
@@ -35,7 +35,7 @@ foreach ($version in $versions) {
 
     #Start NAV Server Instances
     Write-Host "Starting Services for version $($version.Substring(0,$version.Length - 1))"
-    Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Substring(0,$version.Length - 1) + "*.0") | Set-NAVServerInstance -Start
+    Get-NAVServerInstance | Where-Object -Property Version -Match ($version.Substring(0,$version.Length - 1) + ".*.0") | Set-NAVServerInstance -Start
 
     UnLoad-InstanceAdminTools
 }

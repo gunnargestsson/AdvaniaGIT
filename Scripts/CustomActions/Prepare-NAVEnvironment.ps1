@@ -16,10 +16,12 @@ Get-NAVServerInstance | Where-Object -Property Version -Like ($SetupParameters.n
 
 #Update Advania.Electronic.Gateway.Config
 if ($SetupParameters.ftpServer -gt "") {
-    $ftpDirectory = Get-FtpDirectory -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -Directory "Advania.Electronic.Gateway.Config"
-    if ($ftpDirectory -imatch "Advania.Electronic.Gateway.Config") {
-        Get-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath "Advania.Electronic.Gateway.Config" -LocalFilePath (Join-Path $setupParameters.navServicePath "Advania.Electronic.Gateway.Config") 
-    }
+    try {
+        $ftpDirectory = Get-FtpDirectory -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -Directory "Advania.Electronic.Gateway.Config.Json"
+        if ($ftpDirectory -imatch "Advania.Electronic.Gateway.Config") {
+            Get-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath "Advania.Electronic.Gateway.Config.Json" -LocalFilePath (Join-Path $setupParameters.navServicePath "Advania.Electronic.Gateway.Config.Json") 
+        }
+    } catch {}
 }
 
 #Update Service Configuration

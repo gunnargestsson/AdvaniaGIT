@@ -16,9 +16,9 @@
                 #Update Advania.Electronic.Gateway.Config
                 param([String]$FTPServer,[String]$FTPUserName,[String]$FTPPassWord)
 
-                if (!(Test-Path (Join-Path $setupParameters.navServicePath "Advania.Electronic.Gateway.Config"))) {
+                if (!(Test-Path (Join-Path $setupParameters.navServicePath "Advania.Electronic.Gateway.Config.Json"))) {
                     if ($FTPServer -gt "" -and $FTPUserName -gt "" -and $FTPPassWord -gt "") {
-                        try { Get-FtpFile -Server $FTPServer -User $FTPUserName -Pass $FTPPassWord -FtpFilePath "Advania.Electronic.Gateway.Config" -LocalFilePath (Join-Path $setupParameters.navServicePath "Advania.Electronic.Gateway.Config") }
+                        try { Get-FtpFile -Server $FTPServer -User $FTPUserName -Pass $FTPPassWord -FtpFilePath "Advania.Electronic.Gateway.Config.Json" -LocalFilePath (Join-Path $setupParameters.navServicePath "Advania.Electronic.Gateway.Config.Json") }
                         catch { }
                     }
                 }
