@@ -9,7 +9,7 @@
     Write-Host "Removing Web Server Instance..."
     $webServerInstance = Get-NAVWebServerInstance -WebServerInstance $BranchSettings.instanceName 
     if ($webServerInstance) {
-        if ([bool]($webServerInstance.PSObject.Properties.name -match "ConfigurationFile")) {
+        if ([bool]($webServerInstance.PSObject.Properties.name -match "Configuration File")) {
             Remove-NAVWebServerInstance -WebServerInstance $BranchSettings.instanceName
         } else {
             Remove-NAVWebServerInstance -WebServerInstance $BranchSettings.instanceName -Force
