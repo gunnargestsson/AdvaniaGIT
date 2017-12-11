@@ -43,7 +43,11 @@
         $Database = New-AzureRmSqlDatabase -DatabaseName $newDatabaseName -CollationName Icelandic_100_CS_AS -Edition Standard -ElasticPoolName $SelectedElasticPool.ElasticPoolName -ServerName $SqlServer.ServerName -ResourceGroupName $AzureResourceGroup.ResourceGroupName
     }
 
-    $Result = Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $newDatabaseName -Command "CREATE USER $($DbCredential.UserName) FROM LOGIN $($DbCredential.UserName);" -Username $UserName -Password $Password
-    $Result = Get-SQLCommandResult -Server "$($SqlServer.ServerName).database.windows.net" -Database $newDatabaseName -Command "ALTER ROLE db_owner ADD MEMBER $($DbCredential.UserName);" -Username $UserName -Password $Password
+    try {
+        $Result = Get-SQLCommandResult -Server "$($databaseServer.ServerName).database.windows.net" -Database $DatabaseName -Command "CREATE USER $($DbCredential.UserName) FROM LOGIN $($DbCredential.UserName);" -Username $UserName -Password $Password
+        $Result = Get-SQLCommandResult -Server "$($databaseServer.ServerName).database.windows.net" -Database $DatabaseName -Command "ALTER ROLE db_owner ADD MEMBER $($DbCredential.UserName);" -Username $UserName -Password $Password
+    } catch {
+        Write-Host "SQL Service User configured..."
+    }
     
 }
