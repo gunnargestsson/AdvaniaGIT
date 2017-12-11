@@ -25,7 +25,7 @@
   "customReportLayoutsPath": "CustomReportLayouts",
   "webServicesPath": "WebServices",
   "binaryPath": "Binaries",
-  "testObjectsPath": "Test",
+  "testObjectsPath": "Tests",
   "buildSourcePath": "Source",
   "targetPlatform": "DynamicsNAV",
   "VSCodePath": "AL",
