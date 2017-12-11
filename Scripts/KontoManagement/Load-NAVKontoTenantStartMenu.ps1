@@ -12,7 +12,9 @@
         $menuItem = $Tenant
         $menuItem | Add-Member -MemberType NoteProperty -Name No -Value $TenantNo -Force
         $tenantConfig = Get-NAVKontoResponse -Provider $Provider -Query "get-tenant?guid=$($Tenant.guid)"
-        $menuItem = Combine-Settings $tenantConfig.Result $menuItem
+        if ($tenantConfig.Status -eq "True") {
+            $menuItem = Combine-Settings $tenantConfig.Result $menuItem
+        }
         $menuItems += $menuItem
         $TenantNo ++
     }    
