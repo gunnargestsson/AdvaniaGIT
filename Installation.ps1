@@ -79,6 +79,9 @@ foreach ($configFile in (Get-ChildItem -Path (Join-Path $PSScriptRoot 'Data\*.js
         }
     } else {
         Copy-Item -Path $configFile.FullName -Destination (Join-Path $InstallationPath 'Data')
+        if ($configFile.BaseName -iin ('DockerSettings','GITSettings')) {
+            Start-Process -FilePath $InstalledConfigFile
+        }
     }    
 }
 Write-Host "Please update configuration files to match your environment (opened automatically)"
