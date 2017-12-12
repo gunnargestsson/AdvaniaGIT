@@ -8,5 +8,9 @@ if ($SetupParameters.testCompanyName) {
 $CompanyRegistrationNo = Initialize-NAVTestCompanyRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName
 Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName -ForModifiedObjects
 & (Join-Path $PSScriptRoot Prepare-NAVUnitTest.ps1) 
-& (Join-path $PSScriptRoot Start-TestClient.ps1)
+if (![bool]($SetupParameters.PSObject.Properties.name -match "testExecution") -and $SetupParameters.testExecution -ieq "Background") {
+    & (Join-Path $PSScriptRoot Start-TestCodeunit.ps1)
+} else {
+    & (Join-path $PSScriptRoot Start-TestClient.ps1)
+}
 Set-NAVCompanyInfoRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName -RegistrationNo $CompanyRegistrationNo
