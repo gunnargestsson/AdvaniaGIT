@@ -22,20 +22,20 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add new command to load container management menu
 - Add new command to import NAV Container Helper module <https://github.com/Microsoft/navcontainerhelper>
 
-### [0.0.5]
+## [0.0.5]
 - Add new commands to copy source.txt between work folder and repository
 
-### [0.0.6]
+## [0.0.6]
 - Add new command that will build deltas based on the source from last build
 - Add new commands to load NAV modules; model, apps, ide, instance, and instance app
 - Rename command group from AdvaniaGIT to Advania to not mix with standard GIT commands in search
 
-### [0.0.7]
+## [0.0.7]
 - Add new command to add files.encoding settings to the workspace.  Required to see non-us characters in the text editor
 - Fix commands for unit tests execution
 
-### [0.0.8]
+## [0.0.8]
 - Add new command to build deltas and reverse deltas from last build source
 
-### [0.0.9]
+## [0.0.9]
 - Add new command to import test objects from TestToolKit and from GIT Tests folder
