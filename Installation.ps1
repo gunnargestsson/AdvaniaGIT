@@ -47,9 +47,7 @@ if (Test-Path -Path $InstallationPath) {
         New-Item -Path $Destination -ItemType Directory -ErrorAction SilentlyContinue
         $Items = Get-ChildItem -Path $Source 
         foreach ($Item in $Items) {
-            if (!(Test-Path -Path (Join-Path $Destination $Item.Name))) {
-                Copy-Item -Path $Item.FullName -Destination $Destination -Recurse -ErrorAction SilentlyContinue 
-            }
+            Copy-Item -Path $Item.FullName -Destination $Destination -Recurse -Force -ErrorAction SilentlyContinue             
         }
     }
     $Destination = Join-Path $InstallationPath 'Data'
