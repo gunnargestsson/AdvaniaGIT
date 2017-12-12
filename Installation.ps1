@@ -17,19 +17,22 @@ if (!$IsInAdminMode) {
     Start-Process powershell -Verb runas -WorkingDirectory $PSScriptRoot -ArgumentList $ArgumentList -WindowStyle Normal -Wait
     break
 }
+Write-Host "Starting AdvaniaGIT Installation/Upgrade..."
 
 $Module = (Get-Module -ListAvailable | Where-Object -Property Name -EQ "AdvaniaGIT")
 if ($Module) {
-    $DefaultPath = Split-Path (Split-Path $Module.Path -Parent) -Parent
+    $InstallationPath = Split-Path (Split-Path (Split-Path $Module.Path -Parent) -Parent) -Parent
+    Write-Host "AdvaniaGIT module found on path $InstallationPath"
+    Write-Host "Upgrading..."
 } else {
     $DefaultPath = (Join-Path $env:SystemDrive 'AdvaniaGIT')
+    Write-Host "This will install AdvaniaGIT on your computer.  Please select a local path for the module."
+    Write-Host "Database, backups and installation media will be stored in this folder."
+    Write-Host "Close this window to cancel installation/upgrade"
+    Write-Host ""
+    $InstallationPath = Read-Host -Prompt "Enter local path for AdvaniaGIT (default = $DefaultPath)"
+    if ($InstallationPath -eq "") { $InstallationPath = $DefaultPath }
 }
-Write-Host "This will install AdvaniaGIT on your computer.  Please select a local path for the module."
-Write-Host "Database, backups and installation media will be stored in this folder."
-Write-Host "Close this window to cancel installation/upgrade"
-Write-Host ""
-$InstallationPath = Read-Host -Prompt "Enter local path for AdvaniaGIT (default = ${$DefaultPath})"
-if ($InstallationPath -eq "") { $InstallationPath = $DefaultPath }
 New-Item -Path $InstallationPath -ItemType Directory -ErrorAction SilentlyContinue
 if (Test-Path -Path $InstallationPath) {
     if (!(Test-Path (Join-Path $PSScriptRoot 'TestDevel.ps1'))) {
@@ -56,32 +59,29 @@ else
     break
 }
 
-$DefaultAnswer = 'Y'
-$Answer = Read-Host -Prompt "Perform AdvaniaGIT Module Installation ? (Default = Yes)"
-if ($Answer -iin ('Yes','Y','')) {
-    $ScriptToStart = Join-Path $InstallationPath 'Scripts\Install-Modules.ps1'
-    & $ScriptToStart
+$ScriptToStart = Join-Path $InstallationPath 'Scripts\Install-Modules.ps1'
+& $ScriptToStart
 
-    Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
-    foreach ($configFile in (Join-Path $PSScriptRoot 'Data\*.json')) {
-        $InstalledConfigFile = (Join-Path (Join-Path $InstallationPath 'Data') $configFile.Name)
-        if (Test-Path $InstalledConfigFile) {
-          $installedConfig = Get-Content -Path $InstalledConfigFile -Encoding UTF8 | Out-String | ConvertFrom-Json
-          $newConfig = Get-Content -Path $InstalledConfigFile -Encoding UTF8 | Out-String | ConvertFrom-Json
-          $config = Combine-Settings $installedConfig $newconfig
-          if ($configFile.Name -eq "GITSettings.Json") {
+Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
+foreach ($configFile in (Get-ChildItem -Path (Join-Path $PSScriptRoot 'Data\*.json'))) {
+    $InstalledConfigFile = (Join-Path (Join-Path $InstallationPath 'Data') $configFile.Name)
+    if (Test-Path $InstalledConfigFile) {
+        if ($configFile.BaseName -iin ('DockerSettings','GITSettings')) {
+            $installedConfig = Get-Content -Path $InstalledConfigFile -Encoding UTF8 | Out-String | ConvertFrom-Json
+            $newConfig = Get-Content -Path $configFile.FullName -Encoding UTF8 | Out-String | ConvertFrom-Json
+            $config = Combine-Settings $installedConfig $newconfig
+            if ($configFile.Name -eq "GITSettings.Json") {
             $config.workFolder = (Join-Path $InstallationPath "Workspace")
-          }
-          Set-Content -Path $InstalledConfigFile -Encoding UTF8 -Value ($config | ConvertTo-Json) 
-        } else {
-          Copy-Item -Path $configFile.FullName -Destination (Join-Path $InstallationPath 'Data')
-        }
-        if ($configFile.BaseName -iin ('DockerSettings','GITSettings','NAVVersions','RemoteSettings')) {
+            }
+            Set-Content -Path $InstalledConfigFile -Encoding UTF8 -Value ($config | ConvertTo-Json) 
             Start-Process -FilePath $InstalledConfigFile
         }
-    }
-    Write-Host "Please update configuration files to match your environment (opened automatically)"
+    } else {
+        Copy-Item -Path $configFile.FullName -Destination (Join-Path $InstallationPath 'Data')
+    }    
 }
+Write-Host "Please update configuration files to match your environment (opened automatically)"
+
 
 $DefaultAnswer = 'Y'
 $Answer = Read-Host -Prompt "Perform Remote Administration Module Installation ? (Default = No)"
@@ -99,4 +99,3 @@ if ($Answer -iin ('Yes','Y','')) {
     & $ScriptToStart
 }
 
-$input = Read-Host -Prompt "Press any key to continue..."
