@@ -2,6 +2,7 @@
 if ($BranchSettings.dockerContainerId -gt "") {
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
 } else {    
+    Load-ModelTools -SetupParameters $SetupParameters
     if (Test-Path $SetupParameters.testObjectsPath) {
         foreach ($testObjectFile in (Get-ChildItem -Path $SetupParameters.testObjectsPath)) {
             Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $testObjectFile.FullName -SkipDeleteCheck
@@ -12,7 +13,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
             Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $testObjectFile.FullName -SkipDeleteCheck
         }
     }
-
+    UnLoad-ModelTools
 }
         
 
