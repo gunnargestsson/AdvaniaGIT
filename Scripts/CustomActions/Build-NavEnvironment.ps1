@@ -1,13 +1,24 @@
 if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
     if ($BranchSettings.instanceName -eq "") {
         Write-Host "Starting Docker Image Development Container for Branch ..."
-        if ($SetupPatameters.DockerAdminPasswordId) {
-            Import-Module RemoteManagement -DisableNameChecking | Out-Null
-            $DockerAdmin = Get-NAVPasswordStateUser -PasswordId $SetupPatameters.DockerAdminPasswordId
-            Start-DockerContainer -SetupParameters $SetupParameters -BranchSettings $BranchSettings -AdminUsername $DockerAdmin.Username -AdminPassword $DockerAdmin.Password
-        } else {
-            Start-DockerContainer -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+        $params = @{
+            SetupParameters = $SetupParameters 
+            BranchSettings = $BranchSettings
         }
+        if ($SetupParameters.DockerAdminPasswordId) {
+            Import-Module RemoteManagement -DisableNameChecking | Out-Null
+            $DockerAdmin = Get-NAVPasswordStateUser -PasswordId $SetupParameters.DockerAdminPasswordId
+            $params += @{
+                AdminUsername = $DockerAdmin.UserName 
+                AdminPassword = $DockerAdmin.Password
+            }
+        }
+        if ($SetupParameters.DockerMemoryLimit) {
+            $params += @{
+                MemoryLimit = $SetupParameters.DockerMemoryLimit
+            }
+        }
+        Start-DockerContainer @params
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     } 
 }

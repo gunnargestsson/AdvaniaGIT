@@ -9,7 +9,9 @@
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
     [String]$AdminUsername = $env:USERNAME,
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-    [String]$AdminPassword
+    [String]$AdminPassword,
+    [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+    [String]$MemoryLimit = "3G"
     )
     
     $DockerSettings = Get-DockerSettings 
@@ -35,8 +37,7 @@
     docker.exe pull $imageName
 
     $volume = "$($SetupParameters.Repository):C:\GIT"
-    $rootPath = "$($SetupParameters.rootPath):C:\Host"    
-    $memoryLimit = "3G"
+    $rootPath = "$($SetupParameters.rootPath):C:\Host"        
     $genericTag = (docker.exe inspect $imageName | ConvertFrom-Json).Config.Labels.tag
 
     $parameters = @(
@@ -44,7 +45,7 @@
                 "--env username=$adminUsername",
                 "--env ExitOnError=N",
                 "--env ACCEPT_EULA=Y",
-                "--memory $memoryLimit",
+                "--memory $MemoryLimit",
                 "--volume `"$volume`"",
                 "--volume `"$rootPath`"",
                 "--restart always"
