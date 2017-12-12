@@ -1,8 +1,6 @@
 ﻿if ($BranchSettings.dockerContainerId -gt "") {
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
 } else {    
-    $ClientSettings = Prepare-NAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
-
     if ($SetupParameters.testCompanyName -and $SetupParameters.testCompanyName -gt "") {
         $companyName = $SetupParameters.testCompanyName
     } else {
