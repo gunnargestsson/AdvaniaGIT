@@ -4,13 +4,19 @@ if ($BranchSettings.dockerContainerId -gt "") {
 } else {    
     Load-ModelTools -SetupParameters $SetupParameters
     if (Test-Path $SetupParameters.testObjectsPath) {
-        foreach ($testObjectFile in (Get-ChildItem -Path $SetupParameters.testObjectsPath)) {
+        foreach ($testObjectFile in (Get-ChildItem -Path (Join-Path $SetupParameters.testObjectsPath '*.txt'))) {
             Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $testObjectFile.FullName -SkipDeleteCheck
+        }
+        foreach ($testObjectFile in (Get-ChildItem -Path (Join-Path $SetupParameters.testObjectsPath '*.fob'))) {
+            Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $testObjectFile.FullName -ImportAction Overwrite -SynchronizeSchemaChanges Force
         }
     }
     if (Test-Path (Join-Path $env:SystemDrive 'TestToolKit')) {
-        foreach ($testObjectFile in (Get-ChildItem -Path (Join-Path $env:SystemDrive 'TestToolKit'))) {
+        foreach ($testObjectFile in (Get-ChildItem -Path (Join-Path $env:SystemDrive 'TestToolKit\*.txt'))) {
             Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $testObjectFile.FullName -SkipDeleteCheck
+        }
+        foreach ($testObjectFile in (Get-ChildItem -Path (Join-Path $env:SystemDrive 'TestToolKit\*.fob'))) {
+            Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $testObjectFile.FullName -ImportAction Overwrite -SynchronizeSchemaChanges Force
         }
     }
     UnLoad-ModelTools
