@@ -4,6 +4,11 @@ import * as terminal from './terminal';
 import * as path from "path";
 import * as fs from "fs";
 
+export function StartAdvaniaGITInstallation() {
+    terminal.PSTerminal.sendText(`Invoke-WebRequest -Uri "https://raw.githubusercontent.com/gunnargestsson/AdvaniaGIT/master/Scripts/Install-AdvaniaGIT.ps1" -OutFile "$($env:TEMP)\\Install-AdvaniaGIT.ps1" -ErrorAction Stop`);
+    terminal.PSTerminal.sendText(`& "$($env:TEMP)\\Install-AdvaniaGIT.ps1"`);
+}
+
 export function BuildDeltasInGIT(Repository) {
     StartAction(Repository,`Build-DeltasInGIT.ps1`);
 }

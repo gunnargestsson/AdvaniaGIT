@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.0.9",
+    "version": "0.1.0",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -14,6 +14,7 @@
         "Other"
     ],
     "activationEvents": [
+        "onCommand:advaniagit.StartAdvaniaGITInstallation",
         "onCommand:advaniagit.BuildDeltasInGIT",
         "onCommand:advaniagit.BuildDeltasFromSourceInGIT",
         "onCommand:advaniagit.BuildDeltasFromSource",
@@ -102,6 +103,11 @@
     "main": "./out/extension",
     "contributes": {
         "commands": [
+            {
+                "title": "Go! Start AdvaniaGIT Installation/Upgrade",
+                "command": "advaniagit.StartAdvaniaGITInstallation",
+                "category": "Advania"
+            },
             {
                 "title": "Check NAV Environment",
                 "command": "advaniagit.CheckNAVEnvironment",

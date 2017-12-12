@@ -4,6 +4,6 @@ import * as vscode from "vscode";
 export const PSTerminal = vscode.window.createTerminal(`AdvaniaGIT`);
 
 export function ImportAdvaniaGITModule() {
-    PSTerminal.sendText(`Import-Module AdvaniaGIT -DisableNameChecking`);
+    PSTerminal.sendText(`Get-Module -Name AdvaniaGIT | Import-Module -DisableNameChecking`);
 }
 
