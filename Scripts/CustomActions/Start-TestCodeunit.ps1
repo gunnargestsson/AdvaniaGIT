@@ -14,7 +14,7 @@
 
     Load-InstanceAdminTools -SetupParameters $SetupParameters                        
     $Users = Get-NAVServerUser -ServerInstance $BranchSettings.instanceName
-    if ($Users -ne $null -and $Users.Length -gt 0) {
+    if ($Users) {
         if (!($Users | Where-Object -Property UserName -imatch "${env:USERNAME}")) {
             Write-Host "Creating User ${env:USERNAME}..."
             New-NAVServerUser -ServerInstance $BranchSettings.instanceName -WindowsAccount $env:USERNAME 
