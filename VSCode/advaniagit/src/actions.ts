@@ -100,6 +100,9 @@ export function ImportFromNAVtoTarget(Repository) {
 export function ImportFromTargetToGIT(Repository) {
     StartAction(Repository,`ImportFrom-TargetToGIT.ps1`);
 }
+export function ImportFromTestObjectsToNAV(Repository) {
+    StartAction(Repository,`ImportFrom-TestObjectsToNAV.ps1`);
+}
 export function LoadALMenu(Repository) {
     StartAction(Repository,`Load-ALMenu.ps1`);
 }

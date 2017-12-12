@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -48,6 +48,7 @@
         "onCommand:advaniagit.ImportFromNAVtoGIT",
         "onCommand:advaniagit.ImportFromNAVtoTarget",
         "onCommand:advaniagit.ImportFromTargetToGIT",
+        "onCommand:advaniagit.ImportFromTestObjectsToNAV",
         "onCommand:advaniagit.LoadALMenu",
         "onCommand:advaniagit.LoadClientMenu",
         "onCommand:advaniagit.LoadCodeMenu",
@@ -360,6 +361,11 @@
                 "command": "advaniagit.ImportFromAllGITtoNAV",
                 "category": "Advania"
             },
+            {
+                "title": "Import All Test Objects to NAV Environment (both TestToolKit and from GIT)",
+                "command": "advaniagit.ImportFromTestObjectsToNAV",
+                "category": "Advania"
+            },                        
             {
                 "title": "Create new Branch Id in Setup.json",
                 "command": "advaniagit.CreateNewBranchId",

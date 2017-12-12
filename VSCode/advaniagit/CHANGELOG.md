@@ -36,3 +36,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### [0.0.8]
 - Add new command to build deltas and reverse deltas from last build source
+
+### [0.0.9]
+- Add new command to import test objects from TestToolKit and from GIT Tests folder
