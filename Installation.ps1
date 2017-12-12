@@ -52,6 +52,8 @@ if (Test-Path -Path $InstallationPath) {
             }
         }
     }
+    $Destination = Join-Path $InstallationPath 'Data'
+    New-Item -Path $Destination -ItemType Directory -ErrorAction SilentlyContinue
 }
 else
 {
