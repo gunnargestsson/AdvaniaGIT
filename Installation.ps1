@@ -19,6 +19,7 @@ if (!$IsInAdminMode) {
 }
 Write-Host "Starting AdvaniaGIT Installation/Upgrade..."
 
+Get-Module -Name "AdvaniaGIT" | Remove-Module
 $Module = (Get-Module -ListAvailable | Where-Object -Property Name -EQ "AdvaniaGIT")
 if ($Module) {
     $InstallationPath = Split-Path (Split-Path (Split-Path $Module.Path -Parent) -Parent) -Parent
