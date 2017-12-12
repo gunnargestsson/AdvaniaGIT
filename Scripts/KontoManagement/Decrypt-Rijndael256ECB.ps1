@@ -9,6 +9,7 @@
     $RijndaelProvider.BlockSize = 256
     $RijndaelProvider.Mode      = [System.Security.Cryptography.CipherMode]::ECB
     $RijndaelProvider.Key       = $key
+    $RijndaelProvider.Padding   = [System.Security.Cryptography.PaddingMode]::None
 
     $Decryptor = $RijndaelProvider.CreateDecryptor()
 

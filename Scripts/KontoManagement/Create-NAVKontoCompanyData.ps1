@@ -29,6 +29,7 @@
 
     $key = [Text.Encoding]::UTF8.GetBytes($KontoEncryption.Password)
     $TenantConfig.bank_password = Decrypt-Rijndael256ECB -Key $Key -CipherText $TenantConfig.bank_password
+    $TenantConfig.api_key = Decrypt-Rijndael256ECB -Key $Key -CipherText $TenantConfig.api_key
 
     Write-Host "Executing SetTenantConfiguration..."
     $Company = [System.Uri]::EscapeDataString($TenantConfig.CompanyList[0])

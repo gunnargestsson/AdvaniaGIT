@@ -11,6 +11,7 @@
     # Make sure we use ECB mode, or the generated IV will fuck up the first block upon decryption
     $RijndaelProvider.Mode      = [System.Security.Cryptography.CipherMode]::ECB
     $RijndaelProvider.Key       = $key
+    $RijndaelProvider.Padding   = [System.Security.Cryptography.PaddingMode]::None
 
     # This object will take care of the actual cryptographic transformation
     $Encryptor = $RijndaelProvider.CreateEncryptor()
