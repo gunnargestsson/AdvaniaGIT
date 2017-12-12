@@ -2,7 +2,7 @@
 (
 [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$true)]
 [String]$ScriptName,
-[String]$Repository,
+[String]$Repository = (Get-Location).Path,
 [String]$WorkFolder,
 [String]$SetupPath,
 [String]$ObjectsPath,

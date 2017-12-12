@@ -1,7 +1,13 @@
 if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
     if ($BranchSettings.instanceName -eq "") {
         Write-Host "Starting Docker Image Development Container for Branch ..."
-        Start-DockerContainer -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+        if ($SetupPatameters.DockerAdminPasswordId) {
+            Import-Module RemoteManagement -DisableNameChecking | Out-Null
+            $DockerAdmin = Get-NAVPasswordStateUser -PasswordId $SetupPatameters.DockerAdminPasswordId
+            Start-DockerContainer -SetupParameters $SetupParameters -BranchSettings $BranchSettings -AdminUsername $DockerAdmin.Username -AdminPassword $DockerAdmin.Password
+        } else {
+            Start-DockerContainer -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+        }
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     } 
 }

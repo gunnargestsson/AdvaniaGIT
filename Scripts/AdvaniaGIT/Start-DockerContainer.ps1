@@ -7,6 +7,8 @@
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
     [PSObject]$BranchSettings,
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+    [String]$AdminUsername = $env:USERNAME,
+    [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
     [String]$AdminPassword
     )
     
@@ -23,11 +25,8 @@
     }
 
     if ($AdminPassword -eq "") {
-        $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $env:USERNAME
-        $adminUsername = $DockerCredentials.UserName
+        $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $AdminUsername
         $AdminPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
-    } else {
-        $adminUsername = $env:USERNAME        
     }
 
     Write-Host "Preparing Docker Container for Dynamics NAV..."    
