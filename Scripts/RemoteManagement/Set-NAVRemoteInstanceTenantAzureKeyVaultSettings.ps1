@@ -25,7 +25,7 @@
             }
 
             $AzureKeyVaultSettings = New-Object -TypeName PSObject
-            $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientId -Value $ServerInstance.ADApplicationApplicationId
+            $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientId -Value $ServerInstance.AzureKeyVaultClientId
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateStoreLocation -Value LocalMachine
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateStoreName -Value My
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateThumbprint -Value $ServerInstance.ServicesCertificateThumbprint
