@@ -11,6 +11,8 @@
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
     [String]$AdminPassword,
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+    [String]$BackupFilePath,
+    [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
     [String]$MemoryLimit = "3G"
     )
     
@@ -37,7 +39,7 @@
     docker.exe pull $imageName
 
     $volume = "$($SetupParameters.Repository):C:\GIT"
-    $rootPath = "$($SetupParameters.rootPath):C:\Host"        
+    $rootPath = "$($SetupParameters.rootPath):C:\Host"
     $genericTag = (docker.exe inspect $imageName | ConvertFrom-Json).Config.Labels.tag
 
     $parameters = @(
@@ -52,6 +54,13 @@
                 )
 
     Write-Host "Docker Container starting..."
+
+    if (![System.String]::IsNullOrEmpty($BackupFilePath)) {
+        $BackupFilePath = $BackupFilePath.Replace($SetupParameters.rootPath,"C:\Host")
+        $parameters += @(
+                            "--env bakfile=$BackupFilePath"
+                        )
+    }
 
     if ([System.Version]$genericTag -ge [System.Version]"0.0.3.0") {
         $passwordKeyHostFile = Join-Path $($SetupParameters.LogPath) "aes.key"

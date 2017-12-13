@@ -5,17 +5,28 @@ if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
             SetupParameters = $SetupParameters 
             BranchSettings = $BranchSettings
         }
-        if ($SetupParameters.DockerAdminPasswordId) {
+        if ($SetupParameters.dockerAdminPasswordId) {
             Import-Module RemoteManagement -DisableNameChecking | Out-Null
-            $DockerAdmin = Get-NAVPasswordStateUser -PasswordId $SetupParameters.DockerAdminPasswordId
+            $DockerAdmin = Get-NAVPasswordStateUser -PasswordId $SetupParameters.dockerAdminPasswordId
+            Write-Host "Using stored authentication for Docker Container..."
             $params += @{
                 AdminUsername = $DockerAdmin.UserName 
                 AdminPassword = $DockerAdmin.Password
             }
         }
-        if ($SetupParameters.DockerMemoryLimit) {
-            $params += @{
+        if ($SetupParameters.dockerMemoryLimit) {
+            Write-Host "Using configured memory limit for Docker Container..."
+            $params += @{                
                 MemoryLimit = $SetupParameters.DockerMemoryLimit
+            }
+        }
+        if ($SetupParameters.dockerRestoreBackup) {
+            $BackupFilePath = Get-NAVBackupFilePath -SetupParameters $SetupParameters
+            if (Test-Path -Path $BackupFilePath) {
+                Write-Host "Using backup file for Docker Container..."
+                $params += @{
+                    BackupFilePath = $BackupFilePath
+                }
             }
         }
         Start-DockerContainer @params
