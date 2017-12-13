@@ -22,7 +22,9 @@
         }
         $FtpFileName = "license/$($SelectedTenant.LicenseNo).flf"
         $LocalFileName = Join-Path $env:TEMP "$($SelectedTenant.LicenseNo).flf"
-        Get-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath $FtpFileName -LocalFilePath $LocalFileName
+        Remove-Item -Path $LocalFileName -Force -ErrorAction SilentlyContinue
+        try { Get-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath $FtpFileName -LocalFilePath $LocalFileName }
+        catch {}
         if (!(Test-Path $LocalFileName)) {
             Write-Host -ForegroundColor Red "Unable to download the License File from $($SetupParameters.ftpServer)!"
             $anyKey = Read-Host "Press enter to continue..."

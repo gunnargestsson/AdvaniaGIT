@@ -29,6 +29,11 @@ if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
                 }
             }
         }
+        if (Test-Path $SetupParameters.LicenseFilePath) {  
+                $params += @{
+                    LicenseFilePath = $SetupParameters.LicenseFilePath
+                }
+        }            
         Start-DockerContainer @params
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     } 

@@ -13,6 +13,8 @@
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
     [String]$BackupFilePath,
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+    [String]$LicenseFilePath,
+    [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
     [String]$MemoryLimit = "3G"
     )
     
@@ -59,6 +61,13 @@
         $BackupFilePath = $BackupFilePath.Replace($SetupParameters.rootPath,"C:\Host")
         $parameters += @(
                             "--env bakfile=$BackupFilePath"
+                        )
+    }
+
+    if (![System.String]::IsNullOrEmpty($LicenseFilePath)) {
+        $LicenseFilePath = $LicenseFilePath.Replace($SetupParameters.rootPath,"C:\Host")
+        $parameters += @(
+                            "--env licensefile=$LicenseFilePath"
                         )
     }
 

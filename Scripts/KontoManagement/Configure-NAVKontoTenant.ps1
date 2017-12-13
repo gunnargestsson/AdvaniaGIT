@@ -22,8 +22,11 @@
             '4' { Create-NAVKontoCompanyData  -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig }
             '5' {
                     Create-NAVKontoTenant -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig 
+                    $Tenantconfig = Load-NAVKontoTenantConfig -Provider $Provider -Accountant $Accountant -Tenant $Tenant
                     Create-NAVKontoCompany -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig 
+                    $Tenantconfig = Load-NAVKontoTenantConfig -Provider $Provider -Accountant $Accountant -Tenant $Tenant
                     Create-NAVKontoUsers -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig
+                    $Tenantconfig = Load-NAVKontoTenantConfig -Provider $Provider -Accountant $Accountant -Tenant $Tenant
                     Create-NAVKontoCompanyData  -Provider $Provider -Accountant $Accountant -TenantConfig $Tenantconfig
                 }
         }

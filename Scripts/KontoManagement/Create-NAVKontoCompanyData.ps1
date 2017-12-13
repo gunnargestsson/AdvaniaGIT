@@ -20,7 +20,7 @@
 
     $AdminUser = Get-NAVPasswordStateNAVUser -PasswordId $SelectedTenant.PasswordId 
     if ($AdminUser.UserName -gt "" -and $AdminUser.Password -gt "") {
-        $Credential = New-Object System.Management.Automation.PSCredential("$($TenantConfig.registration_no)\$($AdminUser.UserName)", (ConvertTo-SecureString $AdminUser.Password -AsPlainText -Force))
+        $Credential = New-Object System.Management.Automation.PSCredential("$($TenantConfig.registration_no)\$($AdminUser.UserName)", (ConvertTo-SecureString $AdminUser.Password -AsPlainText -Force))        
     } else {
         $Credential = Get-Credential -Message "Remote Login to Hosts" -ErrorAction Stop    
     }    
@@ -28,8 +28,8 @@
     $KontoEncryption = Get-NAVPasswordStateUser -PasswordId $Provider.ProviderDataHashKey
 
     $key = [Text.Encoding]::UTF8.GetBytes($KontoEncryption.Password)
-    $TenantConfig.bank_password = Decrypt-Rijndael256ECB -Key $Key -CipherText $TenantConfig.bank_password
-    $TenantConfig.api_key = Decrypt-Rijndael256ECB -Key $Key -CipherText $TenantConfig.api_key
+    $TenantConfig.bank_password = (Decrypt-Rijndael256ECB -Key $Key -CipherText $TenantConfig.bank_password).TrimEnd([Text.Encoding]::UTF8.GetChars(0))
+    $TenantConfig.api_key = (Decrypt-Rijndael256ECB -Key $Key -CipherText $TenantConfig.api_key).TrimEnd([Text.Encoding]::UTF8.GetChars(0))
 
     Write-Host "Executing SetTenantConfiguration..."
     $Company = [System.Uri]::EscapeDataString($TenantConfig.CompanyList[0])

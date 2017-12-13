@@ -1,8 +1,8 @@
 ﻿function Start-AdvaniaGITAction {
     param
     (
-    [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-    [String]$Repository,
+    [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+    [String]$Repository = (Get-Location).Path,
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$true)]
     [String]$ScriptName,
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyName=$true)]

@@ -20,9 +20,14 @@ foreach ($License in $Licenses | Sort-Object -Property LastWriteTime) {
     {
         Write-Progress -Status "Processing $i of $count" -Activity 'Copying license...' -PercentComplete ($percent*100) -SecondsRemaining $remtime
     }
-    $LicenseName = $License.BaseName.SubString(0,7)
-    if ($LicenseName -match "^[\d\.]+$") {
-        $FtpFileName = "License/${LicenseName}.flf"
+    if ($License.BaseName.SubString(0,4) -eq "SPLA") {
+        $FtpFileName = "License/$($License.Name)"
         Put-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath $FtpFileName -LocalFilePath $License.FullName
-    }        
+    } else {
+        $LicenseName = $License.BaseName.SubString(0,7)
+        if ($LicenseName -match "^[\d\.]+$") {
+            $FtpFileName = "License/${LicenseName}.flf"
+            Put-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath $FtpFileName -LocalFilePath $License.FullName
+        }       
+    } 
 }

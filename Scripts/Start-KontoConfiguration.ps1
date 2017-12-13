@@ -11,10 +11,10 @@ Import-Module AzureAD
 # Get Environment Settings
 $SetupParameters = Get-GITSettings
 $RemoteConfig = Get-NAVRemoteConfig
-$KontoConfig = Get-NAVKontoConfig
 
 do {
     # Start Menu
+    $KontoConfig = Get-NAVKontoConfig
     $menuItems = Load-NAVKontoStartMenu -KontoConfig $KontoConfig
     Clear-Host
     For ($i=0; $i -le 10; $i++) { Write-Host "" }
