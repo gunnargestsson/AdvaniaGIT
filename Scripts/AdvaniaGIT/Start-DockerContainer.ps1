@@ -107,6 +107,7 @@
 
     $DockerConfig = docker.exe inspect $DockerContainerId
     $DockerContainerName = ($DockerConfig | ConvertFrom-Json).Config[0].HostName
+    $DockerContainerFriendlyName = Split-Path ($DockerConfig | ConvertFrom-Json).Name -Leaf
     $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $DockerContainerName
 
     $WaitForHealty = $true
