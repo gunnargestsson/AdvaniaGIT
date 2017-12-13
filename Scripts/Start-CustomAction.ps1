@@ -9,8 +9,6 @@
 [Parameter(Mandatory=$False, ValueFromPipelineByPropertyName=$true)]
 [String]$Wait='$false',
 [Parameter(Mandatory=$False, ValueFromPipelineByPropertyName=$true)]
-[String]$BuildFolder,
-[Parameter(Mandatory=$False, ValueFromPipelineByPropertyName=$true)]
 [HashTable]$BuildSettings
 )
 # Get the ID and security principal of the current user account
@@ -74,19 +72,10 @@ else
     
     # Set Global Parameters
     $Globals = New-Object -TypeName PSObject
-    if ($BuildFolder) {
-        $Globals | Add-Member WorkFolder $BuildFolder
-        $Globals | Add-Member BackupPath  $BuildFolder
-        $Globals | Add-Member DatabasePath  $BuildFolder
-        $Globals | Add-Member SourcePath  $BuildFolder
-        $Globals | Add-Member ExecutingBuild $true
-    } else {
-        $Globals | Add-Member WorkFolder $SetupParameters.workFolder
-        $Globals | Add-Member BackupPath  (Join-Path $SetupParameters.rootPath "Backup")
-        $Globals | Add-Member DatabasePath  (Join-Path $SetupParameters.rootPath "Database")
-        $Globals | Add-Member SourcePath  (Join-Path $SetupParameters.rootPath "Source")
-        $Globals | Add-Member ExecutingBuild $false
-    }    
+    $Globals | Add-Member WorkFolder $SetupParameters.workFolder
+    $Globals | Add-Member BackupPath  (Join-Path $SetupParameters.rootPath "Backup")
+    $Globals | Add-Member DatabasePath  (Join-Path $SetupParameters.rootPath "Database")
+    $Globals | Add-Member SourcePath  (Join-Path $SetupParameters.rootPath "Source")
     $Globals | Add-Member SetupPath  (Join-Path $Repository $SetupParameters.setupPath)
     $Globals | Add-Member ObjectsPath  (Join-Path $Repository $SetupParameters.objectsPath)
     $Globals | Add-Member DeltasPath  (Join-Path $Repository $SetupParameters.deltasPath)
@@ -114,6 +103,7 @@ else
 
     $SetupParameters = Combine-Settings $Globals $SetupParameters
     if ($BuildSettings) { $SetupParameters = Combine-Settings (New-Object -TypeName PSObject -Property $BuildSettings) $SetupParameters }
+    $SetupParameters = Expand-NAVConfigurationValues $SetupParameters
 
     New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null

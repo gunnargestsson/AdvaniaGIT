@@ -26,7 +26,7 @@
 
     }
 
-    if ($AdminPassword -eq "") {
+    if ([System.String]::IsNullOrEmpty($AdminPassword)) {
         $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $AdminUsername
         $AdminPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
     }

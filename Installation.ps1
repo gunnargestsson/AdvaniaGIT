@@ -36,7 +36,7 @@ if ($Module) {
 }
 New-Item -Path $InstallationPath -ItemType Directory -ErrorAction SilentlyContinue
 if (Test-Path -Path $InstallationPath) {
-    if (!(Test-Path (Join-Path $PSScriptRoot 'TestDevel.ps1'))) {
+    if (!(Test-Path (Join-Path $InstallationPath 'TestDevel.ps1'))) {
         Copy-Item -Path (Join-Path $PSScriptRoot 'TestDevel.ps1') -Destination $InstallationPath -ErrorAction SilentlyContinue
     }
     Copy-Item -Path (Join-Path $PSScriptRoot 'README.md') -Destination $InstallationPath -Force -ErrorAction SilentlyContinue
