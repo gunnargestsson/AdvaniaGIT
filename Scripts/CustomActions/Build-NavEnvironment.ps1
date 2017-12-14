@@ -92,7 +92,7 @@ if ($BranchSettings.dockerContainerName -gt "") {
         Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DataCacheSize -KeyValue 7 
         Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName CompileBusinessApplicationAtStartup -KeyValue $false
         Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName PublicWebBaseUrl -KeyValue "http://$($env:COMPUTERNAME):$(Get-WebClientPort -MainVersion $SetupParameters.mainVersion)/${ServerInstance}/WebClient"
-        if ($SetupParameters.developerService) {
+        if ($SetupParameters.developerService -eq $true) {
             Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DeveloperServicesEnabled -KeyValue $true 
             Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DefaultClient -KeyValue 'Web'
             $BranchSettings.developerServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='DeveloperServicesPort']").Attributes["value"].Value
