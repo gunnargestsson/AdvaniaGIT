@@ -112,15 +112,18 @@ else
     
     # Start the script
     $ScriptToStart = (Join-Path (Join-path $PSScriptRoot 'CustomActions') $ScriptName)
-    try { & $ScriptToStart }
-    catch [Exception] {
-      Write-Host $_.Exception.GetType().FullName, $_.Exception.Message
-      if ($env:TERM_PROGRAM -eq $null -and $env:BAMBOO_AGENT_HOME -eq $null) {
-        $anyKey = Read-Host "Press enter to continue..."
-      }
-      break
+    if ($SetupParameters.BuildMode) {
+        & $ScriptToStart
+    } else {
+        try { & $ScriptToStart }
+        catch [Exception] {
+          Write-Host $_.Exception.GetType().FullName, $_.Exception.Message
+          if ($env:TERM_PROGRAM -eq $null -and $env:BAMBOO_AGENT_HOME -eq $null) {
+            $anyKey = Read-Host "Press enter to continue..."
+          }
+          break
+        }
     }
-
     Pop-Location
 }
 
