@@ -8,7 +8,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
     $jobs = @()
     foreach($objectType in $objectTypes) {
         Write-Host "Starting $objectType compilation..."
-        $filter = "Type=$objectType;id=5054;Version List=<>*Test*"
+        $filter = "Type=$objectType;Version List=<>*Test*"
         $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Yes -Recompile    
     }
     Receive-Job -Job $jobs -Wait     
