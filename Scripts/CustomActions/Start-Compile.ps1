@@ -8,7 +8,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
     $jobs = @()
     foreach($objectType in $objectTypes) {
         Write-Host "Starting $objectType compilation..."
-        $filter = "Type=$objectType;Version List=<>*Test*"
+        $filter = "Type=$objectType;id=5054;Version List=<>*Test*"
         $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Yes -Recompile    
     }
     Receive-Job -Job $jobs -Wait     
@@ -45,7 +45,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
     if ($ErrorObjects.Length -gt 0) {
         Write-Host -ForegroundColor Red "Compilation Errors in objects:"
         $ErrorObjects | Format-Table -AutoSize 
-        exit 1
+        throw 
     }
 
     UnLoad-IdeTools

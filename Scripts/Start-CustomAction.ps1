@@ -115,7 +115,7 @@ else
     try { & $ScriptToStart }
     catch [Exception] {
       Write-Host $_.Exception.GetType().FullName, $_.Exception.Message
-      if ($env:TERM_PROGRAM -eq $null) {
+      if ($env:TERM_PROGRAM -eq $null -and $env:BAMBOO_AGENT_HOME -eq $null) {
         $anyKey = Read-Host "Press enter to continue..."
       }
       break
