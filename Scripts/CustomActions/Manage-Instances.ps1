@@ -22,7 +22,7 @@
 do {
     $menuItems = Load-Menu
     Clear-Host
-    Add-BlankLines
+    Add-BlankLines -SetupParameters $SetupParameters
     $menuItems | Format-Table -Property No, ProjectName, InstanceName, State, DatabaseName, Version, Default, BranchId -AutoSize 
     $input = Read-Host "Please select instance number (0 = exit)"
     switch ($input) {
@@ -32,7 +32,7 @@ do {
             if ($selectedInstance) {
                 do {
                     Clear-Host
-                    Add-BlankLines
+                    Add-BlankLines -SetupParameters $SetupParameters
                     $selectedInstance | Format-Table -Property No, ProjectName, InstanceName, State, DatabaseName, Version, Default, BranchId -AutoSize
                     $input = Read-Host "Please select action (0 = return, 1 = delete, 2 = start, 3 = stop, 4 = event log)"
                     switch ($input) {

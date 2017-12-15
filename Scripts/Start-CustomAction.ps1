@@ -107,7 +107,7 @@ else
 
     New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-    if ($IsInAdminMode ) { Add-BlankLines }
+    if ($IsInAdminMode ) { Add-BlankLines -SetupParameters $SetupParameters }
     $env:WorkFolder = $SetupParameters.WorkFolder
     
     # Start the script

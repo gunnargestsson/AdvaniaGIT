@@ -27,7 +27,7 @@
 do {
     $menuItems = Load-Menu
     Clear-Host
-    Add-BlankLines
+    Add-BlankLines -SetupParameters $SetupParameters
     $menuItems | Format-Table -Property No, ProjectName, DatabaseName, State, InstanceName, Version, Default, BranchId -AutoSize 
     $input = Read-Host "Please select database number (0 = exit)"
     switch ($input) {
@@ -37,7 +37,7 @@ do {
             if ($selectedDatabase) {
                 do {
                     Clear-Host
-                    Add-BlankLines
+                    Add-BlankLines -SetupParameters $SetupParameters
                     $selectedDatabase | Format-Table -Property No, ProjectName, DatabaseName, State, InstanceName, Version, Default, BranchId -AutoSize 
                     $databaseBranchSettings = Get-DatabaseBranchSettings -DatabaseName $selectedDatabase.DatabaseName
                     $InstanceSetupParameters = Create-SetupParameters -SetupParameters $SetupParameters -InstanceVersion $selectedDatabase.Version

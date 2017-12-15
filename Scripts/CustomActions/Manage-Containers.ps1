@@ -21,7 +21,7 @@
 do {
     $menuItems = Load-Menu
     Clear-Host
-    Add-BlankLines
+    Add-BlankLines -SetupParameters $SetupParameters
     $menuItems | Format-Table -Property No, ProjectName, Name, Status, InstanceName, BranchId, Image -AutoSize 
     $input = Read-Host "Please select container number (0 = exit)"
     switch ($input) {
@@ -31,7 +31,7 @@ do {
             if ($selectedContainer) {
                 do {
                     Clear-Host
-                    Add-BlankLines
+                    Add-BlankLines -SetupParameters $SetupParameters
                     $selectedContainer | Format-Table -Property No, ProjectName, Name, Status, InstanceName, BranchId, Image -AutoSize 
                     $input = Read-Host "Please select action (
                     0 = return, 
