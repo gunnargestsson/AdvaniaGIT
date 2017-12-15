@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -93,12 +93,12 @@
         "onCommand:advaniagit.CreateNewBranchId",
         "onCommand:advaniagit.NewGITBranch",
         "onCommand:advaniagit.NewFilesEncodingSettings",
-        "onCommand:advaniagit.LoadAppsTools",
-        "onCommand:advaniagit.LoadIdeTools",
-        "onCommand:advaniagit.LoadInstanceAminTools",
-        "onCommand:advaniagit.LoadInstanceAppTools",
-        "onCommand:advaniagit.LoadModelTool",
-        "onCommand:advaniagit.InstallNAVContainerHelper"
+        "onCommand:advaniagit.ImportAppsTools",
+        "onCommand:advaniagit.ImportIdeTools",
+        "onCommand:advaniagit.ImportInstanceAminTools",
+        "onCommand:advaniagit.ImportInstanceAppTools",
+        "onCommand:advaniagit.ImportModelTools",
+        "onCommand:advaniagit.ImportNAVContainerHelper"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -388,33 +388,33 @@
                 "category": "Advania"
             },
             {
-                "title": "Install NAV Model Tools Module",
-                "command": "advaniagit.LoadModelTools",
+                "title": "Import NAV Model Tools Module",
+                "command": "advaniagit.ImportModelTools",
                 "category": "Advania"
             },
             {
-                "title": "Install NAV Instance Administration Module",
-                "command": "advaniagit.LoadInstanceAdminTools",
+                "title": "Import NAV Instance Administration Module",
+                "command": "advaniagit.ImportInstanceAdminTools",
                 "category": "Advania"
             },
             {
-                "title": "Install NAV Instance App Module",
-                "command": "advaniagit.LoadInstanceAppTools",
+                "title": "Import NAV Instance App Module",
+                "command": "advaniagit.ImportInstanceAppTools",
                 "category": "Advania"
             },
             {
-                "title": "Install NAV Client App Module",
-                "command": "advaniagit.LoadAppsTools",
+                "title": "Import NAV Client App Module",
+                "command": "advaniagit.ImportAppsTools",
                 "category": "Advania"
             },
             {
-                "title": "Install NAV Client Ide Module",
-                "command": "advaniagit.LoadIdeTools",
+                "title": "Import NAV Client Ide Module",
+                "command": "advaniagit.ImportIdeTools",
                 "category": "Advania"
             },
             {
-                "title": "Install Microsoft NAV Container Helper Module",
-                "command": "advaniagit.InstallNAVContainerHelper",
+                "title": "Import Microsoft NAV Container Helper Module",
+                "command": "advaniagit.ImportNAVContainerHelper",
                 "category": "Advania"
             },
             {

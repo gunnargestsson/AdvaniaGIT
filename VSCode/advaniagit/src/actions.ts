@@ -271,22 +271,23 @@ export function NewGITBranch(Repository) {
         }
     })
 }
-export function InstallNAVContainerHelper() {
+export function ImportNAVContainerHelper() {
     terminal.PSTerminal.sendText(`Install-Module NAVContainerHelper -force`);
+    terminal.PSTerminal.sendText(`Import-Module NAVContainerHelper -DisableNameChecking`);
 }
-export function LoadAppsTools(Repository) {
+export function ImportAppsTools(Repository) {
     StartAction(Repository,`Load-AppsTools.ps1`);
 }
-export function LoadIdeTools(Repository) {
+export function ImportIdeTools(Repository) {
     StartAction(Repository,`Load-IdeTools.ps1`);
 }
-export function LoadInstanceAdminTools(Repository) {
+export function ImportInstanceAdminTools(Repository) {
     StartAction(Repository,`Load-InstanceAdminTools.ps1`);
 }
-export function LoadInstanceAppTools(Repository) {
+export function ImportInstanceAppTools(Repository) {
     StartAction(Repository,`Load-InstanceAppTools.ps1`);
 }
-export function LoadModelTools(Repository) {
+export function ImportModelTools(Repository) {
     StartAction(Repository,`Load-ModelTools.ps1`);
 }
 

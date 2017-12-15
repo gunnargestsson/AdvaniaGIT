@@ -100,12 +100,12 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.ImportFromAllGITtoNAV', () => {actions.ImportFromAllGITtoNAV(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateNewBranchId', () => {actions.CreateNewBranchId(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.NewFilesEncodingSettings', () => {actions.NewFilesEncodingSettings(vscode.workspace.rootPath)}),
-        vscode.commands.registerCommand('advaniagit.LoadAppsTools', () => {actions.LoadAppsTools(vscode.workspace.rootPath)}),
-        vscode.commands.registerCommand('advaniagit.LoadIdeTools', () => {actions.LoadIdeTools(vscode.workspace.rootPath)}),
-        vscode.commands.registerCommand('advaniagit.LoadInstanceAdminTools', () => {actions.LoadInstanceAdminTools(vscode.workspace.rootPath)}),
-        vscode.commands.registerCommand('advaniagit.LoadInstanceAppTools', () => {actions.LoadInstanceAppTools(vscode.workspace.rootPath)}),
-        vscode.commands.registerCommand('advaniagit.LoadModelTools', () => {actions.LoadModelTools(vscode.workspace.rootPath)}),       
-        vscode.commands.registerCommand('advaniagit.InstallNAVContainerHelper', () => {actions.InstallNAVContainerHelper()})
+        vscode.commands.registerCommand('advaniagit.ImportAppsTools', () => {actions.ImportAppsTools(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.ImportIdeTools', () => {actions.ImportIdeTools(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.ImportInstanceAdminTools', () => {actions.ImportInstanceAdminTools(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.ImportInstanceAppTools', () => {actions.ImportInstanceAppTools(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.ImportModelTools', () => {actions.ImportModelTools(vscode.workspace.rootPath)}),       
+        vscode.commands.registerCommand('advaniagit.ImportNAVContainerHelper', () => {actions.ImportNAVContainerHelper()})
     ];
     
     context.subscriptions.concat(commandList);
