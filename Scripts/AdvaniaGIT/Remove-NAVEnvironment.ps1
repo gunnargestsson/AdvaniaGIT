@@ -6,14 +6,14 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$BranchSettings
     )
-    Write-Host "Removing Web Server Instance..."
     $webServerInstance = Get-NAVWebServerInstance -WebServerInstance $BranchSettings.instanceName 
     if ($webServerInstance) {
-        if ([bool]($webServerInstance.PSObject.Properties.name -match "Configuration File")) {
-            Remove-NAVWebServerInstance -WebServerInstance $BranchSettings.instanceName
-        } else {
+        Write-Host "Removing Web Server Instance..."
+        if ($webServerInstance.'Configuration File'.contains('web.config')) {
             Remove-NAVWebServerInstance -WebServerInstance $BranchSettings.instanceName -Force
-        }
+        } else {
+            Remove-NAVWebServerInstance -WebServerInstance $BranchSettings.instanceName
+        }        
     }
     Write-Host "Removing Server Instance..."
     Get-NAVServerInstance -ServerInstance $BranchSettings.instanceName | Remove-NAVServerInstance -Force

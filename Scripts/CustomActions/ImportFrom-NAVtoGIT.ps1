@@ -1,7 +1,7 @@
 Check-GitNotUnattached
 Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
 if ($BranchSettings.dockerContainerId -gt "") {
-    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name
+    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
 } else {    
     Load-ModelTools -SetupParameters $SetupParameters
     $ExportPath = Get-NAVExportPath -Repository $SetupParameters.ObjectsPath -WorkFolder (Join-Path $SetupParameters.WorkFolder 'Objects') -StoreAllObjects $SetupParameters.storeAllObjects

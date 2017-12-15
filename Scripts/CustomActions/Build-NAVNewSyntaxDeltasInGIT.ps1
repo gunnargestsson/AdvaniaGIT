@@ -11,7 +11,7 @@ $result = git.exe checkout --force $SetupParameters.baseBranch --quiet
 
 Write-Host Saving base branch...
 if ($BranchSettings.dockerContainerId -gt "") {
-    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName 'Export-GITtoNAVNewSyntaxSource.ps1'
+    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName 'Export-GITtoNAVNewSyntaxSource.ps1' -BuildSettings $BuildSettings
 } else {    
     $buildSource = Join-Path $PSScriptRoot 'Export-GITtoNAVNewSyntaxSource.ps1'
     . $buildSource -Repository $Repository | Out-Null
@@ -22,7 +22,7 @@ $result = git.exe checkout --force $sourcebranch --quiet
 
 Write-Host Saving product branch...
 if ($BranchSettings.dockerContainerId -gt "") {
-    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName 'Export-GITtoNAVNewSyntaxModified.ps1'
+    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName 'Export-GITtoNAVNewSyntaxModified.ps1' -BuildSettings $BuildSettings
 } else {
     $buildSource = Join-Path $PSScriptRoot 'Export-GITtoNAVNewSyntaxModified.ps1'
     . $buildSource -Repository $Repository | Out-Null
@@ -30,7 +30,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
 
 Write-Host Creating deltas in your work folder...
 if ($BranchSettings.dockerContainerId -gt "") {
-    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName 'Create-Deltas.ps1'
+    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName 'Create-Deltas.ps1' -BuildSettings $BuildSettings
 } else {
     $buildSource = Join-Path $PSScriptRoot 'Create-Deltas.ps1'
     . $buildSource -Repository $Repository | Out-Null
@@ -38,7 +38,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
 
 Write-Host Creating reverse deltas in your work folder...
 if ($BranchSettings.dockerContainerId -gt "") {
-    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName 'Create-ReverseDeltas.ps1'
+    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName 'Create-ReverseDeltas.ps1' -BuildSettings $BuildSettings
 } else {
     $buildSource = Join-Path $PSScriptRoot 'Create-ReverseDeltas.ps1'
     . $buildSource -Repository $Repository | Out-Null
