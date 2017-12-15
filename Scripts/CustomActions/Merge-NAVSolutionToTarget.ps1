@@ -13,6 +13,7 @@
     New-Item $ConflictFolder -ItemType Directory | Out-Null
 
     Write-Host Building Target...
+    Load-ModelTools -setupParameters $SetupParameters
     $Deltas = Get-ChildItem -Path (Join-Path $MergeFolder 'Deltas') -Recurse
     foreach ($Delta in $Deltas) 
     {        
@@ -51,4 +52,5 @@
     }
     Write-Host Saving As Target.txt
     Join-NAVApplicationObjectFile -Source (Join-Path $SourceFolder '*.txt') -Destination (Join-Path $($SetupParameters.workFolder) Target.txt) -Force
+    UnLoad-ModelTools
 }
