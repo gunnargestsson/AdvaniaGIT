@@ -20,7 +20,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
     } else {
         Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $ObjectsPath -MarkToDelete
     }    
-    Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Wait
+    Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings
     Import-PermissionSets -SetupParameters $SetupParameters -BranchSettings $BranchSettings
     $lastCommitIDd = Get-GitLastCommitId
     if ($lastCommitIDd -gt '') {

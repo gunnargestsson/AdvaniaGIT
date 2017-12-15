@@ -35,7 +35,7 @@
             }
 
             Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath (Join-path $ObjectsPath "*.TXT") -SkipDeleteCheck
-            Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Wait
+            Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings
             UnLoad-ModelTools 
         } -ArgumentList $DestinationFileName
         Remove-PSSession $Session
