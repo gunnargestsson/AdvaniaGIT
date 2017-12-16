@@ -4,6 +4,5 @@ if ($BranchSettings.dockerContainerId -gt "") {
 } else {    
     Load-ModelTools -SetupParameters $SetupParameters
     Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath (Join-Path $SetupParameters.workFolder 'Target.txt') -SkipDeleteCheck -ErrorAction Stop
-    Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings
     UnLoad-ModelTools
 }
