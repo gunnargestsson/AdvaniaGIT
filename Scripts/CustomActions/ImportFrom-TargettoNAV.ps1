@@ -6,7 +6,8 @@ if ($BranchSettings.dockerContainerId -gt "") {
     
     Write-Verbose -Message "Importing from Target.txt on $($BranchSettings.managementPort)/$($BranchSettings.instanceName)"
     $logFile = (Join-Path $SetupParameters.LogPath "navimport.log")
-    $command = "Command=ImportObjects`,ImportAction=Overwrite`,SynchronizeSchemaChanges=Force`,File=`"(Join-Path $SetupParameters.workFolder 'Target.txt')`""                 
+    $Path = (Join-Path $SetupParameters.workFolder 'Target.txt')
+    $command = "Command=ImportObjects`,ImportAction=Overwrite`,SynchronizeSchemaChanges=Force`,File=`"$Path`""                 
 
     Run-NavIdeCommand -SetupParameters $SetupParameters `
                         -BranchSettings $BranchSettings `
