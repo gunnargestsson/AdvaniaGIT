@@ -16,6 +16,9 @@ if ($BranchSettings.dockerContainerId -gt "") {
                         -ErrText "Error while importing from $(Split-Path $Path)" `
                         -Verbose:$VerbosePreference
 
-          
+    if (Test-Path -Path (Get-Item -Path $logFile)) {
+        Write-Host -ForegroundColor Red (Get-Content -Path $logfile)
+        throw
+    }
     UnLoad-ModelTools
 }
