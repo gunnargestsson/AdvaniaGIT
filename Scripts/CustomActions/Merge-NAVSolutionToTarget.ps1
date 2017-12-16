@@ -50,7 +50,8 @@
             Copy-Item -Path $Delta.FullName -Destination $ObjectName -Force
         }
     }
+
     Write-Host Saving As Target.txt
-    Join-NAVApplicationObjectFile -Source (Join-Path $SourceFolder '*.txt') -Destination (Join-Path $($SetupParameters.workFolder) Target.txt) -Force
+    Join-NAVApplicationObjectFile -Source (Join-Path $SourceFolder '*.txt') -Destination (Join-Path $($SetupParameters.workFolder) Target.txt) -Force -ErrorAction Stop
     UnLoad-ModelTools
 }
