@@ -33,6 +33,7 @@
     catch
     {
         Write-Error $_
+        throw
     }
 
 }
