@@ -16,9 +16,11 @@ if ($BranchSettings.dockerContainerId -gt "") {
                         -ErrText "Error while importing from $(Split-Path $Path)" `
                         -Verbose:$VerbosePreference
 
-    if (Test-Path -Path (Get-Item -Path $logFile)) {
+    if (Test-Path $logFile) {
         Write-Host -ForegroundColor Red (Get-Content -Path $logfile)
         throw
     }
+    Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Id>2000000000" -SynchronizeSchemaChanges No
+    Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=7" -SynchronizeSchemaChanges Force
     UnLoad-ModelTools
 }
