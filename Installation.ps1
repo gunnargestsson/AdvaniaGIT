@@ -40,7 +40,7 @@ if (Test-Path -Path $InstallationPath) {
         Copy-Item -Path (Join-Path $PSScriptRoot 'TestDevel.ps1') -Destination $InstallationPath -ErrorAction SilentlyContinue
     }
     Copy-Item -Path (Join-Path $PSScriptRoot 'README.md') -Destination $InstallationPath -Force -ErrorAction SilentlyContinue
-    $DirectoriesToCopy = @('Backup','Database','Demo','License','Log','Source','Workspace','Scripts','SourceTree')
+    $DirectoriesToCopy = @('Backup','Database','Demo','License','Log','Source','Workspace','Scripts','SourceTree','Tools')
     foreach ($Directory in $DirectoriesToCopy) {
         $Source = Join-Path $PSScriptRoot $Directory
         $Destination = Join-Path $InstallationPath $Directory
