@@ -21,6 +21,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
             Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $testObjectFile.FullName -ImportAction Overwrite -SynchronizeSchemaChanges Force
         }
     }
+    Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings
     UnLoad-ModelTools
 }
         
