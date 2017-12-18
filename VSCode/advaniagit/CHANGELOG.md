@@ -45,3 +45,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.1]
 - Bugfix for Load Model Tools command
+
+## [0.1.2]
+- Bugfix for New Git Branch command
