@@ -12,4 +12,9 @@ if ($SetupParameters.TestResultsPath) {
 }
 Save-NAVTestResultTrx -SQLServer (Get-DatabaseServer -BranchSettings $BranchSettings) -SQLDb $BranchSettings.databaseName -ResultTableName $ResultTableName -OutFile $OutFile 
 
-& $OutFile
+if ($SetupParameters.BuildMode) {
+    # Created with build
+} else {
+    # Open results
+    & $OutFile
+}
