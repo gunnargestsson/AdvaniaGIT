@@ -3,8 +3,8 @@ $Location = (Get-Location).Path
 $GitSettings = Get-GITSettings
 $sourcebranch = git.exe rev-parse --abbrev-ref HEAD 
 if ($SetupParameters.BuildMode) {
-    $SetupParameters.workFolder = Join-Path $SetupParameters.workFolder $SetupParameters.BranchId
-    New-Item $SetupParameters.workFolder -ItemType Directory | Out-Null
+    $SetupParameters.workFolder = Join-Path $SetupParameters.workFolder $SetupParameters.BranchId        
+    New-Item $SetupParameters.workFolder -ItemType Directory -ErrorAction SilentlyContinue| Out-Null
 }
 
 # Create GitFolder and enter it
