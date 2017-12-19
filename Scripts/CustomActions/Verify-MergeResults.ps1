@@ -1,4 +1,8 @@
-﻿$MergeFolder = (Join-Path $SetupParameters.workFolder 'Merge')
+﻿if ($SetupParameters.BuildMode) {
+    $SetupParameters.workFolder = Join-Path $SetupParameters.workFolder $SetupParameters.BranchId
+}
+
+$MergeFolder = (Join-Path $SetupParameters.workFolder 'Merge')
 $ConflictFolder = (Join-Path $MergeFolder 'ConflictObjects')
 
 Write-Host "Check for conflicts after merge..."

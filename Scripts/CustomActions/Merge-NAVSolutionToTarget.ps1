@@ -1,6 +1,10 @@
 ﻿if ($BranchSettings.dockerContainerId -gt "") {
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
 } else {    
+    if ($SetupParameters.BuildMode) {
+        $SetupParameters.workFolder = Join-Path $SetupParameters.workFolder $SetupParameters.BranchId
+    }
+
     $MergeFolder = (Join-Path $SetupParameters.workFolder 'Merge')
     $SourceFolder = (Join-Path $MergeFolder 'Base')
     $TargetFolder = (Join-Path $MergeFolder 'TargetObjects')
