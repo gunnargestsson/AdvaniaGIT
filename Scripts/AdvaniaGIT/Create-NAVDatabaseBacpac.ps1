@@ -19,6 +19,10 @@
     $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
 
     $SqlPackagePath = Get-SqlPackagePath
+    if (!(Test-Path $SqlPackagePath)) {
+        Write-Host -ForegroundColor Red "SQL Package executable not found!"
+        throw
+    }
 
     Write-Host "Starting Database Export (will take some time)..."
     $Arguments = @("/a:Export /ssn:$(Get-DatabaseServer -BranchSettings $BranchSettings) /sdn:$($BranchSettings.databaseName) /tf:$TempBacpacFilePath")
@@ -31,7 +35,10 @@
     $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
 
     if (!$BacpacFilePath) { $BacpacFilePath = Join-Path $SetupParameters.BackupPath "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bacpac" }    
-    if (!(Test-Path $TempBacpacFilePath)) { Show-ErrorMessage -SetupParameters $SetupParameters -ErrorMessage "Failed to create bacpac" }
+    if (!(Test-Path $TempBacpacFilePath)) {
+        Write-Host -ForegroundColor Red "Failed to create bacpac" 
+        throw
+    }
     Move-Item -Path $TempBacpacFilePath -Destination $BacpacFilePath -Force
     Write-Host "Backup $BacpacFilePath Created..."
 }
