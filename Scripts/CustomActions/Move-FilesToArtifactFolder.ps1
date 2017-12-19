@@ -10,7 +10,7 @@
 
     # Workspace Folder
     $results = Get-ChildItem -Path $SetupParameters.WorkFolder -Filter "$($SetupParameters.navRelease)-$($SetupParameters.projectName).*"
-    foreach ($file in $resuls) {
+    foreach ($file in $results) {
         Write-Host "Moving $($file.Name) to $($SetupParameters.DestinationFilePath)..."       
         Move-Item -Path $file.FullName -Destination $SetupParameters.DestinationFilePath -Force -ErrorAction SilentlyContinue
     }
