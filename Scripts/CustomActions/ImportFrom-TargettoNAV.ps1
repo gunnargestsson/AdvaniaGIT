@@ -7,7 +7,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
     Write-Host "Importing from Target.txt to $($BranchSettings.databaseName)"
     $logFile = (Join-Path $SetupParameters.LogPath "navimport.log")
     if ($SetupParameters.BuildMode) {
-        $SetupParameters.workFolder = Join-Path (Join-Path $SetupParameters.workFolder $SetupParameters.BranchId) 'Target.txt'
+        $Path = Join-Path (Join-Path $SetupParameters.workFolder $SetupParameters.BranchId) 'Target.txt'
     } else {
         $Path = (Join-Path $SetupParameters.workFolder 'Target.txt')
     }
