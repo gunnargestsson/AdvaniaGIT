@@ -48,3 +48,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.2]
 - Bugfix for New Git Branch command
+
+## [0.1.3]
+- Bugfix for Import Module command
