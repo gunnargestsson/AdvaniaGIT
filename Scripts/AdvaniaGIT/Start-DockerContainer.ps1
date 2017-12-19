@@ -52,7 +52,9 @@
                 "--memory $MemoryLimit",
                 "--volume `"$volume`"",
                 "--volume `"$rootPath`"",
-                "--restart always"
+                "--restart always",
+                "--env SqlTimeout=1200",
+                "--env locale=$((Get-Culture).Name)"
                 )
 
     Write-Host "Docker Container starting..."
