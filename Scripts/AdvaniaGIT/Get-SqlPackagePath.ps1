@@ -1,10 +1,12 @@
 ﻿Function Get-SqlPackagePath {
     # 1. Get SQL Server Version 
-    $SQLKey = Get-ItemProperty "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL"   
-    $SQLVersionNum = [regex]::Match($SQLKey.MSSQLSERVER, "\d\d").Value 
+    $SQLKey = Get-ItemProperty "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL" -ErrorAction SilentlyContinue
+    if ($SQLKey) {
+        $SQLVersionNum = [regex]::Match($SQLKey.MSSQLSERVER, "\d\d").Value 
  
-    $ToolPath = "C:\Program Files (x86)\Microsoft SQL Server\$($SQLVersionNum)0\DAC\bin\SqlPackage.exe" 
-    if (Test-Path $ToolPath) { Return $ToolPath }
+        $ToolPath = "C:\Program Files (x86)\Microsoft SQL Server\$($SQLVersionNum)0\DAC\bin\SqlPackage.exe" 
+        if (Test-Path $ToolPath) { Return $ToolPath }
+    }
 
     $files = @()
     $files += Get-Item -Path "$(${env:ProgramFiles(x86)})\Microsoft*" | Get-ChildItem -Filter "sqlpackage.exe" -Recurse -ErrorAction SilentlyContinue
