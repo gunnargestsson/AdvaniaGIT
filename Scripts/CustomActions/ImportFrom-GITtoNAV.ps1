@@ -26,3 +26,4 @@ $lastCommitIDd = Get-GitLastCommitId
 if ($lastCommitIDd -gt '') {
     Set-NAVLastCommitId -BranchSettings $BranchSettings -LastCommitID (Get-GitLastCommitId)
 }
+UnLoad-ModelTools
