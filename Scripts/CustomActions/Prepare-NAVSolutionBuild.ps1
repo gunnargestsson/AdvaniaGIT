@@ -1,6 +1,7 @@
 ﻿# Get variables
 $Location = (Get-Location).Path
 $GitSettings = Get-GITSettings
+$SolutionBranchSetup = Get-Content (Join-Path $Location (Split-Path $SetupParameters.setupPath -Leaf)) -Encoding UTF8 | Out-String | ConvertFrom-Json
 $sourcebranch = git.exe rev-parse --abbrev-ref HEAD 
 if ($SetupParameters.BuildMode) {
     $SetupParameters.workFolder = Join-Path $SetupParameters.workFolder $SetupParameters.BranchId        
@@ -24,9 +25,14 @@ New-Item (Join-Path $MergeFolder 'Deltas') -ItemType Directory | Out-Null
 Write-Host Get objects from $SetupParameters.baseBranch
 git.exe clone --single-branch --branch $($SetupParameters.baseBranch) --verbose $($SetupParameters.SourceRepository) $($SetupParameters.baseBranch) --quiet
 $BranchFolder = Join-Path $TempFolder $SetupParameters.baseBranch
-$BranchSetupParameters = Combine-Settings (Get-Content (Join-Path $BranchFolder (Split-Path $SetupParameters.setupPath -Leaf)) | Out-String | ConvertFrom-Json) $GitSettings
+$BranchSetup = Get-Content (Join-Path $BranchFolder (Split-Path $SetupParameters.setupPath -Leaf)) -Encoding UTF8 | Out-String | ConvertFrom-Json
+$BranchSetupParameters = Combine-Settings $BranchSetup $GitSettings
 Write-Host Copying files from (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.objectsPath) '*.txt') to (Join-Path $MergeFolder 'Base') 
 Copy-NAVObjectFileContent -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.objectsPath) '*.txt') -Destination (Join-Path $MergeFolder 'Base') -Force
+Write-Host Update version information in build branch
+$SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name navVersion -Value $BranchSetup.navVersion -Force
+$SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name navBuild -Value $BranchSetup.navBuild -Force
+Set-Content -Path (Join-Path $Location (Split-Path $SetupParameters.setupPath -Leaf)) -Encoding UTF8 -Value (ConvertTo-Json -InputObject $SolutionBranchSetup)
 
 # Clone the delta branches
 $DeltaFolderIndexNo = 10000
