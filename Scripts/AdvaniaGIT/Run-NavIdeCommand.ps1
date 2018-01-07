@@ -9,7 +9,7 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [string] $Command,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-        [string] $NavServerName = "localhost",
+        [string] $NavServerName="localhost",
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [string] $LogFile,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
@@ -22,6 +22,8 @@
         [Switch]$StopOnError
     )
     
+    if (![string]::IsNullOrEmpty($BranchSettings.dockerContainerName) -and $NavServerName -eq "localhost") { $NavServerName = $BranchSettings.dockerContainerName}
+
     $LogFolder = (Split-Path $LogFile)
     $IdFile = Join-Path (Split-Path $LogFile) "finsqlsettings.zup"
     Remove-Item (Join-Path $LogFolder "navcommandresult.txt") -ErrorAction Ignore

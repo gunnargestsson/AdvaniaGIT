@@ -11,5 +11,6 @@
     } else {
         $chcp = '850'
     }    
-    chcp $chcp
+    try {chcp $chcp}
+    catch {}
 }
