@@ -35,21 +35,8 @@
                 $CertValue = Get-NAVServiceCertificateValue -Session $Session -ServerInstance $DefaultServerInstance 
                 $KeyVaultKey = Get-NAVAzureKeyVaultKey -KeyVault $KeyVault -ServerInstanceName $DefaultServerInstance.ServerInstance
                 $DefaultApplication = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $DefaultServerInstance -IconFilePath $IconFilePath -CertValue $CertValue
-                if ($ServerInstances.Length -eq $null -or $DefaultServerInstance.ServerInstance -eq $ServerInstances.ServerInstance ) {                   
-                    $ServicePrincipal = Get-NAVADServicePrincipal -ADApplication $DefaultApplication
-                    Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ServicePrincipalName $ServicePrincipal.ServicePrincipalNames[1] -PermissionsToKeys encrypt,decrypt,get
-                    Set-AzureRmKeyVaultAccessPolicy -VaultName $KeyVault.VaultName -ApplicationId $DefaultApplication.ApplicationId -ObjectId $DefaultApplication.ObjectId -PermissionsToKeys encrypt,decrypt,get
-                    $DefaultServerInstance = Combine-Settings $DefaultServerInstance $KeyVault -Prefix KeyVault
-                    $DefaultServerInstance = Combine-Settings $DefaultServerInstance $KeyVaultKey -Prefix KeyVaultKey
-                    $DefaultServerInstance = Combine-Settings $DefaultServerInstance $ServicePrincipal -Prefix ServicePrincipal
-                    $DefaultServerInstance = Combine-Settings $DefaultServerInstance $DefaultApplication -Prefix GlobalADApplication
-                    $DefaultServerInstance = Combine-Settings $DefaultServerInstance $DefaultApplication -Prefix ADApplication
-                    $DefaultServerInstance | Add-Member -MemberType NoteProperty -Name ADApplicationFederationMetadataLocation -Value "https://login.windows.net/$($Subscription.Account.Id.Split("@").GetValue(1))/federationmetadata/2007-06/federationmetadata.xml"
-                    Set-NAVRemoteInstanceADRegistration -Session $Session -ServerInstance $DefaultServerInstance -RestartServerInstance
-                    if ($instanceNo -eq 1) { Set-NAVRemoteInstanceTenantAzureKeyVaultSettings -Session $Session -ServerInstance $DefaultServerInstance -KeyVault $KeyVault -RemoteConfig $RemoteConfig -RemoteComputer $RemoteComputer }
-                }
 
-                foreach ($ServerInstance in $ServerInstances | Where-Object -Property Default -eq False) {                    
+                foreach ($ServerInstance in $ServerInstances) {                    
                     $CertValue = Get-NAVServiceCertificateValue -Session $Session -ServerInstance $ServerInstance 
                     $KeyVaultKey = Get-NAVAzureKeyVaultKey -KeyVault $KeyVault -ServerInstanceName $ServerInstance.ServerInstance
                     $Application = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $ServerInstance -IconFilePath $IconFilePath -CertValue $CertValue
