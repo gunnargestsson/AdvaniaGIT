@@ -17,7 +17,7 @@ New-Item $TargetFolder -ItemType Directory | Out-Null
 Remove-Item -Path $ConflictFolder -Recurse -Force -ErrorAction SilentlyContinue
 New-Item $ConflictFolder -ItemType Directory | Out-Null
 
-Write-Host Building Target...
+Write-Host Building Target for $($SetupParameters.projectName) on  $($env:COMPUTERNAME) ...
 Load-ModelTools -setupParameters $SetupParameters
 $Deltas = Get-ChildItem -Path (Join-Path $MergeFolder 'Deltas') -Recurse
 foreach ($Delta in $Deltas) 

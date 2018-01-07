@@ -110,7 +110,7 @@ else
     if ($IsInAdminMode ) { Add-BlankLines -SetupParameters $SetupParameters }
     $env:WorkFolder = $SetupParameters.WorkFolder
     
-    Set-NAVCodePage -SetupParameters $SetupParameters
+    #Set-NAVCodePage -SetupParameters $SetupParameters
 
     # Start the script
     $ScriptToStart = (Join-Path (Join-path $PSScriptRoot 'CustomActions') $ScriptName)
