@@ -25,8 +25,9 @@ if (Test-Path $logFile) {
     throw
 }
 Write-Host "Import complete"
-Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=1;Id=2000000006" -SynchronizeSchemaChanges No
-Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=1;Id=2000000000..2000000005" -SynchronizeSchemaChanges Force
-Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=1;Id=2000000007.." -SynchronizeSchemaChanges Force
-Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=7" -SynchronizeSchemaChanges Force
+Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=1;Id=2000000006" -SynchronizeSchemaChanges No | Out-Null
+Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=1;Id=2000000000..2000000005" -SynchronizeSchemaChanges Force | Out-Null
+Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=1;Id=2000000007.." -SynchronizeSchemaChanges Force | Out-Null
+Compile-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Filter "Type=7" -SynchronizeSchemaChanges Force | Out-Null
+Write-Host "Compile complete"
 UnLoad-ModelTools
