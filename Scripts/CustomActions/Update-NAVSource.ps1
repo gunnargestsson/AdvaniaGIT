@@ -27,6 +27,10 @@ if ($zipFileVersion -gt $navGITVersion) {
     Write-Host "Updating Setup.json..."
     $SetupJson = Get-Content $SetupParameters.setupPath | Out-String | ConvertFrom-Json
     $SetupJson.navVersion = $zipFileVersion
+    $Article = Get-NAVLatestBlogArticle -SetupParameters $SetupParameters
+    $CU = $Article.title -replace '\D+(\d+)','$1'
+    $CU = $CU.Substring(0,$CU.IndexOf($SetupParameters.navRelease))
+    $SetupJson | Add-Member -MemberType NoteProperty -Name navBuild -Value "$($SetupParameters.navRelease)-cu$CU" -Force
     Set-Content -Path $SetupParameters.setupPath -Value ($SetupJson | ConvertTo-Json)
 
     if ($SetupParameters.ftpServer -gt "") {
