@@ -27,6 +27,7 @@ function Build-NAVObjects
 
     Write-Host Get objects from $SetupParameters.baseBranch
     $result = git.exe checkout --force $SetupParameters.baseBranch --quiet 
+    $result = git.exe pull
     $BaseSetupParameters = Get-Content $SetupParameters.setupPath | Out-String | ConvertFrom-Json
     if ($BaseSetupParameters.storeAllObjects -eq "false" -or $BaseSetupParameters.storeAllObjects -eq $false) {
         Split-NAVApplicationObjectFile -Source (Get-NAVSourceFilePath -SetupParameters $BaseSetupParameters) -Destination (Join-Path $MergeFolder 'Base') -Force
@@ -41,6 +42,7 @@ function Build-NAVObjects
           Start-Sleep -Seconds 1
           Write-Host Get deltas from $deltaBranch
           $result = git.exe checkout --force $deltaBranch --quiet 
+          $result = git.exe pull
           $branchFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $deltaBranch))
           New-Item $branchFolder -ItemType Directory | Out-Null
           Copy-Item -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchFolder -Force 
@@ -50,6 +52,7 @@ function Build-NAVObjects
 
     Write-Host Switching back to Source Branch
     $result = git.exe checkout --force $sourcebranch --quiet 
+    $result = git.exe pull
 
     if ($IncludeCustomization -eq $true)
     {
