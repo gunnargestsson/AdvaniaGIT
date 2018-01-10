@@ -36,7 +36,7 @@
                     $SelectedTenant = Combine-Settings $TenantSettings $SelectedTenant
                  }
             '3' {  
-                    Set-NAVDeploymentRemoteInstanceTenantLicense -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant
+                    Set-NAVDeploymentRemoteInstanceTenantLicense -Session $Session -Credential $Credential -DeploymentName $DeploymentName -SelectedTenant $SelectedTenant -ApplicationLicense
                     $anyKey = Read-Host "Press enter to continue..."
                 }                
         }                    

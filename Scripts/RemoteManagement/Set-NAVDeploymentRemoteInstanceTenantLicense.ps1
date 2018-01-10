@@ -7,7 +7,9 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SelectedTenant,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [String]$DeploymentName
+        [String]$DeploymentName,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Switch]$ApplicationLicense
     )
     PROCESS 
     {
@@ -44,8 +46,11 @@
                 } else {
                     $RemoteSession = New-NAVRemoteSession -Credential $Credential -HostName $RemoteComputer.FQDN 
                 }        
-
-                Set-NAVRemoteInstanceTenantLicense -Session $RemoteSession -SelectedTenant $SelectedTenant -LicenseData $LicenseData
+                if ($ApplicationLicense) {
+                    Set-NAVRemoteInstanceTenantLicense -Session $RemoteSession -SelectedTenant $SelectedTenant -LicenseData $LicenseData -ApplicationLicense
+                } else {
+                    Set-NAVRemoteInstanceTenantLicense -Session $RemoteSession -SelectedTenant $SelectedTenant -LicenseData $LicenseData
+                }
 
                 if ($Session.ComputerName -ne $RemoteSession.ComputerName) { Remove-PSSession -Session $RemoteSession }
             }
