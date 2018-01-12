@@ -6,11 +6,11 @@
     [PSObject]$SetupParameters
     )
 
-    $Languages = (Get-ChildItem $SetupParameters.navServicePath -Filter '??-??' -Directory -ErrorAction SilentlyContinue) 
-    if ($Languages) {
-        $Language = $Languages[0].Name.SubString(3,2).ToUpper()
-    } else { 
+    $Language = Get-NAVInstallationCountry -NavInstallationPath $SetupParameters.navServicePath
+    if ([String]::IsNullOrEmpty($Language)) {
         $Language = Get-ReleaseForLocation -Location (Get-Culture).Name.Substring(3,2).ToUpper()
+    } else {
+        $Language = $Language.Substring(3,2).ToUpper()
     }
     return $Language
 }

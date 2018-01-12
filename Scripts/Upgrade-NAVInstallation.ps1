@@ -11,7 +11,7 @@ foreach ($navVersion in $navVersions.Releases) {
     Write-Host "Updating installation for $($navVersion.navRelease)..."
     $navInstallation = Get-Item -Path (Join-Path $env:ProgramFiles "Microsoft Dynamics NAV\\$($navVersion.mainVersion)\\Service\\Microsoft.Dynamics.Nav.Server.exe")
     $navInstallationVersion = (Get-ItemProperty -Path $navInstallation.FullName).VersionInfo.FileVersion    
-    [String]$Language = (Get-ChildItem (Split-Path $navInstallation -Parent) -Filter '??-??' -Directory)[0]
+    [String]$Language = Get-NAVInstallationCountry -NavInstallationPath (Split-Path $navInstallation -Parent)
     Write-Host "Updating folder $navInstallation with version $navInstallationVersion for language $($Language.SubString(0,2).ToUpper())..."
     $Package = $SetupParameters.navZipFiles.Replace('%navRelease%',$navVersion.navRelease).Replace('%navVersion%',$navVersion.mainVersion)
     $zipFile = (Get-ChildItem -Path $Package -Filter "CU * NAV $($navVersion.navRelease) $($Language.SubString(0,2).ToUpper()).zip" -File | Sort-Object LastAccessTime -Descending)[0].FullName
