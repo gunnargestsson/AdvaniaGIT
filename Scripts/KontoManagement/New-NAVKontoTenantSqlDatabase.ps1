@@ -60,18 +60,19 @@
        
     $SelectedElasticPool = Get-NAVAzureSqlElasticPool -AzureResourceGroup $resourceGroup -SqlServer $databaseServer
     if (!$SelectedElasticPool) { break }
-    
-    $databaseExists = Get-AzureRmSqlDatabase -DatabaseName $DatabaseName -ResourceGroupName $resourceGroup.ResourceGroupName -ServerName $databaseServer.ServerName -ErrorAction SilentlyContinue
-    if ($databaseExists) {
-        Write-Host -ForegroundColor Red "Database ${newDatabaseName} already exists!"
-        $anyKey = Read-Host "Press enter to continue..."
-        break
-    }
 
     $Template = Get-NAVAzureDbTemplates -AzureResourceGroup $resourceGroup -ContainerName $Provider.TenantTemplateContainer
     $UserName = $Credential.UserName
     $Password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password))
 
+    
+    $databaseExists = Get-AzureRmSqlDatabase -DatabaseName $DatabaseName -ResourceGroupName $resourceGroup.ResourceGroupName -ServerName $databaseServer.ServerName -ErrorAction SilentlyContinue
+    if ($databaseExists) {
+        Write-Host -ForegroundColor Red "Database ${newDatabaseName} already exists!"
+        $anyKey = Read-Host "Press enter to continue..."
+        $Database = New-NAVDatabaseObject -DatabaseName $DatabaseName -DatabaseServerName "$($databaseServer.ServerName).database.windows.net" -DatabaseUserName $UserName -DatabasePassword $Password 
+        return $DataBase
+    }
     
     if ($Template) {
         Write-Host "Starting Database Restore from $($Template.Blob[0].Name) (will take some time)..."

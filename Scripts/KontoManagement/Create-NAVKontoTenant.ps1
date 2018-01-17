@@ -55,6 +55,7 @@
         if ($Database -eq $null) {
           return
         }
+        Update-NAVRemoteInstanceTenant -Session $Session -SelectedTenant $TenantSettings -Database $Database 
         Mount-NAVRemoteInstanceTenant -Session $Session -SelectedTenant $TenantSettings -Database $Database -AzureKeyVaultSettings $AzureKeyVaultSettings -AllowAppDatabaseWrite $true -NasServicesEnabled $true 
         Start-NAVRemoteInstanceTenantSync -Session $Session -SelectedTenant $TenantSettings
         Set-NAVDeploymentRemoteInstanceTenantSettings -Session $Session -Credential (Get-NAVKontoRemoteCredentials) -SelectedTenant $TenantSettings -DeploymentName $Provider.Deployment | Out-Null
