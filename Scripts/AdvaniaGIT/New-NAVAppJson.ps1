@@ -26,6 +26,7 @@
     $AppSettings | Add-Member -MemberType NoteProperty -Name url -Value $SetupParameters.appUrl
     $AppSettings | Add-Member -MemberType NoteProperty -Name logo -Value $SetupParameters.appIcon
     $AppSettings | Add-Member -MemberType NoteProperty -Name platform -Value "$($SetupParameters.navVersion.Split(".")[0]).0.0.0"
+    $AppSettings | Add-Member -MemberType NoteProperty -Name application -Value "$($SetupParameters.navVersion.Split(".")[0]).0.0.0"
         
     foreach ($Property in @(Get-Member -InputObject $AppSettings -MemberType NoteProperty).Name) {
         if ($AppSettings."$Property" -eq $null) { $AppSettings."$Property" = "" }
@@ -39,12 +40,6 @@
     foreach ($Property in @(Get-Member -InputObject $AppSettings -MemberType NoteProperty).Name) {
         if ($AppSettings."$Property" -eq $null) { $AppSettings."$Property" = @() }
     }
-
-    # Add Application Settings Objects
-    $ApplicationSettings = New-Object -TypeName PSObject
-    $ApplicationSettings | Add-Member -MemberType NoteProperty -Name version -Value "$($SetupParameters.navVersion.Split(".")[0]).0.0.0"
-    $ApplicationSettings | Add-Member -MemberType NoteProperty -Name locale -Value $SetupParameters.navSolution
-    $AppSettings | Add-Member -MemberType NoteProperty -Name application -Value $ApplicationSettings
 
     Set-Content -Path $AppJsonPath -Value ($AppSettings | ConvertTo-Json)
 }
