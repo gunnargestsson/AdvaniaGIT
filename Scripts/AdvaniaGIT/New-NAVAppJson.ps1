@@ -7,6 +7,10 @@
         [PSObject]$SetupParameters
     )
     $AppJsonPath = Join-Path $SetupParameters.VSCodePath "app.json"
+    
+    if (!(Test-Path $SetupParameters.VSCodePath)) {
+        New-Item -Path $SetupParameters.VSCodePath -ItemType Directory | Out-Null
+    }
 
     if (Test-Path $AppJsonPath) {
         return

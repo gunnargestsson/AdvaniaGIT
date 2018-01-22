@@ -9,6 +9,9 @@
         [PSObject]$BranchSettings
     )
     $LaunchJsonPath = Join-Path $SetupParameters.VSCodePath ".vscode\launch.json"
+    if (!(Test-Path -Path (Split-Path $LaunchJsonPath -Parent))) {
+        New-Item -Path (Split-Path $LaunchJsonPath -Parent) -ItemType Directory | Out-Null
+    }
 
     if (Test-Path $LaunchJsonPath) {
         $LaunchSettings = Get-Content -Path $LaunchJsonPath | Out-String | ConvertFrom-Json
