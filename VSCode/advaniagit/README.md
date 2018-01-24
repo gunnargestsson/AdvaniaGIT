@@ -8,8 +8,8 @@ Enables the custom actions from AdvaniaGIT inside Visual Studio Code
 
 ## Requirements
 
-Install AdvaniaGIT from <https://github.com/gunnargestsson/AdvaniaGIT>
 Start Visual Studio Code as Administrator by updating the shortcut <https://github.com/gunnargestsson/AdvaniaGIT/blob/master/VSCode/advaniagit/img/runasadmin.png>
+Install AdvaniaGIT from with Advaina: Go! command
 
 ## Extension Settings
 
@@ -22,3 +22,7 @@ NAV 2018 with Docker config <https://github.com/gunnargestsson/nav2018>
 ## Release Notes
 
 See Changlog for update details
+
+## Blog
+
+On Dynamics.is <http://www.dynamics.is/?tag=AdvaniaGIT>

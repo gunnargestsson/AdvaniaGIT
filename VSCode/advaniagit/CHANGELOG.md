@@ -51,3 +51,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.3]
 - Bugfix for Import Module command
+
+## [0.1.4]
+- Add new command to Debug Container Host

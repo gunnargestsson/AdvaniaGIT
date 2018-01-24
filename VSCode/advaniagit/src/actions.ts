@@ -9,6 +9,10 @@ export function StartAdvaniaGITInstallation() {
     terminal.PSTerminal.sendText(`& "$($env:TEMP)\\Install-AdvaniaGIT.ps1"`);
 }
 
+export function StartAdvaniaGITContainerHostDebug() {
+    terminal.PSTerminal.sendText(`Invoke-WebRequest https://aka.ms/Debug-ContainerHost.ps1 -UseBasicParsing | Invoke-Expression`);
+}
+
 export function BuildDeltasInGIT(Repository) {
     StartAction(Repository,`Build-DeltasInGIT.ps1`);
 }
