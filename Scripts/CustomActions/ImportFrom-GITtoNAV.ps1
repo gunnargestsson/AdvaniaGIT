@@ -9,7 +9,12 @@ if ($lastNAVCommitId -gt '') {
     $ObjectList = Get-GitModifiedFiles -GitCommitId $lastNAVCommitId
     if ($ObjectList -ne $null) {
         Copy-NAVObjectsToWorkspace -SetupParameters $SetupParameters -ObjectList $ObjectList
-        Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath (Join-Path $SetupParameters.workFolder 'Objects') -SkipDeleteCheck
+        $fileList = Get-ChildItem -Path (Join-Path $SetupParameters.workFolder 'Objects')
+        if ($fileList) {
+            Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath (Join-Path $SetupParameters.workFolder 'Objects') -SkipDeleteCheck
+        } else {
+            Write-Host -ForegroundColor Red "Nothing to import..."
+        }
     }
 } elseif ($SetupParameters.objectProperties -eq "false") {
     & (Join-Path $PSScriptRoot 'Export-GITtoSource.ps1')
