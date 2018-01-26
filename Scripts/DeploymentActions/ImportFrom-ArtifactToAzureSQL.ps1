@@ -1,16 +1,64 @@
-﻿Import-Module RemoteManagement -DisableNameChecking | Out-Null
-$DbAdmin = Get-NAVPasswordStateUser -PasswordId $SetupParameters.SqlServerPid
-$VMAdmin = Get-NAVPasswordStateUser -PasswordId $SetupParameters.NavServerPid
+﻿$DbAdmin = Get-NAVPasswordStateUser -PasswordId $DeploymentSettings.SqlServerPid
+$VMAdmin = Get-NAVPasswordStateUser -PasswordId $DeploymentSettings.NavServerPid
 $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 
-$WorkFolder = 'c:\AdvaniaGIT\Workspace'
-$Session = New-NAVRemoteSession -Credential $VMCredential -HostName $SetupParameters.NavServerHostName -SetupPath $WorkFolder
-$ObjectsFiles = Get-ChildItem -Path $SetupParameters.workFolder -Filter *.fob
+$WorkFolder = $SetupParameters.WorkFolder
+Write-Host "Connecting to $($DeploymentSettings.instanceServer)..."
+$Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentSettings.instanceServer -SetupPath $WorkFolder
+
+Write-Host "Updating Branch Settings on remote server..."
+Invoke-Command -Session $Session -ScriptBlock {
+    param([string]$branchId,[string]$instanceName)
+    Write-Host "Updating branch settings for ${branchId}..."
+    $SetupParameters | Add-Member -MemberType NoteProperty -Name branchId -Value $branchId
+    $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
+    $BranchSettings.instanceName = $instanceName
+    $InstanceSettings = Get-InstanceSettings -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    $BranchSettings.databaseServer = $InstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='DatabaseServer']").Attributes["value"].Value
+    $BranchSettings.databaseName = $InstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='DatabaseName']").Attributes["value"].Value
+    $BranchSettings.clientServicesPort = $InstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ClientServicesPort']").Attributes["value"].Value
+    $BranchSettings.managementServicesPort = $InstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='ManagementServicesPort']").Attributes["value"].Value 
+    Update-BranchSettings -BranchSettings $BranchSettings
+} -ArgumentList ($DeploymentSettings.branchId, $DeploymentSettings.instanceName)
+
+$ObjectsFiles = Get-ChildItem -Path $DeploymentSettings.workFolder -Filter *.fob
 foreach ($ObjectsFile in $ObjectsFiles) {
-    Write-Host "Uploading Artifact to remote server..."
+    Write-Host "Uploading Artifact $($ObjectsFile.Name) to remote server..."
     Compress-Archive -Path $ObjectsFile.FullName -DestinationPath (Join-Path $WorkFolder 'Objects.zip') -Force
     Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder 'Objects.zip') -DestinationFile (Join-Path $WorkFolder 'Objects.zip') 
     Remove-Item -Path (Join-Path $WorkFolder 'Objects.zip')  -Force -ErrorAction SilentlyContinue
+
+    Write-Host "Expanding $($ObjectsFile.Name) on remote server..."
+    Invoke-Command -Session $Session -ScriptBlock {
+        param([string]$ZipFileName,[string]$ObjectFilePath)
+        Expand-Archive -Path $ZipFileName -DestinationPath $ObjectFilePath -Force
+        Remove-Item -Path $ZipFileName -Force -ErrorAction SilentlyContinue
+    } -ArgumentList ((Join-Path $WorkFolder 'Objects.zip'), $WorkFolder)
+
+    Write-Host "Importing $($ObjectsFile.Name)..."
+    Invoke-Command -Session $Session -ScriptBlock {
+        param([string]$file,[string]$username,[string]$password)
+        $logFile = "$($SetupPatameters.LogPath)\$((Get-Item $file).BaseName).log"             
+        $command = "Command=ImportObjects`,ImportAction=Overwrite`,SynchronizeSchemaChanges=No`,File=`"$file`"" 
+                    
+        Run-NavIdeCommand -SetupParameters $SetupParameters `
+                        -BranchSettings $BranchSettings `
+                        -Command $command `
+                        -LogFile $logFile `
+                        -Username $username `
+                        -Password $password `
+                        -ErrText "Error while importing from $((Get-Item $file).BaseName)" `
+                        -Verbose:$VerbosePreference
+        Remove-Item -Path $file  -Force -ErrorAction SilentlyContinue
+    } -ArgumentList ((Join-Path $WorkFolder $ObjectsFile.Name),$DbAdmin.Username,$DbAdmin.Password)
+
+    Write-Host "Syncronizing changes..."
+    Invoke-Command -Session $Session -ScriptBlock {
+        Load-InstanceAdminTools -SetupParameters $SetupParameters
+        Get-NAVTenant -ServerInstance $BranchSettings.instanceName | Sync-NAVTenant -Mode ForceSync -Force
+    }
+
+    Write-Host "Import complete..."
 }
 
-# SqlServerDb='2016-ADIS'
+$Session | Remove-PSSession
