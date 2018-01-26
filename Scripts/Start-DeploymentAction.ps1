@@ -7,7 +7,7 @@
 [Parameter(Mandatory=$False, ValueFromPipelineByPropertyName=$true)]
 [HashTable]$BuildSettings,
 [Parameter(Mandatory=$False, ValueFromPipelineByPropertyName=$true)]
-[HashTable]$BranchSettings
+[HashTable]$DeploymentSettings
 )
     # Import all needed modules
     Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
