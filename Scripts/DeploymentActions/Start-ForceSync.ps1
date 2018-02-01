@@ -7,9 +7,10 @@ $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentS
 
 Write-Host "Syncronizing changes..."
 Invoke-Command -Session $Session -ScriptBlock {
+    param([string]$instanceName)
     Load-InstanceAdminTools -SetupParameters $SetupParameters
-    Get-NAVTenant -ServerInstance $DeploymentSettings.instanceName | Sync-NAVTenant -Mode ForceSync -Force
-}
+    Get-NAVTenant -ServerInstance $instanceName | Sync-NAVTenant -Mode ForceSync -Force
+} -ArgumentList $DeploymentSettings.instanceName
 
 
 $Session | Remove-PSSession
