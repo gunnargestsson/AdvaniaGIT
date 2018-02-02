@@ -12,7 +12,7 @@ if ($SetupParameters.testCodeunitId -and $SetupParameters.testCodeunitId -gt "")
 }
 
 $params = @()
-$params += @("-consolemode -showNavigationPage:0 -settings:`"$($ClientSettings.Config)`" `"dynamicsnav:////$companyName/RunCodeunit?Codeunit=$CodeunitId`"")
+$params += @("-consolemode -showNavigationPage:0 -language:1033 -profile:`"Sales Order Processor`" -settings:`"$($ClientSettings.Config)`" `"dynamicsnav:////$companyName/RunCodeunit?Codeunit=$CodeunitId`"")
 $startDate = Get-Date 
 Write-Host "Running: `"$($ClientSettings.Client)`" $params" -ForegroundColor Green
 Start-Process -FilePath $ClientSettings.Client -ArgumentList $params -Wait
