@@ -5,7 +5,7 @@ if ([string]::IsNullOrEmpty($TranslationSource)) {
     throw
 }
 
-$LanguageName = Get-NAVTranslationTarget -SetupParameters $SetupParameters
+$LanguageName = Get-NAVTranslationTarget -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 if ([string]::IsNullOrEmpty($LanguageName)) {
     Write-Host -ForegroundColor Red "Language not found or selected!"
     throw
@@ -18,13 +18,13 @@ if (Test-Path $TranslationTarget) {
     throw
 }
 
+Write-Host "Select C/AL translation file to import..."
 $CALTranslationFile = Get-NAVTranslationFileName -initialDirectory $SetupParameters.Repository
 
 if (!(Test-Path $CALTranslationFile)) {
     Write-Host -ForegroundColor Red "CAL Translation file not found!"
     throw
 }
-
 
 Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget 
 $TranslationTable = Get-NAVTranslationTable -TranslationFile $CALTranslationFile -LanguageNo $LanguageId 

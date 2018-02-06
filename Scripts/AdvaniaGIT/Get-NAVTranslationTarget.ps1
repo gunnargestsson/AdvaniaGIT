@@ -4,9 +4,20 @@
     param
     (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$SetupParameters
+        [PSObject]$SetupParameters,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$BranchSettings
     )
-    $Languages = Get-ChildItem -Path $SetupParameters.navServicePath -Filter '??-??'
+    if ($BranchSettings.dockerContainerId -eq "") {
+        $Languages = Get-ChildItem -Path $SetupParameters.navServicePath -Filter '??-??'
+    } else {
+        $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId
+        $Languages = Invoke-Command -Session $Session -ScriptBlock {
+            $navServicePath = (Get-Item -Path 'C:\Program Files\Microsoft Dynamics NAV\*\Service').FullName
+            return Get-ChildItem -Path $navServicePath -Filter '??-??'
+        }
+        Remove-PSSession $Session
+    }
     if ($Languages.Count -eq 1) { return ($Languages | Select-Object -First 1).Name }
     $LanguageNo = 1
     $menuItems = @()
