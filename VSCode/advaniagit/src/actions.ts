@@ -64,6 +64,13 @@ export function CreateNavBacpac(Repository) {
 export function CreateReverseDeltas(Repository) {
     StartAction(Repository,`Create-ReverseDeltas.ps1`);
 }
+export function CreateXlfLabelsInALCode(Repository) {
+    StartAction(Repository,`Create-XlfLabelsInALCode.ps1`);
+    vscode.window.showInformationMessage('Make sure to compile the project with Ctrl+Shift+B to create Xlf file!')    
+}
+export function CreateXlfFromCALTranslateFile(Repository) {
+    StartAction(Repository,`Create-XlfFromCALTranslate.ps1`);
+}
 export function DummyAction(Repository) {
     StartAction(Repository,`Dummy-Action.ps1`);
 }

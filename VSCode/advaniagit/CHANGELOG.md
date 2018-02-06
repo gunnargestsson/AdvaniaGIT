@@ -54,3 +54,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.4]
 - Add new command to Debug Container Host
+
+## [0.1.5]
+- Add new commands to create labels in AL and to work with Xlf files

@@ -39,6 +39,8 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.CreateNavBackup', () => {actions.CreateNavBackup(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateNavBacpac', () => {actions.CreateNavBacpac(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateReverseDeltas', () => {actions.CreateReverseDeltas(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.CreateXlfLabelsInALCode', () => {actions.CreateXlfLabelsInALCode(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.CreateXlfFromCALTranslateFile', () => {actions.CreateXlfFromCALTranslateFile(vscode.workspace.rootPath)}),        
         vscode.commands.registerCommand('advaniagit.DummyAction', () => {actions.DummyAction(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ExportGITtoModified', () => {actions.ExportGITtoModified(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ExportGITtoNAVNewSyntaxModified', () => {actions.ExportGITtoNAVNewSyntaxModified(vscode.workspace.rootPath)}),

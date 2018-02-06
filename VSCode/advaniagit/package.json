@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -33,6 +33,8 @@
         "onCommand:advaniagit.CreateNavBackup",
         "onCommand:advaniagit.CreateNavBacpac",
         "onCommand:advaniagit.CreateReverseDeltas",
+        "onCommand:advaniagit.CreateXlfLabelsInALCode",
+        "onCommand:advaniagit.CreateXlfFromCALTranslateFile",        
         "onCommand:advaniagit.DummyAction",
         "onCommand:advaniagit.ExportGITtoModified",
         "onCommand:advaniagit.ExportGITtoNAVNewSyntaxModified",
@@ -347,6 +349,16 @@
                 "command": "advaniagit.ConvertNAVNewSyntaxDeltasToAL",
                 "category": "Advania"
             },
+            {
+                "title": "Create Xlf Labels in current AL project (make sure that every file is saved)",
+                "command": "advaniagit.CreateXlfLabelsInALCode",
+                "category": "Advania"
+            },
+            {
+                "title": "Create Xlf translation file based on C/AL translation export",
+                "command": "advaniagit.CreateXlfFromCALTranslateFile",
+                "category": "Advania"
+            },                        
             {
                 "title": "Update Launch.Json with current branch environment",
                 "command": "advaniagit.UpdateLaunchJsonForCurrentBranch",
