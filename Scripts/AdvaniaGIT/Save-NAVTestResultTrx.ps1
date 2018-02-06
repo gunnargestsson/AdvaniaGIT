@@ -126,14 +126,14 @@
                 $Message = $TestResults.CreateElement('Message')
                 $null = $ErrorInfo.AppendChild($Message)
                 $Message.InnerText = $line['Error Message']
-                if ($line['Call Stack'] -and ($line['Call Stack'].ToString() -gt '')) {
-                    $CallStackData = Get-NAVBlobToString -CompressedByteArray $line['Call Stack'] -ErrorAction SilentlyContinue
-                    if ($CallStackData.Data)  {
-                        $StackTrace = $TestResults.CreateElement('StackTrace')
-                        $null = $ErrorInfo.AppendChild($StackTrace)
-                        $StackTrace.InnerText = $CallStackData.Data
-                    }
-                }
+                #if ($line['Call Stack'] -and ($line['Call Stack'].ToString() -gt '')) {
+                #    $CallStackData = Get-NAVBlobToString -CompressedByteArray $line['Call Stack'] -ErrorAction SilentlyContinue
+                #    if ($CallStackData.Data)  {
+                #        $StackTrace = $TestResults.CreateElement('StackTrace')
+                #        $null = $ErrorInfo.AppendChild($StackTrace)
+                #        $StackTrace.InnerText = $CallStackData.Data
+                #    }
+                #}
                 $ResultsSummary.SetAttribute('outcome','Failed')
             }
             2 
