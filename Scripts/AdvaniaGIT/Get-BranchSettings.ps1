@@ -15,6 +15,7 @@
             "databaseServer" = ""; 
             "databaseInstance" = ""; 
             "databaseName" = ""; 
+            "instanceServer" = "localhost";
             "instanceName" = ""; 
             "clientServicesPort" = "7046"; 
             "managementServicesPort" = "7045";
@@ -32,6 +33,9 @@
         }
         if (![bool]($BranchSettings.PSObject.Properties.name -match "developerServicesPort")) {
             $BranchSettings | Add-Member -MemberType NoteProperty -Name developerServicesPort -Value "7049"
+        }
+        if (![bool]($BranchSettings.PSObject.Properties.name -match "instanceServer")) {
+            $BranchSettings | Add-Member -MemberType NoteProperty -Name instanceServer -Value "localhost"
         }
     }
     Return $BranchSettings

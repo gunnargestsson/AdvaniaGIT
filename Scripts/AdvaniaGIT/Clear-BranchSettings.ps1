@@ -11,6 +11,7 @@
     $LocalBranchSettings.databaseInstance = ""
     $LocalBranchSettings.databaseName = ""
     $LocalBranchSettings.databaseServer = ""
+    $LocalBranchSettings.instanceServer = ""
     $LocalBranchSettings.instanceName = ""
     $LocalBranchSettings.dockerContainerName = ""
     $LocalBranchSettings.dockerContainerId = ""
