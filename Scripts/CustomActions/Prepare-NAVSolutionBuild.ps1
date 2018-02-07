@@ -53,12 +53,14 @@ if ($SetupParameters.deltaBranchList) {
 }
 
 # Copy Customers Deltas
-Write-Host Get deltas from Customer
-$branchMergeFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $sourcebranch))
-New-Item $branchMergeFolder -ItemType Directory | Out-Null
-Write-Host Copying files from (Join-Path $SetupParameters.deltasPath '*.delta') to $branchMergeFolder 
-Copy-NAVObjectFileContent -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchMergeFolder -Force
-$DeltaFolderIndexNo += 10
+if (Test-Path -Path (Join-Path $SetupParameters.deltasPath '*.delta')) {
+    Write-Host Get deltas from Customer
+    $branchMergeFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $sourcebranch))
+    New-Item $branchMergeFolder -ItemType Directory | Out-Null
+    Write-Host Copying files from (Join-Path $SetupParameters.deltasPath '*.delta') to $branchMergeFolder 
+    Copy-NAVObjectFileContent -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchMergeFolder -Force
+    $DeltaFolderIndexNo += 10
+}
 
 # Back to Workfolder and clean GIT folder
 Set-Location $Location
