@@ -29,7 +29,7 @@ if ($zipFileVersion -gt $navGITVersion) {
     $SetupJson.navVersion = $zipFileVersion
     $Article = Get-NAVLatestBlogArticle -SetupParameters $SetupParameters
     $CU = $Article.title -replace '\D+(\d+)','$1'
-    $CU = $CU.Substring(0,$CU.IndexOf($SetupParameters.navRelease))
+    $CU = ($CU.Substring(0,$CU.IndexOf($SetupParameters.navRelease))).TrimStart('0')
     $SetupJson | Add-Member -MemberType NoteProperty -Name navBuild -Value "$($SetupParameters.navRelease)-cu$CU" -Force
     Set-Content -Path $SetupParameters.setupPath -Value ($SetupJson | ConvertTo-Json)
 
