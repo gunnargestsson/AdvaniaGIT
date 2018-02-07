@@ -37,6 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.CreateDeltas', () => {actions.CreateDeltas(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateExtension', () => {actions.CreateExtension(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateNavBackup', () => {actions.CreateNavBackup(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.CreateNavBackupOnFtpServer', () => {actions.CreateNavBackupOnFtpServer(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateNavBacpac', () => {actions.CreateNavBacpac(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateReverseDeltas', () => {actions.CreateReverseDeltas(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateXlfLabelsInALCode', () => {actions.CreateXlfLabelsInALCode(vscode.workspace.rootPath)}),

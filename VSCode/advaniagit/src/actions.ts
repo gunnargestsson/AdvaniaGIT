@@ -58,6 +58,9 @@ export function CreateExtension(Repository) {
 export function CreateNavBackup(Repository) {
     StartAction(Repository,`Create-NavBackup.ps1`);
 }
+export function CreateNavBackupOnFtpServer(Repository) {
+    StartAction(Repository,`Create-NavBackupOnFtpServer.ps1`);
+}
 export function CreateNavBacpac(Repository) {
     StartAction(Repository,`Create-NavBacpac.ps1`);
 }

@@ -1,5 +1,5 @@
 ﻿Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-Write-Host "Requesting new NAV bacpac for branch" $SetupParameters.Branchame
+Write-Host "Requesting new NAV bacpac for branch" $SetupParameters.projectName
 if ($BranchSettings.dockerContainerId -gt "") {
     $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId
     Load-DockerInstanceAdminTools -Session $Session

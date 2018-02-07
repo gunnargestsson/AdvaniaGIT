@@ -57,3 +57,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.5]
 - Add new commands to create labels in AL and to work with Xlf files
+
+## [0.1.6]
+- Add new command to create and upload database backup to the team ftp server
