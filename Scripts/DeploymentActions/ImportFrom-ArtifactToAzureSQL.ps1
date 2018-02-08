@@ -25,15 +25,16 @@ $ObjectsFiles = Get-ChildItem -Path $DeploymentSettings.workFolder -Filter *.fob
 foreach ($ObjectsFile in $ObjectsFiles) {
     Write-Host "Uploading Artifact $($ObjectsFile.Name) to remote server..."
     Compress-Archive -Path $ObjectsFile.FullName -DestinationPath (Join-Path $WorkFolder 'Objects.zip') -Force
-    Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder 'Objects.zip') -DestinationFile (Join-Path $WorkFolder 'Objects.zip') 
+    Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder 'Objects.zip') -DestinationFile (Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-Objects.zip") 
     Remove-Item -Path (Join-Path $WorkFolder 'Objects.zip')  -Force -ErrorAction SilentlyContinue
 
     Write-Host "Expanding $($ObjectsFile.Name) on remote server..."
     Invoke-Command -Session $Session -ScriptBlock {
         param([string]$ZipFileName,[string]$ObjectFilePath)
+        New-Item -Path $ObjectFilePath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
         Expand-Archive -Path $ZipFileName -DestinationPath $ObjectFilePath -Force
         Remove-Item -Path $ZipFileName -Force -ErrorAction SilentlyContinue
-    } -ArgumentList ((Join-Path $WorkFolder 'Objects.zip'), $WorkFolder)
+    } -ArgumentList ((Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-Objects.zip"), "$WorkFolder\$($DeploymentSettings.instanceName)")
 
     Write-Host "Importing $($ObjectsFile.Name)..."
     Invoke-Command -Session $Session -ScriptBlock {
@@ -50,7 +51,7 @@ foreach ($ObjectsFile in $ObjectsFiles) {
                         -ErrText "Error while importing from $((Get-Item $file).BaseName)" `
                         -Verbose:$VerbosePreference
         Remove-Item -Path $file  -Force -ErrorAction SilentlyContinue
-    } -ArgumentList ((Join-Path $WorkFolder $ObjectsFile.Name),$DbAdmin.Username,$DbAdmin.Password)
+    } -ArgumentList ((Join-Path "$WorkFolder\$($DeploymentSettings.instanceName)" $ObjectsFile.Name),$DbAdmin.Username,$DbAdmin.Password)
 
     Write-Host "Syncronizing changes..."
     Invoke-Command -Session $Session -ScriptBlock {
