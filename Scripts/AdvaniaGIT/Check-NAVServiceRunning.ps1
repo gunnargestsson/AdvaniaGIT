@@ -13,7 +13,7 @@
     }
     if ($BranchSettings.dockerContainerId -eq "") {
         if ([string]::IsNullOrEmpty($BranchSettings.instanceServer)) {
-            $BranchSettings | Add-Member -MemberType NoteProperty -Name instanceServer -Value "localhost" -Force
+            $BranchSettings | Add-Member -MemberType NoteProperty -Name instanceServer -Value $env:COMPUTERNAME -Force
         }
         if (!(Get-Service -ComputerName $BranchSettings.instanceServer -Name "MicrosoftDynamicsNavServer`$$($BranchSettings.instanceName)" | Where-Object -Property Status -EQ Running)) {
             Write-Error "Environment $($BranchSettings.instanceName) is not running!" -ErrorAction Stop

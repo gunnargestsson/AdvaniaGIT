@@ -20,7 +20,10 @@ function Prepare-NAVClient
         $clientexe = (Join-Path $SetupParameters.navIdePath 'Microsoft.Dynamics.Nav.Client.exe')
         $clientSettingsPath = (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
         [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:ProgramData ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))
-        Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $env:COMPUTERNAME
+        if ([string]::IsNullOrEmpty($BranchSettings.instanceServer)) {
+            $BranchSettings | Add-Member -MemberType NoteProperty -Name instanceServer -Value $env:COMPUTERNAME -Force
+        }
+        Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $BranchSettings.instanceServer
     }
 
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesPort' -NewValue $BranchSettings.clientServicesPort
