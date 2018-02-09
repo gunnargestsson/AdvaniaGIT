@@ -21,7 +21,7 @@
            
     # Set Global Parameters
     $Globals = New-Object -TypeName PSObject
-    $Globals | Add-Member WorkFolder $SetupParameters.workFolder
+    $Globals | Add-Member WorkFolder $Repository
     $Globals | Add-Member LogPath  (Join-Path $SetupParameters.rootPath "Log\$([GUID]::NewGuid().GUID)")
 
     $SetupParameters = Combine-Settings $Globals $SetupParameters
