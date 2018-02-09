@@ -58,4 +58,11 @@ foreach ($Delta in $Deltas)
 
 Write-Host Saving As Target.txt
 Join-NAVApplicationObjectFile -Source (Join-Path $SourceFolder '*.txt') -Destination (Join-Path $($SetupParameters.workFolder) Target.txt) -Force -ErrorAction Stop
+
+if (Test-Path (Join-Path $MergeFolder "Languages\*.txt")) {
+    Write-Host Saving Translations
+    New-Item -Path $SetupParameters.LanguagePath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+    Copy-Item -Path (Join-Path $MergeFolder "Languages\*.txt") -Destination $SetupParameters.LanguagePath -Force 
+}
+
 UnLoad-ModelTools

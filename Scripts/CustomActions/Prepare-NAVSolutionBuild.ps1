@@ -20,6 +20,7 @@ Remove-Item -Path $MergeFolder -Recurse -Force -ErrorAction SilentlyContinue
 New-Item $MergeFolder -ItemType Directory | Out-Null
 New-Item (Join-Path $MergeFolder 'Base') -ItemType Directory | Out-Null
 New-Item (Join-Path $MergeFolder 'Deltas') -ItemType Directory | Out-Null
+New-Item (Join-Path $MergeFolder 'Languages') -ItemType Directory | Out-Null
 
 # Clone the base branch
 Write-Host Get objects from $SetupParameters.baseBranch
@@ -28,7 +29,8 @@ $BranchFolder = Join-Path $TempFolder $SetupParameters.baseBranch
 $BranchSetup = Get-Content (Join-Path $BranchFolder (Split-Path $SetupParameters.setupPath -Leaf)) -Encoding UTF8 | Out-String | ConvertFrom-Json
 $BranchSetupParameters = Combine-Settings $BranchSetup $GitSettings
 Write-Host Copying files from (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.objectsPath) '*.txt') to (Join-Path $MergeFolder 'Base') 
-Copy-NAVObjectFileContent -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.objectsPath) '*.txt') -Destination (Join-Path $MergeFolder 'Base') -Force
+Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.objectsPath) '*.txt') -Destination (Join-Path $MergeFolder 'Base') -Force
+Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.languagePath) '*.txt') -Destination (Join-Path $MergeFolder 'Languages') -Force -ErrorAction SilentlyContinue
 Write-Host Update version information in build branch
 $SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name navVersion -Value $BranchSetup.navVersion -Force
 $SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name navBuild -Value $BranchSetup.navBuild -Force
@@ -47,7 +49,8 @@ if ($SetupParameters.deltaBranchList) {
         $branchMergeFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $deltaBranch))
         New-Item $branchMergeFolder -ItemType Directory | Out-Null
         Write-Host Copying files from (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') to $branchMergeFolder 
-        Copy-NAVObjectFileContent -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') -Destination $branchMergeFolder -Force
+        Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') -Destination $branchMergeFolder -Force
+        Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.languagePath) '*.txt') -Destination (Join-Path $MergeFolder 'Languages') -Force -ErrorAction SilentlyContinue
         $DeltaFolderIndexNo += 10
     }
 }
@@ -58,7 +61,8 @@ if (Test-Path -Path (Join-Path $SetupParameters.deltasPath '*.delta')) {
     $branchMergeFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $sourcebranch))
     New-Item $branchMergeFolder -ItemType Directory | Out-Null
     Write-Host Copying files from (Join-Path $SetupParameters.deltasPath '*.delta') to $branchMergeFolder 
-    Copy-NAVObjectFileContent -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchMergeFolder -Force
+    Copy-Item -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchMergeFolder -Force
+    Copy-Item -Path (Join-Path $SetupParameters.languagePath '*.txt') -Destination (Join-Path $MergeFolder 'Languages') -Force -ErrorAction SilentlyContinue
     $DeltaFolderIndexNo += 10
 }
 
