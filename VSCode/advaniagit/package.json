@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -40,6 +40,7 @@
         "onCommand:advaniagit.CreateReverseDeltas",
         "onCommand:advaniagit.CreateXlfLabelsInALCode",
         "onCommand:advaniagit.CreateXlfFromCALTranslateFile",        
+        "onCommand:advaniagit.SignAppPackage",        
         "onCommand:advaniagit.DummyAction",
         "onCommand:advaniagit.ExportGITtoModified",
         "onCommand:advaniagit.ExportGITtoNAVNewSyntaxModified",
@@ -256,12 +257,12 @@
                 "category": "Advania"
             },
             {
-                "title": "Build Deltas & Reverse Deltas in GIT based on base branch",
+                "title": "Create Deltas & Reverse Deltas in GIT based on base branch",
                 "command": "advaniagit.BuildDeltasInGIT",
                 "category": "Advania"
             },
             {
-                "title": "Build Deltas & Reverse Deltas in GIT from last build source",
+                "title": "Create Deltas & Reverse Deltas in GIT from last build source",
                 "command": "advaniagit.BuildDeltasFromSourceInGIT",
                 "category": "Advania"
             },
@@ -311,6 +312,11 @@
                 "category": "Advania"
             },
             {
+                "title": "Code Sign app Package in AL folder",
+                "command": "advaniagit.SignAppPackage",
+                "category": "Advania"
+            },
+            {
                 "title": "Base Branch - Start Client",
                 "command": "advaniagit.StartBaseBranchClient",
                 "category": "Advania"
@@ -350,7 +356,7 @@
                 "category": "Advania"
             },
             {
-                "title": "Build New Syntax Deltas & Reverse Deltas in GIT",
+                "title": "Create New Syntax Deltas & Reverse Deltas in GIT",
                 "command": "advaniagit.BuildNAVNewSyntaxDeltasInGIT",
                 "category": "Advania"
             },
@@ -455,7 +461,7 @@
                 "category": "Advania"
             },
             {
-                "title": "Build Deltas & Reverse Deltas in GIT based on Source objects from last build",
+                "title": "Create Deltas & Reverse Deltas in GIT based on Source objects from last build",
                 "command": "advaniagit.BuildDeltasFromSource",
                 "category": "Advania"
             },

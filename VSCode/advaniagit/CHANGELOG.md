@@ -60,3 +60,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.6]
 - Add new command to create and upload database backup to the team ftp server
+
+## [0.1.7]
+- Add new command to sign an application package with code sining certificate
+- The word Build replaced with Create for actions that create deltas

@@ -74,6 +74,9 @@ export function CreateXlfLabelsInALCode(Repository) {
 export function CreateXlfFromCALTranslateFile(Repository) {
     StartAction(Repository,`Create-XlfFromCALTranslate.ps1`);
 }
+export function SignAppPackage(Repository) {
+    StartAction(Repository,`Sign-AppPackage.ps1`);
+}
 export function DummyAction(Repository) {
     StartAction(Repository,`Dummy-Action.ps1`);
 }
