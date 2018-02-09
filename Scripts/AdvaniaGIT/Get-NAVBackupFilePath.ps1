@@ -15,7 +15,14 @@
     $FilePatterns = @(
         "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bak",
         "$($SetupParameters.navRelease)/$($SetupParameters.navVersion)/$($SetupParameters.projectName).bak",
-        "$($SetupParameters.navRelease)/$($SetupParameters.projectName).bak",
+        "$($SetupParameters.navRelease)/$($SetupParameters.projectName).bak")
+    if ([bool]($SetupParameters.PSObject.Properties.name -match "baseBranch")) {
+        $FilePatterns += @(
+            "$($SetupParameters.navRelease)-$($SetupParameters.baseBranch).bak",
+            "$($SetupParameters.navRelease)/$($SetupParameters.navVersion)/$($SetupParameters.baseBranch).bak",
+            "$($SetupParameters.navRelease)/$($SetupParameters.baseBranch).bak")
+    }
+    $FilePatterns += @(
         "$($SetupParameters.navRelease)-$($SetupParameters.navSolution).bak"
         "$($SetupParameters.navRelease)/$($SetupParameters.navVersion)/$($SetupParameters.navSolution).bak",
         "$($SetupParameters.navRelease)/$($SetupParameters.navSolution).bak")
