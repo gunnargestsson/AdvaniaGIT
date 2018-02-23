@@ -8,6 +8,7 @@
         [PSObject]$BranchSettings
     )
 
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "$($SetupParameters.LogPath)\AdvaniaGIT.zip" -ErrorAction Stop
     $DockerSettings = Invoke-Command -Session $Session -ScriptBlock { 
         param([PSObject]$SetupParameters, [PSObject]$BranchSettings, [String]$GeoId, [String]$LocaleName )

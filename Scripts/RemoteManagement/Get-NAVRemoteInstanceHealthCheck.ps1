@@ -5,6 +5,7 @@
     )
     PROCESS 
     {
+    	  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         try {
             $result = Invoke-WebRequest -Uri "$($SelectedInstance.PublicWebBaseUrl)/WebClient/Health/System" -UseBasicParsing -TimeoutSec 10
             if ($result.StatusCode -eq 200 -and ((ConvertFrom-Json $result.Content).result)) {

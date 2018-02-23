@@ -20,6 +20,7 @@
         }
     } else {
         ReStart-DockerContainer -BranchSettings $BranchSettings
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         $result = Invoke-WebRequest -Uri "$($BranchSettings.dockerContainerName)/NAV/WebClient/Health/System" -UseBasicParsing -TimeoutSec 10
         if ($result.StatusCode -eq 200 -and ((ConvertFrom-Json $result.Content).result)) {
             # Web Client Health Check Endpoint will test Web Client, Service Tier and Database Connection

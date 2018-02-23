@@ -5,6 +5,7 @@
         [String]$FileName
     )
 
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     Try { 
         Invoke-WebRequest -Uri $Url -OutFile $FileName -ErrorAction Stop 
     }
