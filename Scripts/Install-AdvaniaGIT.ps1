@@ -1,5 +1,6 @@
 ﻿Remove-Item -Path "$($env:TEMP)\AdvaniaGIT.zip" -Force -ErrorAction SilentlyContinue
 Remove-Item -Path "$($env:TEMP)\AdvaniaGIT" -Recurse -Force -ErrorAction SilentlyContinue
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "$($env:TEMP)\AdvaniaGIT.zip" -ErrorAction Stop
 Expand-Archive -LiteralPath "$($env:TEMP)\AdvaniaGIT.zip" -DestinationPath "$($env:TEMP)\AdvaniaGIT"
 $currentLocation = (Get-Location).Path
