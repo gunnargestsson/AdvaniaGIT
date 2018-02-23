@@ -1,10 +1,6 @@
-﻿Add-Type -Language CSharp -TypeDefinition @"
-  public enum VersionListMergeMode
-  {
-    SourceFirst,
-    TargetFirst
-  }
-"@ -IgnoreWarnings
+﻿if (-not ([System.Management.Automation.PSTypeName]'VersionListMergeMode').Type) {
+    Add-Type -Language CSharp -TypeDefinition "public enum VersionListMergeMode { SourceFirst,TargetFirst } "
+}
 
 function Merge-NAVVersionListString 
 {
