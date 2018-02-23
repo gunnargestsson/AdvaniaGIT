@@ -4,7 +4,7 @@
     SourceFirst,
     TargetFirst
   }
-"@
+"@ -ErrorAction SilentlyContinue
 
 function Merge-NAVVersionListString 
 {
