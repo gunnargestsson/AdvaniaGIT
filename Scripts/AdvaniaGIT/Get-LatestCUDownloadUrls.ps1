@@ -5,7 +5,7 @@
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
     [PSObject]$SetupParameters,
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-    [String]$FeedUrl="https://blogs.msdn.microsoft.com/nav/feed/"
+    [String]$FeedUrl="https://blogs.msdn.microsoft.com/nav/feed/atom"
     )
 
     # Download RSS Feed
@@ -13,15 +13,15 @@
     $ArticlePath = (Join-Path $SetupParameters.LogPath "Article.html")
     Download-NAVFile -Url $FeedUrl -FileName $FeedFilePath
     [xml]$Content = Get-Content $FeedFilePath 
-    $Feed = $Content.rss.channel
+    $Feed = $Content.feed
 
     $DownloadUrls = @()
     $SearchString = "Cumulative Update * for Microsoft Dynamics NAV $($SetupParameters.navRelease) has been released"
-    ForEach ($item in $Feed.Item){ 
-        Write-Verbose "Found article $($item.title)..."
+    ForEach ($item in $Feed.entry){ 
+        Write-Verbose "Found article $($item.title.InnerText)..."
 
-        if ($item.title -like $SearchString) {
-            Download-NAVFile -Url $item.link -FileName $ArticlePath
+        if ($item.title.InnerText -like $SearchString) {
+            Download-NAVFile -Url $item.link.Item(0).href -FileName $ArticlePath
             $Article = (Get-Content $ArticlePath | Out-String).Replace("<span>","")
             $endPos = 1
             while ($Article.IndexOf("http://download.microsoft.com/download", $endPos) -gt 0) {

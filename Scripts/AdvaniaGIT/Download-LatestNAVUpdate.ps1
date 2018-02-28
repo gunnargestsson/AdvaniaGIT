@@ -15,8 +15,15 @@
     PROCESS
     {
         Write-Host "Downloading CU information from Microsoft Blog..."
-        $DownloadUrls = Get-LatestCUDownloadUrls -SetupParameters $SetupParameters 
-        
+        $pageId = 1
+        while (!$DownloadUrls) {
+            $DownloadUrls = Get-LatestCUDownloadUrls -SetupParameters $SetupParameters -FeedUrl "https://blogs.msdn.microsoft.com/nav/feed/atom/?paged=$pageId"
+            if ($pageId -gt 10) { 
+                Write-Host -ForegroundColor Red "Download Urls for $($SetupParameters.navRelease) not found!"
+                throw
+            }
+            $PageId ++
+        }
         Write-Host "Downloading installation for $($SetupParameters.navRelease) $($Language)..."
 
         $DownloadUrl = ($DownloadUrls | Where-Object -Property LocalVersion -EQ $Language).DownloadUrl
