@@ -9,7 +9,9 @@
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
     [Switch]$OnlyFailingTests,
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-    [Switch]$ForModifiedObjects
+    [Switch]$ForModifiedObjects,
+    [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+    [Switch]$TestExecutionContinuing
     )   
 
     $command = "DELETE FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Enabled Codeunit')]"
@@ -35,6 +37,8 @@
           Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
         }
     }
-    $command = "DELETE FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Result')]"
-    Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null      
+    if (!$TestExecutionContinuing) {
+        $command = "DELETE FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Result')]"
+        Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null 
+    }     
 }
