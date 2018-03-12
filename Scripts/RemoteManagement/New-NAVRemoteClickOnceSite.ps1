@@ -11,14 +11,16 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$ClickOnceApplicationName,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [String]$ClickOnceApplicationPublisher
+        [String]$ClickOnceApplicationPublisher,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [String]$TestDeploymentServer
     )
     PROCESS 
     {
         # Create the ClickOnce Site        
         $ClickOncesite = Invoke-Command -Session $Session -ScriptBlock `
             {
-                Param([PSObject]$SelectedInstance, [PSObject]$SelectedTenant, [PSObject]$ClientSettings, [String]$ClickOnceApplicationName, [String]$ClickOnceApplicationPublisher, [String]$DnsIdentity)
+                Param([PSObject]$SelectedInstance, [PSObject]$SelectedTenant, [PSObject]$ClientSettings, [String]$ClickOnceApplicationName, [String]$ClickOnceApplicationPublisher, [String]$DnsIdentity, [string]$TestDeploymentServer)
                                
                 Write-Host "Creating Client Configuration..."
                 $clickOnceCodeSigningPfxPasswordAsSecureString = ConvertTo-SecureString -String $SetupParameters.codeSigningCertificatePassword -AsPlainText -Force
@@ -127,6 +129,7 @@
                     Write-Host "Creating Client 365 Configuration..."
                     $clickOnceCodeSigningPfxPasswordAsSecureString = ConvertTo-SecureString -String $SetupParameters.codeSigningCertificatePassword -AsPlainText -Force
                     $clickOnceDeploymentId = "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)"
+                    $clickOnceDirectory = Join-Path (Join-Path $wwwRootPath "ClickOnce") $clickOnceDeploymentId
                     $clickOnceDirectory = Join-Path $clickOnceDirectory "365"
                     $clickOnceDeploymentId += "365"
                     $AzureADDomain = $SelectedInstance.ClientServicesFederationMetadataLocation.split("/").GetValue(3)
@@ -207,6 +210,95 @@
                     New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "Web365" -PhysicalPath (Join-Path (Split-Path $clickOnceDirectory -Parent) "web365")
                     Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\Web365" -Value @{enabled="true";destination="$($SelectedInstance.PublicWebBaseUrl)365?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
                 }
-            } -ArgumentList ($SelectedInstance, $SelectedTenant, $ClientSettings, $ClickOnceApplicationName, $ClickOnceApplicationPublisher, (Get-NAVDnsIdentity -SelectedInstance $SelectedInstance))
+
+                if (![System.String]::IsNullOrEmpty($TestDeploymentServer)) {
+                    Write-Host "Creating Test Client Configuration..."
+                    $clickOnceCodeSigningPfxPasswordAsSecureString = ConvertTo-SecureString -String $SetupParameters.codeSigningCertificatePassword -AsPlainText -Force
+                    $clickOnceDeploymentId = "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)"
+                    $clickOnceDirectory = Join-Path (Join-Path $wwwRootPath "ClickOnce") $clickOnceDeploymentId
+                    $clickOnceDirectory = Join-Path $clickOnceDirectory "Test"
+                    $clickOnceDeploymentId += "Test"
+                    $AzureADDomain = $SelectedInstance.ClientServicesFederationMetadataLocation.split("/").GetValue(3)
+                    Remove-Item -Path $clickOnceDirectory -Recurse -Force -ErrorAction SilentlyContinue
+                    $webSiteUrl = "https://$($SelectedTenant.ClickOnceHost)/Test"
+                    [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:ProgramData ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))                       
+
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $TestDeploymentServer
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesPort' -NewValue (Split-Path (Split-Path $SelectedInstance.PublicWinBaseUrl -Parent) -Leaf).Split(':').GetValue(1)
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServerInstance' -NewValue (Split-Path $SelectedInstance.PublicWinBaseUrl -Leaf)
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'UrlHistory' -NewValue ""
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'DnsIdentity' -NewValue $DnsIdentity
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'TenantId' -NewValue $SelectedTenant.Id
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesCredentialType' -NewValue $SelectedInstance.ClientServicesCredentialType
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicesCertificateValidationEnabled' -NewValue false
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicePrincipalNameRequired' -NewValue false
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicePrincipalNameRequired' -NewValue false
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServer' -NewValue $ClientSettings.HelpServer
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServerPort' -NewValue $ClientSettings.HelpServerPort
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ACSUri' -NewValue ""
+
+                    Write-Host "Creating ClickOnce Test Directory..."
+                    New-ClickOnceDirectory -ClientUserSettings $clientUserSettings -ClickOnceDirectory $clickOnceDirectory
+
+                    Write-Host "Adjusting the application manifest (Microsoft.Dynamics.Nav.Client.exe.manifest)..."
+                    $applicationFilesDirectory = Join-Path $clickOnceDirectory 'Deployment\ApplicationFiles'
+                    $applicationManifestFile = Join-Path $applicationFilesDirectory 'Microsoft.Dynamics.Nav.Client.exe.manifest'
+                    $applicationIdentityName = "$clickOnceDeploymentId application identity"
+                    $NAVClientFile = (Join-Path $applicationFilesDirectory 'Microsoft.Dynamics.Nav.Client.exe')
+                    $applicationIdentityVersion = (Get-ItemProperty -Path $NAVClientFile).VersionInfo.FileVersion
+
+                    Set-ApplicationManifestFileList `
+                        -ApplicationManifestFile $applicationManifestFile `
+                        -ApplicationFilesDirectory $applicationFilesDirectory `
+                        -MageExeLocation $SetupParameters.MageExeLocation
+
+                    Set-ApplicationManifestApplicationIdentity `
+                        -ApplicationManifestFile $applicationManifestFile `
+                        -ApplicationIdentityName $applicationIdentityName `
+                        -ApplicationIdentityVersion $applicationIdentityVersion
+
+                    Write-Host "Signing the application manifest..."
+                    Start-ProcessWithErrorHandling -FilePath $SetupParameters.MageExeLocation -ArgumentList "-Sign `"$applicationManifestFile`" -CertFile `"$($SetupParameters.codeSigningCertificate)`" -password $($SetupParameters.codeSigningCertificatePassword)" 
+
+                    Write-Host "Adjusting the deployment manifest (Microsoft.Dynamics.Nav.Client.application)..."
+                    $deploymentManifestFile = Join-Path $clickOnceDirectory 'Deployment\Microsoft.Dynamics.Nav.Client.application'
+                    $deploymentIdentityName = "$clickOnceDeploymentId deployment identity" 
+                    $deploymentIdentityVersion = $applicationIdentityVersion
+                    $deploymentManifestUrl = ($webSiteUrl + "/Deployment/Microsoft.Dynamics.Nav.Client.application")
+                    $applicationManifestUrl = ($webSiteUrl + "/Deployment/ApplicationFiles/Microsoft.Dynamics.Nav.Client.exe.manifest")
+                    $applicationName = "$ClickOnceApplicationName fyrir prófun $($SelectedTenant.CustomerName)"
+
+                    Set-DeploymentManifestApplicationReference `
+                        -DeploymentManifestFile $deploymentManifestFile `
+                        -ApplicationManifestFile $applicationManifestFile `
+                        -ApplicationManifestUrl $applicationManifestUrl `
+                        -MageExeLocation $SetupParameters.MageExeLocation
+
+                    Set-DeploymentManifestSettings `
+                        -DeploymentManifestFile $deploymentManifestFile `
+                        -DeploymentIdentityName $deploymentIdentityName `
+                        -DeploymentIdentityVersion $deploymentIdentityVersion `
+                        -DeploymentManifestUrl $deploymentManifestUrl `
+                        -ApplicationPublisher $ClickOnceApplicationPublisher `
+                        -ApplicationName $applicationName
+
+                    Write-Host "Signing the deployment manifest..."
+                    Start-ProcessWithErrorHandling -FilePath $SetupParameters.MageExeLocation -ArgumentList "-Sign `"$deploymentManifestFile`" -CertFile `"$($SetupParameters.codeSigningCertificate)`" -password $($SetupParameters.codeSigningCertificatePassword)" 
+
+                    Write-Host "Putting a web.config file in the Deployment folder, which will tell IIS to allow downloading of .config files etc..."
+                    $sourceFile = Join-Path $AdminRemoteDirectory 'ClickOnce\Resources\deployment_web.config'
+                    $targetFile = Join-Path $clickOnceDirectory 'Deployment\web.config'
+                    Copy-Item $sourceFile -destination $targetFile
+
+                    Write-Host "Creating the ClickOnce and Web Test Sites"
+                    New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "Test" -PhysicalPath $clickOnceDirectory
+                    New-Item -Path (Join-Path (Split-Path $clickOnceDirectory -Parent) "webTest") -ItemType Directory -ErrorAction SilentlyContinue
+                    New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "WebTest" -PhysicalPath (Join-Path (Split-Path $clickOnceDirectory -Parent) "webTest")
+                    Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\WebTest" -Value @{enabled="true";destination="$($SelectedInstance.PublicWebBaseUrl)Test?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
+
+                }
+
+
+            } -ArgumentList ($SelectedInstance, $SelectedTenant, $ClientSettings, $ClickOnceApplicationName, $ClickOnceApplicationPublisher, (Get-NAVDnsIdentity -SelectedInstance $SelectedInstance), $TestDeploymentServer)
     }
 }

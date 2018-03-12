@@ -25,10 +25,10 @@
                 Foreach ($SelectedInstance in $Instances) {
     
                     # Remove old Web Instance
-                    Remove-NAVRemoteWebInstance -Session $Session -SelectedInstance $SelectedInstance 
+                    Remove-NAVRemoteWebInstance -Session $Session -SelectedInstance $SelectedInstance
                                                
                     # Create the Web Instance
-                    New-NAVRemoteWebInstance -Session $Session -SelectedInstance $SelectedInstance -ClientSettings $RemoteComputer.ClientSettings
+                    New-NAVRemoteWebInstance -Session $Session -SelectedInstance $SelectedInstance -ClientSettings $RemoteComputer.ClientSettings -TestDeploymentServer $Remotes.TestDeploymentServer
                 }
                 Remove-PSSession -Session $Session 
             }

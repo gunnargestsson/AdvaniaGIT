@@ -1,7 +1,7 @@
 ﻿$VMAdmin = Get-NAVPasswordStateUser -PasswordId $DeploymentSettings.NavServerPid
 $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 
-$WorkFolder = $SetupParameters.WorkFolder
+$WorkFolder = $DeploymentSettings.workFolder
 Write-Host "Connecting to $($DeploymentSettings.instanceServer)..."
 $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentSettings.instanceServer -SetupPath $WorkFolder
 
@@ -31,6 +31,7 @@ if (Test-Path -Path (Join-Path $workFolder "*.txt")) {
 
         Copy-Item -Path (Join-Path $filePath "*.txt") -Destination $TranslationsPath -Force
         Remove-Item -Path (Join-Path $filePath "*.txt")  -Force -ErrorAction SilentlyContinue
+        Ser-NAVServerInstance -ServerInstance $DeploymentSettings.instanceName -Restart
     } -ArgumentList (Join-Path $WorkFolder $($DeploymentSettings.instanceName))
 
     Write-Host "Translations Import complete..."

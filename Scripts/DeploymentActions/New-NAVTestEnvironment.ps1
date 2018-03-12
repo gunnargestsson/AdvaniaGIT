@@ -9,10 +9,6 @@ Invoke-Command -Session $Session -ScriptBlock {
     param([string]$instanceName,[string]$branchId)   
         $SetupParameters | Add-Member -MemberType NoteProperty -Name branchId -Value $branchId -Force
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
-        $BranchSettings.databaseInstance = ''
-        $BranchSettings.databaseServer = 'localhost'
-        $BranchSettings.databaseName = $instanceName
-        $BranchSettings.instanceName = ""
 
         Load-InstanceAdminTools -SetupParameters $SetupParameters
         Write-Host "Simplifying Database..."

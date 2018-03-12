@@ -1,5 +1,4 @@
-﻿$DbAdmin = Get-NAVPasswordStateUser -PasswordId $DeploymentSettings.SqlServerPid
-$VMAdmin = Get-NAVPasswordStateUser -PasswordId $DeploymentSettings.NavServerPid
+﻿$VMAdmin = Get-NAVPasswordStateUser -PasswordId $DeploymentSettings.NavServerPid
 $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 
 $WorkFolder = $DeploymentSettings.workFolder
@@ -38,7 +37,7 @@ foreach ($ObjectsFile in $ObjectsFiles) {
 
     Write-Host "Importing $($ObjectsFile.Name)..."
     Invoke-Command -Session $Session -ScriptBlock {
-        param([string]$file,[string]$username,[string]$password)
+        param([string]$file)
         $logFile = "$($SetupPatameters.LogPath)\$((Get-Item $file).BaseName).log"             
         $command = "Command=ImportObjects`,ImportAction=Overwrite`,SynchronizeSchemaChanges=No`,File=`"$file`"" 
                     
@@ -46,12 +45,10 @@ foreach ($ObjectsFile in $ObjectsFiles) {
                         -BranchSettings $BranchSettings `
                         -Command $command `
                         -LogFile $logFile `
-                        -Username $username `
-                        -Password $password `
                         -ErrText "Error while importing from $((Get-Item $file).BaseName)" `
                         -Verbose:$VerbosePreference
         Remove-Item -Path $file  -Force -ErrorAction SilentlyContinue
-    } -ArgumentList ((Join-Path "$WorkFolder\$($DeploymentSettings.instanceName)" $ObjectsFile.Name),$DbAdmin.Username,$DbAdmin.Password)
+    } -ArgumentList ((Join-Path "$WorkFolder\$($DeploymentSettings.instanceName)" $ObjectsFile.Name))
 
     Write-Host "Syncronizing changes..."
     Invoke-Command -Session $Session -ScriptBlock {

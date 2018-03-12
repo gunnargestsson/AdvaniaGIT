@@ -33,7 +33,7 @@
                         if ($SelectedTenant.CustomerName -gt "" -and $SelectedTenant.ClickOnceHost -gt "") {
                             Write-Host "Building ClickOnce Site for $($SelectedTenant.CustomerName)..."
                             # Create the ClickOnce Site
-                            New-NAVRemoteClickOnceSite -Session $Session -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant -ClickOnceApplicationName $Remotes.ClickOnceApplicationName -ClickOnceApplicationPublisher $Remotes.ClickOnceApplicationPublisher -ClientSettings $RemoteComputer.ClientSettings
+                            New-NAVRemoteClickOnceSite -Session $Session -SelectedInstance $SelectedInstance -SelectedTenant $SelectedTenant -ClickOnceApplicationName $Remotes.ClickOnceApplicationName -ClickOnceApplicationPublisher $Remotes.ClickOnceApplicationPublisher -ClientSettings $RemoteComputer.ClientSettings -TestDeploymentServer $Remotes.TestDeploymentServer
                         }
                     }
                 }

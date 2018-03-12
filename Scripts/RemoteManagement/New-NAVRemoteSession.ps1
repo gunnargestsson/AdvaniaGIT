@@ -23,6 +23,8 @@
     Invoke-Command -Session $Session -ScriptBlock `
         {
             param([string] $SetupPath)
+            Set-ExecutionPolicy unrestricted
+            Import-Module WebAdministration | Out-Null
             Import-Module AdvaniaGIT -DisableNameChecking | Out-Null             
             if (!(Test-Path -Path $SetupPath)) {
                 if (Test-Path -Path (Split-Path $SetupPath -Parent)) {
