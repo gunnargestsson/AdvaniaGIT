@@ -40,6 +40,17 @@ Invoke-Command -Session $Session -ScriptBlock {
             $command = "DELETE FROM [dbo].[${tableName}]"
             $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command            
 
+            $tableName = "${company}`$Company Information"
+            For ($i=0; $i -lt $invalidChars.invalididentifierchars.Length; $i++) { 
+                $tableName = $tableName.Replace($invalidChars.invalididentifierchars.SubString($i,1),"_")
+            }
+
+            $command = "UPDATE [dbo].[${tableName}] SET [System Indicator] = 5"
+            $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command            
+            $command = "UPDATE [dbo].[${tableName}] SET [System Indicator Style] = 5"
+            $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command            
+
+
         }
 
 

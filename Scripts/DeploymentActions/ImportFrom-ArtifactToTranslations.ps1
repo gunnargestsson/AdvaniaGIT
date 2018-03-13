@@ -31,7 +31,7 @@ if (Test-Path -Path (Join-Path $workFolder "*.txt")) {
 
         Copy-Item -Path (Join-Path $filePath "*.txt") -Destination $TranslationsPath -Force
         Remove-Item -Path (Join-Path $filePath "*.txt")  -Force -ErrorAction SilentlyContinue
-        Ser-NAVServerInstance -ServerInstance $DeploymentSettings.instanceName -Restart
+        Set-NAVServerInstance -ServerInstance $DeploymentSettings.instanceName -Restart
     } -ArgumentList (Join-Path $WorkFolder $($DeploymentSettings.instanceName))
 
     Write-Host "Translations Import complete..."

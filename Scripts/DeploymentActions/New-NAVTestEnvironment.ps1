@@ -38,7 +38,16 @@ Invoke-Command -Session $Session -ScriptBlock {
         Get-NAVServerInstance -ServerInstance $instanceName | Where-Object -Property State -EQ Running | Sync-NAVTenant -Mode ForceSync -Force
         Update-BranchSettings -BranchSettings $BranchSettings
         Write-Host "Environment build completed..."
-
+        Write-Host "Renaming companies..."
+        $companyNames = (Get-NAVCompany -ServerInstance $instanceName).CompanyName
+        foreach ($companyName in $companyNames) { 
+            Write-Host Renaming ${companyName}...
+            $newCompanyName = "TEST ${companyName}"
+            if ($newCompanyName.Length -gt 30) {
+              $newCompanyName = $newCompanyName.Substring(0,30)
+            }
+            Rename-NAVCompany -ServerInstance $instanceName -CompanyName $companyName -NewCompanyName $newCompanyName -Force
+        }
         UnLoad-InstanceAdminTools
     } -ArgumentList ($DeploymentSettings.instanceName, $DeploymentSettings.branchId)
 
