@@ -228,7 +228,7 @@
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServerInstance' -NewValue (Split-Path $SelectedInstance.PublicWinBaseUrl -Leaf)
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'UrlHistory' -NewValue ""
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'DnsIdentity' -NewValue $DnsIdentity
-                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'TenantId' -NewValue $SelectedTenant.Id
+                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'TenantId' -NewValue default
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesCredentialType' -NewValue $SelectedInstance.ClientServicesCredentialType
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicesCertificateValidationEnabled' -NewValue false
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicePrincipalNameRequired' -NewValue false
@@ -294,7 +294,7 @@
                     New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "Test" -PhysicalPath $clickOnceDirectory
                     New-Item -Path (Join-Path (Split-Path $clickOnceDirectory -Parent) "webTest") -ItemType Directory -ErrorAction SilentlyContinue
                     New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "WebTest" -PhysicalPath (Join-Path (Split-Path $clickOnceDirectory -Parent) "webTest")
-                    Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\WebTest" -Value @{enabled="true";destination="$($SelectedInstance.PublicWebBaseUrl)Test?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
+                    Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\WebTest" -Value @{enabled="true";destination="$($SelectedInstance.PublicWebBaseUrl)Test?tenant=default";exactDestination="true";httpResponseStatus="Permanent"}
 
                 }
 

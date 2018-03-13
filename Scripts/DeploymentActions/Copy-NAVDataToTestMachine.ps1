@@ -6,7 +6,7 @@ $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentS
 
 Write-Host "Exporting Live Database to Navdata..."
 Invoke-Command -Session $Session -ScriptBlock {
-    param([string]$instanceName,[string]$workFolder,[string]$backupFtpPath)
+    param([string]$instanceName,[string]$tenantId='default', [string]$workFolder,[string]$backupFtpPath)
     function Split-File($inFile,  $outPrefix, [Int32] $bufSize){
         $stream = [System.IO.File]::OpenRead($inFile)
         $chunkNum = 1
@@ -22,10 +22,11 @@ Invoke-Command -Session $Session -ScriptBlock {
     }
 
     Load-InstanceAdminTools -SetupParameters $SetupParameters
+    New-Item -Path $workFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     $navDataFilePath = Join-Path $workFolder "$($SetupParameters.navRelease)-${instanceName}.navdata"
     Remove-Item -Path $navDataFilePath -ErrorAction SilentlyContinue
     Write-Host Writing Customer Database to ${navDataFilePath}...
-    Export-NAVData -ServerInstance $instanceName -IncludeApplication -IncludeApplicationData -IncludeGlobalData -AllCompanies -FilePath $navDataFilePath -Force
+    Export-NAVData -ServerInstance $instanceName -Tenant $tenantId -IncludeApplication -IncludeApplicationData -IncludeGlobalData -AllCompanies -FilePath $navDataFilePath -Force
     if (Test-Path -Path $navDataFilePath) {        
         Split-File -inFile $navDataFilePath -outPrefix "${navDataFilePath}.part." -bufSize 1000000000
         $files = Get-ChildItem -Path "${navDataFilePath}.part.*"
@@ -39,7 +40,7 @@ Invoke-Command -Session $Session -ScriptBlock {
         Write-Host "Unable to create navdata file!"
         throw
     }
-} -ArgumentList ($DeploymentSettings.instanceName, $DeploymentSettings.tempPath, $DeploymentSettings.backupFtpPath)
+} -ArgumentList ($DeploymentSettings.instanceName, $DeploymentSettings.tenantId, $DeploymentSettings.tempPath, $DeploymentSettings.backupFtpPath)
 
 
 $Session | Remove-PSSession

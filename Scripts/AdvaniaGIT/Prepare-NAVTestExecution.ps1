@@ -38,6 +38,7 @@
         }
     }
     if (!$TestExecutionContinuing) {
+        Write-Host "Deleting previous test results..."
         $command = "DELETE FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Result')]"
         Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null 
     }     

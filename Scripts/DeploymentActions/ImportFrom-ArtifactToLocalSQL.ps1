@@ -20,7 +20,7 @@ Invoke-Command -Session $Session -ScriptBlock {
     Update-BranchSettings -BranchSettings $BranchSettings
 } -ArgumentList ($DeploymentSettings.branchId, $DeploymentSettings.instanceName)
 
-$ObjectsFiles = Get-ChildItem -Path $DeploymentSettings.workFolder -Filter *.fob
+$ObjectsFiles = Get-ChildItem -Path (Get-Location).Path -Filter *.fob
 foreach ($ObjectsFile in $ObjectsFiles) {
     Write-Host "Uploading Artifact $($ObjectsFile.Name) to remote server..."
     Compress-Archive -Path $ObjectsFile.FullName -DestinationPath (Join-Path $WorkFolder 'Objects.zip') -Force

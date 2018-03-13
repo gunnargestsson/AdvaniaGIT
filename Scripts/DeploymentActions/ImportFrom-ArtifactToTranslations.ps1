@@ -7,7 +7,7 @@ $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentS
 
 if (Test-Path -Path (Join-Path $workFolder "*.txt")) {
     Write-Host "Uploading Translations Artifacts to remote server as Translations.zip..."
-    Compress-Archive -Path (Join-Path $workFolder "*.txt") -DestinationPath (Join-Path $WorkFolder 'Translations.zip') -Force
+    Compress-Archive -Path (Join-Path (Get-Location).Path "*.txt") -DestinationPath (Join-Path $WorkFolder 'Translations.zip') -Force
     Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder 'Translations.zip') -DestinationFile (Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-Translations.zip") 
     Remove-Item -Path (Join-Path $WorkFolder 'Translations.zip')  -Force -ErrorAction SilentlyContinue
 
