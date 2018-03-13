@@ -6,13 +6,15 @@
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyname=$true)]
         [String]$TranslationFile,
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyname=$true)]
-        [String]$LanguageNo
+        [String]$LanguageNo,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [HashTable]$TranslateTable
     )
 
     Write-Host "Loading translation data from ${TranslationFile}..."
     $CALTranslateFile = Get-Content -Encoding Oem -Path $TranslationFile
-    $LanguageNo = '-A' + $LanguageNo
-    $TranslateTable = @{}
+    $LanguageNo = '-A' + $LanguageNo  
+    if (!$TranslateTable) {$TranslateTable = @{}}  
     $keyFound = $false
     $NoOfLines = 0
     foreach ($CALTranslateLine in $CALTranslateFile) {    

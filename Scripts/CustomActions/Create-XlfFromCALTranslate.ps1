@@ -14,18 +14,18 @@ if ([string]::IsNullOrEmpty($LanguageName)) {
 $LanguageId = Get-NAVLanguageIdFromLanguageName -LanguageName $LanguageName
 $TranslationTarget = ($TranslationSource.FullName).Replace(".g.xlf",".${LanguageId}.xlf")
 if (Test-Path $TranslationTarget) {
-    Write-Host -ForegroundColor Red "Translation Target Language already exists.  Please delete file and try again"
-    throw
+    $TranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $TranslationTarget -TranslateTable $TranslationTable
+    Remove-Item -Path $TranslationTarget -Force    
 }
 
 Write-Host "Select C/AL translation file to import..."
 $CALTranslationFile = Get-NAVTranslationFileName -initialDirectory $SetupParameters.Repository
 
-if (!(Test-Path $CALTranslationFile)) {
-    Write-Host -ForegroundColor Red "CAL Translation file not found!"
-    throw
+if (Test-Path $CALTranslationFile) {
+    $TranslationTable = Get-NAVTranslationTable -TranslationFile $CALTranslationFile -LanguageNo $LanguageId -TranslateTable $TranslationTable
 }
 
-Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget 
-$TranslationTable = Get-NAVTranslationTable -TranslationFile $CALTranslationFile -LanguageNo $LanguageId 
-Apply-NAVTranslationTableToXlfFile -TranslationTable $TranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName 
+if ($TranslationTable) {
+    Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget 
+    Apply-NAVTranslationTableToXlfFile -TranslationTable $TranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName 
+}
