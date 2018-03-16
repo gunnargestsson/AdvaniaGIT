@@ -20,7 +20,6 @@
                 Param([PSObject]$SelectedInstance, [PSObject]$ClientSettings, [String]$DnsIdentity, [string]$TestDeploymentServer)
                 Load-InstanceAdminTools -SetupParameters $SetupParameters
                 Write-Host "Creating Web Client Site for $($SelectedInstance.ServerInstance)..."
-                Import-Module WebAdministration
                 if ([int]$SetupParameters.mainVersion -ge 110) {
                     New-NAVWebServerInstance `
                         -ClientServicesCredentialType $SelectedInstance.ClientServicesCredentialType `
@@ -28,7 +27,7 @@
                         -DnsIdentity $DnsIdentity `
                         -Server localhost `
                         -ServerInstance $SelectedInstance.ServerInstance `
-                        -WebServerInstance $SelectedInstance.ServerInstance `
+                        -WebServerInstance $SelectedInstance.ServerInstance 
                 } else {
                     New-NAVWebServerInstance `
                         -ClientServicesCredentialType $SelectedInstance.ClientServicesCredentialType `

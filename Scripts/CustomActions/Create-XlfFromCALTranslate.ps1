@@ -21,11 +21,17 @@ if (Test-Path $TranslationTarget) {
 Write-Host "Select C/AL translation file to import..."
 $CALTranslationFile = Get-NAVTranslationFileName -initialDirectory $SetupParameters.Repository
 
-if (Test-Path $CALTranslationFile) {
-    $TranslationTable = Get-NAVTranslationTable -TranslationFile $CALTranslationFile -LanguageNo $LanguageId -TranslateTable $TranslationTable
+if ($CALTranslationFile) {
+    if (Test-Path $CALTranslationFile) {
+        $TranslationTable = Get-NAVTranslationTable -TranslationFile $CALTranslationFile -LanguageNo $LanguageId -TranslateTable $TranslationTable
+    }
 }
 
 if ($TranslationTable) {
+    Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget 
+    Apply-NAVTranslationTableToXlfFile -TranslationTable $TranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName 
+} else {
+    $TranslationTable = @{}
     Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget 
     Apply-NAVTranslationTableToXlfFile -TranslationTable $TranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName 
 }
