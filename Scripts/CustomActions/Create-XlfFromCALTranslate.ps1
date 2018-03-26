@@ -12,7 +12,7 @@ if ([string]::IsNullOrEmpty($LanguageName)) {
 }
 
 $LanguageId = Get-NAVLanguageIdFromLanguageName -LanguageName $LanguageName
-$TranslationTarget = ($TranslationSource.FullName).Replace(".g.xlf",".${LanguageId}.xlf")
+$TranslationTarget = ($TranslationSource.FullName).Replace(".g.xlf",".${LanguageName}.xlf")
 if (Test-Path $TranslationTarget) {
     $TranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $TranslationTarget -TranslateTable $TranslationTable
     Remove-Item -Path $TranslationTarget -Force    

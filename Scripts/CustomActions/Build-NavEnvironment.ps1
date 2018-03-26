@@ -1,4 +1,4 @@
-if ($SetupParameters.dockerImage -and $SetupParameters.dockerImage -gt "") {
+if (![String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
     if ($BranchSettings.instanceName -eq "") {
         Write-Host "Starting Docker Image Development Container for Branch ..."
         $params = @{
