@@ -9,15 +9,16 @@
     )
     PROCESS
     {
-
-        if ($DefaultUserName -eq "" -and $DefaultPassword -eq "") {
-            $Credential = Get-Credential -Message $Message -ErrorAction Stop
-        } elseif ($DefaultPassword -eq "") {
-            $Credential = Get-Credential -Message $Message -UserName $DefaultUserName -ErrorAction Stop        
-        } else {
-            $Credential = New-Object System.Management.Automation.PSCredential($DefaultUserName, (ConvertTo-SecureString $DefaultPassword -AsPlainText -Force))
-        }
-        
+        $Credential = Get-NAVDockerContainerCredentials
+        if ([String]::IsNullOrEmpty($Credential.UserName) -or $Credential.UserName -ine $DefaultUserName ) {
+            if ($DefaultUserName -eq "" -and $DefaultPassword -eq "") {
+                $Credential = Get-Credential -Message $Message -ErrorAction Stop
+            } elseif ($DefaultPassword -eq "") {
+                $Credential = Get-Credential -Message $Message -UserName $DefaultUserName -ErrorAction Stop        
+            } else {
+                $Credential = New-Object System.Management.Automation.PSCredential($DefaultUserName, (ConvertTo-SecureString $DefaultPassword -AsPlainText -Force))
+            }
+        }        
         return $Credential
     }        
 }

@@ -11,8 +11,10 @@
 
     # Add the properties, from the second object, to the first object
     foreach ($Property in $PropertyNames) {
-        if (($Configuration.$Property.GetType()).Name.Contains("String")) {
-          $Configuration.$Property = $ExecutionContext.InvokeCommand.ExpandString($Configuration.$Property)
+        if (![String]::IsNullOrEmpty($Configuration.$Property)) {
+            if (($Configuration.$Property.GetType()).Name.Contains("String")) {
+              $Configuration.$Property = $ExecutionContext.InvokeCommand.ExpandString($Configuration.$Property)
+            }
         }
     }
 

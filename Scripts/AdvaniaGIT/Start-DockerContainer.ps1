@@ -19,6 +19,12 @@
     )
     
     $DockerSettings = Get-DockerSettings 
+
+    if ([System.String]::IsNullOrEmpty($AdminPassword)) {
+        $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $AdminUsername
+        $AdminPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
+    }
+
     Write-Host "Connecting to repository $($DockerSettings.RepositoryPath)..."
     if ($DockerSettings.RepositoryPassword -gt "") {
         try {
@@ -28,11 +34,6 @@
             Write-Host -ForegroundColor Red "Unable to login to docker repository: $($DockerSettings.RepositoryPath)"
         }
 
-    }
-
-    if ([System.String]::IsNullOrEmpty($AdminPassword)) {
-        $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $AdminUsername
-        $AdminPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
     }
 
     Write-Host "Preparing Docker Container for Dynamics NAV..."    
@@ -62,15 +63,20 @@
     if (![System.String]::IsNullOrEmpty($BackupFilePath)) {
         $BackupFilePath = $BackupFilePath.Replace($SetupParameters.rootPath,"C:\Host")
         $parameters += @(
-                            "--env bakfile=$BackupFilePath"
+                            "--env bakfile=`"$BackupFilePath`""
                         )
     }
 
     if (![System.String]::IsNullOrEmpty($LicenseFilePath)) {
         $LicenseFilePath = $LicenseFilePath.Replace($SetupParameters.rootPath,"C:\Host")
         $parameters += @(
-                            "--env licensefile=$LicenseFilePath"
+                            "--env licensefile=`"$LicenseFilePath`""
                         )
+    }
+
+    if (![String]::IsNullOrEmpty($DockerSettings.DockerHostIPName)) {
+        $dockerContainerIp = Get-NextAvailableDockerIpAddress
+        $parameters +=  @("--network=$($DockerSettings.DockerHostIPName)","--ip ${dockerContainerIp}")
     }
 
     if ([System.Version]$genericTag -ge [System.Version]"0.0.3.0") {
@@ -136,6 +142,7 @@
     $BranchSettings.databaseServer = $DockerContainerName
     $BranchSettings.dockerContainerName = $DockerContainerName
     $BranchSettings.dockerContainerId = $DockerContainerId
+    $BranchSettings.dockerContainerIp = (Get-DockerIPAddress -Session $Session)
     $BranchSettings.clientServicesPort = $DockerSettings.BranchSettings.clientServicesPort
     $BranchSettings.managementServicesPort = $DockerSettings.BranchSettings.managementServicesPort
     $BranchSettings.developerServicesPort = $DockerSettings.BranchSettings.developerServicesPort

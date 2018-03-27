@@ -21,7 +21,8 @@
             "managementServicesPort" = "7045";
             "developerServicesPort" = "7049";
             "dockerContainerName" = "";
-            "dockerContainerId" = ""}
+            "dockerContainerId" = "";
+            "dockerContainerIp" = "";}
         $allBranchSettings.Branches += $BranchSettings
         Set-Content -Path $SettingsFilePath -Value ($allBranchSettings | ConvertTo-Json)        
     } else {
@@ -30,6 +31,9 @@
         }
         if (![bool]($BranchSettings.PSObject.Properties.name -match "dockerContainerId")) {
             $BranchSettings | Add-Member -MemberType NoteProperty -Name dockerContainerId -Value ""
+        }
+        if (![bool]($BranchSettings.PSObject.Properties.name -match "dockerContainerIp")) {
+            $BranchSettings | Add-Member -MemberType NoteProperty -Name dockerContainerIp -Value ""
         }
         if (![bool]($BranchSettings.PSObject.Properties.name -match "developerServicesPort")) {
             $BranchSettings | Add-Member -MemberType NoteProperty -Name developerServicesPort -Value "7049"

@@ -1,11 +1,11 @@
 ﻿function Load-Menu
 {    
     $menuItems = @()
-    $containers = Get-DockerContainers
+    $containers = Get-DockerContainers -Session $Session
     $containerNo = 1
     foreach ($container in $containers) {        
         $containerBranchSettings = Get-DockerBranchSettings -DockerContainerName $container.Id
-        $containerConfiguration = Get-DockerContainerConfiguration -DockerContainerName $container.Id
+        $containerConfiguration = Get-DockerContainerConfiguration -DockerContainerName $container.Id -Session $Session
         $container | Add-Member -MemberType NoteProperty -Name No -Value $containerNo
         $container | Add-Member -MemberType NoteProperty -Name Name -Value $container.Id
         $container.Id = $containerConfiguration.Id
@@ -16,6 +16,12 @@
         $containerNo ++
     }
     Return $menuItems
+}
+
+$DockerSettings = Get-DockerSettings
+if (![String]::IsNullOrEmpty($DockerSettings.DockerHostVMName)) {
+    $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $env:USERNAME
+    $Session = New-PSSession -VMName $DockerSettings.DockerHostVMName -Credential $DockerCredentials
 }
 
 do {
@@ -47,19 +53,41 @@ do {
                                 $ContainerBranchSettings = New-Object -TypeName PSObject
                                 $ContainerBranchSettings | Add-Member -MemberType NoteProperty -Name dockerContainerName -Value $selectedContainer.Name
                                 $ContainerBranchSettings | Add-Member -MemberType NoteProperty -Name dockerContainerId -Value $selectedContainer.Id
-                                ReStart-DockerContainer -BranchSettings $ContainerBranchSettings 
+                                ReStart-DockerContainer -BranchSettings $ContainerBranchSettings -Session $Session
                             }
                         '2' {
                                 Write-Host "Killing Docker Container $($selectedContainer.Name)..."
-                                $dockerContainerName = docker.exe kill $($selectedContainer.Name)
+                                if (![String]::IsNullOrEmpty($Session.ComputerName)) {
+                                    Invoke-Command -Session $Session -ScriptBlock {
+                                        param ([string]$containerName)
+                                        $dockerContainerName = docker.exe kill $containerName
+                                    } -ArgumentList $selectedContainer.Name
+                                } else {
+                                    $dockerContainerName = docker.exe kill $($selectedContainer.Name)
+                                }
                             }
                         '3' {
                                 
                                 Write-Host "Killing and removing Docker Container $($selectedContainer.Name)..."
                                 if ($selectedContainer.Status.Contains("Up")) {
-                                    $dockerContainerName = docker.exe kill $($selectedContainer.Name)
+                                    if (![String]::IsNullOrEmpty($Session.ComputerName)) {
+                                        Invoke-Command -Session $Session -ScriptBlock {
+                                            param ([string]$containerName)
+                                            $dockerContainerName = docker.exe kill $containerName
+                                        } -ArgumentList $selectedContainer.Name
+                                    } else {
+                                        $dockerContainerName = docker.exe kill $($selectedContainer.Name)
+                                    }
+
                                 }
-                                $dockerContainerName = docker.exe rm $($selectedContainer.Name)
+                                if (![String]::IsNullOrEmpty($Session.ComputerName)) {
+                                    Invoke-Command -Session $Session -ScriptBlock {
+                                        param ([string]$containerName)
+                                        $dockerContainerName = docker.exe rm $containerName
+                                    } -ArgumentList $selectedContainer.Name
+                                } else {
+                                    $dockerContainerName = docker.exe rm $($selectedContainer.Name)
+                                }         
                                 Edit-DockerHostRegiststration -RemoveHostName $selectedContainer.Name
                                 if ($selectedContainer.branchId -gt "") { 
                                     $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId
