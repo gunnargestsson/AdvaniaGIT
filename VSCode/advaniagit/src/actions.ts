@@ -260,7 +260,9 @@ export function DeleteOldLogs(Repository) {
 export function ImportFromAllGITtoNAV(Repository) {
     StartAction(Repository,`ImportFrom-AllGITtoNAV.ps1`);
 }
-
+export function SaveContainerCredentials(Repository) {
+    StartAction(Repository,`Save-NAVContainerCredentials.ps1`);
+}
 export function CreateNewBranchId(Repository) {
     StartAction(Repository,`Create-NewBranchId.ps1`);
 }

@@ -25,9 +25,10 @@
         }
         if (!($dockerContainer.Status -match "(healthy)")) {
             Write-Error "Container $($BranchSettings.dockerContainerName) unable to start !" -ErrorAction Stop
+        } else {
+            $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId
+            Edit-DockerHostRegiststration -RemoveHostName $BranchSettings.dockerContainerName -AddHostName $BranchSettings.dockerContainerName -AddIpAddress (Get-DockerIPAddress -Session $Session)
+            Remove-PSSession $Session
         }
     }
-    $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId
-    Edit-DockerHostRegiststration -RemoveHostName $BranchSettings.dockerContainerName -AddHostName $BranchSettings.dockerContainerName -AddIpAddress (Get-DockerIPAddress -Session $Session)
-    Remove-PSSession $Session
 }

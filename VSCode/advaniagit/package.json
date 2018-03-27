@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -39,8 +39,8 @@
         "onCommand:advaniagit.CreateNavBacpac",
         "onCommand:advaniagit.CreateReverseDeltas",
         "onCommand:advaniagit.CreateXlfLabelsInALCode",
-        "onCommand:advaniagit.CreateXlfFromCALTranslateFile",        
-        "onCommand:advaniagit.SignAppPackage",        
+        "onCommand:advaniagit.CreateXlfFromCALTranslateFile",
+        "onCommand:advaniagit.SignAppPackage",
         "onCommand:advaniagit.DummyAction",
         "onCommand:advaniagit.ExportGITtoModified",
         "onCommand:advaniagit.ExportGITtoNAVNewSyntaxModified",
@@ -66,7 +66,7 @@
         "onCommand:advaniagit.LoadTestMenu",
         "onCommand:advaniagit.ManageDatabases",
         "onCommand:advaniagit.ManageInstances",
-        "onCommand:advaniagit.ManageContainers",        
+        "onCommand:advaniagit.ManageContainers",
         "onCommand:advaniagit.MergeDeltas",
         "onCommand:advaniagit.PrepareNAVEnvironment",
         "onCommand:advaniagit.PrepareNAVUnitTest",
@@ -101,6 +101,7 @@
         "onCommand:advaniagit.ImportFromAllGITtoNAV",
         "onCommand:advaniagit.CreateNewBranchId",
         "onCommand:advaniagit.NewGITBranch",
+        "onCommand:advaniagit.SaveContainerCredentials",
         "onCommand:advaniagit.NewFilesEncodingSettings",
         "onCommand:advaniagit.ImportAppsTools",
         "onCommand:advaniagit.ImportIdeTools",
@@ -121,7 +122,8 @@
                 "title": "Debug Container Host",
                 "command": "advaniagit.StartAdvaniaGITContainerHostDebug",
                 "category": "Advania"
-            },            {
+            },
+            {
                 "title": "Check NAV Environment",
                 "command": "advaniagit.CheckNAVEnvironment",
                 "category": "Advania"
@@ -340,7 +342,8 @@
                 "title": "Manage Containers",
                 "command": "advaniagit.ManageContainers",
                 "category": "Advania"
-            },            {
+            },
+            {
                 "title": "Upgrade NAV Installation",
                 "command": "advaniagit.UpgradeNAVInstallation",
                 "category": "Advania"
@@ -374,7 +377,7 @@
                 "title": "Create Xlf translation file based on C/AL translation export",
                 "command": "advaniagit.CreateXlfFromCALTranslateFile",
                 "category": "Advania"
-            },                        
+            },
             {
                 "title": "Update Launch.Json with current branch environment",
                 "command": "advaniagit.UpdateLaunchJsonForCurrentBranch",
@@ -404,7 +407,7 @@
                 "title": "Import All Test Objects to NAV Environment (both TestToolKit and from GIT)",
                 "command": "advaniagit.ImportFromTestObjectsToNAV",
                 "category": "Advania"
-            },                        
+            },
             {
                 "title": "Create new Branch Id in Setup.json",
                 "command": "advaniagit.CreateNewBranchId",
@@ -418,6 +421,11 @@
             {
                 "title": "Create new GIT branch...",
                 "command": "advaniagit.NewGITBranch",
+                "category": "Advania"
+            },
+            {
+                "title": "Save Container Credentials",
+                "command": "advaniagit.SaveContainerCredentials",
                 "category": "Advania"
             },
             {
@@ -480,9 +488,9 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
+        "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.14"
     }
 }

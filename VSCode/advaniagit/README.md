@@ -13,11 +13,12 @@ Install AdvaniaGIT from with Advaina: Go! command
 
 ## Extension Settings
 
-Each branch must have a setup.json file installed to describe the content.  See AdvaniaGIT for details.
-Examples on GitHub
-NAV 2016 <https://github.com/gunnargestsson/nav2016>
-NAV 2017 <https://github.com/gunnargestsson/nav2017>
-NAV 2018 with Docker config <https://github.com/gunnargestsson/nav2018>
+- Each branch must have a setup.json file installed to describe the content.  See AdvaniaGIT for details.
+- Examples on GitHub
+- NAV 2016 <https://github.com/gunnargestsson/nav2016>
+- NAV 2017 <https://github.com/gunnargestsson/nav2017>
+- NAV 2018 with Docker config <https://github.com/gunnargestsson/nav2018>
+- Dynamics 365 Business Central <https://github.com/gunnargestsson/businesscentral>
 
 ## Release Notes
 
