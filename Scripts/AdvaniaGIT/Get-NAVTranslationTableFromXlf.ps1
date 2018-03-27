@@ -15,7 +15,7 @@
     foreach ($node in $Xlf.xliff.file.body.group.'trans-unit') {
         if ($node.target) {
             if (!($TranslateTable.ContainsKey($node.source))) {
-                $TranslateTable.Add($node.source,$node.target.InnerText)
+                $TranslateTable.Add($node.source,$node.target)
             }
         }
     }
