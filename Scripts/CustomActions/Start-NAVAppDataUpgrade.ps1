@@ -3,7 +3,7 @@
 } else {    
     Load-InstanceAdminTools -SetupParameters $SetupParameters
     Load-AppsManagementTools -SetupParameters $SetupParameters
-    Get-NAVTenant -ServerInstance $BranchSettings.instanceName | Start-NAVAppDataUpgrade -Force
+    Get-NAVTenant -ServerInstance $BranchSettings.instanceName | Get-NAVAppInfo | Start-NAVAppDataUpgrade -Force
     UnLoad-AppsManagementTools
     UnLoad-InstanceAdminTools
 }

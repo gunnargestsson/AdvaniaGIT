@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -41,6 +41,7 @@
         "onCommand:advaniagit.CreateXlfLabelsInALCode",
         "onCommand:advaniagit.CreateXlfFromCALTranslateFile",
         "onCommand:advaniagit.SignAppPackage",
+        "onCommand:advaniagit.StartNAVAppDataUpgrade",
         "onCommand:advaniagit.DummyAction",
         "onCommand:advaniagit.ExportGITtoModified",
         "onCommand:advaniagit.ExportGITtoNAVNewSyntaxModified",
@@ -418,6 +419,11 @@
                 "command": "advaniagit.StartVSCode",
                 "category": "Advania"
             },
+            {
+                "title": "Execute NAV App Data Upgrade",
+                "command": "advaniagit.StartNAVAppDataUpgrade",
+                "category": "Advania"
+            },            
             {
                 "title": "Create new GIT branch...",
                 "command": "advaniagit.NewGITBranch",

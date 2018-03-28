@@ -77,6 +77,9 @@ export function CreateXlfFromCALTranslateFile(Repository) {
 export function SignAppPackage(Repository) {
     StartAction(Repository,`Sign-AppPackage.ps1`);
 }
+export function StartNAVAppDataUpgrade(Repository) {
+    StartAction(Repository,`Start-NAVAppDataUpgrade.ps1`);
+}
 export function DummyAction(Repository) {
     StartAction(Repository,`Dummy-Action.ps1`);
 }

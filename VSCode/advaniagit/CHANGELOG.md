@@ -67,3 +67,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.8]
 - Add new command to save container credentials to local user profile
+
+## [0.1.9]
+- Add new command to start nav app data upgrade
