@@ -24,6 +24,10 @@ Write-Host Saving product branch...
 $buildSource = Join-Path $PSScriptRoot 'Export-GITtoNAVNewSyntaxModified.ps1'
 . $buildSource -Repository $Repository | Out-Null
 
+Write-Host Remove Version List Information
+Load-ModelTools -SetupParameters $SetupParameters 
+Set-NAVApplicationObjectProperty -TargetPath (Join-Path $SetupParameters.workFolder 'Source.txt') -VersionListProperty ''
+Set-NAVApplicationObjectProperty -TargetPath (Join-Path $SetupParameters.workFolder 'Modified.txt') -VersionListProperty ''
 
 Write-Host Creating deltas in your work folder...
 $buildSource = Join-Path $PSScriptRoot 'Create-Deltas.ps1'
