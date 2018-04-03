@@ -3,6 +3,7 @@ $VMAdmin = Get-NAVPasswordStateUser -PasswordId $DeploymentSettings.NavServerPid
 $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 
 $WorkFolder = $DeploymentSettings.workFolder
+New-Item -Path $WorkFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
 Write-Host "Connecting to $($DeploymentSettings.instanceServer)..."
 $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentSettings.instanceServer -SetupPath $WorkFolder
 
