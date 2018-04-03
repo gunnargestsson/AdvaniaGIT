@@ -22,6 +22,10 @@
                 $selectedInstanceName = ($menuItems | Where-Object -Property No -EQ $input).ServerInstance
                 $selectedInstance = $menuItems | Where-Object -Property ServerInstance -EQ $selectedInstanceName
                 if ($selectedInstance) {
+                    if ([String]::IsNullOrEmpty($SelectedInstance.PublicWinBaseUrl)) {
+                        $SelectedInstance | Add-Member -MemberType NoteProperty -Name PublicWinBaseUrl -Value "DynamicsNAV://$($SelectedInstance.PSComputerName):$($SelectedInstance.ClientServicesPort)/$($SelectedInstance.ServerInstance)" -Force
+                    }
+
                     do {
                         Clear-Host
                         For ($i=0; $i -le 10; $i++) { Write-Host "" }
