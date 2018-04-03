@@ -23,30 +23,45 @@ foreach ($ALFile in $ALFiles) {
     $ALFileData = (Get-Content -Path $ALFile.FullName -Encoding UTF8) -split "`r`n"   
     $ALFileOutputData = "" 
     $inQuotes = $false
-    foreach ($ALFileLine in $ALFileData) {
-        if ($ALFileLine -match "TextConst") {
-            $pos = $ALFileLine.IndexOf(':')
-            $line =  $ALFileLine.Substring($pos + 12).TrimEnd(';')
-            $myHash = Convert-NAVMLStringToHash $line
-            $ALFileOutputData += $ALFileLine.Substring(0,$pos + 2) + "Label " + $myHash.Item('ENU')
-            if ($myHash.ContainsKey('Comment')) {
-                if ($myHash.Item('Comment') -match "{Locked}") {
-                    $ALFileOutputData += ",Locked=true;"
+    $inObject = $true
+    for ($c = 0; $c -lt $ALFileData.Length; $c++) {
+        $ALFileLine = $ALFileData.Item($c)        
+        if ($inObject) {
+            $CompactedAlFileLine = $ALFileLine.replace(' ','')
+            if ($ALFileLine -match "TextConst") {
+                $pos = $ALFileLine.IndexOf(':')
+                $line =  $ALFileLine.Substring($pos + 12).TrimEnd(';')
+                $myHash = Convert-NAVMLStringToHash $line
+                $ALFileOutputData += $ALFileLine.Substring(0,$pos + 2) + "Label " + $myHash.Item('ENU')
+                if ($myHash.ContainsKey('Comment')) {
+                    if ($myHash.Item('Comment') -match "{Locked}") {
+                        $ALFileOutputData += ",Locked=true;"
+                    } else {
+                        $ALFileOutputData += ",Comment=$($myHash.Item('Comment'));"
+                    }
                 } else {
-                    $ALFileOutputData += ",Comment=$($myHash.Item('Comment'));"
+                    $ALFileOutputData += ";"
                 }
+            } elseif ($CompactedAlFileLine -match "CaptionML=" -or $CompactedAlFileLine -match "ToolTipML=" -or $CompactedAlFileLine -match "InstructionalTextML=" -or $CompactedAlFileLine -match "OptionCaptionML=" -or $CompactedAlFileLine -match "PromotedActionCategoriesML=") {
+                $ALFileLine = $ALFileLine.replace("CaptionML","Caption")
+                $ALFileLine = $ALFileLine.replace("ToolTipML","ToolTip")
+                $ALFileLine = $ALFileLine.replace("InstructionalTextML","InstructionalText")
+                $ALFileLine = $ALFileLine.replace("OptionCaptionML","OptionCaption")
+                $ALFileLine = $ALFileLine.replace("PromotedActionCategoriesML","PromotedActionCategories")
+                $pos = $ALFileLine.IndexOf('=')
+                $line =  $ALFileLine.Substring($pos + 1).TrimStart(' ')
+                while ($line -eq $line.TrimEnd(';')) {
+                    $c ++
+                    $line += $ALFileData.Item($c).TrimStart(' ')
+                } 
+                $myHash = Convert-NAVMLStringToHash $line.TrimEnd(';')
+                $ALFileOutputData += $ALFileLine.Substring(0,$pos - 1) + " = " + $myHash.Item('ENU') + ';'
             } else {
-                $ALFileOutputData += ";"
+                $ALFileOutputData += $ALFileLine        
             }
-        } elseif ($ALFileLine -match "CaptionML=" -or $ALFileLine -match "ToolTipML=" -or $ALFileLine -match "InstructionalTextML=" -or $ALFileLine -match "OptionCaptionML=") {
-            $pos = $ALFileLine.IndexOf('=')
-            $line =  $ALFileLine.Substring($pos + 1).TrimEnd(';')
-            $myHash = Convert-NAVMLStringToHash $line
-            $ALFileOutputData += $ALFileLine.Substring(0,$pos - 2) + "=" + $myHash.Item('ENU') + ';'
-        } else {
-            $ALFileOutputData += $ALFileLine        
+            $ALFileOutputData += "`r`n"
         }
-        $ALFileOutputData += "`r`n"
+        if ($ALFileLine -eq '}') { $inObject = $false }
         
     }    
     Set-Content -Path $ALFile.FullName -Value $ALFileOutputData -Encoding UTF8
