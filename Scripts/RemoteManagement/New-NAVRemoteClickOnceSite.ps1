@@ -122,8 +122,33 @@
                 New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "Soap" -PhysicalPath (Join-Path $clickOnceDirectory "soap")
                 New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "OData" -PhysicalPath (Join-Path $clickOnceDirectory "odata")
                 Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\Web" -Value @{enabled="true";destination="$($SelectedInstance.PublicWebBaseUrl)?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
-                Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\Soap" -Value @{enabled="true";destination="$($SelectedInstance.PublicSOAPBaseUrl)?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
+                Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\Soap" -Value @{enabled="true";destination="$($SelectedInstance.PublicSOAPBaseUrl)/Services?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
                 Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\OData" -Value @{enabled="true";destination="$($SelectedInstance.PublicODataBaseUrl)?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
+
+                $addLinksLines = "        <p>`r`n"
+                $addLinksLines += "            <a target=`"_blank`" href=`"Web`">Web Client with password authentication</a><label> | </label>`r`n"
+                if ($SelectedInstance.AppIdUri -gt "") {
+                    $addLinksLines += "            <a target=`"_blank`" href=`"Web365`">Web Client with Office 365 authentication</a><label> | </label>`r`n"
+                }
+                if (![System.String]::IsNullOrEmpty($TestDeploymentServer)) {
+                    $addLinksLines += "            <a target=`"_blank`" href=`"WebTest`">Web Client for testing</a><label> | </label>`r`n"
+                }
+
+                $addLinksLines += "            <a target=`"_blank`" href=`"Soap`">Soap web service</a><label> | </label>`r`n"
+                $addLinksLines += "            <a target=`"_blank`" href=`"OData`">OData web service</a>`r`n"
+
+                 if ([bool]($SelectedInstance.PSObject.Properties.name -match "ODataServicesV4EndpointEnabled")) {
+                      New-Item -Path (Join-Path $clickOnceDirectory "odataV4") -ItemType Directory -ErrorAction SilentlyContinue
+                      New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "ODataV4" -PhysicalPath (Join-Path $clickOnceDirectory "odataV4")
+                      Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\ODataV4" -Value @{enabled="true";destination="$($SelectedInstance.PublicODataBaseUrl)V4?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
+                      $addLinksLines += "            <label> | </label><a target=`"_blank`" href=`"ODataV4`">OData web service verison 4</a>`r`n"
+                    }
+
+                $addLinksLines += "        </p>`r`n"
+                AddTo-NAVClientInstallation -NAVClientInstallationPath (Join-Path $clickOnceDirectory 'NAVClientInstallation.html') -BeforeLineContaining "<p>" -InsertContent $addLinksLines
+                $updClientInstallLine = "                    <p><input class=`"viptile`" id=`"installNavButton`" type=`"button`" value=`"Password authentication`" onclick=`"onInstallNavClicked()`" /></p>"
+                Replace-NAVClientInstallation -NAVClientInstallationPath (Join-Path $clickOnceDirectory 'NAVClientInstallation.html') -LineContaining "installNavButton" -NewInsertContent $updClientInstallLine
+
 
                 if ($SelectedInstance.AppIdUri -gt "") {
                     Write-Host "Creating Client 365 Configuration..."
@@ -209,6 +234,19 @@
                     New-Item -Path (Join-Path (Split-Path $clickOnceDirectory -Parent) "web365") -ItemType Directory -ErrorAction SilentlyContinue
                     New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "Web365" -PhysicalPath (Join-Path (Split-Path $clickOnceDirectory -Parent) "web365")
                     Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\Web365" -Value @{enabled="true";destination="$($SelectedInstance.PublicWebBaseUrl)365?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
+
+                    $inst365 = "        function onInstallNav365Clicked() {
+            if (document.SampleForm.acceptMicrosoftLicenseCheckbox.checked == false) {
+                alert('You must accept the license terms to continue.');
+            }
+            else {
+                open('365/Deployment/Microsoft.Dynamics.Nav.Client.application');
+            }
+        }"
+                    $inst365button = "                    <p><input class=`"viptile`" id=`"installNav365Button`" type=`"button`" value=`"Office 365 authentication`" onclick=`"onInstallNav365Clicked()`" /></p>"
+
+                    AddTo-NAVClientInstallation -NAVClientInstallationPath (Join-Path (Split-Path $clickOnceDirectory -Parent) 'NAVClientInstallation.html') -BeforeLineContaining "function onInstallNavClicked()" -InsertContent $inst365
+                    AddTo-NAVClientInstallation -NAVClientInstallationPath (Join-Path (Split-Path $clickOnceDirectory -Parent) 'NAVClientInstallation.html') -AfterLineContaining "installNavButton" -InsertContent $inst365button
                 }
 
                 if (![System.String]::IsNullOrEmpty($TestDeploymentServer)) {
@@ -295,6 +333,18 @@
                     New-Item -Path (Join-Path (Split-Path $clickOnceDirectory -Parent) "webTest") -ItemType Directory -ErrorAction SilentlyContinue
                     New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "WebTest" -PhysicalPath (Join-Path (Split-Path $clickOnceDirectory -Parent) "webTest")
                     Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\WebTest" -Value @{enabled="true";destination="$($SelectedInstance.PublicWebBaseUrl)Test?tenant=default";exactDestination="true";httpResponseStatus="Permanent"}
+                    $instTest = "        function onInstallNavTestClicked() {
+            if (document.SampleForm.acceptMicrosoftLicenseCheckbox.checked == false) {
+                alert('You must accept the license terms to continue.');
+            }
+            else {
+                open('Test/Deployment/Microsoft.Dynamics.Nav.Client.application');
+            }
+        }"
+                    $instTestbutton = "                    <p><input class=`"viptile`" id=`"installNavTestButton`" type=`"button`" value=`"Testing`" onclick=`"onInstallNavTestClicked()`" /></p>"
+
+                    AddTo-NAVClientInstallation -NAVClientInstallationPath (Join-Path (Split-Path $clickOnceDirectory -Parent) 'NAVClientInstallation.html') -BeforeLineContaining "function onInstallNavClicked()" -InsertContent $instTest
+                    AddTo-NAVClientInstallation -NAVClientInstallationPath (Join-Path (Split-Path $clickOnceDirectory -Parent) 'NAVClientInstallation.html') -AfterLineContaining "installNavButton" -InsertContent $instTestbutton
 
                 }
 
