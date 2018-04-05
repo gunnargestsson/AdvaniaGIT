@@ -21,14 +21,3 @@
     }
     Set-Content -Path $NAVClientInstallationPath -Encoding UTF8 -Value $newNAVClientInstallationContent
 }
-
-$inst365 = "        function onInstallNav365Clicked() {
-            if (document.SampleForm.acceptMicrosoftLicenseCheckbox.checked == false) {
-                alert('You must accept the license terms to continue.');
-            }
-            else {
-                open('365/Deployment/Microsoft.Dynamics.Nav.Client.application');
-            }
-        }"
-
-AddTo-NAVClientInstallation -NAVClientInstallationPath 'C:\Program Files (x86)\Microsoft Dynamics NAV\110\ClickOnce Installer Tools\TemplateFiles\NAVClientInstallation2.html' -BeforeLineContaining "onInstallNavClicked" -InsertContent $inst365
