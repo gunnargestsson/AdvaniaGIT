@@ -49,6 +49,7 @@
                     $ServerInstance = Combine-Settings $ServerInstance $DefaultApplication -Prefix GlobalADApplication
                     $ServerInstance = Combine-Settings $ServerInstance $Application -Prefix ADApplication
                     $ServerInstance | Add-Member -MemberType NoteProperty -Name ADApplicationFederationMetadataLocation -Value "https://login.windows.net/$($Subscription.Account.Id.Split("@").GetValue(1))/federationmetadata/2007-06/federationmetadata.xml"
+                    $ServerInstance | Add-Member -MemberType NoteProperty -Name ADApplicationWSFederationLoginEndpoint -Value "https://login.windows.net/common/wsfed?wa=wsignin1.0%26wtrealm=$($SelectedInstance.AppIdUri)%26wreply=$($SelectedInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx"
                     Set-NAVRemoteInstanceADRegistration -Session $Session -ServerInstance $ServerInstance -RestartServerInstance
                     if ($instanceNo -eq 1) { Set-NAVRemoteInstanceTenantAzureKeyVaultSettings -Session $Session -ServerInstance $ServerInstance -KeyVault $KeyVault -RemoteConfig $RemoteConfig -RemoteComputer $RemoteComputer }
                 }

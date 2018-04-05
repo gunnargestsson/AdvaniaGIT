@@ -9,10 +9,10 @@
     {
         $Result = Invoke-Command -Session $Session -ScriptBlock `
             {
-                param(
-                    [String]$ServerInstance)
-                Write-Verbose "Import Module from $($SetupParameters.navServicePath)..."
-                Load-InstanceAdminTools -SetupParameters $SetupParameters
+                param([String]$ServerInstance)
+                Write-Verbose "Import Module from $($SetupParameters.navServicePath)..."                
+                if (Test-Path -Path (Join-Path $SetupParameters.navServicePath 'NavAdminTool.ps1')) { Import-Module (Join-Path $SetupParameters.navServicePath 'NavAdminTool.ps1') -DisableNameChecking }
+                if (Test-Path -Path (Join-Path $SetupParameters.navServicePath 'NAVWebClientManagement.psm1')) { Import-Module (Join-Path $SetupParameters.navServicePath 'NAVWebClientManagement.psm1') -DisableNameChecking }
                 Write-Host "Removing Web Client Site for ${ServerInstance}..."
                 if ([int]$SetupParameters.mainVersion -ge 110) {
                     if (Get-NAVWebServerInstance -WebServerInstance $ServerInstance) { Remove-NAVWebServerInstance -WebServerInstance $ServerInstance }
@@ -23,7 +23,6 @@
                     Get-NAVWebServerInstance -WebServerInstance "${ServerInstance}365" | Remove-NAVWebServerInstance -Force
                     Get-NAVWebServerInstance -WebServerInstance "${ServerInstance}Test" | Remove-NAVWebServerInstance -Force
                 }
-                UnLoad-InstanceAdminTools
                 Start-Sleep -Seconds 2
             } -ArgumentList $SelectedInstance.ServerInstance
     }    
