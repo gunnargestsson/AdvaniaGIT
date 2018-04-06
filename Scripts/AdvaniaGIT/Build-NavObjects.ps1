@@ -115,7 +115,7 @@ function Build-NAVObjects
 
     if ($SaveSourceFileName -ne $null -and $SaveSourceFileName -gt "") {
         Write-Host Saving build as $SaveSourceFileName
-        New-Item -Path (Split-Path $SetupParameters.buildSourcePath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+        New-Item -Path (Split-Path $SaveSourceFileName -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
         Join-NAVApplicationObjectFile -Source (Join-Path $SourceFolder '*.txt') -Destination $SaveSourceFileName -Force
     }
 
