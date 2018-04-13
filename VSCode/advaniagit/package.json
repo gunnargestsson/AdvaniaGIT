@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.1.9",
+    "version": "0.2.0",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -40,6 +40,7 @@
         "onCommand:advaniagit.CreateReverseDeltas",
         "onCommand:advaniagit.CreateXlfLabelsInALCode",
         "onCommand:advaniagit.CreateXlfFromCALTranslateFile",
+        "onCommand:advaniagit.BuildNAVSymbolReferences",        
         "onCommand:advaniagit.SignAppPackage",
         "onCommand:advaniagit.StartNAVAppDataUpgrade",
         "onCommand:advaniagit.DummyAction",
@@ -379,6 +380,11 @@
                 "command": "advaniagit.CreateXlfFromCALTranslateFile",
                 "category": "Advania"
             },
+            {
+                "title": "Build C/AL Symbol References for AL",
+                "command": "advaniagit.BuildNAVSymbolReferences",
+                "category": "Advania"
+            },            
             {
                 "title": "Update Launch.Json with current branch environment",
                 "command": "advaniagit.UpdateLaunchJsonForCurrentBranch",

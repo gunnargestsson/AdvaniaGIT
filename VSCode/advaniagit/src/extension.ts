@@ -42,6 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.CreateReverseDeltas', () => {actions.CreateReverseDeltas(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateXlfLabelsInALCode', () => {actions.CreateXlfLabelsInALCode(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateXlfFromCALTranslateFile', () => {actions.CreateXlfFromCALTranslateFile(vscode.workspace.rootPath)}),        
+        vscode.commands.registerCommand('advaniagit.BuildNAVSymbolReferences', () => {actions.BuildNAVSymbolReferences(vscode.workspace.rootPath)}),                
         vscode.commands.registerCommand('advaniagit.SignAppPackage', () => {actions.SignAppPackage(vscode.workspace.rootPath)}), 
         vscode.commands.registerCommand('advaniagit.StartNAVAppDataUpgrade', () => {actions.StartNAVAppDataUpgrade(vscode.workspace.rootPath)}),         
         vscode.commands.registerCommand('advaniagit.DummyAction', () => {actions.DummyAction(vscode.workspace.rootPath)}),

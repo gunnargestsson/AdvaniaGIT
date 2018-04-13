@@ -1,0 +1,51 @@
+﻿<#
+    .SYNOPSIS
+    Performs a technical upgrade of a database from a previous version of Microsoft Dynamics NAV.
+
+    .DESCRIPTION
+    Performs a technical upgrade of a database from a previous version of Microsoft Dynamics NAV.
+
+    .INPUTS
+    None
+    You cannot pipe input into this function.
+
+    .OUTPUTS
+    None
+
+    .EXAMPLE
+    Invoke-NAVDatabaseConversion MyApp
+    Perform the technical upgrade on a NAV database named MyApp.
+
+    .EXAMPLE
+    Invoke-NAVDatabaseConversion MyApp -ServerName "TestComputer01\NAVDEMO"
+    Perform the technical upgrade on a NAV database named MyApp on TestComputer01\NAVDEMO Sql server .
+#>
+function Invoke-NAVDatabaseSymbolReferenceUpdate
+{
+    [CmdletBinding(DefaultParameterSetName='All')]
+    Param(
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$SetupParameters,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [PSObject]$BranchSettings,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [string] $Username,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [string] $Password               
+    )
+
+    $logFile = (Join-Path $SetupParameters.LogPath naverrorlog.txt)
+
+    $command = 'Command=generatesymbolreference'
+    
+    Run-NavIdeCommand -Command $command `
+        -SetupParameters $SetupParameters `
+        -BranchSettings $BranchSettings `
+        -UserName $UserName `
+        -Password $Password `
+        -LogFile $logFile `
+        -ErrText "Error while converting $($BranchSettings.DatabaseName)" `
+        -Verbose:$VerbosePreference `
+        -StopOnError
+
+}

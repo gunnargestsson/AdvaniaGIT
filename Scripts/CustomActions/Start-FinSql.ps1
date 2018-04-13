@@ -14,6 +14,9 @@ if ($BranchSettings.dockerContainerId -gt "") {
 }
 
 $params="database=`"$($BranchSettings.databaseName)`",servername=`"$(Get-DatabaseServer -BranchSettings $BranchSettings)`",ID=`"$($IdFile)`""
+if ($SetupParameters.navVersion.Split(".")[0] -ge 12) {
+  $params += ",generatesymbolreference=yes"
+}
 
 Write-Host "Running: `"$finsqlexe`" $params" -ForegroundColor Green
 Start-Process -FilePath $finsqlexe -ArgumentList $params 
