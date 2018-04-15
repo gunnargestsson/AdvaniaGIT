@@ -10,7 +10,7 @@
     )
     
     Load-InstanceAdminTools -SetupParameters $SetupParameters
-    Set-NAVServerConfiguration -ServerInstance $BranchSettings.instanceName -KeyName GenerateSymbolReference -KeyValue true
+    Set-NAVServerConfiguration -ServerInstance $BranchSettings.instanceName -KeyName EnableSymbolLoadingAtServerStartup -KeyValue true
     Set-NAVServerInstance -ServerInstance $BranchSettings.instanceName -Restart
     Get-NAVTenant -ServerInstance $BranchSettings.instanceName | Sync-NAVTenant -Mode Sync -Force
     UnLoad-InstanceAdminTools
