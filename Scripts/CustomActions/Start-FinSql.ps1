@@ -14,7 +14,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
 }
 
 $params="database=`"$($BranchSettings.databaseName)`",servername=`"$(Get-DatabaseServer -BranchSettings $BranchSettings)`",ID=`"$($IdFile)`""
-if ($SetupParameters.navVersion.Split(".")[0] -ge 12) {
+if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 12) {
   $params += ",generatesymbolreference=1"
 }
 
