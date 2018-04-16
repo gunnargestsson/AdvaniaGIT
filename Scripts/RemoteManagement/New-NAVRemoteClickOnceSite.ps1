@@ -141,7 +141,7 @@
                       New-Item -Path (Join-Path $clickOnceDirectory "odataV4") -ItemType Directory -ErrorAction SilentlyContinue
                       New-WebVirtualDirectory -Site "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Name "ODataV4" -PhysicalPath (Join-Path $clickOnceDirectory "odataV4")
                       Set-WebConfiguration system.webServer/httpRedirect "IIS:\sites\$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)\ODataV4" -Value @{enabled="true";destination="$($SelectedInstance.PublicODataBaseUrl)V4?tenant=$($SelectedTenant.Id)";exactDestination="true";httpResponseStatus="Permanent"}
-                      $addLinksLines += "            <label> | </label><a target=`"_blank`" href=`"ODataV4`">OData web service verison 4</a>`r`n"
+                      $addLinksLines += "            <label> | </label><a target=`"_blank`" href=`"ODataV4`">OData web service version 4</a>`r`n"
                     }
 
                 $addLinksLines += "        </p>`r`n"
