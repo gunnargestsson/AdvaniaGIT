@@ -5,21 +5,21 @@
       "mainVersion": "90",
       "navRelease": "2016",
       "webClientPort": "8090",
-      "helpServer": "nav90help.advania.is",
+      "helpServer": "2016help.navleiga.is",
       "helpServerPort": "80"
     },
     {
       "mainVersion": "100",
       "navRelease": "2017",
       "webClientPort": "8080",
-      "helpServer": "nav100help.advania.is",
+      "helpServer": "2017help.navleiga.is",
       "helpServerPort": "80"
     },
     {
       "mainVersion": "110",
       "navRelease": "2018",
       "webClientPort": "8081",
-      "helpServer": "nav110help.advania.is",
+      "helpServer": "2018help.navleiga.is",
       "helpServerPort": "80"
     }
 	]
