@@ -29,11 +29,13 @@ if (![String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
                 }
             }
         }
-        if (Test-Path $SetupParameters.LicenseFilePath) {  
-                $params += @{
-                    LicenseFilePath = $SetupParameters.LicenseFilePath
-                }
-        }            
+        if (![string]::IsNullOrEmpty($SetupParameters.LicenseFilePath)) {
+            if (Test-Path $SetupParameters.LicenseFilePath) {  
+                    $params += @{
+                        LicenseFilePath = $SetupParameters.LicenseFilePath
+                    }
+            }            
+        }
         Start-DockerContainer @params
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     } 
@@ -120,8 +122,10 @@ if ($BranchSettings.dockerContainerName -gt "") {
         Write-Host "Environment already created..."
     }
 
-    if (Test-Path $SetupParameters.LicenseFilePath) {  
-        Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFilePath 
+    if (![string]::IsNullOrEmpty($SetupParameters.LicenseFilePath)) {
+        if (Test-Path $SetupParameters.LicenseFilePath) {  
+            Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFilePath 
+        }
     }
     UnLoad-InstanceAdminTools
 
