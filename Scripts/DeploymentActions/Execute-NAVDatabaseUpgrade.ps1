@@ -44,7 +44,7 @@ Invoke-Command -Session $Session -ScriptBlock {
     Write-Host "Switch Serviceinstance ${instanceName} to ${databaseServer}\${databaseToUpgrade}..."    
     Set-NAVServerConfiguration -ServerInstance $instanceName -KeyName DatabaseName -KeyValue $databaseToUpgrade
     Set-NAVServerInstance -ServerInstance $instanceName -Start
-    Sync-NAVTenant -ServerInstance $instanceName -Mode ForceSync -Force -ErrorAction Stop
+    Sync-NAVTenant -ServerInstance $instanceName -Mode ForceSync -CommitPerTable -Force -ErrorAction Stop
 
 
     UnLoad-InstanceAdminTools
