@@ -7,10 +7,14 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$BranchSettings,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-        [String]$NavServerName = 'localhost'
+        [String]$NavServerName = $env:COMPUTERNAME
     )
     Write-Host "Compiling imported objects..."
     Load-IdeTools -SetupParameters $SetupParameters
-    Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databaseName -Filter Type=$objectType -NavServerName $env:COMPUTERNAME -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Force 
+    if (![String]::IsNullOrEmpty($BranchSettings.dockerContainerName)) {
+       $NavServerName = $BranchSettings.dockerContainerName
+    }
+
+    Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databaseName -Filter Type=$objectType -NavServerName $NavServerName -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Force 
     UnLoad-IdeTools
 }
