@@ -94,7 +94,9 @@ else
     $Globals | Add-Member buildSourcePath  (Join-Path $Repository $SetupParameters.buildSourcePath)
     $Globals | Add-Member LogPath  (Join-Path $SetupParameters.rootPath "Log\$([GUID]::NewGuid().GUID)")
     $Globals | Add-Member LicensePath  (Join-Path $SetupParameters.rootPath "License")
-    $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile) -ErrorAction SilentlyContinue
+    if (![String]::IsNullOrEmpty($SetupParameters.licenseFile)) {
+        $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile) 
+    }
     $Globals | Add-Member DownloadPath  (Join-Path $SetupParameters.rootPath "Download")
     $Globals | Add-Member NewSyntaxObjectsPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.objectsPath)")
     $Globals | Add-Member NewSyntaxDeltasPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.deltasPath)")
