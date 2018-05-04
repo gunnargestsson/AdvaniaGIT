@@ -94,7 +94,7 @@ else
     $Globals | Add-Member buildSourcePath  (Join-Path $Repository $SetupParameters.buildSourcePath)
     $Globals | Add-Member LogPath  (Join-Path $SetupParameters.rootPath "Log\$([GUID]::NewGuid().GUID)")
     $Globals | Add-Member LicensePath  (Join-Path $SetupParameters.rootPath "License")
-    if (![String]::IsNullOrEmpty($SetupParameters.licenseFile)) {
+    if ([bool]($SetupParameters.PSObject.Properties.name -match "licenseFile")) {
         $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile) 
     }
     $Globals | Add-Member DownloadPath  (Join-Path $SetupParameters.rootPath "Download")

@@ -42,7 +42,7 @@
             $GITSettings.ftpServer = $SetupParameters.ftpServer
             $GITSettings.ftpUser = $SetupParameters.ftpUser
             $GITSettings.ftpPass = $SetupParameters.ftpPass
-            if (![String]::IsNullOrEmpty($SetupParameters.licenseFile)) {
+            if ([bool]($SetupParameters.PSObject.Properties.name -match "licenseFile")) {
             	$GITSettings.licenseFile = $SetupParameters.licenseFile
             }
             $GITSettings.objectsNotToDelete = $SetupParameters.objectsNotToDelete
