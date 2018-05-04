@@ -9,8 +9,7 @@ function Update-NAVLicense
         [String]$LicenseFilePath
     )   
     if (Test-Path $LicenseFilePath) {
-			Write-Host "Importing NAV license ..."
+		Write-Host "Importing NAV license ..."
     	Import-NAVServerLicense -ServerInstance $BranchSettings.instanceName -LicenseFile $LicenseFilePath -Database NavDatabase -Force
     }
-  }
 }
