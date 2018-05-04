@@ -79,6 +79,13 @@
         $parameters +=  @("--network=$($DockerSettings.DockerHostIPName)","--ip ${dockerContainerIp}")
     }
 
+    if ($SetupParameters.BuildMode) {
+        $parameters += @(
+                            "--env webClient=N",
+                            "--env httpSite=N"
+                        )        
+    }
+
     if ([System.Version]$genericTag -ge [System.Version]"0.0.3.0") {
         $passwordKeyHostFile = Join-Path $($SetupParameters.LogPath) "aes.key"
         $logFolder = Split-Path $SetupParameters.LogPath -Leaf
