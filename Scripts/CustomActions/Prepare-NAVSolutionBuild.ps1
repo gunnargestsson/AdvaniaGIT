@@ -21,6 +21,7 @@ New-Item $MergeFolder -ItemType Directory | Out-Null
 New-Item (Join-Path $MergeFolder 'Base') -ItemType Directory | Out-Null
 New-Item (Join-Path $MergeFolder 'Deltas') -ItemType Directory | Out-Null
 New-Item (Join-Path $MergeFolder 'Languages') -ItemType Directory | Out-Null
+New-Item (Join-Path $MergeFolder 'Tests') -ItemType Directory | Out-Null
 
 # Clone the base branch
 Write-Host Get objects from $SetupParameters.baseBranch
@@ -31,6 +32,7 @@ $BranchSetupParameters = Combine-Settings $BranchSetup $GitSettings
 Write-Host Copying files from (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.objectsPath) '*.txt') to (Join-Path $MergeFolder 'Base') 
 Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.objectsPath) '*.txt') -Destination (Join-Path $MergeFolder 'Base') -Force
 Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.languagePath) '*.txt') -Destination (Join-Path $MergeFolder 'Languages') -Force -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.testObjectsPath) '*.txt') -Destination (Join-Path $MergeFolder 'Tests') -Force -ErrorAction SilentlyContinue
 Write-Host Update version information in build branch
 $SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name navVersion -Value $BranchSetup.navVersion -Force
 $SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name navBuild -Value $BranchSetup.navBuild -Force
@@ -50,7 +52,8 @@ if ($SetupParameters.deltaBranchList) {
         New-Item $branchMergeFolder -ItemType Directory | Out-Null
         Write-Host Copying files from (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') to $branchMergeFolder 
         Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') -Destination $branchMergeFolder -Force
-        Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.languagePath) '*.txt') -Destination (Join-Path $MergeFolder 'Languages') -Force -ErrorAction SilentlyContinue
+        Copy-NewItem -SourceFolder (Join-Path $BranchFolder $BranchSetupParameters.languagePath) -DestinationFolder (Join-Path $MergeFolder 'Languages')
+        Copy-NewItem -SourceFolder (Join-Path $BranchFolder $BranchSetupParameters.testObjectsPath) -DestinationFolder (Join-Path $MergeFolder 'Tests')
         $DeltaFolderIndexNo += 10
     }
 }
@@ -62,9 +65,13 @@ if (Test-Path -Path (Join-Path $SetupParameters.deltasPath '*.delta')) {
     New-Item $branchMergeFolder -ItemType Directory | Out-Null
     Write-Host Copying files from (Join-Path $SetupParameters.deltasPath '*.delta') to $branchMergeFolder 
     Copy-Item -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchMergeFolder -Force
-    Copy-Item -Path (Join-Path $SetupParameters.languagePath '*.txt') -Destination (Join-Path $MergeFolder 'Languages') -Force -ErrorAction SilentlyContinue
+    Copy-NewItem -SourceFolder $SetupParameters.languagePath -DestinationFolder (Join-Path $MergeFolder 'Languages')
+    Copy-NewItem -SourceFolder $SetupParameters.testObjectsPath -DestinationFolder (Join-Path $MergeFolder 'Tests') 
     $DeltaFolderIndexNo += 10
 }
+
+Copy-Item -Path (Join-Path $MergeFolder 'Languages') -Destination $SetupParameters.languagePath -Force -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $MergeFolder 'Tests')  -Destination $SetupParameters.testObjectsPath -Force -ErrorAction SilentlyContinue
 
 # Back to Workfolder and clean GIT folder
 Set-Location $Location
