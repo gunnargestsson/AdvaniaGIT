@@ -42,9 +42,6 @@
             $GITSettings.ftpServer = $SetupParameters.ftpServer
             $GITSettings.ftpUser = $SetupParameters.ftpUser
             $GITSettings.ftpPass = $SetupParameters.ftpPass
-            if ([bool]($SetupParameters.PSObject.Properties.name -match "licenseFile")) {
-            	$GITSettings.licenseFile = $SetupParameters.licenseFile
-            }
             $GITSettings.objectsNotToDelete = $SetupParameters.objectsNotToDelete
             Update-GITSettings -GITSettings $GITSettings -SettingsFilePath "C:\AdvaniaGIT\Data\GITSettings.Json"
             Remove-Item -Path $AdvaniaGITZip -Force -ErrorAction SilentlyContinue

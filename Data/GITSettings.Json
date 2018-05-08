@@ -3,6 +3,7 @@
   "ftpUser": "",
   "ftpPass": "",
   "workFolder": "C:\\AdvaniaGIT\\Workspace",
+  "licenseFile": "",
   "patchNoFunction": "",
   "defaultDatabaseServer": "localhost",
   "defaultDatabaseInstance": "",
