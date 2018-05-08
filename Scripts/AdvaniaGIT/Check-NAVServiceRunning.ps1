@@ -18,7 +18,7 @@
         if (!(Get-Service -ComputerName $BranchSettings.instanceServer -Name "MicrosoftDynamicsNavServer`$$($BranchSettings.instanceName)" | Where-Object -Property Status -EQ Running)) {
             Write-Error "Environment $($BranchSettings.instanceName) is not running!" -ErrorAction Stop
         }
-    } else {
+    } elseif (!$SetupParameters.BuildMode)  {
         ReStart-DockerContainer -BranchSettings $BranchSettings
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         $result = Invoke-WebRequest -Uri "$($BranchSettings.dockerContainerName)/NAV/WebClient/Health/System" -UseBasicParsing -TimeoutSec 10
