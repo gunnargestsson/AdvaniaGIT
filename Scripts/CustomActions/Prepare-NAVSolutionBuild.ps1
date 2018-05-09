@@ -70,8 +70,8 @@ if (Test-Path -Path (Join-Path $SetupParameters.deltasPath '*.delta')) {
     $DeltaFolderIndexNo += 10
 }
 
-Copy-Item -Path (Join-Path $MergeFolder 'Languages') -Destination $SetupParameters.languagePath -Force -ErrorAction SilentlyContinue
-Copy-Item -Path (Join-Path $MergeFolder 'Tests')  -Destination $SetupParameters.testObjectsPath -Force -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path (Join-Path $MergeFolder 'Languages') '*.txt') -Destination $SetupParameters.languagePath -Force -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path (Join-Path $MergeFolder 'Tests') '*.txt') -Destination $SetupParameters.testObjectsPath -Force -ErrorAction SilentlyContinue
 
 # Back to Workfolder and clean GIT folder
 Set-Location $Location
