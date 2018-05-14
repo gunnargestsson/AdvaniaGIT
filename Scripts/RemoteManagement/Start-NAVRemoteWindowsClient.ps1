@@ -36,6 +36,6 @@
     New-Item -Path (Split-Path $clientSettingsPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     Set-Content -Path $clientSettingsPath -Value $clientUserSettings.OuterXml -Force
     $params = @()
-    $params += @('-settings:"' + $clientSettingsPath + '"')    
+    $params += @('-settings:"' + $clientSettingsPath + '" -language:' + (Get-Culture).LCID)    
     Start-Process -FilePath $clientexe -ArgumentList $params
 }

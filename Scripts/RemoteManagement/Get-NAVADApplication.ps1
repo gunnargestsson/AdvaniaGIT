@@ -7,13 +7,24 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$IconFilePath,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [String]$CertValue
+        [String]$CertValue,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Switch]$ReplaceApplication
     )
     PROCESS 
     {    
         $DisplayName = "${DeploymentName}-$($ServerInstance.ServerInstance)"
-        $Application = Get-AzureRmADApplication -DisplayNameStartWith $DisplayName
+        $Application = Get-AzureRmADApplication -DisplayNameStartWith $DisplayName        
         if (!$Application) {
+            $ReplaceApplication = $true
+        } else {
+            if ($ReplaceApplication) {
+                $ObjectId = $Application.ObjectId
+                Set-AzureRmADApplication -ObjectId $ObjectId -AvailableToOtherTenants $False
+                Remove-AzureRmADApplication -ObjectId $ObjectId -Force
+            }
+        }
+        if ($ReplaceApplication) {
             $x509 = [System.Security.Cryptography.X509Certificates.X509Certificate2]([System.Convert]::FromBase64String($CertValue))           
             $IdentifierUri = "http://$(Get-NAVDnsIdentity -SelectedInstance $ServerInstance)/${DisplayName}"
             $ReplyUrls = @("$($ServerInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx")
