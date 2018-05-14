@@ -7,7 +7,9 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$DeploymentName,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-        [String]$ServerInstanceName
+        [String]$ServerInstanceName,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Switch]$ReplaceApplication
     )
     PROCESS 
     {          
@@ -34,7 +36,11 @@
                 
                 $CertValue = Get-NAVServiceCertificateValue -Session $Session -ServerInstance $DefaultServerInstance 
                 $KeyVaultKey = Get-NAVAzureKeyVaultKey -KeyVault $KeyVault -ServerInstanceName $DefaultServerInstance.ServerInstance
-                $DefaultApplication = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $DefaultServerInstance -IconFilePath $IconFilePath -CertValue $CertValue -ReplaceApplication
+                if ($instanceNo -eq 1) {
+                    $DefaultApplication = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $DefaultServerInstance -IconFilePath $IconFilePath -CertValue $CertValue -ReplaceApplication $ReplaceApplication
+                } else {
+                    $DefaultApplication = Get-NAVADApplication -DeploymentName $DeploymentName -ServerInstance $DefaultServerInstance -IconFilePath $IconFilePath -CertValue $CertValue
+                }
 
                 foreach ($ServerInstance in $ServerInstances) {                    
                     $CertValue = Get-NAVServiceCertificateValue -Session $Session -ServerInstance $ServerInstance 
