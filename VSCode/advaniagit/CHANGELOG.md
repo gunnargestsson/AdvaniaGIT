@@ -73,3 +73,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.2.0]
 - Add new command to build C/AL symbols for AL development
+
+## [0.2.1]
+- Add new command to download and install VS Code AL Extension from container and remove that task from environment build

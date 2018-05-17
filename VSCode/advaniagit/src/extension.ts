@@ -94,6 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.StartVSCodeOnCurrentBranch', () => {actions.StartVSCodeOnCurrentBranch(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.UpdateLaunchJsonForBaseBranch', () => {actions.UpdateLaunchJsonForBaseBranch(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.UpdateLaunchJsonForCurrentBranch', () => {actions.UpdateLaunchJsonForCurrentBranch(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.InstallALExtensionFromDocker', () => {actions.InstallALExtensionFromDocker(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.StartWebClient', () => {actions.StartWebClient(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.StopNAVServices', () => {actions.StopNAVServices(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.SyncRemoteNAVInstance', () => {actions.SyncRemoteNAVInstance(vscode.workspace.rootPath)}),

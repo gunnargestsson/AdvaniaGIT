@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -90,6 +90,7 @@
         "onCommand:advaniagit.StartVSCode",
         "onCommand:advaniagit.UpdateLaunchJsonForBaseBranch",
         "onCommand:advaniagit.UpdateLaunchJsonForCurrentBranch",
+        "onCommand:advaniagit.InstallALExtensionFromDocker",        
         "onCommand:advaniagit.StartWebClient",
         "onCommand:advaniagit.StopNAVServices",
         "onCommand:advaniagit.SyncRemoteNAVInstance",
@@ -395,6 +396,11 @@
                 "command": "advaniagit.UpdateLaunchJsonForBaseBranch",
                 "category": "Advania"
             },
+            {
+                "title": "Download and install AL Extension for VS Code from container",
+                "command": "advaniagit.InstallALExtensionFromDocker",
+                "category": "Advania"
+            },            
             {
                 "title": "Remove Object Properties from modified objects",
                 "command": "advaniagit.RemoveNAVObjectsProperties",

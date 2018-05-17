@@ -43,10 +43,6 @@ if (![String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
 if ($BranchSettings.dockerContainerName -gt "") {
     ReStart-DockerContainer -BranchSettings $BranchSettings
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
-    if ($SetupParameters.BuildMode -eq $null) {
-        Copy-DockerALExtension -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-        Install-ALforVSCode -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-    }
 } else {
     Load-InstanceAdminTools -SetupParameters $Setupparameters
     if ($BranchSettings.instanceName -eq "") {

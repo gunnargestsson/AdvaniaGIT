@@ -257,6 +257,9 @@ export function UpdateLaunchJsonForBaseBranch(Repository) {
 export function UpdateLaunchJsonForCurrentBranch(Repository) {
     StartAction(Repository,`Update-LaunchJsonForCurrentBranch.ps1`);
 }
+export function InstallALExtensionFromDocker(Repository) {
+    StartAction(Repository,`Install-ALExtensionFromDocker.ps1`);
+}
 export function RemoveNAVObjectsProperties(Repository) {
     StartAction(Repository,`Remove-NAVObjectsProperties.ps1`);
 }
