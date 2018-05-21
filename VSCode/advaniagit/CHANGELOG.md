@@ -76,3 +76,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.2.1]
 - Add new command to download and install VS Code AL Extension from container and remove that task from environment build
+
+## [0.2.2]
+- Add new command to update the usage category for AL files based on the New Syntax Menu Suite delta file

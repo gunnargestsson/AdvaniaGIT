@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -40,6 +40,7 @@
         "onCommand:advaniagit.CreateReverseDeltas",
         "onCommand:advaniagit.CreateXlfLabelsInALCode",
         "onCommand:advaniagit.CreateXlfFromCALTranslateFile",
+        "onCommand:advaniagit.UpdateUsageCategory",
         "onCommand:advaniagit.BuildNAVSymbolReferences",        
         "onCommand:advaniagit.SignAppPackage",
         "onCommand:advaniagit.StartNAVAppDataUpgrade",
@@ -379,6 +380,11 @@
             {
                 "title": "Create Xlf translation file based on C/AL translation export",
                 "command": "advaniagit.CreateXlfFromCALTranslateFile",
+                "category": "Advania"
+            },
+            {
+                "title": "Update Usage Category in AL files base on New Syntax Delta Menu Suite object (make sure that every file is saved)",
+                "command": "advaniagit.UpdateUsageCategory",
                 "category": "Advania"
             },
             {

@@ -74,6 +74,9 @@ export function CreateXlfLabelsInALCode(Repository) {
 export function CreateXlfFromCALTranslateFile(Repository) {
     StartAction(Repository,`Create-XlfFromCALTranslate.ps1`);
 }
+export function UpdateUsageCategory(Repository) {
+    StartAction(Repository,`Create-UsageCategory.ps1`);
+}
 export function BuildNAVSymbolReferences(Repository) {
     StartAction(Repository,`Build-NAVSymbolReferences.ps1`);
 }
