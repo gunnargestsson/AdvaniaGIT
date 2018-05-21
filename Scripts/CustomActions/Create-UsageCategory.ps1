@@ -30,7 +30,7 @@ foreach ($ALFile in $ALFiles) {
             $ALFileOutputData += "    UsageCategory = $($menuSuiteItem.DepartmentCategory);"
             $ALFileOutputData += "`r`n"    
         }
-        for ($c = 3; $c -lt $ALFileData.Length; $c++) {
+        for ($c = 2; $c -lt $ALFileData.Length; $c++) {
             $ALFileOutputData += $ALFileData.Item($c)
             $ALFileOutputData += "`r`n"
         }
