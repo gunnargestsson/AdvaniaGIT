@@ -1,5 +1,9 @@
 ﻿if ($BranchSettings.dockerContainerId -gt "") {
-    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
+    if ([Bool](Get-Module NAVContainerHelper)) {
+        Import-TestToolkitToNavContainer -containerName $BranchSettings.dockerContainerName
+    } else {
+        Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
+    }
 } else {        
     # Import Standard Test Tool Kit
     if (Test-Path (Join-Path $env:SystemDrive 'TestToolKit')) {

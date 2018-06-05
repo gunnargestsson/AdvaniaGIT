@@ -6,7 +6,7 @@
     [PSObject]$BranchSettings
     )
     
-    $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $BranchSettings.dockerContainerName
+    $dockerContainer = Get-DockerContainers | Where-Object -Property Names -ieq $BranchSettings.dockerContainerName
     if (!$dockerContainer) {
         Write-Error "Docker Container $($BranchSettings.dockerContainerName) does not exist!  Please rebuild the NAV Environment." -ErrorAction Stop
     } 

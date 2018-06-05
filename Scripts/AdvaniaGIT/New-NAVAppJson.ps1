@@ -29,6 +29,8 @@
     $AppSettings | Add-Member -MemberType NoteProperty -Name help -Value $SetupParameters.appHelp
     $AppSettings | Add-Member -MemberType NoteProperty -Name url -Value $SetupParameters.appUrl
     $AppSettings | Add-Member -MemberType NoteProperty -Name logo -Value $SetupParameters.appIcon
+    $AppSettings | Add-Member -MemberType NoteProperty -Name target -Value 'Extension'
+    $AppSettings | Add-Member -MemberType NoteProperty -Name showMyCode -Value $true
     $AppSettings | Add-Member -MemberType NoteProperty -Name platform -Value "$($SetupParameters.navVersion.Split(".")[0]).0.0.0"
     $AppSettings | Add-Member -MemberType NoteProperty -Name application -Value "$($SetupParameters.navVersion.Split(".")[0]).0.0.0"
         

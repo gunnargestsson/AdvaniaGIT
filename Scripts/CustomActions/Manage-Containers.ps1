@@ -4,10 +4,9 @@
     $containers = Get-DockerContainers
     $containerNo = 1
     foreach ($container in $containers) {        
-        $containerBranchSettings = Get-DockerBranchSettings -DockerContainerName $container.Id
-        $containerConfiguration = Get-DockerContainerConfiguration -DockerContainerName $container.Id
+        $containerBranchSettings = Get-DockerBranchSettings -DockerContainerName $container.Names
+        $containerConfiguration = Get-DockerContainerConfiguration -DockerContainerName $container.Names
         $container | Add-Member -MemberType NoteProperty -Name No -Value $containerNo
-        $container | Add-Member -MemberType NoteProperty -Name Name -Value $container.Id
         $container.Id = $containerConfiguration.Id
         $container | Add-Member -MemberType NoteProperty -Name InstanceName -Value $containerBranchSettings.instanceName
         $container | Add-Member -MemberType NoteProperty -Name BranchId -Value $containerBranchSettings.branchId
@@ -22,7 +21,7 @@ do {
     $menuItems = Load-Menu
     Clear-Host
     Add-BlankLines -SetupParameters $SetupParameters
-    $menuItems | Format-Table -Property No, ProjectName, Name, Status, InstanceName, BranchId, Image -AutoSize 
+    $menuItems | Format-Table -Property No, ProjectName, Names, Status, InstanceName, BranchId, Image -AutoSize 
     $input = Read-Host "Please select container number (0 = exit)"
     switch ($input) {
         '0' { break }
