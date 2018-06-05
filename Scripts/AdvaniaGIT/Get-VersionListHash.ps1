@@ -11,7 +11,7 @@
     foreach ($element in $versionlistarray) 
     {
         $moduleinfo = Get-VersionListModuleShortcut($element)
-        $hash.Add($moduleinfo.shortcut,$moduleinfo.version)
+        if (!$hash.ContainsKey($moduleinfo.shortcut)) {$hash.Add($moduleinfo.shortcut,$moduleinfo.version) }
     }
     return $hash
 }
