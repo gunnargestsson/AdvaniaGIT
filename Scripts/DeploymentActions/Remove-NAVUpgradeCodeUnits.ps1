@@ -5,7 +5,7 @@ $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.Us
 Write-Host "Connecting to $($DeploymentSettings.instanceServer)..."
 $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentSettings.instanceServer
 
-Write-Host "Creating instance $($DeploymentSettings.instanceName)..."
+Write-Host "Removing Upgrade Codeunits from $($DeploymentSettings.instanceName)..."
 Invoke-Command -Session $Session -ScriptBlock {
     param([string]$instanceName,[string]$Username,[String]$Password)
 
