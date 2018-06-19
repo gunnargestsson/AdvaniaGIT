@@ -43,7 +43,6 @@ if (![String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
 
 if ($BranchSettings.dockerContainerName -gt "") {
     ReStart-DockerContainer -BranchSettings $BranchSettings
-    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
 } else {
     Load-InstanceAdminTools -SetupParameters $SetupParameters
     if ($BranchSettings.instanceName -eq "") {
@@ -126,12 +125,10 @@ if ($BranchSettings.dockerContainerName -gt "") {
     }
     UnLoad-InstanceAdminTools
 
-    if ($Setupparameters.uidOffset) {
-        Write-Host "Set uidoffset in database $($BranchSettings.databaseName) to $($Setupparameters.uidOffset)"
-        $command = 'UPDATE [dbo].[$ndo$dbproperty] SET [uidoffset] = ' + $Setupparameters.uidOffset
-        $Result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command   
-    }
-
 }
 
-
+if (![string]::IsNullOrEmpty($Setupparameters.uidOffset)) {
+    Write-Host "Set uidoffset in database $($BranchSettings.databaseName) to $($Setupparameters.uidOffset)"
+    $command = 'UPDATE [dbo].[$ndo$dbproperty] SET [uidoffset] = ' + $Setupparameters.uidOffset
+    $Result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command   
+}
