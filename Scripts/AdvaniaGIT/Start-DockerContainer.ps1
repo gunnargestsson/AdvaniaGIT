@@ -45,11 +45,11 @@
     $parameters = @(
                 "--volume `"$volume`"",
                 "--volume `"$rootPath`"",
-                "--env SqlTimeout=1200",
-                "--env httpSite=N")
+                "--env SqlTimeout=1200")
 
     if ($SetupParameters.BuildMode) {
-        $parameters += @("--env webClient=N" )        
+        $parameters += @("--env webClient=N",
+                         "--env httpSite=N")        
     }
 
     if (![System.String]::IsNullOrEmpty($BackupFilePath)) {
