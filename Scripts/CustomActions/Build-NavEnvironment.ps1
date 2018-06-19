@@ -40,13 +40,14 @@ if (![String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     } 
 }
+
 if ($BranchSettings.dockerContainerName -gt "") {
     ReStart-DockerContainer -BranchSettings $BranchSettings
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
 } else {
-    Load-InstanceAdminTools -SetupParameters $Setupparameters
+    Load-InstanceAdminTools -SetupParameters $SetupParameters
     if ($BranchSettings.instanceName -eq "") {
-        Write-Host "Requesting new NAV Environment for branch" $Setupparameters.Branchname
+        Write-Host "Requesting new NAV Environment for branch" $Setupparameters.projectName
         $BackupFilePath = Get-NAVBackupFilePath -SetupParameters $SetupParameters
         $ServerInstance = "NAV" + $($Setupparameters.navRelease) + "DEV" + (Get-EnvironmentNo)
         $params = @{ 
