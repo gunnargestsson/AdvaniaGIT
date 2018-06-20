@@ -8,7 +8,9 @@
     )
 
     if (![String]::IsNullOrEmpty($BranchSettings.dockerContainerName)) {
-        Install-NAVSipCryptoProviderFromNavContainer -containerName $BranchSettings.dockerContainerName 
+        if (!(Test-Path -Path 'C:\Windows\System32\NavSip.dll')) {
+            Install-NAVSipCryptoProviderFromNavContainer -containerName $BranchSettings.dockerContainerName
+        }
         if (!(Test-Path -Path 'C:\Windows\System32\NavSip.dll')) {
            Copy-FileFromNavContainer -containerName $BranchSettings.dockerContainerName -containerPath 'C:\Windows\System32\NavSip.dll' -localPath 'C:\Windows\System32\NavSip.dll' 
         }
