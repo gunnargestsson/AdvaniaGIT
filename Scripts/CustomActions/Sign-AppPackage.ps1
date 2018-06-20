@@ -1,4 +1,7 @@
-﻿$appPackageFileNames = Get-ChildItem -Path (Join-Path $SetupParameters.repository AL) -Filter "*.app"
+﻿Copy-MissingNAVSipToHost -BranchSettings $BranchSettings
+
+
+$appPackageFileNames = Get-ChildItem -Path (Join-Path $SetupParameters.repository AL) -Filter "*.app"
 foreach ($appPackageFileName in $appPackageFileNames) {
     if (Test-Path $SetupParameters.CodeSigningCertificate) {
       Write-Host "Signing APP package $($appPackageFileName.Name)..."

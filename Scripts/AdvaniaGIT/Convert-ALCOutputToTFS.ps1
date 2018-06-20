@@ -2,8 +2,8 @@
 # https://dynamicsuser.net/nav/b/kine/posts/alc-exe-output-formatting-for-tfs-vsts
 
 function Convert-ALCOutputToTFS {
-    foreach ($_ in $input) {
-        switch -regex ($_) {
+    foreach ($_ in $input) { 
+        switch -regex ($i) {
             "^warning (\w{2}\d{4}):(.*('.*').*|.*)$" {
                 if (Test-Path $Matches[3]) {
                     Write-Host "##vso[task.logissue type=warning;sourcepath=$($Matches[3]);code=$($Matches[1]);]$($Matches[2])"
@@ -24,7 +24,7 @@ function Convert-ALCOutputToTFS {
                 Write-Host "##vso[task.logissue type=warning;sourcepath=$($Matches[1]);linenumber=$($Matches[2]);columnnumber=$($Matches[3]);code=$($Matches[4]);]$($Matches[5])"
             }
             default {
-                Write-Host $_
+                Write-Host $i
             }
         }
     }

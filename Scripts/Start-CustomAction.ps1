@@ -68,7 +68,7 @@ else
     if (![System.String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
         if (![Bool](Get-Module NAVContainerHelper)) {
             if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
-                Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..."
+                if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
                 Import-Module NAVContainerHelper -DisableNameChecking
             }
         }
@@ -112,6 +112,7 @@ else
     $Globals | Add-Member NewSyntaxDeltasPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.deltasPath)")
     $Globals | Add-Member NewSyntaxReverseDeltasPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.reverseDeltasPath)")
     $Globals | Add-Member VSCodePath  (Join-Path $Repository $SetupParameters.VSCodePath)
+    $Globals | Add-Member VSCodeTestPath  (Join-Path $Repository "$($SetupParameters.VSCodePath)$($SetupParameters.testObjectsPath)")
 
     $SetupParameters = Combine-Settings $Globals $SetupParameters
     if (![String]::IsNullOrEmpty($BuildSettings)) { $SetupParameters = Combine-Settings (New-Object -TypeName PSObject -Property $BuildSettings) $SetupParameters }

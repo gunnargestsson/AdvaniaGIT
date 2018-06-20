@@ -1,26 +1,4 @@
-﻿<#
-    .SYNOPSIS
-    Performs a technical upgrade of a database from a previous version of Microsoft Dynamics NAV.
-
-    .DESCRIPTION
-    Performs a technical upgrade of a database from a previous version of Microsoft Dynamics NAV.
-
-    .INPUTS
-    None
-    You cannot pipe input into this function.
-
-    .OUTPUTS
-    None
-
-    .EXAMPLE
-    Invoke-NAVDatabaseConversion MyApp
-    Perform the technical upgrade on a NAV database named MyApp.
-
-    .EXAMPLE
-    Invoke-NAVDatabaseConversion MyApp -ServerName "TestComputer01\NAVDEMO"
-    Perform the technical upgrade on a NAV database named MyApp on TestComputer01\NAVDEMO Sql server .
-#>
-function Invoke-NAVDatabaseSymbolReferenceUpdate
+﻿function Invoke-NAVDatabaseSymbolReferenceUpdate
 {
     [CmdletBinding(DefaultParameterSetName='All')]
     Param(

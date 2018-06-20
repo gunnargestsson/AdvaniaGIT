@@ -8,14 +8,14 @@
     )
 
     if (![String]::IsNullOrEmpty($BranchSettings.dockerContainerName)) {
-        if (!(Test-Path -Path 'C:\Windows\System32\NavSip.dll')) {
-            Install-NAVSipCryptoProviderFromNavContainer -containerName $BranchSettings.dockerContainerName
+        try {
+            if (Test-Path -Path "C:\Windows\System32\NavSip.dll") { RegSvr32 /u /s "C:\Windows\System32\NavSip.dll" }
+            if (Test-Path -Path "C:\Windows\SysWow64\NavSip.dll") { RegSvr32 /u /s "C:\Windows\SysWow64\NavSip.dll" }
+            Install-NAVSipCryptoProviderFromNavContainer -containerName $BranchSettings.dockerContainerName 
         }
-        if (!(Test-Path -Path 'C:\Windows\System32\NavSip.dll')) {
-           Copy-FileFromNavContainer -containerName $BranchSettings.dockerContainerName -containerPath 'C:\Windows\System32\NavSip.dll' -localPath 'C:\Windows\System32\NavSip.dll' 
-        }
-        if (!(Test-Path -Path 'C:\Windows\syswow64\NavSip.dllll')) {
-           Copy-FileFromNavContainer -containerName $BranchSettings.dockerContainerName -containerPath 'C:\Windows\syswow64\NavSip.dll' -localPath 'C:\Windows\syswow64\NavSip.dll' 
-        }
+        finally {
+            if (Test-Path -Path "C:\Windows\System32\NavSip.dll") { RegSvr32 /s "C:\Windows\System32\NavSip.dll" }
+            if (Test-Path -Path "C:\Windows\SysWow64\NavSip.dll") { RegSvr32 /s "C:\Windows\SysWow64\NavSip.dll" }      
+        }  
     }
 }    

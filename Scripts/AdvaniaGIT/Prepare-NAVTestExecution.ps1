@@ -11,13 +11,14 @@
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
     [Switch]$ForModifiedObjects,
     [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-    [Switch]$TestExecutionContinuing
+    [Switch]$TestExecutionContinuing,
+    [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+    [String]$CodeunitIdFilter
     )   
 
     $command = "DELETE FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Enabled Codeunit')]"
     Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
     if ($OnlyFailingTests) {
-
         $command = "SELECT [Codeunit ID] FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Result')] WHERE [Result]>0"
         Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | % {
           $command = "INSERT INTO [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Enabled Codeunit')] ([Test Codeunit ID]) VALUES($($_.'Codeunit ID'))"
@@ -30,7 +31,11 @@
           Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
         }
     } else {
-        $command = "SELECT [Object ID] FROM [dbo].[Object Metadata] WHERE [Object Type] = '5' AND [Object Subtype] = 'Test'"
+        if ([String]::IsNullOrEmpty($CodeunitIdFilter)) {
+            $command = "SELECT [Object ID] FROM [dbo].[Object Metadata] WHERE [Object Type] = '5' AND [Object Subtype] = 'Test'"
+        } else {
+            $command = "SELECT [Object ID] FROM [dbo].[Object Metadata] WHERE [Object ID] $CodeunitIdFilter AND [Object Type] = '5' AND [Object Subtype] = 'Test'"
+        }
         $Codeunits = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
         foreach ($Codeunit in $Codeunits) {
           $command = "INSERT INTO [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Enabled Codeunit')] ([Test Codeunit ID]) VALUES($($Codeunit.'Object ID'))"

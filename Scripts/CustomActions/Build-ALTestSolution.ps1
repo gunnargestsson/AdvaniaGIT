@@ -5,11 +5,10 @@
 if ($SetupParameters.BuildMode) {
     $BranchWorkFolder = Join-Path $SetupParameters.WorkFolder $SetupParameters.branchId
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
-    Remove-Item -Path (Join-Path $BranchWorkFolder 'out') -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -Path (Join-Path $BranchWorkFolder 'out') -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     
 
-    $ALProjectFolder = $SetupParameters.VSCodePath
+    $ALProjectFolder = $SetupParameters.VSCodeTestPath
     $AlPackageOutParent = (Join-Path $BranchWorkFolder 'out')
     $ALPackageCachePath = (Join-Path $BranchWorkFolder 'Symbols')
     $ALCompilerPath = (Join-Path $BranchWorkFolder 'vsix\extension\bin\alc.exe')
@@ -35,6 +34,3 @@ if ($SetupParameters.BuildMode) {
         exit 1
     }    
 }
-
-#$SetupParameters
-

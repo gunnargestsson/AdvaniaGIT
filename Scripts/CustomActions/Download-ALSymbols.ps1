@@ -19,6 +19,7 @@ Invoke-RestMethod -Method Get -Uri ($sysUrl) -OutFile (Join-Path $SetupParameter
 if ($SetupParameters.BuildMode) {
     $BranchWorkFolder = Join-Path $SetupParameters.WorkFolder $SetupParameters.branchId
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
+    Remove-Item -Path (Join-Path $BranchWorkFolder 'Symbols') -Force -Recurse -ErrorAction SilentlyContinue
     New-Item -Path (Join-Path $BranchWorkFolder 'Symbols') -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     Move-Item -Path (Join-Path $SetupParameters.LogPath 'Application.app') -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force
     Move-Item -Path (Join-Path $SetupParameters.LogPath 'System.app') -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force

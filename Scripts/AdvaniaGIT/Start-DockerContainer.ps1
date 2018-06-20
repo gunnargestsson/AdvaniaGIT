@@ -70,8 +70,12 @@
             $params += @{ licensefile = "$LicenseFilePath" }
         }
 
+        if (![System.String]::IsNullOrEmpty($SetupParameters.includeTestToolkit)) {
+            $params += @{ includeTestToolkit = $SetupParameters.includeTestToolkit }
+        }
+
         $DockerContainerFriendlyName = "$($SetupParameters.projectName)               ".Substring(0,15).TrimEnd(" ")
-        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -enableSymbolLoading
+        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -enableSymbolLoading -alwaysPull
         $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 
     } else {
         docker.exe pull $imageName
