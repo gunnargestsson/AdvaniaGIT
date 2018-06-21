@@ -167,12 +167,17 @@
 
     $Session = New-DockerSession -DockerContainerId $DockerContainerId
     $DockerSettings = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
-    Edit-DockerHostRegiststration -AddHostName $DockerContainerFriendlyName -AddIpAddress (Get-DockerIPAddress -Session $Session)
+    if ([Bool](Get-Module NAVContainerHelper)) {
+        $DockerContainerIpAddress = Get-NavContainerIpAddress -containerName $DockerContainerFriendlyName
+    } else {
+        $DockerContainerIpAddress = Get-DockerIPAddress -Session $Session
+    }
+    Edit-DockerHostRegiststration -AddHostName $DockerContainerFriendlyName -AddIpAddress $DockerContainerIpAddress
 
     $BranchSettings.databaseServer = $DockerContainerFriendlyName
     $BranchSettings.dockerContainerName = $DockerContainerFriendlyName
     $BranchSettings.dockerContainerId = $DockerContainerId
-    $BranchSettings.dockerContainerIp = (Get-DockerIPAddress -Session $Session)
+    $BranchSettings.dockerContainerIp = $DockerContainerIpAddress
     $BranchSettings.clientServicesPort = $DockerSettings.BranchSettings.clientServicesPort
     $BranchSettings.managementServicesPort = $DockerSettings.BranchSettings.managementServicesPort
     $BranchSettings.developerServicesPort = $DockerSettings.BranchSettings.developerServicesPort
