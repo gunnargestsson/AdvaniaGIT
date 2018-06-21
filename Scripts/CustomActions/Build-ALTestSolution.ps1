@@ -30,7 +30,7 @@ if ($SetupParameters.BuildMode) {
     & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath | Convert-ALCOutputToTFS
  
     if (-not (Test-Path $AlPackageOutPath)) {
-        Write-Error "no app file was generated"
+        Write-Host "##vso[task.logissue type=error;sourcepath=$AlPackageOutPath;]No app file was generated!"
         exit 1
     }    
 }

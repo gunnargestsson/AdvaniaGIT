@@ -20,7 +20,9 @@
     # Log file name is based on the name of the imported file.
     $logFile = (Join-Path $SetupParameters.LogPath "navimport.log")
     $command = "Command=ImportObjects`,ImportAction=$ImportAction`,SynchronizeSchemaChanges=$SynchronizeSchemaChanges`,File=`"$Path`""                 
-
+    if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 12) {
+      $command += ",generatesymbolreference=1"
+    }
     try
     {
         Run-NavIdeCommand -SetupParameters $SetupParameters `

@@ -16,6 +16,10 @@
     )
     $LogFile = Join-Path $SetupParameters.LogPath "filtercompile.log"
     $command = "Command=CompileObjects`,SynchronizeSchemaChanges=$SynchronizeSchemaChanges`,Filter=`"$Filter`""
+    if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 12) {
+      $command += ",generatesymbolreference=1"
+    }
+
     Run-NavIdeCommand -SetupParameters $SetupParameters `
                     -BranchSettings $BranchSettings `
                     -Command $command `

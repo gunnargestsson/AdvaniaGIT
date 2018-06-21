@@ -11,8 +11,11 @@ if ($SetupParameters.BuildMode) {
 } else {
     $Path = (Join-Path $SetupParameters.workFolder 'Target.txt')
 }
-$command = "Command=ImportObjects`,ImportAction=Overwrite`,SynchronizeSchemaChanges=No`,File=`"$Path`""                 
-
+$command = "Command=ImportObjects`,ImportAction=Overwrite`,SynchronizeSchemaChanges=No`,File=`"$Path`""  
+if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 12) {
+  $command += ",generatesymbolreference=1"
+}
+               
 Run-NavIdeCommand -SetupParameters $SetupParameters `
                     -BranchSettings $BranchSettings `
                     -Command $command `
