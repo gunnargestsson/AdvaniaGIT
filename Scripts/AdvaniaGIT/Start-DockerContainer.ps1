@@ -75,7 +75,7 @@
         }
 
         $DockerContainerFriendlyName = "$($SetupParameters.projectName)               ".Substring(0,15).TrimEnd(" ")
-        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -enableSymbolLoading -alwaysPull
+        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -enableSymbolLoading -alwaysPull -includeCSide
         $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 
     } else {
         docker.exe pull $imageName

@@ -16,8 +16,11 @@ if ($BranchSettings.instanceName -ne "") {
             }
         }
         Edit-DockerHostRegiststration -RemoveHostName $BranchSettings.dockerContainerName 
-        $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId
         
+        $DockerSettings = Get-DockerSettings 
+        $DockerSettings.ClientFolders = $DockerSettings.ClientFolders | Where-Object -Property dockerContainerName -NE $BranchSettings.dockerContainerName 
+        Update-DockerSettings -DockerSettings $DockerSettings 
+        $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId
     }
 }
 
