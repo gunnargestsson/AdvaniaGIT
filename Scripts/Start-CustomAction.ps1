@@ -64,16 +64,6 @@ else
     # Find NAV Release
     $SetupParameters | Add-Member "navRelease" (Get-NAVRelease -mainVersion $mainVersion)
 
-    # Use NAV Container Helper if available
-    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
-        if (![Bool](Get-Module NAVContainerHelper)) {
-            if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
-                if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
-                Import-Module NAVContainerHelper -DisableNameChecking
-            }
-        }
-    }
-
     # Find Branch Settings
     $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
     if ($BranchSettings.dockerContainerName -gt "") {
@@ -123,7 +113,16 @@ else
     if ($IsInAdminMode ) { Add-BlankLines -SetupParameters $SetupParameters }
     $env:WorkFolder = $SetupParameters.WorkFolder
     
-    #Set-NAVCodePage -SetupParameters $SetupParameters
+    # Use NAV Container Helper if available
+    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
+        if (![Bool](Get-Module NAVContainerHelper)) {
+            if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
+                if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
+                Import-Module NAVContainerHelper -DisableNameChecking
+            }
+        }
+    }
+
 
     # Start the script
     $ScriptToStart = (Join-Path (Join-path $PSScriptRoot 'CustomActions') $ScriptName)

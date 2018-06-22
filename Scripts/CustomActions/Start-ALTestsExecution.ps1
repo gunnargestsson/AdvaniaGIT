@@ -1,6 +1,4 @@
-﻿& (Join-path $PSScriptRoot Rename-CompanyToCRONUS.ps1)
-
-if ($SetupParameters.testCompanyName) {
+﻿if ($SetupParameters.testCompanyName) {
     $companyName = $SetupParameters.testCompanyName
 } else {
     $companyName = Get-FirstCompanyName -SQLServer (Get-DatabaseServer -BranchSettings $BranchSettings) -SQLDb $BranchSettings.databaseName
