@@ -31,12 +31,21 @@
           Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
         }
     } else {
+        # C/AL Test Codeunits
         if ([String]::IsNullOrEmpty($CodeunitIdFilter)) {
             $command = "SELECT [Object ID] FROM [dbo].[Object Metadata] WHERE [Object Type] = '5' AND [Object Subtype] = 'Test'"
         } else {
             $command = "SELECT [Object ID] FROM [dbo].[Object Metadata] WHERE [Object ID] $CodeunitIdFilter AND [Object Type] = '5' AND [Object Subtype] = 'Test'"
         }
         $Codeunits = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
+        # AL Test Codeunits
+        if ([String]::IsNullOrEmpty($CodeunitIdFilter)) {
+            $command = "SELECT [Object ID] FROM [dbo].[NAV App Object Metadata] WHERE [Object Type] = '5' AND [Object Subtype] = 'Test'"
+        } else {
+            $command = "SELECT [Object ID] FROM [dbo].[NAV App Object Metadata] WHERE [Object ID] $CodeunitIdFilter AND [Object Type] = '5' AND [Object Subtype] = 'Test'"
+        }
+        $Codeunits += Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
+
         foreach ($Codeunit in $Codeunits) {
           $command = "INSERT INTO [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Enabled Codeunit')] ([Test Codeunit ID]) VALUES($($Codeunit.'Object ID'))"
           Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null

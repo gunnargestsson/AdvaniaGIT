@@ -127,6 +127,7 @@ else
     # Start the script
     $ScriptToStart = (Join-Path (Join-path $PSScriptRoot 'CustomActions') $ScriptName)
     if ($SetupParameters.BuildMode) {
+        Write-Host "Starting ${ScriptName} in ${Repository}..."
         & $ScriptToStart
     } else {
         try { & $ScriptToStart }

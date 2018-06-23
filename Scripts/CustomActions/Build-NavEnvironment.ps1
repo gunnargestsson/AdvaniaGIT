@@ -38,6 +38,7 @@ if (![String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
         }
         Start-DockerContainer @params
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
+        & (Join-path $PSScriptRoot Verify-RepositorySetupInContainer.ps1)
     } 
 }
 

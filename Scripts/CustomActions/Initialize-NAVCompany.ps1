@@ -10,7 +10,6 @@
         New-NAVServerUserPermissionSet -WindowsAccount $env:USERNAME -PermissionSetId SUPER -ServerInstance $ServerInstance -ErrorAction SilentlyContinue
         Invoke-NAVCodeunit -CompanyName "My Test Company" -CodeunitId 2 -Language en-US -ServerInstance $ServerInstance -Force            
     } -ArgumentList $BranchSettings.instanceName
-
 } else {    
     Load-InstanceAdminTools -SetupParameters $SetupParameters 
     Write-Host "Initializing company 'My Test Company'..."
