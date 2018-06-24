@@ -9,5 +9,5 @@ $ExtensionAppJsonObject = Get-Content -Raw -Path $ExtensionAppJsonFile | Convert
 $CodeunitIdFilter = "BETWEEN $($ExtensionAppJsonObject.idRange.from) AND $($ExtensionAppJsonObject.idRange.to)"
 
 Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName -CodeunitIdFilter $CodeunitIdFilter
-& (Join-path $PSScriptRoot Prepare-NAVUnitTest.ps1)
+& (Join-path $PSScriptRoot Restart-NAVService.ps1)
 & (Join-path $PSScriptRoot Start-TestClient.ps1)

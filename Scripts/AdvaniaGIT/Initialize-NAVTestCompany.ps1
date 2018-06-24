@@ -15,7 +15,7 @@
         Set-NAVServerInstance -ServerInstance $BranchSettings.instanceName -Restart 
         Sync-NAVTenant -ServerInstance $BranchSettings.instanceName -Tenant default -Mode Sync -Force 
     }
-    if ($SetupParameters.navRelease -ge '2018') {
+    if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 12) {
         Start-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Language is-IS -ContinueOnError -FunctionExecutionMode Parallel -Force -SkipAppVersionCheck
     } else {
         Start-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Language is-IS -ContinueOnError -FunctionExecutionMode Parallel -Force
