@@ -47,7 +47,8 @@ foreach ($ObjectsFile in $ObjectsFiles) {
                         -Command $command `
                         -LogFile $logFile `
                         -ErrText "Error while importing from $((Get-Item $file).BaseName)" `
-                        -Verbose:$VerbosePreference
+                        -Verbose:$VerbosePreference `
+                        -StopOnError
         Remove-Item -Path $file  -Force -ErrorAction SilentlyContinue
     } -ArgumentList ((Join-Path "$WorkFolder\$($DeploymentSettings.instanceName)" $ObjectsFile.Name))
 
