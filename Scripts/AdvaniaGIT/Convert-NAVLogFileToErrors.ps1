@@ -36,6 +36,7 @@
     {
         if ($StopOnError) {
             Write-Error -Message "$($message)" -ErrorAction Stop
+            throw
         } else {
             Write-Host -ForegroundColor Red "  $($message)"
         }
