@@ -3,8 +3,10 @@
     $DockerSettings = Get-DockerSettings
     $newClientFolders = @()
     foreach ($ClientFolder in $DockerSettings.ClientFolders) {
-        if (Test-Path $ClientFolder.clientFolderPath) {        
-            $newClientFolders += $ClientFolder
+        if (![String]::IsNullOrEmpty($ClientFolder)) {
+            if (Test-Path $ClientFolder.clientFolderPath) {        
+                $newClientFolders += $ClientFolder
+            }
         }
     }
     $DockerSettings.ClientFolders = $newClientFolders

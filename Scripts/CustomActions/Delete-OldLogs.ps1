@@ -1,4 +1,5 @@
-﻿Get-Childitem -Path (Split-Path $SetupParameters.LogPath -Parent) |
+﻿Write-Host "Removing files and folder older than 7 days from $(Split-Path $SetupParameters.LogPath -Parent)..."
+Get-Childitem -Path (Split-Path $SetupParameters.LogPath -Parent) |
     Where-Object {$_.LastWriteTime -lt (Get-Date).AddDays(-7)} | 
     Remove-Item -Recurse
 
