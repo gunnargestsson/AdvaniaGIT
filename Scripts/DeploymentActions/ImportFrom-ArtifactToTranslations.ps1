@@ -2,7 +2,7 @@
 $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 
 $WorkFolder = $DeploymentSettings.workFolder
-New-Item -Path $WorkFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+if (!(Test-Path -Path $WorkFolder)) {New-Item -Path $WorkFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null}
 Write-Host "Connecting to $($DeploymentSettings.instanceServer)..."
 $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentSettings.instanceServer -SetupPath $WorkFolder
 
@@ -15,7 +15,7 @@ if (Test-Path -Path (Join-Path $workFolder "*.txt")) {
     Write-Host "Expanding Translations.zip on remote server..."
     Invoke-Command -Session $Session -ScriptBlock {
         param([string]$ZipFileName,[string]$TranslationFilePath)
-        New-Item -Path $TranslationFilePath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+        if (!(Test-Path -Path $TranslationFilePath)) { New-Item -Path $TranslationFilePath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null }
         Expand-Archive -Path $ZipFileName -DestinationPath $TranslationFilePath -Force
         Remove-Item -Path $ZipFileName -Force -ErrorAction SilentlyContinue
     } -ArgumentList ((Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-Translations.zip"), "${WorkFolder}\$($DeploymentSettings.instanceName)")

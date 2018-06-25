@@ -18,6 +18,7 @@
     
     # Get Environment Settings
     $SetupParameters = Get-GITSettings
+    $SetupParameters | Add-Member -MemberType NoteProperty -Name DeploymentMode -Value $true -Force
            
     # Set Global Parameters
     $Globals = New-Object -TypeName PSObject
@@ -27,13 +28,27 @@
     $SetupParameters = Combine-Settings $Globals $SetupParameters
     if (![String]::IsNullOrEmpty($BuildSettings)) { $SetupParameters = Combine-Settings (New-Object -TypeName PSObject -Property $BuildSettings) $SetupParameters }
 
-    New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-    New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-    if ($IsInAdminMode ) { Add-BlankLines -SetupParameters $SetupParameters }
+    if (-not (Test-Path -Path (Split-Path -Path $SetupParameters.LogPath -Parent))) {
+        New-Item -Path (Split-Path -Path $SetupParameters.LogPath -Parent) -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+    }
+    if (-not (Test-Path -Path $SetupParameters.LogPath)) {
+        New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+    }
     $env:WorkFolder = $SetupParameters.WorkFolder
     
-    # Start the script
-    $ScriptToStart = (Join-Path (Join-path $PSScriptRoot 'DeploymentActions') $ScriptName)
-    & $ScriptToStart
-    Pop-Location
+    $Error.Clear()
 
+    #Start the script
+    Write-Verbose "Starting ${ScriptName}..."
+    $ScriptToStart = (Join-Path (Join-path $PSScriptRoot 'DeploymentActions') $ScriptName)            
+    & $ScriptToStart
+    Write-Verbose "Execution of ${ScriptName} completed"
+    Pop-Location   
+
+    if ($Error.Count -gt 0) {
+        Write-Verbose "Errors: ${Error}"        
+        exit 1
+    }
+
+    
+  

@@ -49,9 +49,8 @@ foreach ($ObjectsFile in $ObjectsFiles) {
                         -LogFile $logFile `
                         -Username $username `
                         -Password $password `
-                        -ErrText "Error while importing from $((Get-Item $file).BaseName)" `
-                        -Verbose:$VerbosePreference `
                         -StopOnError
+                        
         Remove-Item -Path $file  -Force -ErrorAction SilentlyContinue
     } -ArgumentList ((Join-Path "$WorkFolder\$($DeploymentSettings.instanceName)" $ObjectsFile.Name),$DbAdmin.Username,$DbAdmin.Password)
 
