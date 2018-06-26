@@ -1,6 +1,5 @@
 ﻿if ([Bool](Get-Module NAVContainerHelper)) {
-    $DockerRepository = (Get-NavContainerSharedFolders -containerName $BranchSettings.dockerContainerName).Name
-    if ([String]::IsNullOrEmpty($DockerRepository)) {
+    if ((Get-NavContainerSharedFolders -containerName $BranchSettings.dockerContainerName).Keys -notcontains $SetupParameters.Repository) {
         Copy-FileToNavContainer -containerName $BranchSettings.dockerContainerName -localPath $SetupParameters.setupPath -containerPath "C:\GIT" 
     }
 }

@@ -23,6 +23,8 @@
     if ([System.String]::IsNullOrEmpty($AdminPassword)) {
         $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $AdminUsername
         $AdminPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
+    } else {
+        $DockerCredentials = New-Object System.Management.Automation.PSCredential($env:USERNAME, (ConvertTo-SecureString $AdminPassword -AsPlainText -Force))
     }
 
     Write-Host "Connecting to repository $($DockerSettings.RepositoryPath)..."
