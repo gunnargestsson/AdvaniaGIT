@@ -2,23 +2,26 @@ Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $Branc
 if ($BranchSettings.dockerContainerId -gt "") {
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
 } else {    
-    Load-IdeTools -SetupParameters $SetupParameters
+    Load-IdeTools -SetupParameters $SetupParameters    
     $ErrorObjects = @()
     $objectTypes = 'Table','Page','Report','Codeunit','Query','XMLport','MenuSuite'
     $jobs = @()
     foreach($objectType in $objectTypes) {
         Write-Host "Starting $objectType compilation..."
         $filter = "Type=$objectType;Version List=<>*Test*"
-        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Yes -Recompile    
+        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile    
     }
     Receive-Job -Job $jobs -Wait     
     
     foreach($objectType in $objectTypes) {
         Write-Host "Starting $objectType test objects compilation..."
         $filter = "Type=$objectType;Version List=*Test*"
-        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Yes -Recompile    
+        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile    
     }
     Receive-Job -Job $jobs -Wait
+
+    Load-InstanceAdminTools -SetupParameters $SetupParameters
+    Get-NAVTenant $BranchSettings.instanceName | Sync-NAVTenant -Force -Mode forceSync
 
     foreach ($job in $jobs.ChildJobs) {
         [string]$Error = $job.Error
