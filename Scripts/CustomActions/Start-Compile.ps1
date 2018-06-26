@@ -1,6 +1,15 @@
 Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 if ($BranchSettings.dockerContainerId -gt "") {
-    Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
+    if ([Bool](Get-Module NAVContainerHelper)) {
+        if (![String]::IsNullOrEmpty($SetupParameters.dockerAuthentication) -and $SetupParameters.dockerAuthentication -ieq "NavUserPassword") {
+            $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName "SA"        
+            Compile-ObjectsInNavContainer -containerName $BranchSettings.dockerContainerName -sqlCredential $DockerCredentials
+        } else {
+            Compile-ObjectsInNavContainer -containerName $BranchSettings.dockerContainerName 
+        }
+    } else {
+        Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
+    }
 } else {    
     Load-IdeTools -SetupParameters $SetupParameters    
     $ErrorObjects = @()

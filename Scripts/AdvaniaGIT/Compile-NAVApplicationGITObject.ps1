@@ -20,13 +20,24 @@
       $command += ",generatesymbolreference=1"
     }
 
-    Run-NavIdeCommand -SetupParameters $SetupParameters `
+    if (![String]::IsNullOrEmpty($SetupParameters.dockerAuthentication) -and $SetupParameters.dockerAuthentication -ieq "NavUserPassword") {
+        $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName "SA"
+        Run-NavIdeCommand -SetupParameters $SetupParameters `
+                    -BranchSettings $BranchSettings `
+                    -Command $command `
+                    -LogFile $logFile `
+                    -ErrText "Error while importing $file" `
+                    -Verbose:$VerbosePreference `
+                    -Username $DockerCredentials.UserName `
+                    -Password [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
+    } else {
+        Run-NavIdeCommand -SetupParameters $SetupParameters `
                     -BranchSettings $BranchSettings `
                     -Command $command `
                     -LogFile $logFile `
                     -ErrText "Error while importing $file" `
                     -Verbose:$VerbosePreference
-   
+    }
 
     if (Test-Path -Path "$($SetupParameters.LogPath)\navcommandresult.txt")
     {

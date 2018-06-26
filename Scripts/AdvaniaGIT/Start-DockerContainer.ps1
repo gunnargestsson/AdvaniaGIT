@@ -72,8 +72,12 @@
             $params += @{ licensefile = "$LicenseFilePath" }
         }
 
-        if (![System.String]::IsNullOrEmpty($SetupParameters.includeTestToolkit)) {
-            $params += @{ includeTestToolkit = $SetupParameters.includeTestToolkit }
+        if (![System.String]::IsNullOrEmpty($SetupParameters.dockerTestToolkit)) {
+            $params += @{ includeTestToolkit = $SetupParameters.dockerTestToolkit }
+        }
+
+        if (![System.String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
+            $params += @{ auth = $SetupParameters.dockerAuthentication }
         }
 
         $DockerContainerFriendlyName = "$($SetupParameters.projectName)               ".Substring(0,15).TrimEnd(" ")

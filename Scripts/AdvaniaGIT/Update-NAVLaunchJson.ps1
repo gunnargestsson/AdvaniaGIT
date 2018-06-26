@@ -19,6 +19,16 @@
             $LaunchSettings.configurations[0].server = "http://$($BranchSettings.dockerContainerName)"
         }
         $LaunchSettings.configurations[0].serverInstance = $BranchSettings.instanceName
+        if ([String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
+            $LaunchSettings.configurations[0].authentication = "Windows"
+        } else {
+            switch ($SetupParameters.dockerAuthentication)
+            {
+                "NavUserPassword" { $LaunchSettings.configurations[0].authentication = "UserPassword" }
+                default {$LaunchSettings.configurations[0].authentication = $SetupParameters.dockerAuthentication}
+            }
+        }
+
     } else {
         $LaunchSettings = New-Object -TypeName PSObject   
         # Add Text Type Objects
@@ -47,7 +57,12 @@
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name port -Value $developerServicesPort
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name tenant -Value "Default"
         $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name serverInstance -Value $BranchSettings.instanceName
-        $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name authentication -Value "Windows"
+        if ([String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
+            $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name authentication -Value "Windows"
+        } else {
+            $ConfigurationSettings | Add-Member -MemberType NoteProperty -Name authentication -Value $SetupParameters.dockerAuthentication
+        }
+        
         $LaunchSettings | Add-Member -MemberType NoteProperty -Name configurations -Value @($ConfigurationSettings)
     }
     New-Item -Path (Join-Path $SetupParameters.VSCodePath ".vscode") -ItemType Directory -ErrorAction SilentlyContinue | Out-Null

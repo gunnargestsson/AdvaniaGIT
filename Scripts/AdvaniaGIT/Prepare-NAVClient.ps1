@@ -14,11 +14,17 @@ function Prepare-NAVClient
         $clientPath = Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings
         $clientexe = Join-Path $clientPath 'Microsoft.Dynamics.Nav.Client.exe'
         $clientSettingsPath = Join-Path $clientPath 'ClientUserSettings.config'
+        if ([String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
+            $ClientServicesCredentialType = "Windows"
+        } else {
+            $ClientServicesCredentialType = $SetupParameters.dockerAuthentication
+        }
         [xml]$clientUserSettings = Get-Content -Path $clientSettingsPath
         Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $BranchSettings.dockerContainerName
     } else {    
         $clientexe = (Join-Path $SetupParameters.navIdePath 'Microsoft.Dynamics.Nav.Client.exe')
         $clientSettingsPath = (Join-Path $SetupParameters.LogPath 'ClientUserSettings.config')
+        $ClientServicesCredentialType = "Windows"
         [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:ProgramData ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))
         if ([string]::IsNullOrEmpty($BranchSettings.instanceServer)) {
             $BranchSettings | Add-Member -MemberType NoteProperty -Name instanceServer -Value $env:COMPUTERNAME -Force
@@ -30,7 +36,7 @@ function Prepare-NAVClient
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServerInstance' -NewValue $BranchSettings.instanceName
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'UrlHistory' -NewValue ""
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'TenantId' -NewValue ""
-    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesCredentialType' -NewValue Windows
+    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ClientServicesCredentialType' -NewValue $ClientServicesCredentialType
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicesCertificateValidationEnabled' -NewValue false
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicePrincipalNameRequired' -NewValue false
     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServer' -NewValue (Get-HelpServer -mainVersion $SetupParameters.mainVersion)
