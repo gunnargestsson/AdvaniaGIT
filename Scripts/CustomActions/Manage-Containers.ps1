@@ -44,22 +44,22 @@ do {
                             }
                         '1' {
                                 $ContainerBranchSettings = New-Object -TypeName PSObject
-                                $ContainerBranchSettings | Add-Member -MemberType NoteProperty -Name dockerContainerName -Value $selectedContainer.Name
+                                $ContainerBranchSettings | Add-Member -MemberType NoteProperty -Name dockerContainerName -Value $selectedContainer.Names
                                 $ContainerBranchSettings | Add-Member -MemberType NoteProperty -Name dockerContainerId -Value $selectedContainer.Id
                                 ReStart-DockerContainer -BranchSettings $ContainerBranchSettings 
                             }
                         '2' {
-                                Write-Host "Killing Docker Container $($selectedContainer.Name)..."
-                                $dockerContainerName = docker.exe kill $($selectedContainer.Name)
+                                Write-Host "Killing Docker Container $($selectedContainer.Names)..."
+                                $dockerContainerName = docker.exe kill $($selectedContainer.Names)
                             }
                         '3' {
                                 
-                                Write-Host "Killing and removing Docker Container $($selectedContainer.Name)..."
+                                Write-Host "Killing and removing Docker Container $($selectedContainer.Names)..."
                                 if ($selectedContainer.Status.Contains("Up")) {
-                                    $dockerContainerName = docker.exe kill $($selectedContainer.Name)
+                                    $dockerContainerName = docker.exe kill $($selectedContainer.Names)
                                 }
-                                $dockerContainerName = docker.exe rm $($selectedContainer.Name)
-                                Edit-DockerHostRegiststration -RemoveHostName $selectedContainer.Name
+                                $dockerContainerName = docker.exe rm $($selectedContainer.Names)
+                                Edit-DockerHostRegiststration -RemoveHostName $selectedContainer.Names
                                 if ($selectedContainer.branchId -gt "") { 
                                     $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId
                                 } 
