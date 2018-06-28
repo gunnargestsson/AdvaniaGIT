@@ -35,13 +35,24 @@
     $logFile = Join-Path $SetupParameters.LogPath 'navexport.log'
     try
     {
-        Run-NavIdeCommand -Command $command `
-          -SetupParameters $SetupParameters `
-          -BranchSettings $BranchSettings `
-          -LogFile $logFile `
-          -ErrText "Error while exporting $Filter" `
-          -Verbose:$VerbosePreference
-
+        if (![String]::IsNullOrEmpty($SetupParameters.dockerAuthentication) -and $SetupParameters.dockerAuthentication -ieq "NavUserPassword") {
+            $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName "SA"
+            Run-NavIdeCommand -Command $command `
+                -SetupParameters $SetupParameters `
+                -BranchSettings $BranchSettings `
+                -LogFile $logFile `
+                -ErrText "Error while exporting $Filter" `
+                -Verbose:$VerbosePreference `
+                -Username $DockerCredentials.UserName `
+                -Password [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
+        } else {
+            Run-NavIdeCommand -Command $command `
+              -SetupParameters $SetupParameters `
+              -BranchSettings $BranchSettings `
+              -LogFile $logFile `
+              -ErrText "Error while exporting $Filter" `
+              -Verbose:$VerbosePreference
+        }
     }
     catch
     {
