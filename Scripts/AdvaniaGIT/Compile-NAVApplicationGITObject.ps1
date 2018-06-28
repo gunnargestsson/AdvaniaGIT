@@ -29,7 +29,7 @@
                     -ErrText "Error while importing $file" `
                     -Verbose:$VerbosePreference `
                     -Username $DockerCredentials.UserName `
-                    -Password [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
+                    -Password ([Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password)))
     } else {
         Run-NavIdeCommand -SetupParameters $SetupParameters `
                     -BranchSettings $BranchSettings `
