@@ -25,12 +25,24 @@
     }
     try
     {
-        Run-NavIdeCommand -SetupParameters $SetupParameters `
-                            -BranchSettings $BranchSettings `
-                            -Command $command `
-                            -LogFile $logFile `
-                            -ErrText "Error while importing from $(Split-Path $Path)" `
-                            -Verbose:$VerbosePreference
+        if (![String]::IsNullOrEmpty($SetupParameters.dockerAuthentication) -and $SetupParameters.dockerAuthentication -ieq "NavUserPassword") {
+            $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName "SA"
+            Run-NavIdeCommand -Command $command `
+                -SetupParameters $SetupParameters `
+                -BranchSettings $BranchSettings `
+                -LogFile $logFile `
+                -ErrText "Error while importing from $(Split-Path $Path)" `
+                -Verbose:$VerbosePreference `
+                -Username $DockerCredentials.UserName `
+                -Password ([Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password)))
+        } else {
+            Run-NavIdeCommand -SetupParameters $SetupParameters `
+                -BranchSettings $BranchSettings `
+                -Command $command `
+                -LogFile $logFile `
+                -ErrText "Error while importing from $(Split-Path $Path)" `
+                -Verbose:$VerbosePreference
+        }
     }
     catch
     {

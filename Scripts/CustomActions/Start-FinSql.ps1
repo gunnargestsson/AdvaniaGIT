@@ -18,6 +18,17 @@ if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 12) {
   $params += ",generatesymbolreference=1"
 }
 
+if ([String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
+    $params += ",ntauthentication=1"
+} else {
+    switch ($SetupParameters.dockerAuthentication)
+    {
+        "NavUserPassword" { $params += ",ntauthentication=0" }
+        default {$params += ",ntauthentication=1"}
+    }
+}
+
+
 Write-Host "Running: `"$finsqlexe`" $params" -ForegroundColor Green
 Start-Process -FilePath $finsqlexe -ArgumentList $params 
 
