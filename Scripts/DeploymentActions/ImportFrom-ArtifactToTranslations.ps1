@@ -6,9 +6,10 @@ if (!(Test-Path -Path $WorkFolder)) {New-Item -Path $WorkFolder -ItemType Direct
 Write-Host "Connecting to $($DeploymentSettings.instanceServer)..."
 $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentSettings.instanceServer -SetupPath $WorkFolder
 
-if (Test-Path -Path (Join-Path $workFolder "*.txt")) {
-    Write-Host "Uploading Translations Artifacts to remote server as Translations.zip..."
-    Compress-Archive -Path (Join-Path (Get-Location).Path "*.txt") -DestinationPath (Join-Path $WorkFolder 'Translations.zip') -Force
+
+if (Get-ChildItem -Path (Get-Location).Path -Filter *.txt) {
+    Write-Host "Uploading Artifact Translations to remote server as Translations.zip..."
+    Compress-Archive -Path (Join-Path (Get-Location).Path *.txt) -DestinationPath (Join-Path $WorkFolder 'Translations.zip') -Force
     Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder 'Translations.zip') -DestinationFile (Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-Translations.zip") 
     Remove-Item -Path (Join-Path $WorkFolder 'Translations.zip')  -Force -ErrorAction SilentlyContinue
 
@@ -22,18 +23,19 @@ if (Test-Path -Path (Join-Path $workFolder "*.txt")) {
 
     Write-Host "Copying Translations Artifacts to service instance $($DeploymentSettings.instanceName)..."
     Invoke-Command -Session $Session -ScriptBlock {
-        param([string]$filePath)
+        param([string]$filePath,[string]$instanceName)
         Load-InstanceAdminTools -SetupParameters $SetupParameters
-        if (Get-NAVServerInstance -ServerInstance $DeploymentSettings.instanceName | Where-Object -Property Default -eq True) { 
+        if (Get-NAVServerInstance -ServerInstance $instanceName | Where-Object -Property Default -eq True) { 
             $TranslationsPath = Join-Path $SetupParameters.navServicePath "Translations"
         } else { 
-            $TranslationsPath = Join-Path $SetupParameters.navServicePath "Instances\$($DeploymentSettings.instanceName)\Translations"
+            $TranslationsPath = Join-Path $SetupParameters.navServicePath "Instances\${instanceName}\Translations"
         }
-
+        Write-Host "Copying translation from ${filePath} to ${TranslationsPath}..."
         Copy-Item -Path (Join-Path $filePath "*.txt") -Destination $TranslationsPath -Force
         Remove-Item -Path (Join-Path $filePath "*.txt")  -Force -ErrorAction SilentlyContinue
-        Set-NAVServerInstance -ServerInstance $DeploymentSettings.instanceName -Restart
-    } -ArgumentList (Join-Path $WorkFolder $($DeploymentSettings.instanceName))
+        Set-NAVServerInstance -ServerInstance $instanceName -Restart
+        Get-NAVTenant -ServerInstance $instanceName | Sync-NAVTenant -Mode Sync -Force
+    } -ArgumentList (Join-Path $WorkFolder $($DeploymentSettings.instanceName)), $DeploymentSettings.instanceName
 
     Write-Host "Translations Import complete..."
 }
