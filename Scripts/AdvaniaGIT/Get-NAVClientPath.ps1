@@ -4,11 +4,15 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SetupParameters
     )
-    $versionPath = (Join-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") $SetupParameters.navVersion) "Roletailored Client")
-    if (Test-Path $versionPath) {
-        return $versionPath
+
+    $versionPaths = (Join-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") $SetupParameters.navVersion) "Roletailored Client"),
+                    (Join-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") $SetupParameters.mainVersion) "Roletailored Client"),
+                    (Get-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") "*\Roletailored Client").FullName)
+    foreach ($versionPath in $versionPaths) {        
+        if (Test-Path $versionPath) {
+            return $versionPath
+        }
     }
-    else {      
-        return (Join-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") $SetupParameters.mainVersion) "Roletailored Client")
-    }
+    Write-Error "NAV Client Path not found!"
+    thow
 }

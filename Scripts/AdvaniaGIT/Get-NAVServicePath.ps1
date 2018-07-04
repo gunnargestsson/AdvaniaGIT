@@ -4,11 +4,15 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SetupParameters
     )
-    $versionPath = (Join-Path (Join-Path (Join-Path ${env:ProgramFiles} "Microsoft Dynamics NAV") $SetupParameters.navVersion) "Service")
-    if (Test-Path $versionPath) {
-        return $versionPath
+    $versionPaths = (Join-Path (Join-Path (Join-Path ${env:ProgramFiles} "Microsoft Dynamics NAV") $SetupParameters.navVersion) "Service"),
+                    (Join-Path (Join-Path (Join-Path ${env:ProgramFiles} "Microsoft Dynamics NAV") $SetupParameters.mainVersion) "Service"),
+                    (Get-Path (Join-Path (Join-Path ${env:ProgramFiles} "Microsoft Dynamics NAV") "*\Service").FullName)
+    foreach ($versionPath in $versionPaths) {        
+        if (Test-Path $versionPath) {
+            return $versionPath
+        }
     }
-    else {      
-        return (Join-Path (Join-Path (Join-Path ${env:ProgramFiles} "Microsoft Dynamics NAV") $SetupParameters.mainVersion) "Service")
-    }
+    Write-Error "NAV Service Path not found!"
+    thow
+
 }
