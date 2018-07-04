@@ -34,7 +34,6 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.txt) {
         Copy-Item -Path (Join-Path $filePath "*.txt") -Destination $TranslationsPath -Force
         Remove-Item -Path (Join-Path $filePath "*.txt")  -Force -ErrorAction SilentlyContinue
         Set-NAVServerInstance -ServerInstance $instanceName -Restart
-        Get-NAVTenant -ServerInstance $instanceName | Sync-NAVTenant -Mode Sync -Force
     } -ArgumentList (Join-Path $WorkFolder $($DeploymentSettings.instanceName)), $DeploymentSettings.instanceName
 
     Write-Host "Translations Import complete..."
