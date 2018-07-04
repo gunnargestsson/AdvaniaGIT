@@ -13,6 +13,5 @@
             return $versionPath
         }
     }
-    Write-Error "NAV Client Path not found!"
-    thow
+    Write-Verbose "Installed NAV Client Path not found!"    
 }

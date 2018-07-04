@@ -12,7 +12,5 @@
             return $versionPath
         }
     }
-    Write-Error "NAV Service Path not found!"
-    thow
-
+    Write-Verbose "Installed NAV Service Path not found!"
 }
