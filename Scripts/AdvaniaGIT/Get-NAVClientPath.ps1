@@ -9,12 +9,10 @@
 
     $versionPaths = (Join-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") $SetupParameters.navVersion) "Roletailored Client"),
                     (Join-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") $SetupParameters.mainVersion) "Roletailored Client"),
-                    (Get-Item (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") "*\Roletailored Client").FullName)
+                    (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") "*\Roletailored Client")
     foreach ($versionPath in $versionPaths) {
-        if (![String]::IsNullOrEmpty($versionPath)) {
-            if (Test-Path $versionPath) {
-                return $versionPath
-            }
+        if (Test-Path $versionPath) {
+            return (Get-Item -Path $versionPath).FullName
         }
     }
     if ($ErrorIfNotFound) {
