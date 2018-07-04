@@ -6,7 +6,7 @@
     )
     $versionPaths = (Join-Path (Join-Path (Join-Path ${env:ProgramFiles} "Microsoft Dynamics NAV") $SetupParameters.navVersion) "Service"),
                     (Join-Path (Join-Path (Join-Path ${env:ProgramFiles} "Microsoft Dynamics NAV") $SetupParameters.mainVersion) "Service"),
-                    (Get-Path (Join-Path (Join-Path ${env:ProgramFiles} "Microsoft Dynamics NAV") "*\Service").FullName)
+                    (Get-Item (Join-Path (Join-Path ${env:ProgramFiles} "Microsoft Dynamics NAV") "*\Service").FullName)
     foreach ($versionPath in $versionPaths) {        
         if (Test-Path $versionPath) {
             return $versionPath
