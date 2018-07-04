@@ -32,9 +32,6 @@ foreach($objectType in $objectTypes) {
     Receive-Job -Job $jobs -Wait
 }
 
-Load-InstanceAdminTools -SetupParameters $SetupParameters
-Get-NAVTenant $BranchSettings.instanceName | Sync-NAVTenant -Force -Mode forceSync
-
 foreach ($job in $jobs.ChildJobs) {
     [string]$Error = $job.Error
     foreach ($line in $Error.Split("`n")) {
