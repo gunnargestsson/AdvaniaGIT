@@ -11,7 +11,7 @@
                     (Join-Path (Join-Path ${env:ProgramFiles} "Microsoft Dynamics NAV") "*\Service")
     foreach ($versionPath in $versionPaths) {
         if (Test-Path $versionPath) {
-            return $versionPath
+            return (Get-Item -Path $versionPath).FullName
         }
     }
     if ($ErrorIfNotFound) {
