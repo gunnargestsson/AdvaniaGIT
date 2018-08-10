@@ -30,5 +30,6 @@
   "targetPlatform": "DynamicsNAV",
   "VSCodePath": "AL",
   "NewSyntaxPrefix": "NewSyntax",
-  "filesEncoding": "cp850"
+  "filesEncoding": "cp850",
+  "skipDeleteCheck": "false"
 }

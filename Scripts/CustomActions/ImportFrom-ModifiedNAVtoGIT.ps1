@@ -16,6 +16,13 @@ Remove-Item -Path $ExportPath -Force -ErrorAction SilentlyContinue
 
 Export-ModifiedNAVTxtFromApplication -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $ExportPath
 Set-NAVApplicationObjectProperty -TargetPath $ExportPath -ModifiedProperty No
+
+if ($SetupParameters.objectProperties -eq "false") {
+    Set-NAVApplicationObjectProperty -TargetPath $ExportPath `
+                -VersionListProperty "" `
+                -DateTimeProperty "" 
+}
+
 if ($SetupParameters.datetimeCulture -gt "" -and $SetupParameters.datetimeCulture -ne (Get-Culture).Name) {
     Write-Host "Converting Date and Time properties from $((Get-Culture).Name) to $($SetupParameters.datetimeCulture)..."
     $TempObjectPath = Join-Path $SetupParameters.LogPath Convert
