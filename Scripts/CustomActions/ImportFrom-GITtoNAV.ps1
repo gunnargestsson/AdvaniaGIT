@@ -19,11 +19,18 @@ if ($lastNAVCommitId -gt '') {
 } elseif ($SetupParameters.objectProperties -eq "false") {
     & (Join-Path $PSScriptRoot 'Export-GITtoSource.ps1')
     Write-Host "Importing All objects..."
-    $command = "UPDATE [dbo].[Object] SET [Version List] = '#DELETED' WHERE [ID] < 2000000004"
-    Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
+    if (!$SetupParameters.skipDeleteCheck) {
+        Write-Host "Marking all object as deleted..."
+        $command = "UPDATE [dbo].[Object] SET [Version List] = '#DELETED' WHERE [ID] < 2000000004"
+        Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
+    }
     Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path (Join-Path $SetupParameters.WorkFolder "Source.txt") -ImportAction Overwrite -SynchronizeSchemaChanges Force 
 } else {
-    Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $ObjectsPath -MarkToDelete
+    if ($SetupParameters.skipDeleteCheck) {
+        Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $ObjectsPath -SkipDeleteCheck
+    } else {
+        Update-NAVApplicationFromTxt -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $ObjectsPath -MarkToDelete
+    }
 }    
 Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 Import-PermissionSets -SetupParameters $SetupParameters -BranchSettings $BranchSettings
