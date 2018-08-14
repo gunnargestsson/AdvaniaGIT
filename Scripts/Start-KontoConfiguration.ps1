@@ -10,7 +10,7 @@ Import-Module AzureAD
    
 # Get Environment Settings
 $SetupParameters = Get-GITSettings
-$RemoteConfig = Get-NAVRemoteConfig
+$RemoteConfig = Get-NAVRemoteConfig -Initial
 
 do {
     # Start Menu

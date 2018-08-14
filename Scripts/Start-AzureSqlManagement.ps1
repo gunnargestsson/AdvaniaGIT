@@ -7,7 +7,7 @@ Import-Module AzureRM
 
 # Get Environment Settings
 $SetupParameters = Get-GITSettings
-$RemoteConfig = Get-NAVRemoteConfig
+$RemoteConfig = Get-NAVRemoteConfig -Initial
 
 $DBAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
 if ($DBAdmin.UserName -gt "" -and $DBAdmin.Password -gt "") {
