@@ -8,7 +8,7 @@ Import-Module AzureAD
    
 # Get Environment Settings
 $SetupParameters = Get-GITSettings
-$RemoteConfig = Get-NAVRemoteConfig
+$RemoteConfig = Get-NAVRemoteConfig -Initial
 
 $VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
 if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
