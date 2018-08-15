@@ -23,7 +23,11 @@ if (!$Credential.UserName -or !$Credential.Password) {
     break
 }
 
-$VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
+if ([String]::IsNullOrEmpty($RemoteConfig.DBAdminPasswordID)) {
+    $VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
+} else {
+    $VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBAdminPasswordID
+}
 if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
     $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 } else {
