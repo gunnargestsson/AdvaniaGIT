@@ -1,8 +1,8 @@
 ﻿# Script made to convert the LS database to enable for source control (remove ndf file).
 # Gunnar Gestsson, 2017.
 # Update these two lines
-$version = '90'
-$backupFilePath = 'C:\NAVManagementWorkFolder\BACKUP\w1-ls-nav-9-00-10-release.bak'
+$version = '110'
+$backupFilePath = 'C:\AdvaniaGIT\BACKUP\FastLane2018.bak'
 
 # Import all needed modules
 Get-Module -Name AdvaniaGIT | Remove-Module

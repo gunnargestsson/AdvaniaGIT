@@ -7,7 +7,7 @@
         [PSObject]$SetupParameters
     )
     if ($SetupParameters.defaultDatabaseInstance -gt "") {
-        $Server = $SetupParameters.defaultDatabaseServer + "\\" + $SetupParameters.defaultDatabaseInstance
+        $Server = $SetupParameters.defaultDatabaseServer + "\" + $SetupParameters.defaultDatabaseInstance
     } else {
         $Server = $SetupParameters.defaultDatabaseServer
     }

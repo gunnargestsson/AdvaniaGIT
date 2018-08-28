@@ -9,13 +9,19 @@
         [String]$DatabaseName
     )
 
+    $command = "SELECT DATABASEPROPERTYEX('master', 'Collation');"
+    $CollationResult = Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command $command
+    $selectedCollation = Read-Host -Prompt "Select Database Collation (default=$($CollationResult.Column1))" 
+    if ($selectedCollation -eq "") { $selectedCollation = $CollationResult.Column1 }
+
     Write-Host "Creating database $DatabaseName"
     $dbDataFile = Join-Path $SetupParameters.DatabasePath ($DatabaseName + "_data.mdf")
     $dbLogFile = Join-Path $SetupParameters.DatabasePath ($DatabaseName + "_log.ldf")
 
     $command = "CREATE DATABASE [" + $DatabaseName + "] CONTAINMENT = NONE  ON  PRIMARY "
     $command += "( NAME = N'$DatabaseName" + "_Data', FILENAME = N'$dbDataFile' , SIZE = 100MB , MAXSIZE = UNLIMITED, FILEGROWTH = 10%) "
-    $command += "LOG ON ( NAME = N'$DatabaseName" + "_Log', FILENAME = N'$dbLogFile' , SIZE = 100MB , MAXSIZE = 2048GB , FILEGROWTH = 10%);"
+    $command += "LOG ON ( NAME = N'$DatabaseName" + "_Log', FILENAME = N'$dbLogFile' , SIZE = 100MB , MAXSIZE = 2048GB , FILEGROWTH = 10%) "
+    $command += "COLLATE ${selectedCollation};"
     $CreateResult = Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command $command
 
     $command = "ALTER DATABASE [" + $DatabaseName + "] SET COMPATIBILITY_LEVEL = 130;"

@@ -15,27 +15,15 @@
         $tempDatabaseName = New-Guid
         New-NAVEmptyDatabase -SetupParameters $SetupParameters -DatabaseName $tempDatabaseName
         Load-InstanceAdminTools -SetupParameters $SetupParameters
-        if ($Setupparameters.defaultDatabaseInstance -gt "") {        
-            Import-NAVData `
-              -DatabaseServer "$($SetupParameters.defaultDatabaseServer)\$($SetupParameters.defaultDatabaseInstance)" `
-              -DatabaseName $tempDatabaseName `
-              -FilePath $SelectedNavdataFile.FullName `
-              -IncludeApplication `
-              -IncludeApplicationData `
-              -IncludeGlobalData `
-              -AllCompanies `
-              -Force
-        } else {
-            Import-NAVData `
-              -DatabaseServer $SetupParameters.defaultDatabaseServer `
-              -DatabaseName $tempDatabaseName `
-              -FilePath $SelectedNavdataFile.FullName `
-              -IncludeApplication `
-              -IncludeApplicationData `
-              -IncludeGlobalData `
-              -AllCompanies `
-              -Force
-        }
+        Import-NAVData `
+            -DatabaseServer (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) `
+            -DatabaseName $tempDatabaseName `
+            -FilePath $SelectedNavdataFile.FullName `
+            -IncludeApplication `
+            -IncludeApplicationData `
+            -IncludeGlobalData `
+            -AllCompanies `
+            -Force
         UnLoad-InstanceAdminTools
         $TempBackupFilePath = Join-Path $SetupParameters.LogPath "NAVBackup.bak"
         $command = "select @@version as [Version]"
