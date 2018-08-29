@@ -19,11 +19,13 @@
     $command = "DELETE FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Enabled Codeunit')]"
     Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
     if ($OnlyFailingTests) {
-        $command = "SELECT [Codeunit ID] FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Result')] WHERE [Result]>0"
+        $command = "SELECT DISTINCT [Codeunit ID] FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Result')] WHERE [Result]>0"
         Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | % {
           $command = "INSERT INTO [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Enabled Codeunit')] ([Test Codeunit ID]) VALUES($($_.'Codeunit ID'))"
           Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
         }
+        $command = "DELETE FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Result')] WHERE [Result]>0"
+        Write-Host "Retrying $(Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command) tests..."
     } elseif ($ForModifiedObjects) {
         $command = "SELECT DISTINCT [Test Codeunit ID] FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Coverage Map')],[Object] WHERE [Modified] = 1 AND [Type] = [Object Type] AND [ID] = [Object ID]"
         Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | % {

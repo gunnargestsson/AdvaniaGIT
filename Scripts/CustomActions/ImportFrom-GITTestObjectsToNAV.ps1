@@ -13,6 +13,7 @@ if (Test-Path $SetupParameters.testObjectsPath) {
         Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $testObjectFile.FullName -ImportAction Overwrite -SynchronizeSchemaChanges Force
     }
     Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    & (Join-Path $PSScriptRoot 'Start-ForceSync.ps1')
     UnLoad-ModelTools
 }
 

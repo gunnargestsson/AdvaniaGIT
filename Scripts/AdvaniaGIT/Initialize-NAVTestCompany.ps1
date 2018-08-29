@@ -15,7 +15,8 @@
         Set-NAVServerInstance -ServerInstance $BranchSettings.instanceName -Restart 
         Sync-NAVTenant -ServerInstance $BranchSettings.instanceName -Tenant default -Mode Sync -Force 
     }
-    if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 12) {
+    Write-Host "Executing upgrade codeunits for version $([int]$SetupParameters.navVersion.Split(".")[0])..."
+    if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
         Start-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Language is-IS -ContinueOnError -FunctionExecutionMode Parallel -Force -SkipAppVersionCheck
     } else {
         Start-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Language is-IS -ContinueOnError -FunctionExecutionMode Parallel -Force

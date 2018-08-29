@@ -9,14 +9,12 @@
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [String]$NavServerName = $env:COMPUTERNAME
     )
-    Write-Host "Compiling imported objects..."
-    Load-InstanceAdminTools -SetupParameters $SetupParameters
+    Write-Host "Compiling imported objects..."    
     Load-IdeTools -SetupParameters $SetupParameters
     if (![String]::IsNullOrEmpty($BranchSettings.dockerContainerName)) {
        $NavServerName = $BranchSettings.dockerContainerName
     }
 
-    Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databaseName -Filter Type=$objectType -NavServerName $NavServerName -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No
-    Get-NAVTenant $BranchSettings.instanceName | Sync-NAVTenant -Force -Mode forceSync
+    Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databaseName -Filter Type=$objectType -NavServerName $NavServerName -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No    
     UnLoad-IdeTools
 }

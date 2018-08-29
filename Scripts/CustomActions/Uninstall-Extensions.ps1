@@ -5,6 +5,7 @@ if ($BranchSettings.dockerContainerId -gt "") {
     Load-AppsManagementTools  -SetupParameters $Setupparameters
 
     Get-NAVTenant -Serverinstance $BranchSettings.instanceName | Get-NAVAppInfo | Uninstall-NAVApp
+    Get-NAVAppInfo -Serverinstance $BranchSettings.instanceName | Unpublish-NAVApp
      
     Write-Host "Extensions from server $($BranchSettings.instanceName)"
     UnLoad-AppsManagementTools

@@ -33,6 +33,7 @@ if ($lastNAVCommitId -gt '') {
     }
 }    
 Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+& (Join-Path $PSScriptRoot 'Start-ForceSync.ps1')
 Import-PermissionSets -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 $lastCommitIDd = Get-GitLastCommitId
 if ($lastCommitIDd -gt '') {
