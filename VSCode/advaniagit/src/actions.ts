@@ -19,9 +19,6 @@ export function BuildDeltasInGIT(Repository) {
 export function BuildDeltasFromSourceInGIT(Repository) {
     StartAction(Repository,`Build-DeltasFromSourceInGIT.ps1`);
 }
-export function BuildDeltasFromSource(Repository) {
-    StartAction(Repository,`Build-DeltasFromSource.ps1`);
-}
 export function BuildNavEnvironment(Repository) {
     StartAction(Repository,`Build-NavEnvironment.ps1`);
 }
@@ -262,6 +259,15 @@ export function UpdateLaunchJsonForCurrentBranch(Repository) {
 }
 export function InstallALExtensionFromDocker(Repository) {
     StartAction(Repository,`Install-ALExtensionFromDocker.ps1`);
+}
+export function DiscoverAllDockerContainers(Repository) {
+    StartAction(Repository,`Discover-AllDockerContainers.ps1`);
+}    
+export function StopAllDockerContainers(Repository) {
+    StartAction(Repository,`Stop-AllDockerContainers.ps1`);
+}
+export function StartAllDockerContainers(Repository) {
+    StartAction(Repository,`Start-AllDockerContainers.ps1`);
 }
 export function RemoveNAVObjectsProperties(Repository) {
     StartAction(Repository,`Remove-NAVObjectsProperties.ps1`);

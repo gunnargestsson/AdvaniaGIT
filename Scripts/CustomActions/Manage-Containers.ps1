@@ -49,17 +49,17 @@ do {
                                 ReStart-DockerContainer -BranchSettings $ContainerBranchSettings 
                             }
                         '2' {
-                                Write-Host "Killing Docker Container $($selectedContainer.Names)..."
-                                $dockerContainerName = docker.exe kill $($selectedContainer.Names)
+                                Write-Host "Stopping Docker Container $($selectedContainer.Names)..."
+                                $dockerContainerName = docker.exe stop $($selectedContainer.Names)
                             }
                         '3' {
                                 
-                                Write-Host "Killing and removing Docker Container $($selectedContainer.Names)..."
+                                Write-Host "Stopping and removing Docker Container $($selectedContainer.Names)..."
                                 if ($selectedContainer.Status.Contains("Up")) {
-                                    $dockerContainerName = docker.exe kill $($selectedContainer.Names)
+                                    $dockerContainerName = docker.exe stopp $($selectedContainer.Names)
                                 }
                                 $dockerContainerName = docker.exe rm $($selectedContainer.Names)
-                                Edit-DockerHostRegiststration -RemoveHostName $selectedContainer.Names
+                                Edit-DockerHostRegistration -RemoveHostName $selectedContainer.Names
                                 if ($selectedContainer.branchId -gt "") { 
                                     $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId
                                 } 

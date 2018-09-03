@@ -1,7 +1,7 @@
 ﻿$VMAdmin = Get-NAVPasswordStateUser -PasswordId $DeploymentSettings.NavServerPid
 $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 
-Write-Host "Connecting to $($DeploymentSettings.databaseServer)..."
+Write-Host "Connecting to $($DeploymentSettings.instanceServer)..."
 $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentSettings.instanceServer
 
 Invoke-Command -Session $Session -ScriptBlock {
@@ -18,13 +18,20 @@ Invoke-Command -Session $Session -ScriptBlock {
         }
         Write-Host "Starting Database Restore for $($BackupFile.FullName)..."
         Get-SQLCommandResult -Server localhost -Database master -Command "RESTORE DATABASE [${databaseToUpgrade}] FROM DISK = N'$($BackupFile.FullName)' WITH FILE = 1, NOUNLOAD" -CommandTimeout 0 | Out-Null
-        Write-Host "Adding Service User..."
-        $command = "CREATE USER [NT AUTHORITY\NETWORK SERVICE] FOR LOGIN [NT AUTHORITY\NETWORK SERVICE] WITH DEFAULT_SCHEMA=[dbo]"
+        $command = "SELECT count(*) as [Exists] FROM sys.database_principals where (type='S' or type = 'U') and name = 'NT AUTHORITY\NETWORK SERVICE'"
         $result = Get-SQLCommandResult -Server localhost -Database $databaseToUpgrade -Command $command | Out-Null
-        $command = "ALTER ROLE [db_owner] ADD MEMBER [NT AUTHORITY\NETWORK SERVICE]" 
+        if ($result.Exists -eq 0) {
+            Write-Host "Adding Service User..."            
+            $command = "CREATE USER [NT AUTHORITY\NETWORK SERVICE] FOR LOGIN [NT AUTHORITY\NETWORK SERVICE] WITH DEFAULT_SCHEMA=[dbo]"
+            $result = Get-SQLCommandResult -Server localhost -Database $databaseToUpgrade -Command $command -ErrorAction SilentlyContinue
+            $command = "ALTER ROLE [db_owner] ADD MEMBER [NT AUTHORITY\NETWORK SERVICE]" 
+            $result = Get-SQLCommandResult -Server localhost -Database $databaseToUpgrade -Command $command -ErrorAction SilentlyContinue
+        }
+        $command = "UPDATE [dbo].[`$ndo`$dbproperty] SET [license] = null"
         $result = Get-SQLCommandResult -Server localhost -Database $databaseToUpgrade -Command $command | Out-Null
-        $command = "UPDATE [dbo].[$ndo$dbproperty] SET [license] = null"
-        $result = Get-SQLCommandResult -Server localhost -Database $databaseToUpgrade -Command $command | Out-Null
+    } else {
+        Write-Host "Database backup not found.  Aborting!"
+        exit(1)
     }
 
     UnLoad-InstanceAdminTools

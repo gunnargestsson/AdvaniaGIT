@@ -12,6 +12,7 @@
     # Import all needed modules
     Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
     Import-Module RemoteManagement -DisableNameChecking | Out-Null
+    [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
     Push-Location 
     Set-Location $Repository

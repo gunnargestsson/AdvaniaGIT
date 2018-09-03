@@ -79,3 +79,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.2.2]
 - Add new command to update the usage category for AL files based on the New Syntax Menu Suite delta file
+
+## [0.2.3]
+- Add new commands to stop, start and rediscover Docker Containers

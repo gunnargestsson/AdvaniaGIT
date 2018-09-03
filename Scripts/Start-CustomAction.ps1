@@ -20,6 +20,7 @@ $adminRole=[System.Security.Principal.WindowsBuiltInRole]::Administrator
  
 # Check to see if we are currently running "as Administrator"
 $IsInAdminMode = $myWindowsPrincipal.IsInRole($adminRole)
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 if ($InAdminMode -eq '$true' -or $InAdminMode -eq $true) {
     Write-Host "Starting Script in Admin Mode..."
@@ -114,12 +115,10 @@ else
     $env:WorkFolder = $SetupParameters.WorkFolder
     
     # Use NAV Container Helper if available
-    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
-        if (![Bool](Get-Module NAVContainerHelper)) {
-            if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
-                if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
-                Import-Module NAVContainerHelper -DisableNameChecking
-            }
+    if (![Bool](Get-Module NAVContainerHelper)) {
+        if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
+            if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
+            Import-Module NAVContainerHelper -DisableNameChecking
         }
     }
 

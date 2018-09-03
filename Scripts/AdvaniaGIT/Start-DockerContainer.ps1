@@ -81,7 +81,7 @@
         }
 
         $DockerContainerFriendlyName = "$($SetupParameters.projectName)               ".Substring(0,15).TrimEnd(" ") -replace '_','-'
-        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -enableSymbolLoading -alwaysPull -includeCSide
+        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -enableSymbolLoading -alwaysPull -includeCSide -restart no
         $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 
     } else {
         docker.exe pull $imageName
@@ -95,7 +95,7 @@
                     "--env username=$adminUsername",
                     "--env ExitOnError=N",
                     "--env ACCEPT_EULA=Y",
-                    "--restart always",
+                    "--restart no",
                     "--env locale=$((Get-Culture).Name)"
                     )    
 
@@ -178,7 +178,7 @@
     } else {
         $DockerContainerIpAddress = Get-DockerIPAddress -Session $Session
     }
-    Edit-DockerHostRegiststration -AddHostName $DockerContainerFriendlyName -AddIpAddress $DockerContainerIpAddress
+    Edit-DockerHostRegistration -AddHostName $DockerContainerFriendlyName -AddIpAddress $DockerContainerIpAddress
 
     $BranchSettings.databaseServer = $DockerContainerFriendlyName
     $BranchSettings.dockerContainerName = $DockerContainerFriendlyName

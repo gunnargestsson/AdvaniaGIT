@@ -1,4 +1,4 @@
-﻿Function Edit-DockerHostRegiststration
+﻿Function Edit-DockerHostRegistration
 {
     param(
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
@@ -23,15 +23,15 @@
     $newHostsContent = @()
     foreach ($hostsLine in $hostsContent) {
         if ($RemoveHostName -ne $null -and $RemoveHostName -gt "" -and $hostsLine -imatch $RemoveHostName) {
-            Write-Verbose "Removing ${hostsLine}..."
+            Write-Verbose "Removing ${hostsLine} from hosts..."
         } elseif ($hostsLine -gt "") {
             $newHostsContent += $hostsLine 
         }
     }
 
     
-    if ($AddHostName -ne $null -and $AddIpAddress -ne $null) {
-        Write-Verbose "Adding ${AddHostName}..."
+    if ($AddHostName -ne $null -and [bool]($AddIpAddress -as [ipaddress])) {
+        Write-Verbose "Adding ${AddHostName} to hosts..."
         $newHostsContent += "${AddIpAddress}    ${AddHostName}" + "`r`n"
     }
 
