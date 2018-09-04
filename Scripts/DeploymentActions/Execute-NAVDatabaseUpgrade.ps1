@@ -7,20 +7,6 @@ $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentS
 Write-Host "Upgrading NAV Database $($DeploymentSettings.databaseToUpgrade)..."
 Invoke-Command -Session $Session -ScriptBlock {
     param([string]$instanceName,[string]$databaseToUpgrade)
-    function OemConvert
-    {
-        [CmdletBinding()]
-        param
-        (
-            [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-            [string]$InputString
-        )
-        PROCESS
-        {
-            return ([System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::GetEncoding(850).GetBytes($InputString)))
-        }
-    }
-
     $databaseServer = "localhost"
 
     Load-InstanceAdminTools -SetupParameters $SetupParameters
@@ -48,10 +34,9 @@ Invoke-Command -Session $Session -ScriptBlock {
         Write-Host "Executing Data Upgrade..."        
         Start-NAVDataUpgrade -ServerInstance $instanceName -Tenant default -Language (Get-Culture).Name -FunctionExecutionMode Parallel -SkipCompanyInitialization -SkipAppVersionCheck -Force -ContinueOnError
         Get-NAVDataUpgrade -ServerInstance $instanceName -Tenant default -Progress -Interval 10        
-        #Get-NAVDataUpgrade -ServerInstance $instanceName -Tenant default -Detailed | Format-Table -Property CodeunitId, FunctionName, CompanyName, State, Error
+        Get-NAVDataUpgrade -ServerInstance $instanceName -Tenant default -Detailed | Format-Table -Property CodeunitId, FunctionName, CompanyName, State, Error
         foreach ($executionError in (Get-NAVDataUpgrade -ServerInstance $instanceName -Tenant default -Detailed | Where-Object -Property Error -GT "")) {
             Write-Host "Error in $($executionError.CodeunitId), function $($executionError.FunctionName):"
-            $executionError.Error = OemConvert $executionError.Error
             Write-Host $executionError.Error | Format-List
         }        
     } else {
