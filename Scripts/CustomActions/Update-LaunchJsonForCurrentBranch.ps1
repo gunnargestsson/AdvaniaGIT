@@ -7,6 +7,8 @@ if (!(Test-Path -Path (Split-Path $LaunchJsonPath -Parent))) {
 
 Update-NAVLaunchJson -SetupParameters $SetupParameters -BranchSettings $BranchSettings -LaunchJsonPath $LaunchJsonPath
 
-$LaunchJsonPath = Join-Path "$($SetupParameters.VSCodePath)$(Split-Path $SetupParameters.testObjectsPath -Leaf)" ".vscode\launch.json"
-Update-NAVLaunchJson -SetupParameters $SetupParameters -BranchSettings $BranchSettings -LaunchJsonPath $LaunchJsonPath
-
+$ALTestPath = Join-Path $SetupParameters.VSCodePath $(Split-Path $SetupParameters.testObjectsPath -Leaf)
+if (Test-Path -Path $ALTestPath) {
+    $LaunchJsonPath = Join-Path $ALTestPath ".vscode\launch.json"
+    Update-NAVLaunchJson -SetupParameters $SetupParameters -BranchSettings $BranchSettings -LaunchJsonPath $LaunchJsonPath
+}
