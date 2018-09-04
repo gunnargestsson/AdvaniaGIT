@@ -12,7 +12,7 @@ if ($SetupParameters.BuildMode) {
     $Path = (Join-Path $SetupParameters.workFolder 'Target.txt')
 }
 $command = "Command=ImportObjects`,ImportAction=Overwrite`,SynchronizeSchemaChanges=No`,File=`"$Path`""  
-if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 12) {
+if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
   $command += ",generatesymbolreference=1"
 }
                
