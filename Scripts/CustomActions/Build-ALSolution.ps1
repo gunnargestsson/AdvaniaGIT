@@ -27,11 +27,12 @@ if ($SetupParameters.BuildMode) {
     Write-Host "Using Compiler: " $ALCompilerPath
     $AlPackageOutPath = Join-Path $AlPackageOutParent $ExtensionName
     Write-Host "Using Output Folder: " $AlPackageOutPath
+    Write-Host "Using Source Folder: " $ALProjectFolder
     Set-Location -Path $ALProjectFolder
     & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath | Convert-ALCOutputToTFS
  
     if (-not (Test-Path $AlPackageOutPath)) {
         Write-Host "##vso[task.logissue type=error;sourcepath=$AlPackageOutPath;]No app file was generated!"
-        exit 1
+        throw        
     }    
 }

@@ -16,6 +16,9 @@ Invoke-RestMethod -Method Get -Uri ($appUrl) -OutFile (Join-Path $SetupParameter
 Write-Host "Downloading System from $sysUrl..."
 Invoke-RestMethod -Method Get -Uri ($sysUrl) -OutFile (Join-Path $SetupParameters.LogPath 'System.app') -UseDefaultCredentials
 
+if (!(Test-Path (Join-Path $SetupParameters.LogPath 'Application.app'))) {throw}
+if (!(Test-Path (Join-Path $SetupParameters.LogPath 'System.app'))) {throw}
+
 if ($SetupParameters.BuildMode) {
     $BranchWorkFolder = Join-Path $SetupParameters.WorkFolder $SetupParameters.branchId
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
