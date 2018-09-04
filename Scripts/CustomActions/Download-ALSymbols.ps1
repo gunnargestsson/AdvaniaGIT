@@ -7,9 +7,11 @@ if ($BranchSettings.dockerContainerName -eq "") {
     throw
 }
 
+$navVersion = "$(($SetupParameters.navVersion).Split(".")[0]).0.0.0"
+
 $baseUrl = "http://$($BranchSettings.dockerContainerName):$($BranchSettings.developerServicesPort)/$($BranchSettings.instanceName)/dev/packages"
-$appUrl = $baseUrl + "?publisher=Microsoft&appName=Application&versionText=$($SetupParameters.navVersion)"
-$sysUrl = $baseurl + "?publisher=Microsoft&appName=System&versionText=$($SetupParameters.navVersion)"
+$appUrl = $baseUrl + "?publisher=Microsoft&appName=Application&versionText=${navVersion}"
+$sysUrl = $baseurl + "?publisher=Microsoft&appName=System&versionText=${navVersion}"
 
 Write-Host "Downloading Application from $appUrl..."
 Invoke-RestMethod -Method Get -Uri ($appUrl) -OutFile (Join-Path $SetupParameters.LogPath 'Application.app') -UseDefaultCredentials
