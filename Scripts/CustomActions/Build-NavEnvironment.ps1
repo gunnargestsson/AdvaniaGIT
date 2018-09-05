@@ -96,10 +96,9 @@ if ($BranchSettings.dockerContainerName -gt "") {
         if ($SetupParameters.developerService -eq $true) {
             Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DeveloperServicesEnabled -KeyValue $true 
             Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DefaultClient -KeyValue 'Web'
+            Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName EnableSymbolLoadingAtServerStartup -KeyValue $true
             $BranchSettings.developerServicesPort = $DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='DeveloperServicesPort']").Attributes["value"].Value
-        }
-        if ($DefaultInstanceSettings.DocumentElement.appSettings.SelectSingleNode("add[@key='DeveloperServicesEnabled']")) {
-            Set-NAVServerConfiguration -ServerInstance $ServerInstance -KeyName DeveloperServicesEnabled -KeyValue $true
+        } else {
             $BranchSettings.developerServicesPort = ""
         }
         $BranchSettings.instanceName = $ServerInstance
