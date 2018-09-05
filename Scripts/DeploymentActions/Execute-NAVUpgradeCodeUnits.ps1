@@ -9,7 +9,6 @@ Invoke-Command -Session $Session -ScriptBlock {
 
     Load-InstanceAdminTools -SetupParameters $SetupParameters
     Write-Host "Executing upgrade codeunits for instance ${instanceName} version $($SetupParameters.navVersion) ..."
-    Set-NAVServerInstance -ServerInstance $instanceName -Restart
     if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
         Get-NAVTenant -ServerInstance $instanceName | Start-NAVDataUpgrade -Language (Get-Culture).Name -FunctionExecutionMode Parallel -SkipCompanyInitialization -Force -ContinueOnError -SkipAppVersionCheck -ErrorAction Stop 
     } else {
