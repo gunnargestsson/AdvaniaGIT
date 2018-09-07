@@ -15,7 +15,7 @@ if ($BranchSettings.instanceName -ne "") {
                 $dockerContainerName = docker.exe rm $($BranchSettings.dockerContainerName)
             }
         }
-        Edit-DockerHostRegiststration -RemoveHostName $BranchSettings.dockerContainerName 
+        Edit-DockerHostRegistration -RemoveHostName $BranchSettings.dockerContainerName 
         
         $DockerSettings = Get-DockerSettings 
         $DockerSettings.ClientFolders = $DockerSettings.ClientFolders | Where-Object -Property dockerContainerName -NE $BranchSettings.dockerContainerName 
