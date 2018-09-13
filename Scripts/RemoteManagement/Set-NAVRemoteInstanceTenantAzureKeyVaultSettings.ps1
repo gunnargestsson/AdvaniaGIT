@@ -17,7 +17,7 @@
         if ($ServerInstance.Multitenant -ieq "true") {
             Write-Host "Reconfiguring Tenants..."
 
-            $DbAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
+            $DbAdmin = Get-NAVUserPasswordObject -Usage "DBUserPasswordID"
             if ($DbAdmin.UserName -gt "" -and $DbAdmin.Password -gt "") {
                 $DatabaseCredential= New-Object System.Management.Automation.PSCredential($DbAdmin.UserName, (ConvertTo-SecureString $DbAdmin.Password -AsPlainText -Force))
             } else {

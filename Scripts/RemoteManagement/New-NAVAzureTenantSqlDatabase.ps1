@@ -40,7 +40,7 @@
         $Pool = Set-AzureRmSqlDatabase -DatabaseName $newDatabaseName -ResourceGroupName $AzureResourceGroup.ResourceGroupName -ServerName $SqlServer.ServerName -ElasticPoolName $SelectedElasticPool.ElasticPoolName 
     } else {
         Write-Host "Starting Database Creation (will take some time)..."
-        $Database = New-AzureRmSqlDatabase -DatabaseName $newDatabaseName -CollationName Icelandic_100_CS_AS -Edition Standard -ElasticPoolName $SelectedElasticPool.ElasticPoolName -ServerName $SqlServer.ServerName -ResourceGroupName $AzureResourceGroup.ResourceGroupName
+        $Database = New-AzureRmSqlDatabase -DatabaseName $newDatabaseName -CollationName Icelandic_100_CS_AS -ElasticPoolName $SelectedElasticPool.ElasticPoolName -ServerName $SqlServer.ServerName -ResourceGroupName $AzureResourceGroup.ResourceGroupName
     }
 
     try {

@@ -10,7 +10,7 @@ Import-Module AzureAD
 $SetupParameters = Get-GITSettings
 $RemoteConfig = Get-NAVRemoteConfig -Initial
 
-$VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
+$VMAdmin = Get-NAVUserPasswordObject -Usage "VMUserPasswordID"
 if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
     $Credential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 } else {
@@ -22,7 +22,7 @@ if (!$Credential.UserName -or !$Credential.Password) {
     break
 }
 
-$AzureRMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.AzureRMUserPasswordID
+$AzureRMAdmin = Get-NAVUserPasswordObject -Usage "AzureRMUserPasswordID"
 if ($AzureRMAdmin.UserName -gt "" -and $AzureRMAdmin.Password -gt "") {
     $AzureCredential = New-Object System.Management.Automation.PSCredential($AzureRMAdmin.UserName, (ConvertTo-SecureString $AzureRMAdmin.Password -AsPlainText -Force))
 } else {

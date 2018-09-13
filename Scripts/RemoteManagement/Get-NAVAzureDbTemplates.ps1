@@ -7,7 +7,7 @@
     )
 
     $RemoteConfig = Get-NAVRemoteConfig
-    $StorageAccountAccess = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DatabaseTemplateStoragePasswordID
+    $StorageAccountAccess = Get-NAVUserPasswordObject -Usage "DatabaseTemplateStoragePasswordID"
     $storageAccount = Get-AzureRmStorageAccount -ResourceGroupName $AzureResourceGroup.ResourceGroupName -Name $StorageAccountAccess.UserName
     $storageAccountContext = New-AzureStorageContext -StorageAccountName $StorageAccountAccess.UserName -StorageAccountKey $StorageAccountAccess.Password
     $storageContainers = Get-AzureStorageContainer -Context $storageAccountContext 
