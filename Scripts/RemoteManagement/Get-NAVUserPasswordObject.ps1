@@ -6,7 +6,7 @@
     $RemoteConfig = Get-NAVRemoteConfig
     if ([bool]($RemoteConfig.PSObject.Properties.name -match $Usage)) {
         $PasswordId = $RemoteConfig.$Usage
-        $Response = Get-NAVPasswordStateNAVUser -PasswordId $PasswordId
+        $Response = Get-NAVPasswordStateUser -PasswordId $PasswordId
     } else {
         $Response = New-NAVAuthenticationDialog -Usage $Usage   
     }
