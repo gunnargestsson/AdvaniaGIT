@@ -21,6 +21,13 @@
       "webClientPort": "8081",
       "helpServer": "2018help.navleiga.is",
       "helpServerPort": "80"
+    },
+    {
+      "mainVersion": "130",
+      "navRelease": "2019",
+      "webClientPort": "8083",
+      "helpServer": "bc13help.navleiga.is",
+      "helpServerPort": "80"
     }
 	]
 }
