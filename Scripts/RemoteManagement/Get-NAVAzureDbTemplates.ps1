@@ -23,7 +23,7 @@
         $storageContainerNo ++
     }
 
-    if ($ContainerName -ne $null) {
+    if (!([string]::IsNullOrEmpty($ContainerName))) {
         return $menuItems | Where-Object -Property Name -EQ $ContainerName
     }
 
