@@ -43,6 +43,9 @@ export function ClearNAVCommentSection(Repository) {
 export function ConvertNAVNewSyntaxDeltasToAL(Repository) {
     StartAction(Repository,`Convert-NAVNewSyntaxDeltasToAL.ps1`);
 }
+export function ConvertNAVNewSyntaxObjectsToAL(Repository) {
+    StartAction(Repository,`Convert-NAVNewSyntaxObjectsToAL.ps1`);
+}
 export function CreateCodeDeltas(Repository) {
     StartAction(Repository,`Create-CodeDeltas.ps1`);
 }

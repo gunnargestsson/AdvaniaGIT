@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.2.3",
+    "version": "1.0.0",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -30,6 +30,7 @@
         "onCommand:advaniagit.CheckNAVEnvironment",
         "onCommand:advaniagit.ClearNAVCommentSection",
         "onCommand:advaniagit.ConvertNAVNewSyntaxDeltasToAL",
+        "onCommand:advaniagit.ConvertNAVNewSyntaxObjectsToAL",
         "onCommand:advaniagit.CreateCodeDeltas",
         "onCommand:advaniagit.CreateDeltas",
         "onCommand:advaniagit.CreateExtension",
@@ -372,6 +373,11 @@
             {
                 "title": "Convert New Syntax Deltas to AL",
                 "command": "advaniagit.ConvertNAVNewSyntaxDeltasToAL",
+                "category": "Advania"
+            },
+            {
+                "title": "Convert New Syntax Objects to AL",
+                "command": "advaniagit.ConvertNAVNewSyntaxObjectsToAL",
                 "category": "Advania"
             },
             {

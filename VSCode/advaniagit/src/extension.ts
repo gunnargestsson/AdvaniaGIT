@@ -32,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.CheckNAVEnvironment', () => {actions.CheckNAVEnvironment(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ClearNAVCommentSection', () => {actions.ClearNAVCommentSection(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ConvertNAVNewSyntaxDeltasToAL', () => {actions.ConvertNAVNewSyntaxDeltasToAL(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.ConvertNAVNewSyntaxObjectsToAL', () => {actions.ConvertNAVNewSyntaxObjectsToAL(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateCodeDeltas', () => {actions.CreateCodeDeltas(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateDeltas', () => {actions.CreateDeltas(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateExtension', () => {actions.CreateExtension(vscode.workspace.rootPath)}),
