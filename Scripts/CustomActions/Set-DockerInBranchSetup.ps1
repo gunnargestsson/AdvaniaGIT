@@ -15,6 +15,7 @@ if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 13) {
 }
 
 if ($SetupParameters.BuildMode) {
+    $SetupJson | Add-Member -MemberType NoteProperty -Name branchId -Value (New-Guid) -Force
     $SetupJson | Add-Member -MemberType NoteProperty -Name dockerFriendlyName -Value "$(Split-Path $SetupParameters.Repository -Leaf)               ".Substring(0,15).TrimEnd(" ")
 }
 
