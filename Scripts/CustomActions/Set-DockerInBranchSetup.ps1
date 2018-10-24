@@ -8,9 +8,9 @@ if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 13) {
  
 } else  {
     if ($($SetupJson.navSolution.SubString(0,2)) -eq "W1") {
-        $SetupJson | Add-Member -MemberType NoteProperty -Name dockerImage -Value "microsoft/dynamics-nav:$($SetupJson.navBuild)" -Force
+        $SetupJson | Add-Member -MemberType NoteProperty -Name dockerImage -Value "microsoft/dynamics-nav:$(($SetupJson.navBuild).substring(0,4))" -Force
     } else {
-        $SetupJson | Add-Member -MemberType NoteProperty -Name dockerImage -Value "microsoft/dynamics-nav:$($SetupJson.navBuild)-$($SetupJson.navSolution.SubString(0,2).ToLower())" -Force
+        $SetupJson | Add-Member -MemberType NoteProperty -Name dockerImage -Value "microsoft/dynamics-nav:$(($SetupJson.navBuild).substring(0,4))-$($SetupJson.navSolution.SubString(0,2).ToLower())" -Force
     }
 }
 

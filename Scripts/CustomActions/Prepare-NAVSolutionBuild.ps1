@@ -4,7 +4,7 @@ $GitSettings = Get-GITSettings
 $SolutionBranchSetup = Get-Content (Join-Path $Location (Split-Path $SetupParameters.setupPath -Leaf)) -Encoding UTF8 | Out-String | ConvertFrom-Json
 $sourcebranch = git.exe rev-parse --abbrev-ref HEAD 
 if ($SetupParameters.BuildMode) {
-    $SetupParameters.workFolder = Join-Path $SetupParameters.workFolder $SetupParameters.BranchId        
+    $SetupParameters.workFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
     New-Item $SetupParameters.workFolder -ItemType Directory -ErrorAction SilentlyContinue| Out-Null
 }
 
