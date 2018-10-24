@@ -86,3 +86,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [1.0.0]
 - Add new commands to convert New Syntax Objects to AL
 - Change version to be a released version 1
+
+## [1.0.1]
+- Add new commands to export modified objects to New Syntax

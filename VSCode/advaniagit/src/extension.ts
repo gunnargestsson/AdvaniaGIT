@@ -59,6 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.ImportRemoteNavFob', () => {actions.ImportRemoteNavFob(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportFromGITtoNAV', () => {actions.ImportFromGITtoNAV(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportFromModifiedNAVtoGIT', () => {actions.ImportFromModifiedNAVtoGIT(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.ImportFromModifiedNewSyntaxNAVtoGIT', () => {actions.ImportFromModifiedNewSyntaxNAVtoGIT(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportFromNAVNewSyntaxToGIT', () => {actions.ImportFromNAVNewSyntaxToGIT(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportFromNAVtoGIT', () => {actions.ImportFromNAVtoGIT(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportFromNAVtoTarget', () => {actions.ImportFromNAVtoTarget(vscode.workspace.rootPath)}),

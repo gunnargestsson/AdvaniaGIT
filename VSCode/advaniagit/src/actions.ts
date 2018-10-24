@@ -119,6 +119,9 @@ export function ImportFromGITtoNAV(Repository) {
 export function ImportFromModifiedNAVtoGIT(Repository) {
     StartAction(Repository,`ImportFrom-ModifiedNAVtoGIT.ps1`);
 }
+export function ImportFromModifiedNewSyntaxNAVtoGIT(Repository) {
+    StartAction(Repository,`ImportFrom-ModifiedNewSyntaxNAVtoGIT.ps1`);
+}
 export function ImportFromNAVNewSyntaxToGIT(Repository) {
     StartAction(Repository,`ImportFrom-NAVNewSyntaxToGIT.ps1`);
 }

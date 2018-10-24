@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -57,6 +57,7 @@
         "onCommand:advaniagit.ImportRemoteNavFob",
         "onCommand:advaniagit.ImportFromGITtoNAV",
         "onCommand:advaniagit.ImportFromModifiedNAVtoGIT",
+        "onCommand:advaniagit.ImportFromModifiedNewSyntaxNAVtoGIT",
         "onCommand:advaniagit.ImportFromNAVNewSyntaxToGIT",
         "onCommand:advaniagit.ImportFromNAVtoGIT",
         "onCommand:advaniagit.ImportFromNAVtoTarget",
@@ -176,6 +177,10 @@
                 "category": "Advania"
             },
             {
+                "title": "Export New Syntax NAV Modified objects to GIT",
+                "command": "advaniagit.ImportFromModifiedNewSyntaxNAVtoGIT",
+                "category": "Advania"
+            },            {
                 "title": "Export NAV objects to GIT",
                 "command": "advaniagit.ImportFromNAVtoGIT",
                 "category": "Advania"
