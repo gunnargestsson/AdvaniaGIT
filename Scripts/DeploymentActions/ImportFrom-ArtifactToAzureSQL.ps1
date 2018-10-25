@@ -67,9 +67,10 @@ foreach ($ObjectsFile in $ObjectsFiles) {
 }
 
 Invoke-Command -Session $Session -ScriptBlock {
+    param([string]$username,[string]$password)
     if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
         Write-Host "Generating symbol references..."
-        $logFile = Join-Path $SetupPatameters.LogPath "generatesymbolreference.log"
+        $logFile = Join-Path $env:TEMP "generatesymbolreference.log"
         $command = "Command=generatesymbolreference" 
         Run-NavIdeCommand -SetupParameters $SetupParameters `
                         -BranchSettings $BranchSettings `
@@ -79,7 +80,7 @@ Invoke-Command -Session $Session -ScriptBlock {
                         -Password $password `
                         -StopOnError                   
     }
-}
+} -ArgumentList ($DbAdmin.Username,$DbAdmin.Password)
 
 
 
