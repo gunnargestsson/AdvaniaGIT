@@ -24,6 +24,32 @@ Invoke-Command -Session $Session -ScriptBlock {
     Update-BranchSettings -BranchSettings $BranchSettings
 } -ArgumentList ($DeploymentSettings.branchId, $DeploymentSettings.instanceName)
 
+Invoke-Command -Session $Session -ScriptBlock {
+    param([string]$filePath,[string]$instanceName)
+    Load-InstanceAdminTools -SetupParameters $SetupParameters
+    Load-InstanceAppTools -SetupParameters $SetupParameters
+   
+    $InstallMatrix = @()
+    $Apps = Get-ChildItem -Path $filePath -Filter "*.app"
+    foreach ($App in $Apps) {
+        $AppToInstall = Get-NAVAppInfo -Path $App.FullName
+        $InstalledOnTenants = Get-NAVAppTenant -ServerInstance $instanceName -Id $AppToInstall.appId
+        $AppToInstall | Add-Member -MemberType NoteProperty -Name Tenants -Value $InstalledOnTenants
+        $AppToInstall | Add-Member -MemberType NoteProperty -Name Id -Value $AppToInstall.appId.Value
+        $InstallMatrix += $AppToInstall
+        # Uninstall
+        foreach ($tenant in $InstalledOnTenants) {
+            Write-Host "Uninstalling $($AppToInstall.Name) from Tenant $($tenant.Id)..."
+            Get-NAVAppInfo -ServerInstance $instanceName -Id $AppToInstall.appId | Uninstall-NAVApp -ServerInstance $instanceName -Tenant $tenant.Id -Force
+        }
+
+        Write-Host "Unpublishing $($AppToInstall.Name)..."
+        Get-NAVAppInfo -ServerInstance $instanceName -Id $AppToInstall.appId | Unpublish-NAVApp -ServerInstance $instanceName 
+    }
+    Set-Content -Path (Join-Path $filepath "App.json") -Value (ConvertTo-Json -InputObject $InstallMatrix)
+
+} -ArgumentList (Join-Path $WorkFolder $($DeploymentSettings.instanceName)), $DeploymentSettings.instanceName
+
 $ObjectsFiles = Get-ChildItem -Path (Get-Location).Path -Filter *.fob
 foreach ($ObjectsFile in $ObjectsFiles) {
     Write-Host "Uploading Artifact $($ObjectsFile.Name) to remote server..."
@@ -82,7 +108,29 @@ Invoke-Command -Session $Session -ScriptBlock {
     }
 } -ArgumentList ($DbAdmin.Username,$DbAdmin.Password)
 
+Invoke-Command -Session $Session -ScriptBlock {
+    param([string]$filePath,[string]$instanceName)
+    Load-InstanceAdminTools -SetupParameters $SetupParameters
+    Load-InstanceAppTools -SetupParameters $SetupParameters
+   
+    $InstallMatrix = Get-Content -Path (Join-Path $filepath "App.json") | ConvertFrom-Json    
+    $Apps = Get-ChildItem -Path $filePath -Filter "*.app"
+    foreach ($App in $Apps) {
+        $AppToInstall = Get-NAVAppInfo -Path $App.FullName
 
+        Write-Host "Publishing $($AppToInstall.Name)..."
+        Publish-NAVApp -ServerInstance $instanceName -Path $App.FullName -SkipVerification
+        
+        $InstalledOnTenants = ($InstallMatrix | Where-Object -Property Id -EQ $AppToInstall.appId).Tenants
+        foreach ($tenant in $InstalledOnTenants) {
+            Write-Host "Installing $($AppToInstall.Name) from Tenant $($tenant.Id)..."
+            Get-NAVAppInfo -ServerInstance $instanceName -Id $AppToInstall.appId | Install-NAVApp -ServerInstance $instanceName -Tenant $tenant.Id -Language (Get-Culture).Name
+            Get-NAVAppInfo -ServerInstance $instanceName -Id $AppToInstall.appId | Start-NAVAppDataUpgrade -ServerInstance $instanceName -Tenant $tenant.Id -Language (Get-Culture).Name 
+        }
+        Remove-Item -Path $App.FullName  -Force -ErrorAction SilentlyContinue
+
+    }
+} -ArgumentList (Join-Path $WorkFolder $($DeploymentSettings.instanceName)), $DeploymentSettings.instanceName
 
 
 $Session | Remove-PSSession
