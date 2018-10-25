@@ -67,7 +67,7 @@ foreach ($ObjectsFile in $ObjectsFiles) {
 Invoke-Command -Session $Session -ScriptBlock {
     if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
         Write-Host "Generating Symbol References..."
-        $logFile = "$($SetupPatameters.LogPath)\$((Get-Item $file).BaseName).log"             
+        $logFile = Join-Path $SetupPatameters.LogPath "generatesymbolreference.log"
         $command = "Command=generatesymbolreference" 
         Run-NavIdeCommand -SetupParameters $SetupParameters `
                         -BranchSettings $BranchSettings `
