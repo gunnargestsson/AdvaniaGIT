@@ -46,7 +46,9 @@ foreach ($ObjectsFile in $ObjectsFiles) {
         param([string]$file,[string]$username,[string]$password)
         $logFile = "$($SetupPatameters.LogPath)\$((Get-Item $file).BaseName).log"             
         $command = "Command=ImportObjects`,ImportAction=Overwrite`,SynchronizeSchemaChanges=No`,File=`"$file`"" 
-                    
+        if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
+          $command += ",generatesymbolreference=1"
+        }                    
         Run-NavIdeCommand -SetupParameters $SetupParameters `
                         -BranchSettings $BranchSettings `
                         -Command $command `
