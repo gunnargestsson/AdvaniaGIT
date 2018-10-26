@@ -124,8 +124,9 @@ Invoke-Command -Session $Session -ScriptBlock {
         $InstalledOnTenants = ($InstallMatrix | Where-Object -Property Id -EQ $AppToInstall.appId).Tenants
         foreach ($tenant in $InstalledOnTenants) {
             Write-Host "Installing $($AppToInstall.Name) from Tenant $($tenant.Id)..."
-            Get-NAVAppInfo -ServerInstance $instanceName -Id $AppToInstall.appId | Install-NAVApp -ServerInstance $instanceName -Tenant $tenant.Id -Language (Get-Culture).Name
-            Get-NAVAppInfo -ServerInstance $instanceName -Id $AppToInstall.appId | Start-NAVAppDataUpgrade -ServerInstance $instanceName -Tenant $tenant.Id -Language (Get-Culture).Name 
+            Get-NAVAppInfo -ServerInstance $instanceName -Id $AppToInstall.appId | Sync-NAVApp -Tenant $tenant.Id -Mode Add -ErrorAction SilentlyContinue
+            Get-NAVAppInfo -ServerInstance $instanceName -Id $AppToInstall.appId | Start-NAVAppDataUpgrade -ServerInstance $instanceName -Tenant $tenant.Id -Language (Get-Culture).Name -ErrorAction SilentlyContinue
+            #Get-NAVAppInfo -ServerInstance $instanceName -Id $AppToInstall.appId | Install-NAVApp -ServerInstance $instanceName -Tenant $tenant.Id -Language (Get-Culture).Name -ErrorAction SilentlyContinue
         }
         Remove-Item -Path $App.FullName  -Force -ErrorAction SilentlyContinue
 
