@@ -6,6 +6,6 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$BranchSettings
     )
-    $DefaultInstance = Get-NAVServerInstance | Where-Object -Property Version -Match ($SetupParameters.navVersion.Substring(0,2) + ".*.0") | Where-Object -Property Default -EQ True
+    $DefaultInstance = Get-NAVServerInstance | Where-Object -Property Version -Match ($SetupParameters.navVersion.Substring(0,2) + "\d.\d+.0") | Select-Object -First 1
     Return $($DefaultInstance.ServerInstance)
 }
