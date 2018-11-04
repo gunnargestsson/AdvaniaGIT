@@ -7,10 +7,13 @@ if ($BranchSettings.dockerContainerId -gt "") {
     Remove-NAVDatabaseLicense -BranchSettings $BranchSettings
     Create-NAVDatabaseBackup -SetupParameters $SetupParameters -BranchSettings $BranchSettings
     if ($SetupParameters.LicenseFilePath) {
+        Write-Host "Importing license file from $($SetupParameters.LicenseFilePath)..."
         if (Test-Path $SetupParameters.LicenseFilePath) {  
             Load-InstanceAdminTools -SetupParameters $SetupParameters
             Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFilePath
             UnLoad-InstanceAdminTools
         }
+    } else {
+        Write-Host "No license file defined..."
     }
 }
