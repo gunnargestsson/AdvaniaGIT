@@ -12,12 +12,12 @@ if ($BranchSettings.dockerContainerId -gt "") {
             Load-InstanceAdminTools -SetupParameters $SetupParameters
             Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFilePath
             UnLoad-InstanceAdminTools
-        } elseif (Test-Path "c:\run\my\license.flf") {
-            Write-Host "Importing license file from c:\run\my\license.flf..."
+        }      
+    } elseif (Test-Path "c:\run\my\license.flf") {
+            Write-Host "Importing license file from c:\run\my\license.flf... (container path)"
             Load-InstanceAdminTools -SetupParameters $SetupParameters
             Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath "c:\run\my\license.flf"
-            UnLoad-InstanceAdminTools
-        } 
+            UnLoad-InstanceAdminTools         
     } else {
         Write-Host "No license file defined..."
     }
