@@ -22,7 +22,7 @@ if (!(Test-Path (Join-Path $SetupParameters.LogPath 'Application.app'))) {throw}
 if (!(Test-Path (Join-Path $SetupParameters.LogPath 'System.app'))) {throw}
 
 if ($SetupParameters.BuildMode) {
-    $BranchWorkFolder = Join-Path $SetupParameters.WorkFolder $SetupParameters.branchId
+    $BranchWorkFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     Remove-Item -Path (Join-Path $BranchWorkFolder 'Symbols') -Force -Recurse -ErrorAction SilentlyContinue
     New-Item -Path (Join-Path $BranchWorkFolder 'Symbols') -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
