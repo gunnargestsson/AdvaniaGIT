@@ -3,7 +3,7 @@
 #
 
 if ($SetupParameters.BuildMode) {
-    $BranchWorkFolder = Join-Path $SetupParameters.WorkFolder $SetupParameters.branchId
+    $BranchWorkFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     New-Item -Path (Join-Path $BranchWorkFolder 'out') -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     
@@ -19,8 +19,11 @@ if ($SetupParameters.BuildMode) {
     if (![String]::IsNullOrEmpty($SetupParameters.buildId)) {
         $Version = $ExtensionAppJsonObject.Version.SubString(0,$ExtensionAppJsonObject.Version.LastIndexOf('.'))
         $ExtensionAppJsonObject.Version = $Version+'.' + $SetupParameters.buildId
+
+        $Version = $ExtensionAppJsonObject.dependencies[0].version.SubString(0,$ExtensionAppJsonObject.Version.LastIndexOf('.'))
+        $ExtensionAppJsonObject.dependencies[0].version = $Version+'.' + $SetupParameters.buildId
     }
-    $ExtensionName = (Clean-NAVFileName -FileName ($Publisher + '_' + $Name + '_' + $ExtensionAppJsonObject.Version + '.app')).Replace(" ","_")    
+    $ExtensionName = (Clean-NAVFileName -FileName ($Publisher + '_' + $Name + '_' + $ExtensionAppJsonObject.Version + '.app')).Replace(" ","_")
     $ExtensionAppJsonObject | ConvertTo-Json | set-content $ExtensionAppJsonFile
     Write-Host "Using Symbols Folder: " $ALPackageCachePath
     Write-Host "Using Compiler: " $ALCompilerPath
@@ -31,6 +34,6 @@ if ($SetupParameters.BuildMode) {
  
     if (-not (Test-Path $AlPackageOutPath)) {
         Write-Host "##vso[task.logissue type=error;sourcepath=$AlPackageOutPath;]No app file was generated!"
-        exit 1
+        throw
     }    
 }
