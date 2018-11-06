@@ -1,5 +1,5 @@
 ﻿if ($SetupParameters.BuildMode) {
-    $BranchWorkFolder = Join-Path $SetupParameters.WorkFolder $SetupParameters.branchId
+    $BranchWorkFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
     if (Test-Path -Path (Join-Path $SetupParameters.repository 'Artifacts')) {
         Remove-Item -Path (Join-Path $SetupParameters.repository 'Artifacts') -Recurse -Force
     }
