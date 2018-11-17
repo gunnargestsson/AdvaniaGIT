@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -108,6 +108,7 @@
         "onCommand:advaniagit.DeleteOldLogs",
         "onCommand:advaniagit.ImportFromAllGITtoNAV",
         "onCommand:advaniagit.CreateNewBranchId",
+        "onCommand:advaniagit.CreateNewAppId",
         "onCommand:advaniagit.NewGITBranch",
         "onCommand:advaniagit.SaveContainerCredentials",
         "onCommand:advaniagit.NewFilesEncodingSettings",
@@ -461,7 +462,12 @@
                 "category": "Advania"
             },
             {
-                "title": "Open Visual Studio Code in AL folder",
+                "title": "Update AppId and AppName to match repository name",
+                "command": "advaniagit.CreateNewAppId",
+                "category": "Advania"
+            },            
+            {
+                "title": "Add AL folders to current Workspace",
                 "command": "advaniagit.StartVSCode",
                 "category": "Advania"
             },

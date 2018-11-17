@@ -290,6 +290,9 @@ export function SaveContainerCredentials(Repository) {
 export function CreateNewBranchId(Repository) {
     StartAction(Repository,`Create-NewBranchId.ps1`);
 }
+export function CreateNewAppId(Repository) {
+    StartAction(Repository,`Create-NewAppId.ps1`);
+}
 export function ExportGITSourceToSource(Repository) {
     StartAction(Repository,`Export-GITSourceToSource.ps1`);
 }

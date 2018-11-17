@@ -112,6 +112,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.DeleteOldLogs', () => {actions.DeleteOldLogs(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportFromAllGITtoNAV', () => {actions.ImportFromAllGITtoNAV(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.CreateNewBranchId', () => {actions.CreateNewBranchId(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.CreateNewAppId', () => {actions.CreateNewAppId(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.SaveContainerCredentials', () => {actions.SaveContainerCredentials(vscode.workspace.rootPath)}),        
         vscode.commands.registerCommand('advaniagit.NewGITBranch', () => {actions.NewGITBranch(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.NewFilesEncodingSettings', () => {actions.NewFilesEncodingSettings(vscode.workspace.rootPath)}),

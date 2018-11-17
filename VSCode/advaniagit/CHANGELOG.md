@@ -89,3 +89,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.0.1]
 - Add new commands to export modified objects to New Syntax
+
+## [1.0.2]
+- Add new commands to update AL Application Id and Name for new Repositories
