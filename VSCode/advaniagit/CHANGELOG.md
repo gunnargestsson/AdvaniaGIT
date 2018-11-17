@@ -92,3 +92,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.0.2]
 - Add new commands to update AL Application Id and Name for new Repositories
+
+## [1.0.3]
+- Add new commands to import test libraries

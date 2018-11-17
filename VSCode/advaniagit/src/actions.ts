@@ -137,6 +137,9 @@ export function ImportFromTargetToGIT(Repository) {
 export function ImportFromTestObjectsToNAV(Repository) {
     StartAction(Repository,`ImportFrom-TestObjectsToNAV.ps1`);
 }
+export function ImportFromTestLibrariesToNAV(Repository) {
+    StartAction(Repository,`ImportFrom-StandardTestLibrariesToNAV.ps1`);
+}
 export function LoadALMenu(Repository) {
     StartAction(Repository,`Load-ALMenu.ps1`);
 }

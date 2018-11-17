@@ -65,6 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('advaniagit.ImportFromNAVtoTarget', () => {actions.ImportFromNAVtoTarget(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportFromTargetToGIT', () => {actions.ImportFromTargetToGIT(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.ImportFromTestObjectsToNAV', () => {actions.ImportFromTestObjectsToNAV(vscode.workspace.rootPath)}),
+        vscode.commands.registerCommand('advaniagit.ImportFromTestLibrariesToNAV', () => {actions.ImportFromTestLibrariesToNAV(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.LoadALMenu', () => {actions.LoadALMenu(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.LoadClientMenu', () => {actions.LoadClientMenu(vscode.workspace.rootPath)}),
         vscode.commands.registerCommand('advaniagit.LoadCodeMenu', () => {actions.LoadCodeMenu(vscode.workspace.rootPath)}),
