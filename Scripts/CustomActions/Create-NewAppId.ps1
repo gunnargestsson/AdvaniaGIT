@@ -19,7 +19,7 @@ if (Test-Path $appJsonPath) {
     Set-Content -Path $appJsonPath -Encoding UTF8 -Value (ConvertTo-Json -InputObject $appJson)
 }
 
-$appJsonPath = Join-Path "$($SetupParameters.VSCodePath)$(Split-Path $SetupParameters.testObjectsPath -Leaf)" "app.json"
+$appJsonPath = Join-Path $SetupParameters.VSCodeTestPath "app.json"
 if (Test-Path $appJsonPath) {
     $appJson = Get-Content -Path $appJsonPath -Encoding UTF8 | Out-String | ConvertFrom-Json
     $appJson.id = (New-Guid)
