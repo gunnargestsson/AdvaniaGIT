@@ -20,7 +20,6 @@ $adminRole=[System.Security.Principal.WindowsBuiltInRole]::Administrator
  
 # Check to see if we are currently running "as Administrator"
 $IsInAdminMode = $myWindowsPrincipal.IsInRole($adminRole)
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 if ($InAdminMode -eq '$true' -or $InAdminMode -eq $true) {
     Write-Host "Starting Script in Admin Mode..."
