@@ -19,7 +19,9 @@
             $LaunchSettings.configurations[0].server = "http://$($BranchSettings.dockerContainerName)"
         }
         $LaunchSettings.configurations[0].serverInstance = $BranchSettings.instanceName
-        $LaunchSettings.configurations[0].port = [int]$BranchSettings.developerServicesPort
+        if (![bool][String]::IsNullOrEmpty($LaunchSettings.configurations[0].port)) {
+            $LaunchSettings.configurations[0].port = [int]$BranchSettings.developerServicesPort
+        }
         if ([String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
             $LaunchSettings.configurations[0].authentication = "Windows"
         } else {

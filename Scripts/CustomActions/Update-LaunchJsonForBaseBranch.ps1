@@ -1,6 +1,5 @@
 ﻿$BaseSetupParameters = Get-BaseBranchSetupParameters -SetupParameters $SetupParameters
 $BaseBranchSettings = Get-BranchSettings -SetupParameters $BaseSetupParameters
-New-NAVAppJson -SetupParameters $SetupParameters 
 
 foreach ($ALPath in (Get-ALPaths -SetupParameters $SetupParameters)) {
     $LaunchJsonPath = Join-Path $ALPath.FullName ".vscode\launch.json"

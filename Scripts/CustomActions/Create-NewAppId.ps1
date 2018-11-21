@@ -45,4 +45,15 @@ if ([String]::IsNullOrEmpty($SetupParameters.ALProjectList)) {
         Set-Content -Path $appJsonPath -Encoding UTF8 -Value (ConvertTo-Json -InputObject $appJson)
         Move-Item -Path (Join-Path $SetupParameters.Repository "HelloWorld") -Destination (Join-Path $SetupParameters.Repository $appName)
     }
+}  else {
+    foreach ($ALPath in (Get-ALPaths -SetupParameters $SetupParameters)) {
+        $appJsonPath = Join-Path $ALPath.FullName "app.json"
+        if (Test-Path $appJsonPath) {
+            $appJson = Get-Content -Path $appJsonPath -Encoding UTF8 | Out-String | ConvertFrom-Json
+            if (![bool]($appJson.PSObject.Properties.name -match "id")) {
+                $appJson | Add-Member -MemberType NoteProperty -Name id -Value (New-Guid)
+                Set-Content -Path $appJsonPath -Encoding UTF8 -Value (ConvertTo-Json -InputObject $appJson)
+            }
+        }
+    }
 } 

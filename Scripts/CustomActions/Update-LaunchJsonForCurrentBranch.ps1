@@ -1,5 +1,3 @@
-New-NAVAppJson -SetupParameters $SetupParameters
-
 foreach ($ALPath in (Get-ALPaths -SetupParameters $SetupParameters)) {
     $LaunchJsonPath = Join-Path $ALPath.FullName ".vscode\launch.json"
     if (!(Test-Path -Path (Split-Path (Split-Path $LaunchJsonPath -Parent) -Parent))) {
