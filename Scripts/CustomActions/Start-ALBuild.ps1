@@ -1,7 +1,3 @@
-Write-Host Remove existing container
-& (Join-path $PSScriptRoot 'Remove-NavEnvironment.ps1')
-Write-Host Set unique branch id for build
-& (Join-path $PSScriptRoot 'Create-NewBranchId.ps1')
 Write-Host Build and Update Docker Container
 & (Join-path $PSScriptRoot 'Build-NavEnvironment.ps1')
 Write-Host Initialize Test Company
@@ -14,6 +10,8 @@ Write-Host Build AL Solution with Tests
 & (Join-path $PSScriptRoot 'Build-ALSolutions.ps1')
 Write-Host Install AL Extension
 & (Join-path $PSScriptRoot 'Install-ALExtensionsToDocker.ps1')
+Write-Host Import Test Libraries
+& (Join-path $PSScriptRoot 'ImportFrom-StandardTestLibrariesToNAV.ps1')
 Write-Host Execute AL Test Codeunits
 & (Join-path $PSScriptRoot 'Start-ALTestsExecution.ps1')
 Write-Host Save Test Results
