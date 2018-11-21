@@ -82,7 +82,7 @@
         }
 
         if ($SetupParameters.BuildMode) {
-            $DockerContainerFriendlyName = (New-Guid).ToString().Replace("-","").Substring(0,15)
+            $DockerContainerFriendlyName = "BC$((New-Guid).ToString().Replace('-','').Substring(0,13))"
         } else {
             if (![System.String]::IsNullOrEmpty($SetupParameters.dockerFriendlyName)) {
                 $DockerContainerFriendlyName = $SetupParameters.dockerFriendlyName
