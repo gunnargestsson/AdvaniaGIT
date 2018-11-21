@@ -35,6 +35,8 @@ if ($SetupParameters.BuildMode) {
         if (-not (Test-Path $AlPackageOutPath)) {
             Write-Host "##vso[task.logissue type=error;sourcepath=$AlPackageOutPath;]No app file was generated!"
             throw        
-        }
+        } else {
+            Copy-Item -Path $AlPackageOutPath -Destination $ALPackageCachePath
+        } 
     }    
 }
