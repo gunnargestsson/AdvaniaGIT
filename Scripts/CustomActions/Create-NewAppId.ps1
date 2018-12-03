@@ -31,7 +31,7 @@ if ([String]::IsNullOrEmpty($SetupParameters.ALProjectList)) {
     if (Test-Path $appJsonPath) {
         $appJson = Get-Content -Path $appJsonPath -Encoding UTF8 | Out-String | ConvertFrom-Json
         $appJson.id = (New-Guid)
-        $appJson.name = "${appName} Unit Tests"
+        $appJson.name = "${appName}.Test"
         $appJson.dependencies[0].appId = $appId
         $appJson.dependencies[0].name = $appName
         Set-Content -Path $appJsonPath -Encoding UTF8 -Value (ConvertTo-Json -InputObject $appJson)

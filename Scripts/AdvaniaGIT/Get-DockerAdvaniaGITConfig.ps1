@@ -12,7 +12,7 @@
         param([PSObject]$SetupParameters, [PSObject]$BranchSettings, [String]$GeoId, [String]$LocaleName )
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted 
         Import-Module AdvaniaGIT
-        $GITSettings = Get-GTISettings
+        $GITSettings = Get-GITSettings
         $BranchSettings = Get-BranchSettings -SetupParameters $GITSettings
         $DockerSettings = New-Object -TypeName PSObject
         $DockerSettings | Add-Member -MemberType NoteProperty -Name GITSettings -Value $GITSettings
