@@ -12,6 +12,7 @@ if ($SetupParameters.BuildMode) {
     $ALProjectFolder = $SetupParameters.VSCodePath
     $AlPackageOutParent = (Join-Path $BranchWorkFolder 'out')
     $ALPackageCachePath = (Join-Path $BranchWorkFolder 'Symbols')
+    $ALAssemblyProbingPath = (Join-Path $ALProjectFolder '.netpackages')
     $ALCompilerPath = (Join-Path $BranchWorkFolder 'vsix\extension\bin\alc.exe')
     $ExtensionAppJsonFile = Join-Path $ALProjectFolder 'app.json'
     $ExtensionAppJsonObject = Get-Content -Raw -Path $ExtensionAppJsonFile | ConvertFrom-Json
@@ -29,7 +30,7 @@ if ($SetupParameters.BuildMode) {
     Write-Host "Using Output Folder: " $AlPackageOutPath
     Write-Host "Using Source Folder: " $ALProjectFolder
     Set-Location -Path $ALProjectFolder
-    & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath 
+    & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath /assemblyProbingPaths:$ALAssemblyProbingPath
  
     if (-not (Test-Path $AlPackageOutPath)) {
         Write-Host "##vso[task.logissue type=error;sourcepath=$AlPackageOutPath;]No app file was generated!"

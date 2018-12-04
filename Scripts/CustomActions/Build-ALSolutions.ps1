@@ -15,6 +15,7 @@ if ($SetupParameters.BuildMode) {
     foreach ($ALPath in (Get-ALPaths -SetupParameters $SetupParameters)) {
 
         $ALProjectFolder = $ALPath.FullName
+        $ALAssemblyProbingPath = (Join-Path $ALProjectFolder '.netpackages')
         $ExtensionAppJsonFile = Join-Path $ALProjectFolder 'app.json'
         $ExtensionAppJsonObject = Get-Content -Raw -Path $ExtensionAppJsonFile | ConvertFrom-Json
         $Publisher = $ExtensionAppJsonObject.Publisher
@@ -31,7 +32,7 @@ if ($SetupParameters.BuildMode) {
         Write-Host "Using Output Folder: " $AlPackageOutPath
         Write-Host "Using Source Folder: " $ALProjectFolder
         Set-Location -Path $ALProjectFolder
-        & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath
+        & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath /assemblyProbingPaths:$ALAssemblyProbingPath
         if (-not (Test-Path $AlPackageOutPath)) {
             Write-Host "##vso[task.logissue type=error;sourcepath=$AlPackageOutPath;]No app file was generated!"
             throw        
