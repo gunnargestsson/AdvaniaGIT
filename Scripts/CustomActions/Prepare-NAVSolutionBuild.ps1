@@ -51,9 +51,9 @@ if ($SetupParameters.deltaBranchList) {
         $branchMergeFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $deltaBranch))
         New-Item $branchMergeFolder -ItemType Directory | Out-Null
         Write-Host Copying files from (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') to $branchMergeFolder 
-        Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') -Destination $branchMergeFolder -Force
-        Copy-NewItem -SourceFolder (Join-Path $BranchFolder $BranchSetupParameters.languagePath) -DestinationFolder (Join-Path $MergeFolder 'Languages')
-        Copy-NewItem -SourceFolder (Join-Path $BranchFolder $BranchSetupParameters.testObjectsPath) -DestinationFolder (Join-Path $MergeFolder 'Tests')
+        Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') -Destination $branchMergeFolder -Force -ErrorAction SilentlyContinue
+        Copy-NewItem -SourceFolder (Join-Path $BranchFolder $BranchSetupParameters.languagePath) -DestinationFolder (Join-Path $MergeFolder 'Languages') -ErrorAction SilentlyContinue
+        Copy-NewItem -SourceFolder (Join-Path $BranchFolder $BranchSetupParameters.testObjectsPath) -DestinationFolder (Join-Path $MergeFolder 'Tests') -ErrorAction SilentlyContinue
         $DeltaFolderIndexNo += 10
     }
 }
@@ -64,9 +64,9 @@ if (Test-Path -Path (Join-Path $SetupParameters.deltasPath '*.delta')) {
     $branchMergeFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $sourcebranch))
     New-Item $branchMergeFolder -ItemType Directory | Out-Null
     Write-Host Copying files from (Join-Path $SetupParameters.deltasPath '*.delta') to $branchMergeFolder 
-    Copy-Item -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchMergeFolder -Force
-    Copy-NewItem -SourceFolder $SetupParameters.languagePath -DestinationFolder (Join-Path $MergeFolder 'Languages')
-    Copy-NewItem -SourceFolder $SetupParameters.testObjectsPath -DestinationFolder (Join-Path $MergeFolder 'Tests') 
+    Copy-Item -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchMergeFolder -Force 
+    Copy-NewItem -SourceFolder $SetupParameters.languagePath -DestinationFolder (Join-Path $MergeFolder 'Languages') -ErrorAction SilentlyContinue
+    Copy-NewItem -SourceFolder $SetupParameters.testObjectsPath -DestinationFolder (Join-Path $MergeFolder 'Tests') -ErrorAction SilentlyContinue
     $DeltaFolderIndexNo += 10
 }
 
