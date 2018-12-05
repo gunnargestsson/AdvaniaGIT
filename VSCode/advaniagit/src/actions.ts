@@ -46,6 +46,9 @@ export function ConvertNAVNewSyntaxDeltasToAL(Repository) {
 export function ConvertNAVNewSyntaxObjectsToAL(Repository) {
     StartAction(Repository,`Convert-NAVNewSyntaxObjectsToAL.ps1`);
 }
+export function ConvertNAVNewSyntaxTestObjectsToAL(Repository) {
+    StartAction(Repository,`Convert-NAVNewSyntaxTestsToAL.ps1`);
+}
 export function CreateCodeDeltas(Repository) {
     StartAction(Repository,`Create-CodeDeltas.ps1`);
 }

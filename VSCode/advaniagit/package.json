@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -31,6 +31,7 @@
         "onCommand:advaniagit.ClearNAVCommentSection",
         "onCommand:advaniagit.ConvertNAVNewSyntaxDeltasToAL",
         "onCommand:advaniagit.ConvertNAVNewSyntaxObjectsToAL",
+        "onCommand:advaniagit.ConvertNAVNewSyntaxTestObjectsToAL",
         "onCommand:advaniagit.CreateCodeDeltas",
         "onCommand:advaniagit.CreateDeltas",
         "onCommand:advaniagit.CreateExtension",
@@ -387,6 +388,11 @@
                 "command": "advaniagit.ConvertNAVNewSyntaxObjectsToAL",
                 "category": "Advania"
             },
+            {
+                "title": "Convert New Syntax Test Objects to AL",
+                "command": "advaniagit.ConvertNAVNewSyntaxTestObjectsToAL",
+                "category": "Advania"
+            },                        
             {
                 "title": "Create Xlf Labels in current AL project (make sure that every file is saved)",
                 "command": "advaniagit.CreateXlfLabelsInALCode",

@@ -1,14 +1,14 @@
 if ($BranchSettings.dockerContainerId -gt "") { $SetupParameters.navIdePath = Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings }
 
-if (Test-Path $SetupParameters.NewSyntaxObjectsPath) {
+if (Test-Path $SetupParameters.NewSyntaxTestObjectsPath) {
     $Txt2AlPath = Join-Path $SetupParameters.navIdePath "Txt2Al.exe"
-    $ALObjectsPath = "$($SetupParameters.VSCodePath)$(Split-Path $SetupParameters.ObjectsPath -Leaf)"
+    $ALObjectsPath = "$($SetupParameters.VSCodePath)$(Split-Path $SetupParameters.testObjectsPath -Leaf)"
     $TempPath = Join-Path $SetupParameters.WorkFolder "Txt2ALConversion"
     if (Test-Path $Txt2AlPath) {
         New-Item -Path $ALObjectsPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
         New-Item -Path $TempPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
         
-        foreach ($CALFile in (Get-ChildItem -Path $SetupParameters.NewSyntaxObjectsPath -Filter "*.TXT")) {
+        foreach ($CALFile in (Get-ChildItem -Path $SetupParameters.NewSyntaxTestObjectsPath -Filter "*.TXT")) {
             Remove-Item -Path (Join-Path $TempPath "*.*") -Recurse -Force
             Copy-Item -Path $CALFile.FullName -Destination $TempPath
             $ObjectNo = ($CALFile.BaseName).substring(3,($CALFile.BaseName).length - 3)
@@ -23,5 +23,5 @@ if (Test-Path $SetupParameters.NewSyntaxObjectsPath) {
         Write-Host -ForegroundColor Red "Txt 2 AL conversion not supported in this version!"
     }
 } else {
-    Write-Host -ForegroundColor Red "New Syntax Objects folder must exits!"
+    Write-Host -ForegroundColor Red "New Syntax Test Objects folder must exits!"
 }    
