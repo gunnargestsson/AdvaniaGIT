@@ -31,7 +31,12 @@ if ($SetupParameters.BuildMode) {
     $AlPackageOutPath = Join-Path $AlPackageOutParent $ExtensionName
     Write-Host "Using Output Folder: " $AlPackageOutPath
     Set-Location -Path $ALProjectFolder
-    & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath /assemblyProbingPaths:$ALAssemblyProbingPath
+    if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 13) {
+        New-Item -Path $ALAssemblyProbingPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+        & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath /assemblyProbingPaths:$ALAssemblyProbingPath
+    } else {
+        & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath
+    }
  
     if (-not (Test-Path $AlPackageOutPath)) {
         Write-Host "##vso[task.logissue type=error;sourcepath=$AlPackageOutPath;]No app file was generated!"

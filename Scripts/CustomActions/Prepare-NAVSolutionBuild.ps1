@@ -70,8 +70,11 @@ if (Test-Path -Path (Join-Path $SetupParameters.deltasPath '*.delta')) {
     $DeltaFolderIndexNo += 10
 }
 
-Remove-Item -Path (Join-Path $SetupParameters.testObjectsPath "*.*") -Force
-Remove-Item -Path (Join-Path $SetupParameters.languagePath "*.*") -Force
+Remove-Item -Path (Join-Path $SetupParameters.testObjectsPath "*.*") -Force -ErrorAction SilentlyContinue
+New-Item -Path $SetupParameters.testObjectsPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+Remove-Item -Path (Join-Path $SetupParameters.languagePath "*.*") -Force -ErrorAction SilentlyContinue
+New-Item -Path $SetupParameters.languagePath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+
 Copy-Item -Path (Join-Path (Join-Path $MergeFolder 'Languages') '*.txt') -Destination $SetupParameters.languagePath -Force -ErrorAction SilentlyContinue
 Copy-Item -Path (Join-Path (Join-Path $MergeFolder 'Tests') '*.txt') -Destination $SetupParameters.testObjectsPath -Force -ErrorAction SilentlyContinue
 
