@@ -28,6 +28,7 @@ Invoke-Command -Session $Session -ScriptBlock {
     param([string]$filePath,[string]$instanceName)
     Load-InstanceAdminTools -SetupParameters $SetupParameters
     Load-InstanceAppTools -SetupParameters $SetupParameters
+    New-Item -Path $filePath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
    
     $InstallMatrix = @()
     $Apps = Get-ChildItem -Path $filePath -Filter "*.app"
