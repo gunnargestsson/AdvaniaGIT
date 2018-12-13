@@ -36,6 +36,13 @@ Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.testO
 Write-Host Update version information in build branch
 $SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name navVersion -Value $BranchSetup.navVersion -Force
 $SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name navBuild -Value $BranchSetup.navBuild -Force
+
+if ($SetupParameters.CUBuildMode) {
+    $dockerImage = $($SolutionBranchSetup.dockerImage).replace(($BranchSetup.navBuild).substring(0,4),$BranchSetup.navBuild)
+    Write-Host "Adding CU to Docker Image Name (${dockerImage})..."
+    $SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name dockerImage -Value $dockerImage -Force
+}
+
 Set-Content -Path (Join-Path $Location (Split-Path $SetupParameters.setupPath -Leaf)) -Encoding UTF8 -Value (ConvertTo-Json -InputObject $SolutionBranchSetup)
 
 # Clone the delta branches
