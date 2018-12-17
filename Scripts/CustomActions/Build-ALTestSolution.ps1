@@ -11,7 +11,7 @@ if ($SetupParameters.BuildMode) {
     $ALProjectFolder = $SetupParameters.VSCodeTestPath
     $AlPackageOutParent = (Join-Path $BranchWorkFolder 'out')
     $ALPackageCachePath = (Join-Path $BranchWorkFolder 'Symbols')
-    $ALAssemblyProbingPath = (Join-Path $ALProjectFolder '.netpackages')
+    $ALAssemblyProbingPath = Join-Path $ALProjectFolder '.netpackages'
     $ALCompilerPath = (Join-Path $BranchWorkFolder 'vsix\extension\bin\alc.exe')
     $ExtensionAppJsonFile = Join-Path $ALProjectFolder 'app.json'
     $ExtensionAppJsonObject = Get-Content -Raw -Path $ExtensionAppJsonFile | ConvertFrom-Json
@@ -33,7 +33,7 @@ if ($SetupParameters.BuildMode) {
     Set-Location -Path $ALProjectFolder
     if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 13) {
         New-Item -Path $ALAssemblyProbingPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-        & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath /assemblyProbingPaths:$ALAssemblyProbingPath
+        & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath /assemblyProbingPaths:$ALAssemblyProbingPath,$(Join-Path $env:windir 'Assembly')
     } else {
         & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath
     }

@@ -15,7 +15,7 @@ if ($SetupParameters.BuildMode) {
     foreach ($ALPath in (Get-ALPaths -SetupParameters $SetupParameters)) {
 
         $ALProjectFolder = $ALPath.FullName
-        $ALAssemblyProbingPath = (Join-Path $ALProjectFolder '.netpackages')
+        $ALAssemblyProbingPath = Join-Path $ALProjectFolder '.netpackages'
         $ExtensionAppJsonFile = Join-Path $ALProjectFolder 'app.json'
         $ExtensionAppJsonObject = Get-Content -Raw -Path $ExtensionAppJsonFile | ConvertFrom-Json
         $Publisher = $ExtensionAppJsonObject.Publisher
@@ -34,7 +34,7 @@ if ($SetupParameters.BuildMode) {
         Set-Location -Path $ALProjectFolder
         if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 13) {
             New-Item -Path $ALAssemblyProbingPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
-            & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath /assemblyProbingPaths:$ALAssemblyProbingPath
+            & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath /assemblyProbingPaths:$ALAssemblyProbingPath,$(Join-Path $env:windir 'Assembly')
         } else {
             & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath 
         }
