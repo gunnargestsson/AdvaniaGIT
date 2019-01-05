@@ -1,12 +1,8 @@
-﻿if ([String]::IsNullOrEmpty($SetupParameters.ALProjectList)) {
-    $ALSolutions = @()
-    $ALSolutions += Split-Path $SetupParameters.VSCodePath -Leaf
-} else {
-    $ALSolutions = $SetupParameters.ALProjectList
-}
+﻿$ALSolutions = Get-ALPaths -SetupParameters $SetupParameters
 
 foreach ($ALSolution in $ALSolutions) {
-    $TranslationFolder = Join-Path $SetupParameters.Repository "${ALSolution}\Translations"
+    Write-Host "Solution: $($ALSolution.BaseName)..."
+    $TranslationFolder = Join-Path $ALSolution.FullName "Translations"
     if (Test-Path $TranslationFolder) {
         $TranslationSource = Get-ChildItem -Path $TranslationFolder -Filter '*.g.xlf' -ErrorAction SilentlyContinue
         if ([string]::IsNullOrEmpty($TranslationSource)) {
