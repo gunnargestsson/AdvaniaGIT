@@ -134,5 +134,10 @@ Invoke-Command -Session $Session -ScriptBlock {
     }
 } -ArgumentList (Join-Path $WorkFolder $($DeploymentSettings.instanceName)), $DeploymentSettings.instanceName
 
+Write-Host "Syncronizing changes..."
+Invoke-Command -Session $Session -ScriptBlock {
+    Load-InstanceAdminTools -SetupParameters $SetupParameters
+    Get-NAVTenant -ServerInstance $BranchSettings.instanceName | Sync-NAVTenant -Mode ForceSync -Force
+}
 
 $Session | Remove-PSSession

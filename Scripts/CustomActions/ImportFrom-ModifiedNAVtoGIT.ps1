@@ -42,13 +42,9 @@ if ($SetupParameters.datetimeCulture -gt "" -and $SetupParameters.datetimeCultur
 }
 
 foreach ($file in (Get-ChildItem -Path $ExportTempPath -Filter *.TXT)) {
-    if (($file.BaseName).SubString(0,3) -eq "COD") {
-        $content = Get-Content -Path $file.FullName -Encoding Oem -Raw
-        if ($content.IndexOf("Subtype=Test;") -gt 0) {
-            Copy-Item -Path $file.FullName -Destination $SetupParameters.TestObjectsPath
-        } else {
-            Copy-Item -Path $file.FullName -Destination $SetupParameters.ObjectsPath
-        }
+    if (((Get-NAVApplicationObjectProperty -Source $file.FullName).VersionList).IndexOf(",Test") -gt 0) {
+        Write-Host "Found Test Object: $($file.BaseName)"
+        Copy-Item -Path $file.FullName -Destination $SetupParameters.TestObjectsPath
     } else {
         Copy-Item -Path $file.FullName -Destination $SetupParameters.ObjectsPath
     }
