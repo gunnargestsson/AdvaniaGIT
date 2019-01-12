@@ -43,9 +43,8 @@ foreach ($ObjectsFile in $ObjectsFiles) {
     Write-Host "Importing $($ObjectsFile.Name)..."
     Invoke-Command -Session $Session -ScriptBlock {
         param([string]$file)
-        $logFile = "$($SetupPatameters.LogPath)\$((Get-Item $file).BaseName).log"             
-        $command = "Command=ImportObjects`,ImportAction=Overwrite`,SynchronizeSchemaChanges=No`,File=`"$file`"" 
-                    
+        $logFile = "$($SetupPatameters.LogPath)\$((Get-Item $file).BaseName).log"
+        $command = "Command=ImportObjects`,ImportAction=Overwrite`,SynchronizeSchemaChanges=No`,File=`"$file`""                
         Run-NavIdeCommand -SetupParameters $SetupParameters `
                         -BranchSettings $BranchSettings `
                         -Command $command `
@@ -63,5 +62,20 @@ foreach ($ObjectsFile in $ObjectsFiles) {
 
     Write-Host "Import complete..."
 }
+
+# Generate Symbol References
+Invoke-Command -Session $Session -ScriptBlock {
+    if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
+        Write-Host "Generating Symbol References..."
+        $logFile = Join-Path $env:TEMP "generatesymbolreference.log"
+        $command = "Command=generatesymbolreference" 
+        Run-NavIdeCommand -SetupParameters $SetupParameters `
+                        -BranchSettings $BranchSettings `
+                        -Command $command `
+                        -LogFile $logFile `
+                        -StopOnError
+    }                        
+} 
+
 
 $Session | Remove-PSSession

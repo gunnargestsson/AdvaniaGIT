@@ -15,8 +15,14 @@ function Export-ModifiedNAVTxtFromApplication
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$BranchSettings,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [string]$ObjectsPath
+        [string]$ObjectsPath,
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Switch] $ExportWithNewSyntax
     )
     Write-Host -Object 'Exporting modified files...'
-    Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path $ObjectsPath -Filter 'Modified=1' 
+    if ($ExportWithNewSyntax) {
+        Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path $ObjectsPath -Filter 'Modified=1' -ExportWithNewSyntax
+    } else {
+        Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path $ObjectsPath -Filter 'Modified=1' 
+    }
 }

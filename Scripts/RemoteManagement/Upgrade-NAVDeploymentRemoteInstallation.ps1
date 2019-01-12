@@ -12,7 +12,7 @@
         $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
         
-        $DBAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
+        $DBAdmin = Get-NAVUserPasswordObject -Usage "DBUserPasswordID"
         if ($DBAdmin.UserName -gt "" -and $DBAdmin.Password -gt "") {
             $DBCredential = New-Object System.Management.Automation.PSCredential($DBAdmin.UserName, (ConvertTo-SecureString $DBAdmin.Password -AsPlainText -Force))
         } else {
@@ -26,7 +26,7 @@
             break
         }
 
-        $EncryptionAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.EncryptionKeyPasswordID
+        $EncryptionAdmin = Get-NAVUserPasswordObject -Usage "EncryptionKeyPasswordID"
         if ($EncryptionAdmin.Password -gt "") {
             $EncryptionKeyPassword = $EncryptionAdmin.Password
         } else {

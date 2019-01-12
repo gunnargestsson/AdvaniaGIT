@@ -10,7 +10,7 @@ if ($BranchSettings.dockerContainerName -eq "") {
 Copy-DockerALExtension -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 
 if ($SetupParameters.BuildMode) {
-    $BranchWorkFolder = Join-Path $SetupParameters.WorkFolder $SetupParameters.branchId
+    $BranchWorkFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     New-Item -Path (Join-Path $BranchWorkFolder 'vsix') -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     $vsixFile = (Get-ChildItem -Path $SetupParameters.LogPath -Filter "al*.vsix")[0]

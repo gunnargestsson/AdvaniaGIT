@@ -82,3 +82,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.2.3]
 - Add new commands to stop, start and rediscover Docker Containers
+
+## [1.0.0]
+- Add new commands to convert New Syntax Objects to AL
+- Change version to be a released version 1
+
+## [1.0.1]
+- Add new commands to export modified objects to New Syntax
+
+## [1.0.2]
+- Add new commands to update AL Application Id and Name for new Repositories
+
+## [1.0.3]
+- Add new commands to import test libraries
+
+## [1.0.4]
+- Add new commands to convert New Syntax Tests to AL

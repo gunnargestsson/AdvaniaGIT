@@ -43,6 +43,12 @@ export function ClearNAVCommentSection(Repository) {
 export function ConvertNAVNewSyntaxDeltasToAL(Repository) {
     StartAction(Repository,`Convert-NAVNewSyntaxDeltasToAL.ps1`);
 }
+export function ConvertNAVNewSyntaxObjectsToAL(Repository) {
+    StartAction(Repository,`Convert-NAVNewSyntaxObjectsToAL.ps1`);
+}
+export function ConvertNAVNewSyntaxTestObjectsToAL(Repository) {
+    StartAction(Repository,`Convert-NAVNewSyntaxTestsToAL.ps1`);
+}
 export function CreateCodeDeltas(Repository) {
     StartAction(Repository,`Create-CodeDeltas.ps1`);
 }
@@ -116,6 +122,9 @@ export function ImportFromGITtoNAV(Repository) {
 export function ImportFromModifiedNAVtoGIT(Repository) {
     StartAction(Repository,`ImportFrom-ModifiedNAVtoGIT.ps1`);
 }
+export function ImportFromModifiedNewSyntaxNAVtoGIT(Repository) {
+    StartAction(Repository,`ImportFrom-ModifiedNewSyntaxNAVtoGIT.ps1`);
+}
 export function ImportFromNAVNewSyntaxToGIT(Repository) {
     StartAction(Repository,`ImportFrom-NAVNewSyntaxToGIT.ps1`);
 }
@@ -130,6 +139,9 @@ export function ImportFromTargetToGIT(Repository) {
 }
 export function ImportFromTestObjectsToNAV(Repository) {
     StartAction(Repository,`ImportFrom-TestObjectsToNAV.ps1`);
+}
+export function ImportFromTestLibrariesToNAV(Repository) {
+    StartAction(Repository,`ImportFrom-StandardTestLibrariesToNAV.ps1`);
 }
 export function LoadALMenu(Repository) {
     StartAction(Repository,`Load-ALMenu.ps1`);
@@ -283,6 +295,9 @@ export function SaveContainerCredentials(Repository) {
 }
 export function CreateNewBranchId(Repository) {
     StartAction(Repository,`Create-NewBranchId.ps1`);
+}
+export function CreateNewAppId(Repository) {
+    StartAction(Repository,`Create-NewAppId.ps1`);
 }
 export function ExportGITSourceToSource(Repository) {
     StartAction(Repository,`Export-GITSourceToSource.ps1`);

@@ -7,7 +7,7 @@
     )
 
     $RemoteConfig = Get-NAVRemoteConfig
-    $StorageAccountAccess = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DatabaseTemplateStoragePasswordID
+    $StorageAccountAccess = Get-NAVUserPasswordObject -Usage "DatabaseTemplateStoragePasswordID"
     $storageAccount = Get-AzureRmStorageAccount -ResourceGroupName $AzureResourceGroup.ResourceGroupName -Name $StorageAccountAccess.UserName
     $storageAccountContext = New-AzureStorageContext -StorageAccountName $StorageAccountAccess.UserName -StorageAccountKey $StorageAccountAccess.Password
     $storageContainers = Get-AzureStorageContainer -Context $storageAccountContext 
@@ -23,7 +23,7 @@
         $storageContainerNo ++
     }
 
-    if ($ContainerName -ne $null) {
+    if (!([string]::IsNullOrEmpty($ContainerName))) {
         return $menuItems | Where-Object -Property Name -EQ $ContainerName
     }
 

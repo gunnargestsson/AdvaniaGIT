@@ -16,6 +16,9 @@ $ExportTempPath = Join-Path $SetupParameters.WorkFolder 'Objects'
 Remove-Item -Path $ExportPath -Force -ErrorAction SilentlyContinue
 Remove-Item -Path $ExportTempPath -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -Path $ExportTempPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+New-Item -Path $SetupParameters.TestObjectsPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+New-Item -Path $SetupParameters.ObjectsPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+
 
 Export-ModifiedNAVTxtFromApplication -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ObjectsPath $ExportPath
 Set-NAVApplicationObjectProperty -TargetPath $ExportPath -ModifiedProperty No
@@ -39,13 +42,9 @@ if ($SetupParameters.datetimeCulture -gt "" -and $SetupParameters.datetimeCultur
 }
 
 foreach ($file in (Get-ChildItem -Path $ExportTempPath -Filter *.TXT)) {
-    if (($file.BaseName).SubString(0,3) -eq "COD") {
-        $content = Get-Content -Path $file.FullName -Encoding Oem -Raw
-        if ($content.IndexOf("Subtype=Test;") -gt 0) {
-            Copy-Item -Path $file.FullName -Destination $SetupParameters.TestObjectsPath
-        } else {
-            Copy-Item -Path $file.FullName -Destination $SetupParameters.ObjectsPath
-        }
+    if (((Get-NAVApplicationObjectProperty -Source $file.FullName).VersionList).IndexOf(",Test") -gt 0) {
+        Write-Host "Found Test Object: $($file.BaseName)"
+        Copy-Item -Path $file.FullName -Destination $SetupParameters.TestObjectsPath
     } else {
         Copy-Item -Path $file.FullName -Destination $SetupParameters.ObjectsPath
     }

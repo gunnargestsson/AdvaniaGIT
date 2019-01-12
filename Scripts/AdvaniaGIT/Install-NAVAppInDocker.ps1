@@ -22,7 +22,7 @@
 
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters 
         
-        Get-ChildItem -Path $AppFolderPath -Filter "*.app" | ForEach-Object {
+        Get-ChildItem -Path $AppFolderPath -Filter "*.app" | Sort-Object -Property LastWriteTime | ForEach-Object {
             $ext = Publish-NAVApp -ServerInstance $BranchSettings.instanceName -Path $_.FullName -PassThru -SkipVerification
             Sync-NAVApp -ServerInstance $BranchSettings.instanceName -Name $ext.Name -Tenant default
             Install-NAVApp -ServerInstance $BranchSettings.instanceName -Name $ext.Name -Tenant default

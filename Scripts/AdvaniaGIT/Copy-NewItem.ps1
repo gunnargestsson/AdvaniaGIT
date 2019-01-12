@@ -10,16 +10,12 @@
     )
     if ((Test-Path -Path $SourceFolder -PathType Container) -and (Test-Path -Path $DestinationFolder -PathType Container)) {
         $SourceItems = Get-ChildItem -Path $SourceFolder
-        $DestinationItems = Get-ChildItem -Path $DestinationFolder
-        $Difference = Compare-Object -ReferenceObject $SourceItems -DifferenceObject $DestinationItems
-        $Difference | foreach {
-            $copyParams = @{
-                'Path' = $_.InputObject.FullName
+        foreach ($sourceItem in $SourceItems) {
+            $DestinationItem = Join-Path $DestinationFolder $sourceItem.Name
+            if (!(Test-Path -Path $DestinationItem)) {
+                Write-Host "Copying $($sourceItem.Name)..."
+                Copy-Item $sourceItem.FullName -Destination $DestinationFolder
             }
-            if ($_.SideIndicator -eq '<=') {
-                $copyParams.Destination = $DestinationFolder
-            }
-            Copy-Item @copyParams
         }
     }
 

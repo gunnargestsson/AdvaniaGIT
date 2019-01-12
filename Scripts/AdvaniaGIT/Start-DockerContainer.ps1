@@ -19,6 +19,7 @@
     )
     
     $DockerSettings = Get-DockerSettings 
+    $DockerCreated = $false
 
     if ([System.String]::IsNullOrEmpty($AdminPassword)) {
         $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $AdminUsername
@@ -80,8 +81,19 @@
             $params += @{ auth = $SetupParameters.dockerAuthentication }
         }
 
-        $DockerContainerFriendlyName = "$($SetupParameters.projectName)               ".Substring(0,15).TrimEnd(" ") -replace '_','-'
-        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -enableSymbolLoading -alwaysPull -includeCSide -restart no
+        if ($SetupParameters.BuildMode) {
+            $DockerContainerFriendlyName = "BC$((New-Guid).ToString().Replace('-','').Substring(0,13))"
+        } else {
+            if (![System.String]::IsNullOrEmpty($SetupParameters.dockerFriendlyName)) {
+                $DockerContainerFriendlyName = $SetupParameters.dockerFriendlyName
+            } else {
+                $DockerContainerFriendlyName = "$($SetupParameters.projectName)               ".Substring(0,15).TrimEnd(" ") -replace '_','-'
+            }
+        }
+        if ((Get-NavContainers) -inotcontains $DockerContainerFriendlyName) { 
+            New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -enableSymbolLoading -alwaysPull -includeCSide -restart no
+            $DockerCreated = $true
+        }
         $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 
     } else {
         docker.exe pull $imageName
@@ -134,6 +146,7 @@
             $DockerContainerId = Start-DockerRun -accept_eula -accept_outdated -imageName $imageName -parameters $parameters
         }
     
+        $DockerCreated = true;
         $NoOfLogLines = 0
         $WaitForHealty = $true
         $LoopNo = 1
@@ -172,7 +185,11 @@
     }
 
     $Session = New-DockerSession -DockerContainerId $DockerContainerId
-    $DockerSettings = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
+    if ($DockerCreated) { 
+        $DockerSettings = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
+    } else {
+        $DockerSettings = Get-DockerAdvaniaGITConfig -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    }
     if ([Bool](Get-Module NAVContainerHelper)) {
         $DockerContainerIpAddress = Get-NavContainerIpAddress -containerName $DockerContainerFriendlyName
     } else {

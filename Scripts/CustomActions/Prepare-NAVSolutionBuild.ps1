@@ -4,7 +4,7 @@ $GitSettings = Get-GITSettings
 $SolutionBranchSetup = Get-Content (Join-Path $Location (Split-Path $SetupParameters.setupPath -Leaf)) -Encoding UTF8 | Out-String | ConvertFrom-Json
 $sourcebranch = git.exe rev-parse --abbrev-ref HEAD 
 if ($SetupParameters.BuildMode) {
-    $SetupParameters.workFolder = Join-Path $SetupParameters.workFolder $SetupParameters.BranchId        
+    $SetupParameters.workFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
     New-Item $SetupParameters.workFolder -ItemType Directory -ErrorAction SilentlyContinue| Out-Null
 }
 
@@ -36,6 +36,13 @@ Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.testO
 Write-Host Update version information in build branch
 $SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name navVersion -Value $BranchSetup.navVersion -Force
 $SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name navBuild -Value $BranchSetup.navBuild -Force
+
+if ($SetupParameters.CUBuildMode) {
+    $dockerImage = $($SolutionBranchSetup.dockerImage).replace(($BranchSetup.navBuild).substring(0,4),$BranchSetup.navBuild)
+    Write-Host "Adding CU to Docker Image Name (${dockerImage})..."
+    $SolutionBranchSetup | Add-Member -MemberType NoteProperty -Name dockerImage -Value $dockerImage -Force
+}
+
 Set-Content -Path (Join-Path $Location (Split-Path $SetupParameters.setupPath -Leaf)) -Encoding UTF8 -Value (ConvertTo-Json -InputObject $SolutionBranchSetup)
 
 # Clone the delta branches
@@ -51,9 +58,9 @@ if ($SetupParameters.deltaBranchList) {
         $branchMergeFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $deltaBranch))
         New-Item $branchMergeFolder -ItemType Directory | Out-Null
         Write-Host Copying files from (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') to $branchMergeFolder 
-        Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') -Destination $branchMergeFolder -Force
-        Copy-NewItem -SourceFolder (Join-Path $BranchFolder $BranchSetupParameters.languagePath) -DestinationFolder (Join-Path $MergeFolder 'Languages')
-        Copy-NewItem -SourceFolder (Join-Path $BranchFolder $BranchSetupParameters.testObjectsPath) -DestinationFolder (Join-Path $MergeFolder 'Tests')
+        Copy-Item -Path (Join-Path (Join-Path $BranchFolder $BranchSetupParameters.deltasPath) '*.delta') -Destination $branchMergeFolder -Force -ErrorAction SilentlyContinue
+        Copy-NewItem -SourceFolder (Join-Path $BranchFolder $BranchSetupParameters.languagePath) -DestinationFolder (Join-Path $MergeFolder 'Languages') -ErrorAction SilentlyContinue
+        Copy-NewItem -SourceFolder (Join-Path $BranchFolder $BranchSetupParameters.testObjectsPath) -DestinationFolder (Join-Path $MergeFolder 'Tests') -ErrorAction SilentlyContinue
         $DeltaFolderIndexNo += 10
     }
 }
@@ -64,11 +71,16 @@ if (Test-Path -Path (Join-Path $SetupParameters.deltasPath '*.delta')) {
     $branchMergeFolder = (Join-Path (Join-Path $MergeFolder 'Deltas') ($DeltaFolderIndexNo.ToString() + $sourcebranch))
     New-Item $branchMergeFolder -ItemType Directory | Out-Null
     Write-Host Copying files from (Join-Path $SetupParameters.deltasPath '*.delta') to $branchMergeFolder 
-    Copy-Item -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchMergeFolder -Force
-    Copy-NewItem -SourceFolder $SetupParameters.languagePath -DestinationFolder (Join-Path $MergeFolder 'Languages')
-    Copy-NewItem -SourceFolder $SetupParameters.testObjectsPath -DestinationFolder (Join-Path $MergeFolder 'Tests') 
+    Copy-Item -Path (Join-Path $SetupParameters.deltasPath '*.delta') -Destination $branchMergeFolder -Force 
+    Copy-NewItem -SourceFolder $SetupParameters.languagePath -DestinationFolder (Join-Path $MergeFolder 'Languages') -ErrorAction SilentlyContinue
+    Copy-NewItem -SourceFolder $SetupParameters.testObjectsPath -DestinationFolder (Join-Path $MergeFolder 'Tests') -ErrorAction SilentlyContinue
     $DeltaFolderIndexNo += 10
 }
+
+Remove-Item -Path (Join-Path $SetupParameters.testObjectsPath "*.*") -Force -ErrorAction SilentlyContinue
+New-Item -Path $SetupParameters.testObjectsPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+Remove-Item -Path (Join-Path $SetupParameters.languagePath "*.*") -Force -ErrorAction SilentlyContinue
+New-Item -Path $SetupParameters.languagePath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
 
 Copy-Item -Path (Join-Path (Join-Path $MergeFolder 'Languages') '*.txt') -Destination $SetupParameters.languagePath -Force -ErrorAction SilentlyContinue
 Copy-Item -Path (Join-Path (Join-Path $MergeFolder 'Tests') '*.txt') -Destination $SetupParameters.testObjectsPath -Force -ErrorAction SilentlyContinue

@@ -11,8 +11,12 @@ if ($SetupParameters.testCodeunitId -and $SetupParameters.testCodeunitId -gt "")
     $CodeunitId = 130402
 }
 
+$command = "SELECT TOP 1 [Profile ID] FROM [dbo].[Profile]  WHERE [Role Center ID] = 9006"
+$result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $Command
+Write-Host "Profile found $($result.'Profile ID')..."
+
 $params = @()
-$params += @("-consolemode -showNavigationPage:0 -language:1033 -profile:`"Sales Order Processor`" -settings:`"$($ClientSettings.Config)`" `"dynamicsnav:////$companyName/RunCodeunit?Codeunit=$CodeunitId`"")
+$params += @("-consolemode -showNavigationPage:0 -language:1033 -profile:`"$($result.'Profile ID')`" -settings:`"$($ClientSettings.Config)`" `"dynamicsnav:////$companyName/RunCodeunit?Codeunit=$CodeunitId`"")
 $startDate = Get-Date 
 Write-Host "Running: `"$($ClientSettings.Client)`" $params" -ForegroundColor Green
 Start-Process -FilePath $ClientSettings.Client -ArgumentList $params -Wait

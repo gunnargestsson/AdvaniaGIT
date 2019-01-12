@@ -3,7 +3,7 @@
 #
 
 if ($SetupParameters.BuildMode) {
-    $BranchWorkFolder = Join-Path $SetupParameters.WorkFolder $SetupParameters.branchId
+    $BranchWorkFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     Remove-Item -Path (Join-Path $BranchWorkFolder 'out') -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -Path (Join-Path $BranchWorkFolder 'out') -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
@@ -12,6 +12,7 @@ if ($SetupParameters.BuildMode) {
     $ALProjectFolder = $SetupParameters.VSCodePath
     $AlPackageOutParent = (Join-Path $BranchWorkFolder 'out')
     $ALPackageCachePath = (Join-Path $BranchWorkFolder 'Symbols')
+    $ALAssemblyProbingPath = Join-Path $ALProjectFolder '.netpackages'
     $ALCompilerPath = (Join-Path $BranchWorkFolder 'vsix\extension\bin\alc.exe')
     $ExtensionAppJsonFile = Join-Path $ALProjectFolder 'app.json'
     $ExtensionAppJsonObject = Get-Content -Raw -Path $ExtensionAppJsonFile | ConvertFrom-Json
@@ -29,8 +30,12 @@ if ($SetupParameters.BuildMode) {
     Write-Host "Using Output Folder: " $AlPackageOutPath
     Write-Host "Using Source Folder: " $ALProjectFolder
     Set-Location -Path $ALProjectFolder
-    & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath | Convert-ALCOutputToTFS
- 
+    if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 13) {
+        New-Item -Path $ALAssemblyProbingPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+        & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath /assemblyProbingPaths:$ALAssemblyProbingPath,$(Join-Path $env:windir 'Assembly')
+    } else {
+        & $ALCompilerPath /project:.\ /packagecachepath:$ALPackageCachePath /out:$AlPackageOutPath 
+    }
     if (-not (Test-Path $AlPackageOutPath)) {
         Write-Host "##vso[task.logissue type=error;sourcepath=$AlPackageOutPath;]No app file was generated!"
         throw        

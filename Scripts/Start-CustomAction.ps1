@@ -20,7 +20,6 @@ $adminRole=[System.Security.Principal.WindowsBuiltInRole]::Administrator
  
 # Check to see if we are currently running "as Administrator"
 $IsInAdminMode = $myWindowsPrincipal.IsInRole($adminRole)
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 if ($InAdminMode -eq '$true' -or $InAdminMode -eq $true) {
     Write-Host "Starting Script in Admin Mode..."
@@ -99,11 +98,16 @@ else
         $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile) 
     }
     $Globals | Add-Member DownloadPath  (Join-Path $SetupParameters.rootPath "Download")
+    $Globals | Add-Member NewSyntaxTestObjectsPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.testObjectsPath)")
     $Globals | Add-Member NewSyntaxObjectsPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.objectsPath)")
     $Globals | Add-Member NewSyntaxDeltasPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.deltasPath)")
     $Globals | Add-Member NewSyntaxReverseDeltasPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.reverseDeltasPath)")
     $Globals | Add-Member VSCodePath  (Join-Path $Repository $SetupParameters.VSCodePath)
-    $Globals | Add-Member VSCodeTestPath  (Join-Path $Repository "$($SetupParameters.VSCodePath)$($SetupParameters.testObjectsPath)")
+    if ([String]::IsNullOrEmpty($SetupParameters.VSCodeTestPath)) {
+        $Globals | Add-Member VSCodeTestPath (Join-Path $Repository "$($SetupParameters.VSCodePath)$($SetupParameters.testObjectsPath)")
+    } else {
+        $Globals | Add-Member VSCodeTestPath (Join-Path $Repository $SetupParameters.VSCodeTestPath)
+    }
 
     $SetupParameters = Combine-Settings $Globals $SetupParameters
     if (![String]::IsNullOrEmpty($BuildSettings)) { $SetupParameters = Combine-Settings (New-Object -TypeName PSObject -Property $BuildSettings) $SetupParameters }

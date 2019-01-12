@@ -31,7 +31,7 @@
     
     if ($Template) {
         Write-Host "Starting Database Restore from $($Template.Blob[0].Name) (will take some time)..."
-        $Database = New-AzureRmSqlDatabaseImport -DatabaseName $newDatabaseName -ServerName $SqlServer.ServerName -ResourceGroupName $AzureResourceGroup.ResourceGroupName -StorageKeyType "StorageAccessKey" -StorageKey $Template.Access.Password -StorageUri "$($Template.Context.BlobEndPoint)$($Template.Name)/$($Template.Blob[0].Name)" -Edition Standard -ServiceObjectiveName S1 -DatabaseMaxSizeBytes 5000000 -AdministratorLogin $Credential.UserName -AdministratorLoginPassword $Credential.Password -AuthenticationType Sql
+        $Database = New-AzureRmSqlDatabaseImport -DatabaseName $newDatabaseName -ServerName $SqlServer.ServerName -ResourceGroupName $AzureResourceGroup.ResourceGroupName -StorageKeyType "StorageAccessKey" -StorageKey $Template.Access.Password -StorageUri "$($Template.Context.BlobEndPoint)$($Template.Name)/$($Template.Blob[0].Name)" -Edition Standard -ServiceObjectiveName S6 -DatabaseMaxSizeBytes 5000000 -AdministratorLogin $Credential.UserName -AdministratorLoginPassword $Credential.Password -AuthenticationType Sql
         do {        
             Start-Sleep -Seconds 10
             Write-Host "$((Get-AzureRmSqlDatabaseImportExportStatus -OperationStatusLink $Database.OperationStatusLink).Status) - $((Get-AzureRmSqlDatabaseImportExportStatus -OperationStatusLink $Database.OperationStatusLink).StatusMessage)"
@@ -40,7 +40,7 @@
         $Pool = Set-AzureRmSqlDatabase -DatabaseName $newDatabaseName -ResourceGroupName $AzureResourceGroup.ResourceGroupName -ServerName $SqlServer.ServerName -ElasticPoolName $SelectedElasticPool.ElasticPoolName 
     } else {
         Write-Host "Starting Database Creation (will take some time)..."
-        $Database = New-AzureRmSqlDatabase -DatabaseName $newDatabaseName -CollationName Icelandic_100_CS_AS -Edition Standard -ElasticPoolName $SelectedElasticPool.ElasticPoolName -ServerName $SqlServer.ServerName -ResourceGroupName $AzureResourceGroup.ResourceGroupName
+        $Database = New-AzureRmSqlDatabase -DatabaseName $newDatabaseName -CollationName Icelandic_100_CS_AS -ElasticPoolName $SelectedElasticPool.ElasticPoolName -ServerName $SqlServer.ServerName -ResourceGroupName $AzureResourceGroup.ResourceGroupName
     }
 
     try {

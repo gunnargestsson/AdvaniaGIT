@@ -8,7 +8,7 @@ Import-Module AdvaniaGIT -DisableNameChecking | Out-Null
 $SetupParameters = Get-GITSettings
 $RemoteConfig = Get-NAVRemoteConfig -Initial
 
-$VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
+$VMAdmin = Get-NAVUserPasswordObject -Usage "VMUserPasswordID"
 if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
     $Credential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 } else {

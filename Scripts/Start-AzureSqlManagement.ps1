@@ -9,7 +9,7 @@ Import-Module AzureRM
 $SetupParameters = Get-GITSettings
 $RemoteConfig = Get-NAVRemoteConfig -Initial
 
-$DBAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
+$DBAdmin = Get-NAVUserPasswordObject -Usage "DBUserPasswordID"
 if ($DBAdmin.UserName -gt "" -and $DBAdmin.Password -gt "") {
     $Credential = New-Object System.Management.Automation.PSCredential($DBAdmin.UserName, (ConvertTo-SecureString $DBAdmin.Password -AsPlainText -Force))
 } else {
@@ -23,11 +23,8 @@ if (!$Credential.UserName -or !$Credential.Password) {
     break
 }
 
-if ([String]::IsNullOrEmpty($RemoteConfig.DBAdminPasswordID)) {
-    $VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.VMUserPasswordID
-} else {
-    $VMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBAdminPasswordID
-}
+$VMAdmin = Get-NAVUserPasswordObject -Usage "DBAdminPasswordID"
+
 if ($VMAdmin.UserName -gt "" -and $VMAdmin.Password -gt "") {
     $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.UserName, (ConvertTo-SecureString $VMAdmin.Password -AsPlainText -Force))
 } else {
@@ -39,7 +36,7 @@ if (!$VMCredential.UserName -or !$VMCredential.Password) {
     break
 }
 
-$AzureRMAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.AzureRMUserPasswordID
+$AzureRMAdmin = Get-NAVUserPasswordObject -Usage "AzureRMUserPasswordID"
 if ($AzureRMAdmin.UserName -gt "" -and $AzureRMAdmin.Password -gt "") {
     $AzureCredential = New-Object System.Management.Automation.PSCredential($AzureRMAdmin.UserName, (ConvertTo-SecureString $AzureRMAdmin.Password -AsPlainText -Force))
 } else {

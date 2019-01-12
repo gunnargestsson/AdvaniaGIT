@@ -1,5 +1,5 @@
 ﻿if ($SetupParameters.BuildMode) {
-    $SetupParameters.workFolder = Join-Path $SetupParameters.workFolder $SetupParameters.BranchId
+    $SetupParameters.workFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
 }
 
 $MergeFolder = (Join-Path $SetupParameters.workFolder 'Merge')

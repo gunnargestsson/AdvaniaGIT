@@ -9,7 +9,10 @@
 
     $versionPaths = (Join-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") $SetupParameters.navVersion) "Roletailored Client"),
                     (Join-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") $SetupParameters.mainVersion) "Roletailored Client"),
-                    (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") "*\Roletailored Client")
+                   	(Join-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics 365 Business Central") $SetupParameters.navVersion) "Roletailored Client"),
+                    (Join-Path (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics 365 Business Central") $SetupParameters.mainVersion) "Roletailored Client"),
+                    (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics NAV") "*\Roletailored Client"),
+                    (Join-Path (Join-Path ${env:ProgramFiles(x86)} "Microsoft Dynamics 365 Business Central") "*\Roletailored Client")
     foreach ($versionPath in $versionPaths) {
         if (Test-Path $versionPath) {
             return (Get-Item -Path $versionPath).FullName

@@ -36,7 +36,10 @@
         New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     }
     $env:WorkFolder = $SetupParameters.WorkFolder
-    
+    if ($DeploymentSettings.RemoteConfigPath) {
+        $RemoteConfig = Get-NAVRemoteConfig -SettingsFilePath $DeploymentSettings.RemoteConfigPath -Initial 
+    }
+
     $Error.Clear()
 
     #Start the script

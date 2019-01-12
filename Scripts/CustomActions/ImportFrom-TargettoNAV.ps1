@@ -7,7 +7,7 @@ Load-ModelTools -SetupParameters $SetupParameters
 Write-Host "Importing from Target.txt to $($BranchSettings.databaseName)"
 $logFile = (Join-Path $SetupParameters.LogPath "navimport.log")
 if ($SetupParameters.BuildMode) {
-    $Path = Join-Path (Join-Path $SetupParameters.workFolder $SetupParameters.BranchId) 'Target.txt'
+    $Path = Join-Path (Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)") 'Target.txt'
 } else {
     $Path = (Join-Path $SetupParameters.workFolder 'Target.txt')
 }

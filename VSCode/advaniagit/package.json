@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "0.2.3",
+    "version": "1.0.4",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -30,6 +30,8 @@
         "onCommand:advaniagit.CheckNAVEnvironment",
         "onCommand:advaniagit.ClearNAVCommentSection",
         "onCommand:advaniagit.ConvertNAVNewSyntaxDeltasToAL",
+        "onCommand:advaniagit.ConvertNAVNewSyntaxObjectsToAL",
+        "onCommand:advaniagit.ConvertNAVNewSyntaxTestObjectsToAL",
         "onCommand:advaniagit.CreateCodeDeltas",
         "onCommand:advaniagit.CreateDeltas",
         "onCommand:advaniagit.CreateExtension",
@@ -56,11 +58,13 @@
         "onCommand:advaniagit.ImportRemoteNavFob",
         "onCommand:advaniagit.ImportFromGITtoNAV",
         "onCommand:advaniagit.ImportFromModifiedNAVtoGIT",
+        "onCommand:advaniagit.ImportFromModifiedNewSyntaxNAVtoGIT",
         "onCommand:advaniagit.ImportFromNAVNewSyntaxToGIT",
         "onCommand:advaniagit.ImportFromNAVtoGIT",
         "onCommand:advaniagit.ImportFromNAVtoTarget",
         "onCommand:advaniagit.ImportFromTargetToGIT",
         "onCommand:advaniagit.ImportFromTestObjectsToNAV",
+        "onCommand:advaniagit.ImportFromTestLibrariesToNAV",
         "onCommand:advaniagit.LoadALMenu",
         "onCommand:advaniagit.LoadClientMenu",
         "onCommand:advaniagit.LoadCodeMenu",
@@ -106,6 +110,7 @@
         "onCommand:advaniagit.DeleteOldLogs",
         "onCommand:advaniagit.ImportFromAllGITtoNAV",
         "onCommand:advaniagit.CreateNewBranchId",
+        "onCommand:advaniagit.CreateNewAppId",
         "onCommand:advaniagit.NewGITBranch",
         "onCommand:advaniagit.SaveContainerCredentials",
         "onCommand:advaniagit.NewFilesEncodingSettings",
@@ -175,6 +180,10 @@
                 "category": "Advania"
             },
             {
+                "title": "Export New Syntax NAV Modified objects to GIT",
+                "command": "advaniagit.ImportFromModifiedNewSyntaxNAVtoGIT",
+                "category": "Advania"
+            },            {
                 "title": "Export NAV objects to GIT",
                 "command": "advaniagit.ImportFromNAVtoGIT",
                 "category": "Advania"
@@ -375,6 +384,16 @@
                 "category": "Advania"
             },
             {
+                "title": "Convert New Syntax Objects to AL",
+                "command": "advaniagit.ConvertNAVNewSyntaxObjectsToAL",
+                "category": "Advania"
+            },
+            {
+                "title": "Convert New Syntax Test Objects to AL",
+                "command": "advaniagit.ConvertNAVNewSyntaxTestObjectsToAL",
+                "category": "Advania"
+            },                        
+            {
                 "title": "Create Xlf Labels in current AL project (make sure that every file is saved)",
                 "command": "advaniagit.CreateXlfLabelsInALCode",
                 "category": "Advania"
@@ -445,12 +464,22 @@
                 "category": "Advania"
             },
             {
+                "title": "Import Test Libraries to NAV Environment",
+                "command": "advaniagit.ImportFromTestLibrariesToNAV",
+                "category": "Advania"
+            },
+            {
                 "title": "Create new Branch Id in Setup.json",
                 "command": "advaniagit.CreateNewBranchId",
                 "category": "Advania"
             },
             {
-                "title": "Open Visual Studio Code in AL folder",
+                "title": "Update AppId and AppName to match repository name",
+                "command": "advaniagit.CreateNewAppId",
+                "category": "Advania"
+            },            
+            {
+                "title": "Add AL folders to current Workspace",
                 "command": "advaniagit.StartVSCode",
                 "category": "Advania"
             },

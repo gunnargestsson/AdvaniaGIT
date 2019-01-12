@@ -15,12 +15,12 @@
     {
         $OriginalDatabase = $Database
         $RemoteConfig = Get-NAVRemoteConfig
-        $DBAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.DBUserPasswordID
+        $DBAdmin = Get-NAVUserPasswordObject -Usage "DBUserPasswordID"
         if ($DBAdmin.UserName -gt "") { $Database.DatabaseUserName = $DBAdmin.UserName }
         if ($DBAdmin.Password -gt "") { $Database.DatabasePassword = $DBAdmin.Password }
         if ($DBAdmin.GenericField1 -gt "") { $Database.DatabaseServerName = $DBAdmin.GenericField1 }
 
-        $EncryptionAdmin = Get-NAVPasswordStateUser -PasswordId $RemoteConfig.EncryptionKeyPasswordID
+        $EncryptionAdmin = Get-NAVUserPasswordObject -Usage "EncryptionKeyPasswordID"
         if ($EncryptionAdmin.Password -gt "") {
             $EncryptionKeyPassword = $EncryptionAdmin.Password
         } else {
