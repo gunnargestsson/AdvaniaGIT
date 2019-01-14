@@ -8,10 +8,10 @@ if ($SetupParameters.BuildMode) {
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     Remove-Item -Path $AlPackageOutParent -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -Path $AlPackageOutParent -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
-
+    
     $ALPackageCachePath = (Join-Path $BranchWorkFolder 'Symbols')
     $ALCompilerPath = (Join-Path $BranchWorkFolder 'vsix\extension\bin\alc.exe')
-    
+
     foreach ($ALPath in (Get-ALPaths -SetupParameters $SetupParameters)) {
 
         $ALProjectFolder = $ALPath.FullName
