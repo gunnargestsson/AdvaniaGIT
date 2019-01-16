@@ -6,7 +6,6 @@ if ($SetupParameters.BuildMode) {
     $BranchWorkFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
     $AlPackageOutParent = (Join-Path $BranchWorkFolder 'out')
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
-    Remove-Item -Path $AlPackageOutParent -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -Path $AlPackageOutParent -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     
     $ALPackageCachePath = (Join-Path $BranchWorkFolder 'Symbols')
