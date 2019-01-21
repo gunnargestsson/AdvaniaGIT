@@ -35,5 +35,6 @@ if ($SetupParameters.BuildMode) {
     Move-Item -Path (Join-Path $SetupParameters.LogPath 'Test.app') -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force -ErrorAction SilentlyContinue
     # Copy Dependencies from repository
     Copy-Item -Path (Join-Path $SetupParameters.repository "Dependencies\*.app") -Destination (Join-Path $BranchWorkFolder 'Symbols') -ErrorAction SilentlyContinue
+    Copy-Item -Path (Join-Path $SetupParameters.repository "Dependencies\*.app") -Destination (Join-Path $BranchWorkFolder 'out') -ErrorAction SilentlyContinue
 }
 
