@@ -18,6 +18,8 @@ Write-Host Save Test Results
 & (Join-path $PSScriptRoot 'Save-TestResults.ps1')
 Write-Host Remove Test Code
 & (Join-path $PSScriptRoot 'Remove-ALTestFolders.ps1')
+Write-Host Clear Previous builds
+& (Join-path $PSScriptRoot 'Clear-ALOutFolder.ps1')
 Write-Host Build AL Solution without Tests
 & (Join-path $PSScriptRoot 'Build-ALSolutions.ps1')
 Write-Host Copy AL Solution to Artifact folder
