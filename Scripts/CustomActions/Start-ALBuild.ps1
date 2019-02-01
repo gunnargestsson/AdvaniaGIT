@@ -8,6 +8,12 @@ Write-Host Download AL Symbols
 & (Join-path $PSScriptRoot 'Download-ALSymbols.ps1')
 Write-Host Build AL Solution with Tests
 & (Join-path $PSScriptRoot 'Build-ALSolutions.ps1')
+if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies")) {
+    Write-Host Install AL Dependencies
+    & (Join-path $PSScriptRoot 'Install-ALDependencies.ps1')
+    Write-Host Restart NAV Service
+    & (Join-path $PSScriptRoot 'Restart-NAVService.ps1')
+}
 Write-Host Install AL Extension
 & (Join-path $PSScriptRoot 'Install-ALExtensionsToDocker.ps1')
 Write-Host Import Test Libraries

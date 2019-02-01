@@ -29,13 +29,11 @@ if ($SetupParameters.BuildMode) {
     $BranchWorkFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     Remove-Item -Path (Join-Path $BranchWorkFolder 'Symbols') -Force -Recurse -ErrorAction SilentlyContinue
-    New-Item -Path (Join-Path $BranchWorkFolder 'Symbols') -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
-    New-Item -Path (Join-Path $BranchWorkFolder 'out') -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
+    New-Item -Path (Join-Path $BranchWorkFolder 'Symbols') -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null    
     Move-Item -Path (Join-Path $SetupParameters.LogPath 'Application.app') -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force
     Move-Item -Path (Join-Path $SetupParameters.LogPath 'System.app') -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force
     Move-Item -Path (Join-Path $SetupParameters.LogPath 'Test.app') -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force -ErrorAction SilentlyContinue
     # Copy Dependencies from repository
-    Copy-Item -Path (Join-Path $SetupParameters.repository "Dependencies\*.app") -Destination (Join-Path $BranchWorkFolder 'Symbols') -ErrorAction SilentlyContinue
-    Copy-Item -Path (Join-Path $SetupParameters.repository "Dependencies\*.app") -Destination (Join-Path $BranchWorkFolder 'out') -ErrorAction SilentlyContinue
+    Copy-Item -Path (Join-Path $SetupParameters.repository "Dependencies\*.app") -Destination (Join-Path $BranchWorkFolder 'Symbols') -ErrorAction SilentlyContinue    
 }
 
