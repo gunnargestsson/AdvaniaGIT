@@ -4,6 +4,10 @@ Write-Host Initialize Test Company
 & (Join-path $PSScriptRoot 'Initialize-NAVCompany.ps1')
 Write-Host Download AL Addin
 & (Join-path $PSScriptRoot 'Download-ALAddin.ps1')
+if ($SetupParameters.ftpServer -ne "") {
+    Write-Host Download AL Dependencies
+    & (Join-path $PSScriptRoot 'Download-ALDependenciesFromFTPServer.ps1')    
+}
 Write-Host Download AL Symbols
 & (Join-path $PSScriptRoot 'Download-ALSymbols.ps1')
 Write-Host Build AL Solution with Tests
