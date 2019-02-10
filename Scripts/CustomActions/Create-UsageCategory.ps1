@@ -1,8 +1,17 @@
 ﻿$menuItems = @()
-$menuSuiteFiles = Get-ChildItem -Path (Join-Path $SetupParameters.Repository 'NewSyntaxDeltas\MEN*.DELTA')
-foreach ($menuSuiteFile in $menuSuiteFiles) {
-   $menuItems += Read-MenuSuite -ObjectFilePath $menuSuiteFile.FullName
+foreach ($subfolder in ($SetupParameters.ObjectsPath,$SetupParameters.DeltasPath,$SetupParameters.NewSyntaxObjectsPath,$SetupParameters.NewSyntaxDeltasPath)) {
+    if (Test-Path -Path $subfolder -PathType Container) {
+        $menuSuiteFiles = Get-ChildItem -Path (Join-Path $subfolder 'MEN*.DELTA')
+        foreach ($menuSuiteFile in $menuSuiteFiles) {
+           $menuItems += Read-MenuSuite -ObjectFilePath $menuSuiteFile.FullName
+        } 
+        $menuSuiteFiles = Get-ChildItem -Path (Join-Path $subfolder 'MEN*.TXT')
+        foreach ($menuSuiteFile in $menuSuiteFiles) {
+           $menuItems += Read-MenuSuite -ObjectFilePath $menuSuiteFile.FullName
+        } 
+    }
 }
+
     
 $ALFiles = Get-ChildItem -Path (Join-Path $SetupParameters.Repository 'AL') -Filter *.al -Recurse
 foreach ($ALFile in $ALFiles) {
