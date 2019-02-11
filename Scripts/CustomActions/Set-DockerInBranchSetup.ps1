@@ -24,7 +24,7 @@ if ($SetupParameters.BuildMode) {
 Set-Content -Value ($SetupJson | ConvertTo-Json) -Encoding UTF8 -Path $SetupParameters.setupPath
 if ($SetupParameters.BuildMode) {
     $SetupJson | Add-Member -MemberType NoteProperty -Name branchId -Value (New-Guid) -Force
-    $SetupJson | Add-Member -MemberType NoteProperty -Name dockerFriendlyName -Value "$(Split-Path $SetupParameters.Repository -Leaf)               ".Substring(0,15).TrimEnd(" ")
+    $SetupJson | Add-Member -MemberType NoteProperty -Name dockerFriendlyName -Value "$(Split-Path $SetupParameters.Repository -Leaf)               ".Substring(0,15).TrimEnd(" ") -Force
 }
 
 Set-Content -Value ($SetupJson | ConvertTo-Json) -Encoding UTF8 -Path $SetupParameters.setupPath

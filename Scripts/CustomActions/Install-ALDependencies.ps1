@@ -8,4 +8,5 @@
         $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId    
         Install-NAVAppInDocker -Session $Session -SetupParameters $SetupParameters -AppFolderPath (Join-Path $SetupParameters.repository "Dependencies")    
     }
+    Remove-Item -Path (Join-Path $SetupParameters.repository "Dependencies\*.*") -Recurse -ErrorAction SilentlyContinue
 }    
