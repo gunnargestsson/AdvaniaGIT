@@ -1,9 +1,14 @@
 Write-Host Build and Update Docker Container
 & (Join-path $PSScriptRoot 'Build-NavEnvironment.ps1')
+if (![String]::IsNullOrEmpty($SetupParameters.CreateSymbols)) {
+    & (Join-path $PSScriptRoot 'Build-NAVSymbolReferences.ps1')
+}
+
 Write-Host Initialize Test Company
 & (Join-path $PSScriptRoot 'Initialize-NAVCompany.ps1')
 Write-Host Download AL Addin
 & (Join-path $PSScriptRoot 'Download-ALAddin.ps1')
+
 if ($SetupParameters.ftpServer -ne "") {
     Write-Host Download AL Dependencies
     & (Join-path $PSScriptRoot 'Download-ALDependenciesFromFTPServer.ps1')    
