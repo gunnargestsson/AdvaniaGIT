@@ -17,9 +17,13 @@
             if ($node.target) {
                 if (!($TranslateTable.ContainsKey($node.source))) {
                     if ($node.target.GetType().Name -eq "String") {
-                        $TranslateTable.Add($node.source,$node.target)
+                        if (![string]::IsNullOrEmpty($node.target)) {
+                            $TranslateTable.Add($node.source,$node.target)
+                        }
                     } else {
-                        $TranslateTable.Add($node.source,$node.target.'#text')
+                        if (![string]::IsNullOrEmpty($node.target.'#text')) {
+                            $TranslateTable.Add($node.source,$node.target.'#text')
+                        }
                     }
                 }
             }

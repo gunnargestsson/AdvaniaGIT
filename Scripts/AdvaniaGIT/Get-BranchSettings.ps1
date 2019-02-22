@@ -7,7 +7,11 @@
         [String]$SettingsFilePath = (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))  "Data\BranchSettings.Json")
     )
     $allBranchSettings = Get-Content -Path $SettingsFilePath | Out-String | ConvertFrom-Json
-    $branchSettings = ($allBranchSettings.Branches | Where-Object -Property branchId -EQ $SetupParameters.branchId)
+    if (![String]::IsNullOrEmpty($SetupParameters.dockerShared) -and !$SetupParameters.BuildMode) {
+        $branchSettings = ($allBranchSettings.Branches | Where-Object -Property dockerContainerName -EQ $SetupParameters.projectName)
+    } else {
+        $branchSettings = ($allBranchSettings.Branches | Where-Object -Property branchId -EQ $SetupParameters.branchId)
+    }
     if ($branchSettings -eq $null) {
         $branchSettings = @{
             "branchId" = $SetupParameters.branchId; 

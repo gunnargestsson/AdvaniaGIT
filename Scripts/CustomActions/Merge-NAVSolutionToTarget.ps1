@@ -65,4 +65,8 @@ if (Test-Path (Join-Path $MergeFolder "Languages\*.txt")) {
     Copy-Item -Path (Join-Path $MergeFolder "Languages\*.txt") -Destination $SetupParameters.LanguagePath -Force 
 }
 
+$Artifacts = Join-Path $SetupParameters.Repository "Artifacts"
+New-Item -Path $Artifacts -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+Compress-Archive -Path $MergeFolder -DestinationPath (Join-Path $Artifacts "MergeResults.zip") -CompressionLevel Optimal
+
 UnLoad-ModelTools
