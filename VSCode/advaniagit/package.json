@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "1.0.4",
+    "version": "1.1.0",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -34,15 +34,13 @@
         "onCommand:advaniagit.ConvertNAVNewSyntaxTestObjectsToAL",
         "onCommand:advaniagit.CreateCodeDeltas",
         "onCommand:advaniagit.CreateDeltas",
-        "onCommand:advaniagit.CreateExtension",
         "onCommand:advaniagit.CreateNavBackup",
         "onCommand:advaniagit.CreateNavBackupOnFtpServer",
         "onCommand:advaniagit.CreateNavBacpac",
         "onCommand:advaniagit.CreateReverseDeltas",
-        "onCommand:advaniagit.CreateXlfLabelsInALCode",
         "onCommand:advaniagit.CreateXlfFromCALTranslateFile",
         "onCommand:advaniagit.UpdateUsageCategory",
-        "onCommand:advaniagit.BuildNAVSymbolReferences",        
+        "onCommand:advaniagit.BuildNAVSymbolReferences",
         "onCommand:advaniagit.SignAppPackage",
         "onCommand:advaniagit.StartNAVAppDataUpgrade",
         "onCommand:advaniagit.DummyAction",
@@ -65,25 +63,16 @@
         "onCommand:advaniagit.ImportFromTargetToGIT",
         "onCommand:advaniagit.ImportFromTestObjectsToNAV",
         "onCommand:advaniagit.ImportFromTestLibrariesToNAV",
-        "onCommand:advaniagit.LoadALMenu",
-        "onCommand:advaniagit.LoadClientMenu",
-        "onCommand:advaniagit.LoadCodeMenu",
-        "onCommand:advaniagit.LoadExtensionMenu",
-        "onCommand:advaniagit.LoadTestMenu",
         "onCommand:advaniagit.ManageDatabases",
         "onCommand:advaniagit.ManageInstances",
         "onCommand:advaniagit.ManageContainers",
         "onCommand:advaniagit.MergeDeltas",
         "onCommand:advaniagit.PrepareNAVEnvironment",
         "onCommand:advaniagit.PrepareNAVUnitTest",
-        "onCommand:advaniagit.PublishExtension",
-        "onCommand:advaniagit.PublishExtensionToBaseBranch",
         "onCommand:advaniagit.RemoveNavEnvironment",
         "onCommand:advaniagit.ReplaceGITwithTarget",
         "onCommand:advaniagit.SaveTestResults",
         "onCommand:advaniagit.SaveTestResultsCsv",
-        "onCommand:advaniagit.StartBaseBranchClient",
-        "onCommand:advaniagit.StartBaseBranchWebClient",
         "onCommand:advaniagit.StartClient",
         "onCommand:advaniagit.StartCompile",
         "onCommand:advaniagit.StartDebugger",
@@ -92,17 +81,14 @@
         "onCommand:advaniagit.StartFailedTestsExecution",
         "onCommand:advaniagit.StartModifiedObjectsTestsExecution",
         "onCommand:advaniagit.StartVSCode",
-        "onCommand:advaniagit.UpdateLaunchJsonForBaseBranch",
         "onCommand:advaniagit.UpdateLaunchJsonForCurrentBranch",
-        "onCommand:advaniagit.InstallALExtensionFromDocker",     
-        "onCommand:advaniagit.StopAllDockerContainers",     
+        "onCommand:advaniagit.InstallALExtensionFromDocker",
+        "onCommand:advaniagit.StopAllDockerContainers",
         "onCommand:advaniagit.StartAllDockerContainers",
         "onCommand:advaniagit.DiscoverAllDockerContainers",
         "onCommand:advaniagit.StartWebClient",
         "onCommand:advaniagit.StopNAVServices",
         "onCommand:advaniagit.SyncRemoteNAVInstance",
-        "onCommand:advaniagit.UnpublishExtension",
-        "onCommand:advaniagit.UnpublishExtensionFromBaseBranch",
         "onCommand:advaniagit.UpdateNAVSource",
         "onCommand:advaniagit.UpgradeNAVInstallation",
         "onCommand:advaniagit.UploadNAVDatabaseBackup",
@@ -183,7 +169,8 @@
                 "title": "Export New Syntax NAV Modified objects to GIT",
                 "command": "advaniagit.ImportFromModifiedNewSyntaxNAVtoGIT",
                 "category": "Advania"
-            },            {
+            },
+            {
                 "title": "Export NAV objects to GIT",
                 "command": "advaniagit.ImportFromNAVtoGIT",
                 "category": "Advania"
@@ -304,43 +291,8 @@
                 "category": "Advania"
             },
             {
-                "title": "Create Extension V1 in GIT",
-                "command": "advaniagit.CreateExtension",
-                "category": "Advania"
-            },
-            {
-                "title": "Publish Extension V1 to Default Server Instance",
-                "command": "advaniagit.PublishExtension",
-                "category": "Advania"
-            },
-            {
-                "title": "Unpublish Extension V1 from Default Server Instance",
-                "command": "advaniagit.UnpublishExtension",
-                "category": "Advania"
-            },
-            {
-                "title": "Base Branch Server Instance - Publish Extension V1",
-                "command": "advaniagit.PublishExtensionToBaseBranch",
-                "category": "Advania"
-            },
-            {
-                "title": "Base Branch Server Instance - Unpublish Extension V1",
-                "command": "advaniagit.UnpublishExtensionFromBaseBranch",
-                "category": "Advania"
-            },
-            {
                 "title": "Code Sign app Package in AL folder",
                 "command": "advaniagit.SignAppPackage",
-                "category": "Advania"
-            },
-            {
-                "title": "Base Branch - Start Client",
-                "command": "advaniagit.StartBaseBranchClient",
-                "category": "Advania"
-            },
-            {
-                "title": "Base Branch - Start Web Client",
-                "command": "advaniagit.StartBaseBranchWebClient",
                 "category": "Advania"
             },
             {
@@ -392,11 +344,6 @@
                 "title": "Convert New Syntax Test Objects to AL",
                 "command": "advaniagit.ConvertNAVNewSyntaxTestObjectsToAL",
                 "category": "Advania"
-            },                        
-            {
-                "title": "Create Xlf Labels in current AL project (make sure that every file is saved)",
-                "command": "advaniagit.CreateXlfLabelsInALCode",
-                "category": "Advania"
             },
             {
                 "title": "Create Xlf translation file based on C/AL translation export",
@@ -412,37 +359,32 @@
                 "title": "Build C/AL Symbol References for AL",
                 "command": "advaniagit.BuildNAVSymbolReferences",
                 "category": "Advania"
-            },            
+            },
             {
                 "title": "Update Launch.Json with current branch environment",
                 "command": "advaniagit.UpdateLaunchJsonForCurrentBranch",
                 "category": "Advania"
             },
             {
-                "title": "Update Launch.Json with base branch environment",
-                "command": "advaniagit.UpdateLaunchJsonForBaseBranch",
-                "category": "Advania"
-            },
-            {
                 "title": "Download and install AL Extension for VS Code from container",
                 "command": "advaniagit.InstallALExtensionFromDocker",
                 "category": "Advania"
-            },     
+            },
             {
                 "title": "Stop all running Docker Containers",
                 "command": "advaniagit.StopAllDockerContainers",
                 "category": "Advania"
-            },     
+            },
             {
                 "title": "Start all stopped Docker Containers",
                 "command": "advaniagit.StartAllDockerContainers",
                 "category": "Advania"
-            },     
+            },
             {
                 "title": "Discover and reregister all configured Docker Containers",
                 "command": "advaniagit.DiscoverAllDockerContainers",
                 "category": "Advania"
-            },     
+            },
             {
                 "title": "Remove Object Properties from modified objects",
                 "command": "advaniagit.RemoveNAVObjectsProperties",
@@ -477,7 +419,7 @@
                 "title": "Update AppId and AppName to match repository name",
                 "command": "advaniagit.CreateNewAppId",
                 "category": "Advania"
-            },            
+            },
             {
                 "title": "Add AL folders to current Workspace",
                 "command": "advaniagit.StartVSCode",
@@ -487,7 +429,7 @@
                 "title": "Execute NAV App Data Upgrade",
                 "command": "advaniagit.StartNAVAppDataUpgrade",
                 "category": "Advania"
-            },            
+            },
             {
                 "title": "Create new GIT branch...",
                 "command": "advaniagit.NewGITBranch",
@@ -553,9 +495,14 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/mocha": "^2.2.42",
-        "@types/node": "^7.0.43",
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.14"
+        "@types/mocha": "^2.2.48",
+        "@types/node": "^7.10.3",
+        "typescript": "^2.9.2",
+        "vscode": "^1.1.30"
+    },
+    "dependencies": {
+        "fs": "0.0.1-security",
+        "npm-check": "^5.9.0",
+        "path": "^0.12.7"
     }
 }

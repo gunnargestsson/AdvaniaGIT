@@ -98,3 +98,20 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.0.4]
 - Add new commands to convert New Syntax Tests to AL
+
+## [1.1.0]
+- Remove obsolete commands
+        -PublishExtension",
+        -PublishExtensionToBaseBranch",
+        -StartBaseBranchClient",
+        -StartBaseBranchWebClient",       
+        -UpdateLaunchJsonForBaseBranch",
+        -UnpublishExtension",
+        -UnpublishExtensionFromBaseBranch",
+        -CreateExtension",       
+        -CreateXlfLabelsInALCode",         
+        -LoadALMenu",
+        -LoadClientMenu",
+        -LoadCodeMenu",
+        -LoadExtensionMenu",
+        -LoadTestMenu",

@@ -55,9 +55,6 @@ export function CreateCodeDeltas(Repository) {
 export function CreateDeltas(Repository) {
     StartAction(Repository,`Create-Deltas.ps1`);
 }
-export function CreateExtension(Repository) {
-    StartAction(Repository,`Create-Extension.ps1`);
-}
 export function CreateNavBackup(Repository) {
     StartAction(Repository,`Create-NavBackup.ps1`);
 }
@@ -69,10 +66,6 @@ export function CreateNavBacpac(Repository) {
 }
 export function CreateReverseDeltas(Repository) {
     StartAction(Repository,`Create-ReverseDeltas.ps1`);
-}
-export function CreateXlfLabelsInALCode(Repository) {
-    StartAction(Repository,`Create-XlfLabelsInALCode.ps1`);
-    vscode.window.showInformationMessage('Make sure to compile the project with Ctrl+Shift+B to create Xlf file!')    
 }
 export function CreateXlfFromCALTranslateFile(Repository) {
     StartAction(Repository,`Create-XlfFromCALTranslate.ps1`);
@@ -143,21 +136,6 @@ export function ImportFromTestObjectsToNAV(Repository) {
 export function ImportFromTestLibrariesToNAV(Repository) {
     StartAction(Repository,`ImportFrom-StandardTestLibrariesToNAV.ps1`);
 }
-export function LoadALMenu(Repository) {
-    StartAction(Repository,`Load-ALMenu.ps1`);
-}
-export function LoadClientMenu(Repository) {
-    StartAction(Repository,`Load-ClientMenu.ps1`);
-}
-export function LoadCodeMenu(Repository) {
-    StartAction(Repository,`Load-CodeMenu.ps1`);
-}
-export function LoadExtensionMenu(Repository) {
-    StartAction(Repository,`Load-ExtensionMenu.ps1`);
-}
-export function LoadTestMenu(Repository) {
-    StartAction(Repository,`Load-TestMenu.ps1`);
-}
 export function ManageDatabases(Repository) {
     StartAction(Repository,`Manage-Databases.ps1`);
 }
@@ -175,12 +153,6 @@ export function PrepareNAVEnvironment(Repository) {
 }
 export function PrepareNAVUnitTest(Repository) {
     StartAction(Repository,`Prepare-NAVUnitTest.ps1`);
-}
-export function PublishExtension(Repository) {
-    StartAction(Repository,`Publish-Extension.ps1`);
-}
-export function PublishExtensionToBaseBranch(Repository) {
-    StartAction(Repository,`Publish-ExtensionToBaseBranch.ps1`);
 }
 export function RemoveNavEnvironment(Repository) {
     vscode.window.showInputBox({
@@ -202,12 +174,6 @@ export function SaveTestResults(Repository) {
 }
 export function SaveTestResultsCsv(Repository) {
     StartAction(Repository,`Save-TestResultsCsv.ps1`);
-}
-export function StartBaseBranchClient(Repository) {
-    StartAction(Repository,`Start-BaseBranchClient.ps1`);
-}
-export function StartBaseBranchWebClient(Repository) {
-    StartAction(Repository,`Start-BaseBranchWebClient.ps1`);
 }
 export function StartClient(Repository) {
     StartAction(Repository,`Start-Client.ps1`);
@@ -233,9 +199,6 @@ export function StartFailedTestsExecution(Repository) {
 export function StartVSCode(Repository) {
     StartAction(Repository,`Start-VSCode.ps1`);
 }
-export function StartVSCodeOnBaseBranch(Repository) {
-    StartAction(Repository,`Start-VSCodeOnBaseBranch.ps1`);
-}
 export function StartVSCodeOnCurrentBranch(Repository) {
     StartAction(Repository,`Start-VSCodeOnCurrentBranch.ps1`);
 }
@@ -248,12 +211,6 @@ export function StopNAVServices(Repository) {
 export function SyncRemoteNAVInstance(Repository) {
     StartAction(Repository,`Sync-RemoteNAVInstance.ps1`);
 }
-export function UnpublishExtension(Repository) {
-    StartAction(Repository,`Unpublish-Extension.ps1`);
-}
-export function UnpublishExtensionFromBaseBranch(Repository) {
-    StartAction(Repository,`Unpublish-ExtensionFromBaseBranch.ps1`);
-}
 export function UpdateNAVSource(Repository) {
     StartAction(Repository,`Update-NAVSource.ps1`);
 }
@@ -262,9 +219,6 @@ export function UpgradeNAVInstallation(Repository) {
 }
 export function UploadNAVDatabaseBackup(Repository) {
     StartAction(Repository,`Upload-NAVDatabaseBackup.ps1`);
-}
-export function UpdateLaunchJsonForBaseBranch(Repository) {
-    StartAction(Repository,`Update-LaunchJsonForBaseBranch.ps1`);
 }
 export function UpdateLaunchJsonForCurrentBranch(Repository) {
     StartAction(Repository,`Update-LaunchJsonForCurrentBranch.ps1`);
