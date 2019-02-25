@@ -1,3 +1,7 @@
+if ($BranchSettings.dockerContainerId -gt "") {
+    $SetupParameters.navIdePath = Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+}
+
 Load-ModelTools -SetupParameters $SetupParameters
 $SourceFileName = (Join-Path $SetupParameters.WorkFolder 'Source.txt')
 $ModifiedFileName = (Join-Path $SetupParameters.WorkFolder 'Modified.txt')
