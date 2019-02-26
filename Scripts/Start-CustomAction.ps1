@@ -53,6 +53,18 @@ else
     {
         $SetupParameters | Add-Member "Branchname" ""
     }
+
+    $SetupParameters | Add-Member "ConfigPath" (Join-Path $SetupParameters.rootPath "Data")
+
+    # Create a dedicated Work Folder if running builds
+    if (![String]::IsNullOrEmpty($BuildSettings)) { $SetupParameters = Combine-Settings (New-Object -TypeName PSObject -Property $BuildSettings) $SetupParameters }
+    if ($SetupParameters.BuildMode) {
+        $BranchWorkFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
+        New-Item -Path $BranchWorkFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+        New-Item -Path (Join-Path $BranchWorkFolder "Data") -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+        Copy-Item -Path (Join-Path $SetupParameters.ConfigPath "*.json") -Destination (Join-Path $BranchWorkFolder "Data")
+        $SetupParameters.ConfigPath = (Join-Path $BranchWorkFolder "Data")
+    }  
         
     # Find NAV major version based on the repository NAV version - client
     $mainVersion =  ($SetupParameters.navVersion).Split('.').GetValue(0) + ($SetupParameters.navVersion).Split('.').GetValue(1)
