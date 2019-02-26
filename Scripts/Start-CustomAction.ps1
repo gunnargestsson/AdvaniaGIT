@@ -84,7 +84,11 @@ else
     
     # Set Global Parameters
     $Globals = New-Object -TypeName PSObject
-    $Globals | Add-Member WorkFolder $SetupParameters.workFolder
+    if ($SetupParameters.BuildMode) {
+        $Globals | Add-Member WorkFolder $BranchWorkFolder
+    } else {
+        $Globals | Add-Member WorkFolder $SetupParameters.workFolder
+    }
     $Globals | Add-Member BackupPath  (Join-Path $SetupParameters.rootPath "Backup")
     $Globals | Add-Member DatabasePath  (Join-Path $SetupParameters.rootPath "Database")
     $Globals | Add-Member SourcePath  (Join-Path $SetupParameters.rootPath "Source")
