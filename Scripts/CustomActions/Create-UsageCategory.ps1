@@ -3,11 +3,23 @@ foreach ($subfolder in ($SetupParameters.ObjectsPath,$SetupParameters.DeltasPath
     if (Test-Path -Path $subfolder -PathType Container) {
         $menuSuiteFiles = Get-ChildItem -Path (Join-Path $subfolder 'MEN*.DELTA')
         foreach ($menuSuiteFile in $menuSuiteFiles) {
-           $menuItems += Read-MenuSuite -ObjectFilePath $menuSuiteFile.FullName
+          foreach ($menuItem in Read-MenuSuite -ObjectFilePath $menuSuiteFile.FullName) {
+            if ($menuItems | Where-Object -Property Id -EQ $menuItem.Id) {
+                Write-Verbose "Duplicate menu item $($menuItem.Id)"
+             } else {
+                $menuItems += $menuItem
+            }
+          }
         } 
         $menuSuiteFiles = Get-ChildItem -Path (Join-Path $subfolder 'MEN*.TXT')
         foreach ($menuSuiteFile in $menuSuiteFiles) {
-           $menuItems += Read-MenuSuite -ObjectFilePath $menuSuiteFile.FullName
+          foreach ($menuItem in Read-MenuSuite -ObjectFilePath $menuSuiteFile.FullName) {
+            if ($menuItems | Where-Object -Property Id -EQ $menuItem.Id) {
+                Write-Verbose "Duplicate menu item $($menuItem.Id)"
+             } else {
+                $menuItems += $menuItem
+            }
+          }
         } 
     }
 }
