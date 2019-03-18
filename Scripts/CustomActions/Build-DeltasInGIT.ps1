@@ -36,7 +36,7 @@ if (Test-Path $TargetFolder)
   Remove-Item -Path $TargetFolder -Recurse -Force -ErrorAction SilentlyContinue
 }
 New-Item -Path $TargetFolder -ItemType Directory | Out-Null
-Write-Host Saving new deltas $TargetFileName
+Write-Host Saving new deltas to $TargetFolder
 Copy-Item -Path (Join-Path $SourceFolder '*.*') -Destination $TargetFolder
 
 $SourceFolder = (Join-Path $SetupParameters.workFolder 'ReverseDeltas')
@@ -47,7 +47,7 @@ if (Test-Path $TargetFolder)
   Remove-Item -Path $TargetFolder -Recurse -Force -ErrorAction SilentlyContinue
 }
 New-Item -Path $TargetFolder -ItemType Directory | Out-Null
-Write-Host Saving new reverse deltas $TargetFileName
+Write-Host Saving new reverse deltas to $TargetFolder
 Copy-Item -Path (Join-Path $SourceFolder '*.*') -Destination $TargetFolder
 
 
