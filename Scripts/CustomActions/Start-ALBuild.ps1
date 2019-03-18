@@ -4,6 +4,9 @@ if (![String]::IsNullOrEmpty($SetupParameters.CreateSymbols)) {
     & (Join-path $PSScriptRoot 'Build-NAVSymbolReferences.ps1')
 }
 
+# Compile Queries to fix symbols
+& (Join-path $PSScriptRoot 'Start-CompileQueriesOnHost.ps1')
+
 Write-Host Initialize Test Company
 & (Join-path $PSScriptRoot 'Initialize-NAVCompany.ps1')
 Write-Host Download AL Addin
