@@ -11,6 +11,7 @@
     
     Load-InstanceAdminTools -SetupParameters $SetupParameters
     Set-NAVServerConfiguration -ServerInstance $BranchSettings.instanceName -KeyName EnableSymbolLoadingAtServerStartup -KeyValue true
+    Write-Host "Restarting Service $($BranchSettings.instanceName)..."
     Set-NAVServerInstance -ServerInstance $BranchSettings.instanceName -Restart
     Get-NAVTenant -ServerInstance $BranchSettings.instanceName | Sync-NAVTenant -Mode Sync -Force
     UnLoad-InstanceAdminTools
