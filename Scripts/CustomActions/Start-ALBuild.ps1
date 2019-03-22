@@ -5,15 +5,7 @@ if (![String]::IsNullOrEmpty($SetupParameters.CreateSymbols)) {
     & (Join-path $PSScriptRoot 'Build-NAVSymbolReferences.ps1')
 }
 
-Write-Host "Enabling server instance symbol reference update..."
-& (Join-path $PSScriptRoot 'Start-ALSymbolReferenceGenerationOnServer.ps1')
-
-# Import CAL objects required for symbols
-& (Join-path $PSScriptRoot 'ImportFrom-GITCALObjectsToNAV.ps1')
-
-# Compile Queries to fix symbols
-& (Join-path $PSScriptRoot 'Start-CompileQueriesOnHost.ps1')
-& (Join-path $PSScriptRoot 'Start-CompileModifiedObjectsOnHost.ps1')
+& (Join-path $PSScriptRoot 'ImportFrom-CALDependencies.ps1')
 
 Write-Host Initialize Test Company
 & (Join-path $PSScriptRoot 'Initialize-NAVCompany.ps1')
