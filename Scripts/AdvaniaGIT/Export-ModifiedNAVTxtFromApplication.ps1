@@ -20,9 +20,5 @@ function Export-ModifiedNAVTxtFromApplication
         [Switch] $ExportWithNewSyntax
     )
     Write-Host -Object 'Exporting modified files...'
-    if ($ExportWithNewSyntax) {
-        Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path $ObjectsPath -Filter 'Modified=1' -ExportWithNewSyntax
-    } else {
-        Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path $ObjectsPath -Filter 'Modified=1' 
-    }
+    Export-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -ExportTxtSkipUnlicensed -Path $ObjectsPath -Filter 'Modified=1' -ExportWithNewSyntax:$ExportWithNewSyntax
 }
