@@ -48,7 +48,8 @@
     $parameters = @(
                 "--volume `"$volume`"",
                 "--volume `"$rootPath`"",
-                "--env SqlTimeout=1200")
+                "--env SqlTimeout=1200",
+                "--dns 8.8.8.8")
 
     if ($SetupParameters.BuildMode) {
         $parameters += @("--env webClient=N",
