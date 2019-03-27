@@ -6,11 +6,11 @@
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyname=$true)]
         [String]$XlfFile,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyname=$true)]
-        [HashTable]$TranslateTable = @{}
+        [hashtable]$TranslateTable
     )
 
     Write-Host "Loading translation file ${XlfFile}..."
-    if (!$TranslateTable) {$TranslateTable = @{}}
+    if (!$TranslateTable) {$TranslateTable = (New-Object System.Collections.Hashtable)}
     [xml]$Xlf = Get-Content -Path $XlfFile -Encoding UTF8 
     foreach ($node in $Xlf.xliff.file.body.group.'trans-unit') {
         if ($node.translate -ieq 'yes') {
