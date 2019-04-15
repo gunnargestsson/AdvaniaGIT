@@ -23,6 +23,7 @@
 
     $FTPResponse = $FTPRequest.GetResponse()
     $ResponseStream = $FTPResponse.GetResponseStream()
+    $BannerMessage = $FTPResponse.BannerMessage
 
     # Create a nice Array of the detailed directory listing
     $StreamReader = New-Object System.IO.Streamreader $ResponseStream
@@ -37,17 +38,23 @@
 
     # Loop through the listings
     foreach ($CurLine in $DirListing) {
+        if ($BannerMessage.Contains("220 Welcome to Advania")) {
+            # Split line into space separated array
+            $LineTok = ($CurLine -split '\ +')
 
-        # Split line into space separated array
-        $LineTok = ($CurLine -split '\ +')
+            # Get the filename (can even contain spaces)
+            $CurFile = $LineTok[8..($LineTok.Length-1)]
 
-        # Get the filename (can even contain spaces)
-        $CurFile = $LineTok[8..($LineTok.Length-1)]
-
-        # Figure out if it's a directory. Super hax.
-        $DirBool = $LineTok[0].StartsWith("d")
-        $FileBool = $LineTok[0].StartsWith("-")
-
+            # Figure out if it's a directory. Super hax.
+            $DirBool = $LineTok[0].StartsWith("d")
+            $FileBool = $LineTok[0].StartsWith("-")
+        }
+        if ($BannerMessage.Contains("220 Microsoft FTP Service")) {
+            # Extract filename from listing format for microsoft ftp Service
+            $CurFile = $CurLine[39..($CurLine.Length-1)] -join ''
+            $DirBool = $CurLine.Contains('<DIR>');
+            $FileBool = !$DirBool
+        }
         # Determine what to do next (file or dir?)
         If ($DirBool) {
             # Recursively traverse sub-directories
