@@ -98,3 +98,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.0.4]
 - Add new commands to convert New Syntax Tests to AL
+
+## [1.1.0]
+- Fix vulnerabilities and remove obsolete commands
