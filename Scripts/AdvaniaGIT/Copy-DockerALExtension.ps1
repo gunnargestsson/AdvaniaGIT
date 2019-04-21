@@ -5,8 +5,7 @@
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$BranchSettings
     )
-    $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId
-    Invoke-Command -Session $Session -ScriptBlock {
+    Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock {
         param([String]$LogFolder)
         $Extension = Get-Item -Path 'C:\Run\*.vsix'
         if (!$Extension) {
@@ -24,6 +23,5 @@
         } 
 
     } -ArgumentList (Split-Path $SetupParameters.LogPath -Leaf)
-    Remove-PSSession $Session
 }
         

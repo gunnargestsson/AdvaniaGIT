@@ -25,8 +25,6 @@
         }
         if (!($dockerContainer.Status -match "(healthy)")) {
             Write-Error "Container $($BranchSettings.dockerContainerName) unable to start !" -ErrorAction Stop
-        } else {
-            ReRegister-DockerContainer -BranchSettings $BranchSettings
-        }
+        } 
     }
 }

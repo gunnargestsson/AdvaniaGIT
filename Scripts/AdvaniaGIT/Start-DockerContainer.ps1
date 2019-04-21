@@ -18,6 +18,16 @@
     [String]$MemoryLimit = ""
     )
     
+    if (![Bool](Get-Module NAVContainerHelper)) {
+        if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
+            if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
+            Import-Module NAVContainerHelper -DisableNameChecking
+        } else {
+            Write-Host -ForegroundColor Red "NAV Container Helper is required.  Please use the VS Code command to install NAV container helper!"
+            throw
+        }
+    }    
+    
     $DockerSettings = Get-DockerSettings 
     $DockerCreated = $false
 
@@ -63,144 +73,52 @@
                         )
     }
 
-    if ([Bool](Get-Module NAVContainerHelper)) {
-        $params = @{ 
-            additionalParameters = $parameters
-            doNotExportObjectsToText = $true 
-            shortcuts = 'None'
-            }
+
+    $params = @{ 
+        additionalParameters = $parameters
+        doNotExportObjectsToText = $true 
+        shortcuts = 'None'
+        }
         
-        if (![System.String]::IsNullOrEmpty($LicenseFilePath)) {
-            $params += @{ licensefile = "$LicenseFilePath" }
-        }
-
-        if (![System.String]::IsNullOrEmpty($SetupParameters.dockerTestToolkit)) {
-            $params += @{ includeTestToolkit = $SetupParameters.dockerTestToolkit }
-        }
-
-        if (![System.String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
-            $params += @{ auth = $SetupParameters.dockerAuthentication }
-        }
-
-        if (![System.String]::IsNullOrEmpty($SetupParameters.dockerEnableSymbolLoading)) {
-            $params += @{ enableSymbolLoading = $true }
-        }
-
-        if ($SetupParameters.BuildMode) {
-            $DockerContainerFriendlyName = "BC$((New-Guid).ToString().Replace('-','').Substring(0,13))"
-        } else {
-            if (![System.String]::IsNullOrEmpty($SetupParameters.dockerFriendlyName)) {
-                $DockerContainerFriendlyName = $SetupParameters.dockerFriendlyName
-            } else {
-                $DockerContainerFriendlyName = "$($SetupParameters.projectName)               ".Substring(0,15).TrimEnd(" ") -replace '_','-'
-            }
-        }
-        if ((Get-NavContainers) -inotcontains $DockerContainerFriendlyName) { 
-            New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -alwaysPull -includeCSide -restart no
-            $DockerCreated = $true
-        }
-        $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 
-    } else {
-        docker.exe pull $imageName
-        if ($MemoryLimit -eq "") {$MemoryLimit = "4G"}
-
-        $genericTag = (docker.exe inspect $imageName | ConvertFrom-Json).Config.Labels.tag
-
-        $parameters += @(
-                    "--memory $MemoryLimit",
-                    "--env auth=Windows",
-                    "--env username=$adminUsername",
-                    "--env ExitOnError=N",
-                    "--env ACCEPT_EULA=Y",
-                    "--restart no",
-                    "--env locale=$((Get-Culture).Name)"
-                    )    
-
-        Write-Host "Docker Container starting..."
-
-        if (![System.String]::IsNullOrEmpty($LicenseFilePath)) {
-            $LicenseFilePath = $LicenseFilePath.Replace($SetupParameters.rootPath,"C:\Host")
-            $parameters += @(
-                                "--env licensefile=`"$LicenseFilePath`""
-                            )
-            }
-
-        if (![String]::IsNullOrEmpty($DockerSettings.DockerHostIPName)) {
-            $dockerContainerIp = Get-NextAvailableDockerIpAddress
-            $parameters +=  @("--network=$($DockerSettings.DockerHostIPName)","--ip ${dockerContainerIp}")
-        }
-
-        if ([System.Version]$genericTag -ge [System.Version]"0.0.3.0") {
-            $passwordKeyHostFile = Join-Path $($SetupParameters.LogPath) "aes.key"
-            $logFolder = Split-Path $SetupParameters.LogPath -Leaf
-            $passwordKeyFile = Join-Path (Join-Path (Join-Path "C:\Host" (Split-Path (Split-Path $SetupParameters.LogPath -Parent) -Leaf)) $logFolder) "aes.key"
-            $passwordKey = New-Object Byte[] 16
-            [Security.Cryptography.RNGCryptoServiceProvider]::Create().GetBytes($passwordKey)
-            Set-Content -Path $passwordKeyHostFile -Value $passwordKey
-            $encPassword = ConvertFrom-SecureString -SecureString (ConvertTo-SecureString -String $AdminPassword -AsPlainText -Force) -Key $passwordKey
-            
-            $parameters += @(
-                                "--env securePassword=$encPassword",
-                                "--env passwordKeyFile=""$passwordKeyFile""",
-                                "--env removePasswordKeyFile=Y"
-                            ) 
-
-            $DockerContainerId = Start-DockerRun -accept_eula -accept_outdated -imageName $imageName -parameters $parameters
-        } else {
-            $parameters += "--env password=""$AdminPassword"""
-            $DockerContainerId = Start-DockerRun -accept_eula -accept_outdated -imageName $imageName -parameters $parameters
-        }
-    
-        $DockerCreated = true;
-        $NoOfLogLines = 0
-        $WaitForHealty = $true
-        $LoopNo = 1
-        while ($WaitForHealty -and $LoopNo -lt 100) {
-            $log = (docker.exe logs $DockerContainerId) | Select-Object -Skip $NoOfLogLines
-            $NoOfLogLines += $log.Count
-            if ($log.Count -gt 0) {
-                Write-Host "$([string]::Join("`r`n",$log))"
-                $WaitForHealty = (!($log.Contains("Ready for connections!")))
-            }
-            if ($WaitForHealty) { Start-Sleep -Seconds 4 }
-            $LoopNo ++
-        }       
-
-        $DockerConfig = docker.exe inspect $DockerContainerId
-        $DockerContainerName = ($DockerConfig | ConvertFrom-Json).Config[0].HostName
-        $DockerContainerFriendlyName = Split-Path ($DockerConfig | ConvertFrom-Json).Name -Leaf
-        $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $DockerContainerName
-
-        $WaitForHealty = $true
-        $LoopNo = 1
-        while ($WaitForHealty -and $LoopNo -lt 20) {        
-            $dockerContainer = Get-DockerContainers | Where-Object -Property Id -ieq $DockerContainerName
-            Write-Host "Container status: $($dockerContainer.Status)..."
-            $WaitForHealty = $dockerContainer.Status -match "(health: starting)"
-            if ($WaitForHealty) { Start-Sleep -Seconds 10 }
-            $LoopNo ++
-        }
-
-        if (!($dockerContainer.Status -match "(healthy)")) {
-            $logs = docker.exe logs $DockerContainerName
-            Write-Host -ForegroundColor Red "$([string]::Join("`r`n",$logs))"
-            Write-Host -ForegroundColor Red "Status: $($dockerContainer.Status)"
-            Write-Error "Container $DockerContainerName unable to start !" -ErrorAction Stop
-        }
+    if (![System.String]::IsNullOrEmpty($LicenseFilePath)) {
+        $params += @{ licensefile = "$LicenseFilePath" }
     }
 
-    $Session = New-DockerSession -DockerContainerId $DockerContainerId
+    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerTestToolkit)) {
+        $params += @{ includeTestToolkit = $SetupParameters.dockerTestToolkit }
+    }
+
+    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
+        $params += @{ auth = $SetupParameters.dockerAuthentication }
+    }
+
+    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerEnableSymbolLoading)) {
+        $params += @{ enableSymbolLoading = $true }
+    }
+
+    if ($SetupParameters.BuildMode) {
+        $DockerContainerFriendlyName = "BC$((New-Guid).ToString().Replace('-','').Substring(0,13))"
+    } else {
+        if (![System.String]::IsNullOrEmpty($SetupParameters.dockerFriendlyName)) {
+            $DockerContainerFriendlyName = $SetupParameters.dockerFriendlyName
+        } else {
+            $DockerContainerFriendlyName = "$($SetupParameters.projectName)               ".Substring(0,15).TrimEnd(" ") -replace '_','-'
+        }
+    }
+    if ((Get-NavContainers) -inotcontains $DockerContainerFriendlyName) { 
+        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -alwaysPull -includeCSide -restart no -updateHosts
+        $DockerCreated = $true
+    }
+    $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 
+   
+
     if ($DockerCreated) { 
-        $DockerSettings = Install-DockerAdvaniaGIT -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings 
+        $DockerSettings = Install-DockerAdvaniaGIT -SetupParameters $SetupParameters -BranchSettings $BranchSettings -containerName $DockerContainerFriendlyName 
     } else {
-        $DockerSettings = Get-DockerAdvaniaGITConfig -Session $Session -SetupParameters $SetupParameters -BranchSettings $BranchSettings
-    }
-    if ([Bool](Get-Module NAVContainerHelper)) {
-        $DockerContainerIpAddress = Get-NavContainerIpAddress -containerName $DockerContainerFriendlyName
-    } else {
-        $DockerContainerIpAddress = Get-DockerIPAddress -Session $Session
-    }
-    Edit-DockerHostRegistration -AddHostName $DockerContainerFriendlyName -AddIpAddress $DockerContainerIpAddress
+        $DockerSettings = Get-DockerAdvaniaGITConfig -SetupParameters $SetupParameters -BranchSettings $BranchSettings -containerName $DockerContainerFriendlyName 
+    } 
+    $DockerContainerIpAddress = Get-NavContainerIpAddress -containerName $DockerContainerFriendlyName
+   
 
     $BranchSettings.databaseServer = $DockerContainerFriendlyName
     $BranchSettings.dockerContainerName = $DockerContainerFriendlyName
@@ -214,7 +132,6 @@
     $BranchSettings.instanceName = $DockerSettings.BranchSettings.instanceName
 
     Update-BranchSettings -BranchSettings $BranchSettings
-    Remove-PSSession -Session $Session 
     if ($passwordKeyHostFile) {
         Remove-Item -Path $passwordKeyHostFile -Force -ErrorAction SilentlyContinue
     }

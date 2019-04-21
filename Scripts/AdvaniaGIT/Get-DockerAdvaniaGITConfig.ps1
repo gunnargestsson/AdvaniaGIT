@@ -1,14 +1,14 @@
 ﻿Function Get-DockerAdvaniaGITConfig {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [System.Management.Automation.Runspaces.PSSession]$Session,
-        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SetupParameters,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$BranchSettings
+        [PSObject]$BranchSettings,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [String]$ContainerName
     )
 
-    $DockerSettings = Invoke-Command -Session $Session -ScriptBlock { 
+    $DockerSettings = Invoke-ScriptInNavContainer -containerName $ContainerName -ScriptBlock { 
         param([PSObject]$SetupParameters, [PSObject]$BranchSettings, [String]$GeoId, [String]$LocaleName )
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted 
         Import-Module AdvaniaGIT

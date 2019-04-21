@@ -19,8 +19,7 @@
         }
     }
 
-    $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId
-    Invoke-Command -Session $Session -ScriptBlock {
+    Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock {
         param([String]$LogFolder)
         Write-Host "Copying RoleTailored Client to Host Computer..."
         $Source = Get-Item -Path "C:\Program Files (x86)\Microsoft Dynamics NAV\*\RoleTailored Client"
@@ -29,7 +28,6 @@
         $ClientUserSettingsFileName = "C:\Run\ClientUserSettings.config"
         Copy-Item -Path $ClientUserSettingsFileName -Destination (Join-Path $Destination 'RoleTailored Client') -Force
     } -ArgumentList (Split-Path $SetupParameters.LogPath -Leaf)
-    Remove-PSSession $Session
 
     $ClientFolderSettings = New-Object -TypeName PSObject
     $ClientFolderSettings | Add-Member -MemberType NoteProperty -Name dockerContainerName -Value $BranchSettings.dockerContainerName

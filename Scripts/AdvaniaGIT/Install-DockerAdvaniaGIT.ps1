@@ -1,16 +1,16 @@
 ﻿Function Install-DockerAdvaniaGIT {
     param(
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [System.Management.Automation.Runspaces.PSSession]$Session,
-        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [PSObject]$SetupParameters,
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$BranchSettings
+        [PSObject]$BranchSettings,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [String]$ContainerName
     )
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "$($SetupParameters.LogPath)\AdvaniaGIT.zip" -ErrorAction Stop
-    $DockerSettings = Invoke-Command -Session $Session -ScriptBlock { 
+    Invoke-WebRequest -Uri "https://github.com/gunnargestsson/AdvaniaGIT/archive/master.zip" -OutFile "$($SetupParameters.LogPath)\AdvaniaGIT.zip" -ErrorAction Stop    
+    $DockerSettings = Invoke-ScriptInNavContainer -containerName $ContainerName -ScriptBlock { 
         param([PSObject]$SetupParameters, [PSObject]$BranchSettings, [String]$GeoId, [String]$LocaleName )
         Set-ExecutionPolicy -ExecutionPolicy Unrestricted 
         Set-WinHomeLocation -GeoId $GeoId
