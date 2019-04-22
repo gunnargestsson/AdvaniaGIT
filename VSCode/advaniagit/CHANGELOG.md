@@ -101,3 +101,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.1.0]
 - Fix vulnerabilities and remove obsolete commands
+
+## [1.1.1]
+- Bugfix for Launch.Json Action
