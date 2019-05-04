@@ -58,8 +58,7 @@ do {
                                 if ($selectedContainer.Status.Contains("Up")) {
                                     $dockerContainerName = docker.exe stopp $($selectedContainer.Names)
                                 }
-                                $dockerContainerName = docker.exe rm $($selectedContainer.Names)
-                                Edit-DockerHostRegistration -RemoveHostName $selectedContainer.Names
+                                Remove-NavContainer -containerName $($selectedContainer.Names)
                                 if ($selectedContainer.branchId -gt "") { 
                                     $BranchSettings = Clear-BranchSettings -BranchId $BranchSettings.branchId
                                 } 
