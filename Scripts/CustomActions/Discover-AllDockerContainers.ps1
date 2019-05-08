@@ -8,6 +8,6 @@ foreach ($Container in Get-DockerContainers) {
   if ($Container.Status -match "Exited") {        
     ReStart-DockerContainer -BranchSettings $DockerSettings
   } else {
-    ReRegister-DockerContainer -BranchSettings $DockerSettings
+  	Restart-NAVContainer -containerName $Container.Names
   }
 }

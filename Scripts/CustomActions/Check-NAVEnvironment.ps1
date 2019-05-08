@@ -1,4 +1,4 @@
 ﻿if ($BranchSettings.dockerContainerName -gt "") {
-  ReRegister-DockerContainer -BranchSettings $BranchSettings
+  & (Join-path $PSScriptRoot 'Discover-AllDockerContainers.ps1')
 }
 Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings
