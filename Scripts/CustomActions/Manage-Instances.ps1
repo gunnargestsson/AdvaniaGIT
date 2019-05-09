@@ -60,7 +60,7 @@ do {
                                         Get-NAVServerInstance -ServerInstance $selectedInstance.instanceName | Remove-NAVServerInstance -Force
                                         if ($selectedInstance.databaseName -ne "") {
                                             Write-Host "Removing Database..."
-                                            Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command "DROP DATABASE [$($selectedInstance.databaseName)]" | Out-Null                                        
+                                            Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command "DROP DATABASE [$($selectedInstance.databaseName)]" -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword | Out-Null                                        
                                         }
                                 }                                
                                 UnLoad-InstanceAdminTools

@@ -22,7 +22,7 @@
         [int]$ExecutePermission = 0
     )
     $command = "SELECT * FROM [dbo].[Permission] WHERE [Role ID] = '$RoleID' AND [Object Type] = $ObjectType AND [Object ID] = $ObjectID;"
-    $PermissionResult = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command 
+    $PermissionResult = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword 
     if ($PermissionResult) {
         if ($ReadPermission -ne $PermissionResult.'Read Permission' -or `
             $InsertPermission -ne $PermissionResult.'Insert Permission' -or `
@@ -36,12 +36,12 @@
             $command += ",[Delete Permission] = $DeletePermission"
             $command += ",[Execute Permission] = $ExecutePermission "
             $command += "WHERE [Role ID] = '$RoleID' AND [Object Type] = $ObjectType AND [Object ID] = $ObjectID;"
-            $Result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command 
+            $Result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword 
         }
     } else {
         $command = "INSERT INTO [dbo].[Permission] ([Role ID],[Object Type],[Object ID],[Read Permission],[Insert Permission],[Modify Permission],[Delete Permission],[Execute Permission],[Security Filter]) "
         $command += "VALUES ('$RoleID',$ObjectType,$ObjectID,$ReadPermission,$InsertPermission,$ModifyPermission,$DeletePermission,$ExecutePermission,0x)"
-        $Result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command 
+        $Result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword 
     }
 
 }

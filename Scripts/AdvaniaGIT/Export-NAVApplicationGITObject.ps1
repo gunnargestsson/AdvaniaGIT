@@ -36,7 +36,7 @@
     try
     {
         if (![String]::IsNullOrEmpty($SetupParameters.dockerAuthentication) -and $SetupParameters.dockerAuthentication -ieq "NavUserPassword") {
-            $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName "SA"
+            $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $env:USERNAME
             Run-NavIdeCommand -Command $command `
                 -SetupParameters $SetupParameters `
                 -BranchSettings $BranchSettings `

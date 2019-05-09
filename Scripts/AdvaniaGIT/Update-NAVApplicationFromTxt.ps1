@@ -65,7 +65,7 @@
         else 
         {
             $FileObjectsHash.Add("$Type-$Id",$true)
-            $NAVObject = Get-SQLCommandResult -Server $Server -Database $Database -Command "select [Type],[ID],[Version List],[Modified],[Name],[Date],[Time] from Object where [Type]=$Type and [ID]=$Id"
+            $NAVObject = Get-SQLCommandResult -Server $Server -Database $Database -Command "select [Type],[ID],[Version List],[Modified],[Name],[Date],[Time] from Object where [Type]=$Type and [ID]=$Id" -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
             $FileObjectDateTime = Get-Date
             $skipObject = ([datetime]::TryParseExact("$($FileObject.Date) $($FileObject.Time)","$($RepositoryCultureInfo.DateTimeFormat.ShortDatePattern) $($RepositoryCultureInfo.DateTimeFormat.LongTimePattern)".Replace("yyyy","yy"),[System.Globalization.CultureInfo]::InvariantCulture,[System.Globalization.DateTimeStyles]::None,[ref]$FileObjectDateTime))
             if (!$skipObject) {
@@ -121,7 +121,7 @@
     $count = $UpdatedObjects.Count
     if (!$SkipDeleteCheck) 
     {
-        $NAVObjects = Get-SQLCommandResult -Server $Server -Database $Database -Command 'select [Type],[ID],[Version List],[Modified],[Name],[Date],[Time] from Object where [Type]>0 and [ID]<2000000000'
+        $NAVObjects = Get-SQLCommandResult -Server $Server -Database $Database -Command 'select [Type],[ID],[Version List],[Modified],[Name],[Date],[Time] from Object where [Type]>0 and [ID]<2000000000' -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
         $i = 0
         $count = $NAVObjects.Count
         $StartTime = Get-Date
@@ -183,7 +183,7 @@
         }
         if (($ObjToImport.Type -eq 7) -and ($ObjToImport.Id -lt 1050))
         {
-            $Result = Get-SQLCommandResult -Server $Server -Database $Database -Command "DELETE from Object where [Type]=7 and [ID]=$($ObjToImport.Id)"
+            $Result = Get-SQLCommandResult -Server $Server -Database $Database -Command "DELETE from Object where [Type]=7 and [ID]=$($ObjToImport.Id)" -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
         }
         Write-Verbose -Message "Importing $($ObjToImport.FileName.FileName)"
         Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $ObjToImport.FileName.FileName -ImportAction Overwrite -SynchronizeSchemaChanges Force

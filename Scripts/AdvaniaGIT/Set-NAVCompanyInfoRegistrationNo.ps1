@@ -11,5 +11,5 @@
     )   
 
     $command = "UPDATE [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'Company Information')] SET [Registration No_] = '$RegistrationNo' "
-    Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
+    Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword | Out-Null
 }

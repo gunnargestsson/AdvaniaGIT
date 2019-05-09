@@ -13,10 +13,10 @@
     $TempBacpacFilePath = Join-Path $SetupParameters.LogPath "NAVBackup.bacpac"
 
     $command = "DROP USER [NT AUTHORITY\NETWORK SERVICE]"
-    $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
+    $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
 
     $command = "DELETE FROM [dbo].[Session Event]; DELETE FROM [dbo].[Active Session]; DELETE FROM [dbo].[Server Instance]"
-    $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
+    $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
 
     $SqlPackagePath = Get-SqlPackagePath
     if (!(Test-Path $SqlPackagePath)) {
@@ -28,9 +28,9 @@
     & $SqlPackagePath /a:Export /ssn:$(Get-DatabaseServer -BranchSettings $BranchSettings) /sdn:$($BranchSettings.databaseName) /tf:$TempBacpacFilePath
 
     $command = "CREATE USER [NT AUTHORITY\NETWORK SERVICE] FOR LOGIN [NT AUTHORITY\NETWORK SERVICE] WITH DEFAULT_SCHEMA=[dbo]"
-    $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
+    $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
     $command = "ALTER ROLE [db_owner] ADD MEMBER [NT AUTHORITY\NETWORK SERVICE]"
-    $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
+    $result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
 
     if (!$BacpacFilePath) { $BacpacFilePath = Join-Path $SetupParameters.BackupPath "$($SetupParameters.navRelease)-$($SetupParameters.projectName).bacpac" }    
     if (!(Test-Path $TempBacpacFilePath)) {

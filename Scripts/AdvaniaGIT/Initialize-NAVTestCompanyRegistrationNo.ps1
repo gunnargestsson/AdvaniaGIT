@@ -11,7 +11,7 @@
     )   
 
     $command = "SELECT [Registration No_] FROM [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'Company Information')]"
-    $RegistrationNo = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command
+    $RegistrationNo = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
     if ($RegistrationNo.'Registration No_' -eq "") {
       Set-NAVCompanyInfoRegistrationNo -BranchSettings $BranchSettings -CompanyName $CompanyName -RegistrationNo $DefaultRegistrationNo
     }

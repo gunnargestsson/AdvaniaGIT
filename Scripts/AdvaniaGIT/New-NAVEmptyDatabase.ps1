@@ -10,7 +10,7 @@
     )
 
     $command = "SELECT DATABASEPROPERTYEX('master', 'Collation');"
-    $CollationResult = Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command $command
+    $CollationResult = Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
     $selectedCollation = Read-Host -Prompt "Select Database Collation (default=$($CollationResult.Column1))" 
     if ($selectedCollation -eq "") { $selectedCollation = $CollationResult.Column1 }
 
@@ -22,7 +22,7 @@
     $command += "( NAME = N'$DatabaseName" + "_Data', FILENAME = N'$dbDataFile' , SIZE = 100MB , MAXSIZE = UNLIMITED, FILEGROWTH = 10%) "
     $command += "LOG ON ( NAME = N'$DatabaseName" + "_Log', FILENAME = N'$dbLogFile' , SIZE = 100MB , MAXSIZE = 2048GB , FILEGROWTH = 10%) "
     $command += "COLLATE ${selectedCollation};"
-    $CreateResult = Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command $command
+    $CreateResult = Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
 
     $command = "ALTER DATABASE [" + $DatabaseName + "] SET COMPATIBILITY_LEVEL = 130;"
     $command += "IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled')) begin EXEC [" + $DatabaseName + "].[dbo].[sp_fulltext_database] @action = 'enable' end;"
@@ -56,7 +56,7 @@
     $command += "ALTER DATABASE [" + $DatabaseName + "] SET TARGET_RECOVERY_TIME = 0 SECONDS ;"
     $command += "ALTER DATABASE [" + $DatabaseName + "] SET DELAYED_DURABILITY = DISABLED ;"
     $command += "ALTER DATABASE [" + $DatabaseName + "] SET QUERY_STORE = OFF;"
-    $UpdateResult = Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command $command
+    $UpdateResult = Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database master -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
 
     $command = "ALTER DATABASE SCOPED CONFIGURATION SET MAXDOP = 0;"
     $command += "ALTER DATABASE SCOPED CONFIGURATION FOR SECONDARY SET MAXDOP = PRIMARY;"
@@ -67,5 +67,5 @@
     $command += "ALTER DATABASE SCOPED CONFIGURATION SET QUERY_OPTIMIZER_HOTFIXES = OFF;"
     $command += "ALTER DATABASE SCOPED CONFIGURATION FOR SECONDARY SET QUERY_OPTIMIZER_HOTFIXES = PRIMARY;"
     $command += "ALTER DATABASE [" + $DatabaseName + "] SET  READ_WRITE ;"
-    $UpdateResult = Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database $DatabaseName -Command $command
+    $UpdateResult = Get-SQLCommandResult -Server (Get-DefaultDatabaseServer -SetupParameters $SetupParameters) -Database $DatabaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
 }

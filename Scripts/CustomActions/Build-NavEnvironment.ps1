@@ -130,5 +130,5 @@ if ($BranchSettings.dockerContainerName -gt "") {
 if (![string]::IsNullOrEmpty($Setupparameters.uidOffset)) {
     Write-Host "Set uidoffset in database $($BranchSettings.databaseName) to $($Setupparameters.uidOffset)"
     $command = 'UPDATE [dbo].[$ndo$dbproperty] SET [uidoffset] = ' + $Setupparameters.uidOffset
-    $Result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command   
+    $Result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword   
 }

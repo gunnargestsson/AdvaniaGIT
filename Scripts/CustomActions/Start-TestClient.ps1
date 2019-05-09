@@ -12,7 +12,7 @@ if ($SetupParameters.testCodeunitId -and $SetupParameters.testCodeunitId -gt "")
 }
 
 $command = "SELECT TOP 1 [Profile ID] FROM [dbo].[Profile]  WHERE [Role Center ID] = 9006"
-$result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $Command
+$result = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $Command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
 Write-Host "Profile found $($result.'Profile ID')..."
 
 $params = @()
@@ -23,7 +23,7 @@ Start-Process -FilePath $ClientSettings.Client -ArgumentList $params -Wait
 
 $ResultTableName = Get-DatabaseTableName -CompanyName $companyName -TableName 'CAL Test Result'
 $Command = "select count([No_]) as [No. of Tests],CASE [Result] WHEN 0 THEN 'Passed' WHEN 1 THEN 'Failed' WHEN 2 THEN 'Inconclusive' ELSE 'Incomplete' END as [Result] from [$ResultTableName] group by [Result]"
-$SqlResult = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $Command  
+$SqlResult = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $Command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword  
 Write-Host ''
 Write-Host "Results..."
 Write-Host ''

@@ -2,7 +2,7 @@ Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $Branc
 if ($BranchSettings.dockerContainerId -gt "") {
     if ([Bool](Get-Module NAVContainerHelper)) {
         if (![String]::IsNullOrEmpty($SetupParameters.dockerAuthentication) -and $SetupParameters.dockerAuthentication -ieq "NavUserPassword") {
-            $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName "SA"        
+            $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $env:USERNAME        
             Compile-ObjectsInNavContainer -containerName $BranchSettings.dockerContainerName -sqlCredential $DockerCredentials
         } else {
             Compile-ObjectsInNavContainer -containerName $BranchSettings.dockerContainerName 
@@ -18,14 +18,14 @@ if ($BranchSettings.dockerContainerId -gt "") {
     foreach($objectType in $objectTypes) {
         Write-Host "Starting $objectType compilation..."
         $filter = "Type=$objectType;Version List=<>*Test*"
-        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile    
+        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile  -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
     }
     Receive-Job -Job $jobs -Wait     
     
     foreach($objectType in $objectTypes) {
         Write-Host "Starting $objectType test objects compilation..."
         $filter = "Type=$objectType;Version List=*Test*"
-        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile    
+        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword  
     }
     Receive-Job -Job $jobs -Wait
 

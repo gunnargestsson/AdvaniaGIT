@@ -23,14 +23,14 @@ function Set-NAVObjectAsDeleted
         $NAVObjectType,
         $NAVObjectID
     )
-    $Result = Get-SQLCommandResult -Server $Server -Database $Database -Command "select * from Object where [Type]=$($NAVObjectType) and [ID]=$($NAVObjectID)"
+    $Result = Get-SQLCommandResult -Server $Server -Database $Database -Command "select * from Object where [Type]=$($NAVObjectType) and [ID]=$($NAVObjectID)" -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
     if ($Result.Count -eq 0) {
         $command = ''+
         'insert into Object (Type,[Company Name],ID,Name,Modified,Compiled,[BLOB Reference],[BLOB Size],[DBM Table No_],Date,Time,[Version List],Locked,[Locked By])'+
         "VALUES($NAVObjectType,'',$NAVObjectID,'#DELETED $($NAVObjectType):$($NAVObjectID)',0,0,'',0,0,'1753-1-1 0:00:00','1754-1-1 12:00:00','#DELETE',0,'')"
 
-        $Result = Get-SQLCommandResult -Server $Server -Database $Database -Command $command
+        $Result = Get-SQLCommandResult -Server $Server -Database $Database -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
     } else {
-        $Result = Get-SQLCommandResult -Server $Server -Database $Database -Command "update Object set [Version List] = '#DELETE', [Time]='1754-1-1 12:00:00' where [Type]=$($NAVObjectType) and [ID]=$($NAVObjectID)"
+        $Result = Get-SQLCommandResult -Server $Server -Database $Database -Command "update Object set [Version List] = '#DELETE', [Time]='1754-1-1 12:00:00' where [Type]=$($NAVObjectType) and [ID]=$($NAVObjectID)" -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
     }
 }

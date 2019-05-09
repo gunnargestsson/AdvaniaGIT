@@ -22,7 +22,7 @@ if ($lastNAVCommitId -gt '') {
     if ($SetupParameters.skipDeleteCheck -eq "false") {
         Write-Host "Marking all object as deleted..."
         $command = "UPDATE [dbo].[Object] SET [Version List] = '#DELETED' WHERE [ID] < 2000000004"
-        Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command | Out-Null
+        Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword | Out-Null
     }
     Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path (Join-Path $SetupParameters.WorkFolder "Source.txt") -ImportAction Overwrite -SynchronizeSchemaChanges Force 
 } else {

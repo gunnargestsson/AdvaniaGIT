@@ -17,7 +17,7 @@
         Set-NAVServerInstance -ServerInstance $BranchSettings.InstanceName -Stop
         Start-Sleep -Seconds 2
         Write-Host "Removing Database..."
-        Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database master -Command "ALTER DATABASE [$($BranchSettings.DatabaseName)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [$($BranchSettings.DatabaseName)]" | Out-Null
+        Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database master -Command "ALTER DATABASE [$($BranchSettings.DatabaseName)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [$($BranchSettings.DatabaseName)]" -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword | Out-Null
         $params = @{ 
             BackupFilePath = $SelectedBackupFile
             DatabaseServer = $BranchSettings.databaseServer
