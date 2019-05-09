@@ -90,6 +90,8 @@
 
     if (![System.String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
         $params += @{ auth = $SetupParameters.dockerAuthentication }
+    } elseif ($env:USERDOMAIN -eq "AzureAD") {
+        $params += @{ auth = "NavUserpassword" }
     }
 
     if (![System.String]::IsNullOrEmpty($SetupParameters.dockerEnableSymbolLoading)) {

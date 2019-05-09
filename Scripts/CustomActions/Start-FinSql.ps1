@@ -19,7 +19,11 @@ if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
 }
 
 if ([String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
-    $params += ",ntauthentication=1"
+    if ($env:USERDOMAIN -eq "AzureAD") {
+        $params += ",ntauthentication=0"
+    } else {
+        $params += ",ntauthentication=1"
+    }
 } else {
     switch ($SetupParameters.dockerAuthentication)
     {

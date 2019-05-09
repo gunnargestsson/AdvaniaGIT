@@ -15,7 +15,11 @@ function Prepare-NAVClient
         $clientexe = Join-Path $clientPath 'Microsoft.Dynamics.Nav.Client.exe'
         $clientSettingsPath = Join-Path $clientPath 'ClientUserSettings.config'
         if ([String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {
-            $ClientServicesCredentialType = "Windows"
+            if ($env:USERDOMAIN -eq "AzureAD") {
+                $ClientServicesCredentialType = "NavUserPassword"
+            } else {
+                $ClientServicesCredentialType = "Windows"
+            }
         } else {
             $ClientServicesCredentialType = $SetupParameters.dockerAuthentication
         }
