@@ -48,12 +48,21 @@
             # Figure out if it's a directory. Super hax.
             $DirBool = $LineTok[0].StartsWith("d")
             $FileBool = $LineTok[0].StartsWith("-")
-        }
-        if ($BannerMessage.Contains("220 Microsoft FTP Service")) {
+        } elseif ($BannerMessage.Contains("220 Microsoft FTP Service")) {
             # Extract filename from listing format for microsoft ftp Service
             $CurFile = $CurLine[39..($CurLine.Length-1)] -join ''
             $DirBool = $CurLine.Contains('<DIR>');
             $FileBool = !$DirBool
+        } else {
+            # Split line into space separated array
+            $LineTok = ($CurLine -split '\ +')
+
+            # Get the filename (can even contain spaces)
+            $CurFile = $LineTok[8..($LineTok.Length-1)]
+
+            # Figure out if it's a directory. Super hax.
+            $DirBool = $LineTok[0].StartsWith("d")
+            $FileBool = $LineTok[0].StartsWith("-")
         }
         # Determine what to do next (file or dir?)
         If ($DirBool) {
