@@ -18,14 +18,22 @@ if ($BranchSettings.dockerContainerId -gt "") {
     foreach($objectType in $objectTypes) {
         Write-Host "Starting $objectType compilation..."
         $filter = "Type=$objectType;Version List=<>*Test*"
-        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile  -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
+        if ($SetupParameters.SqlUsername) {
+        	$jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
+        } else {
+        	$jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile
+        }
     }
     Receive-Job -Job $jobs -Wait     
     
     foreach($objectType in $objectTypes) {
         Write-Host "Starting $objectType test objects compilation..."
         $filter = "Type=$objectType;Version List=*Test*"
-        $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword  
+        if ($SetupParameters.SqlUsername) {
+        	$jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword  
+        } else {
+        	$jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges No -Recompile
+        }
     }
     Receive-Job -Job $jobs -Wait
 
