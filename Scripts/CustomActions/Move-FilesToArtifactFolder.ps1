@@ -1,17 +1,21 @@
-﻿if (![String]::IsNullOrEmpty($SetupParameters.DestinationFilePath)) {
-    New-Item -Path $SetupParameters.DestinationFilePath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+﻿if ([String]::IsNullOrEmpty($SetupParameters.DestinationFilePath)) {
+    $ArtifactsPath = Join-Path $SetupParameters.repository 'Artifacts'
+} else {
+    $ArtifactsPath = $SetupParameters.DestinationFilePath
+}
 
-    # Backup Folder
-    $backups = Get-ChildItem -Path $SetupParameters.backupPath -Filter "$($SetupParameters.navRelease)-$($SetupParameters.projectName).*"
-    foreach ($file in $backups) {
-        Write-Host "Moving $($file.Name) to $($SetupParameters.DestinationFilePath)..."       
-        Move-Item -Path $file.FullName -Destination $SetupParameters.DestinationFilePath -Force -ErrorAction SilentlyContinue
-    }
+New-Item -Path $SArtifactsPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
 
-    # Workspace Folder
-    $results = Get-ChildItem -Path $SetupParameters.WorkFolder -Filter "$($SetupParameters.navRelease)-$($SetupParameters.projectName).*"
-    foreach ($file in $results) {
-        Write-Host "Moving $($file.Name) to $($SetupParameters.DestinationFilePath)..."       
-        Move-Item -Path $file.FullName -Destination $SetupParameters.DestinationFilePath -Force -ErrorAction SilentlyContinue
-    }
+# Backup Folder
+$backups = Get-ChildItem -Path $SetupParameters.backupPath -Filter "$($SetupParameters.navRelease)-$($SetupParameters.projectName).*"
+foreach ($file in $backups) {
+    Write-Host "Moving $($file.Name) to $($ArtifactsPath)..."       
+    Move-Item -Path $file.FullName -Destination $ArtifactsPath -Force -ErrorAction SilentlyContinue
+}
+
+# Workspace Folder
+$results = Get-ChildItem -Path $SetupParameters.WorkFolder -Filter "$($SetupParameters.navRelease)-$($SetupParameters.projectName).*"
+foreach ($file in $results) {
+    Write-Host "Moving $($file.Name) to $($ArtifactsPath)..."       
+    Move-Item -Path $file.FullName -Destination $ArtifactsPath -Force -ErrorAction SilentlyContinue
 }
