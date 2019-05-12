@@ -4,7 +4,7 @@
     $ArtifactsPath = $SetupParameters.DestinationFilePath
 }
 
-New-Item -Path $SArtifactsPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+New-Item -Path $ArtifactsPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
 
 # Backup Folder
 $backups = Get-ChildItem -Path $SetupParameters.backupPath -Filter "$($SetupParameters.navRelease)-$($SetupParameters.projectName).*"
