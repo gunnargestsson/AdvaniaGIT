@@ -8,7 +8,7 @@ $ResultTableName = Get-DatabaseTableName -CompanyName $companyName -TableName 'C
 if ($SetupParameters.TestResultsPath) {
     $OutFile = Join-Path $Repository $SetupParameters.TestResultsPath
 } else {
-    $OutFile = Join-Path $LogPath ((Split-Path $SetupParameters.LogPath -Leaf) + ".trx")
+    $OutFile = Join-Path $SetupParameters.LogPath "TestResults.trx"
 }
 if (!(Test-Path (Split-Path -Path $OutFile -Parent))) {
     New-Item -Path (Split-Path -Path $OutFile -Parent) -ItemType Directory | Out-Null
