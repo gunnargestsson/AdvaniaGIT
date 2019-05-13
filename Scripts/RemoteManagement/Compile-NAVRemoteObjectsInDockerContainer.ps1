@@ -7,8 +7,7 @@
 
     Invoke-Command -Session $Session -ScriptBlock `
     {
-        $Session = New-DockerSession -DockerContainerId $BranchSettings.DockerContainerId
-        Invoke-Command -Session $Session -ScriptBlock `
+        Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock `
         {            
             Import-Module AdvaniaGIT | Out-Null
             $SetupParameters = Get-GITSettings
@@ -20,19 +19,18 @@
             foreach($objectType in $objectTypes) {
                 Write-Host "Starting $objectType compilation..."
                 $filter = "Type=$objectType;Version List=<>*Test*"
-                $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Yes -Recompile    
+                $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Yes -Recompile -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
             }
  
             Receive-Job -Job $jobs -Wait
             foreach($objectType in $objectTypes) {
                 Write-Host "Starting $objectType test objects compilation..."
                 $filter = "Type=$objectType;Version List=*Test*"
-                $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Yes -Recompile    
+                $jobs += Compile-NAVApplicationObject -DatabaseServer (Get-DatabaseServer -BranchSettings $BranchSettings) -DatabaseName $BranchSettings.databasename -Filter $filter -AsJob -NavServerName localhost -NavServerInstance $BranchSettings.instanceName -NavServerManagementPort $BranchSettings.managementServicesPort -LogPath $SetupParameters.LogPath -SynchronizeSchemaChanges Yes -Recompile -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword   
             }
             Receive-Job -Job $jobs -Wait
             UnLoad-IdeTools
 
         } 
-        Remove-PSSession $Session
     } 
 }

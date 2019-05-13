@@ -7,8 +7,7 @@
 
     Invoke-Command -Session $Session -ScriptBlock `
     {
-        $Session = New-DockerSession -DockerContainerId $BranchSettings.DockerContainerId
-        Invoke-Command -Session $Session -ScriptBlock `
+        Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock `
         {            
             Import-Module AdvaniaGIT | Out-Null
             $SetupParameters = Get-GITSettings
@@ -28,6 +27,5 @@
             Set-WebConfigurationProperty -Filter "/system.webServer/security/authentication/windowsAuthentication" -Name Enabled -Value True -PSPath IIS:\ -Location "NavWebApplicationContainer"
 
         } 
-        Remove-PSSession $Session
     } 
 }

@@ -2,12 +2,12 @@
 {
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
-        [System.Management.Automation.Runspaces.PSSession]$Session,
+        [PSObject]$BranchSettings,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
         [Switch]$RestartServiceTier
     )
     
-    Invoke-Command -Session $Session -ScriptBlock {
+    Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock {
         param([Switch]$RestartServiceTier)
         if (!(Get-Module -Name Microsoft.Dynamics.Nav.Management)) { 
           Import-Module (Join-Path $serviceTierFolder 'Microsoft.Dynamics.Nav.Management.psm1') -DisableNameChecking -Global -ErrorAction SilentlyContinue

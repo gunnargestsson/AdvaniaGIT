@@ -12,8 +12,7 @@
     Invoke-Command -Session $Session -ScriptBlock `
     {
         param([String]$CertificateFileName, [String]$CertificatePassword)
-        $Session = New-DockerSession -DockerContainerId $BranchSettings.DockerContainerId
-        Invoke-Command -Session $Session -ScriptBlock `
+        Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock `
         {            
             param([String]$CertificateFileName, [String]$CertificatePassword)
             Import-Module AdvaniaGIT | Out-Null
@@ -24,6 +23,5 @@
             Set-NAVServerInstanceToNAVUserPassword -SetupParameters $SetupParameters -BranchSettings $BranchSettings -CertificatePath $CertificatePath -CertificatePassword $CertificatePassword
 
         } -ArgumentList ($CertificateFileName, $CertificatePassword)
-        Remove-PSSession $Session
     } -ArgumentList ($CertificateFileName, $CertificatePassword)
 }

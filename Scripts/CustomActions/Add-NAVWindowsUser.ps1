@@ -1,6 +1,5 @@
 ﻿if ($BranchSettings.dockerContainerId -gt "") {
-    $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId 
-    Invoke-Command -Session $Session -ScriptBlock {
+    Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock {
       param([String]$userName, [String]$instanceName)
         Import-Module (Join-Path $serviceTierFolder 'Microsoft.Dynamics.Nav.Management.psm1') -DisableNameChecking -Global -ErrorAction SilentlyContinue
         $UserExists = Get-NAVServerUser -ServerInstance $instanceName | Where-Object -Property UserName -Match "\w+\\${userName}"

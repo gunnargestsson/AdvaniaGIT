@@ -11,8 +11,7 @@
     {
         param([String]$UserName)
 
-        $Session = New-DockerSession -DockerContainerId $BranchSettings.DockerContainerId
-        Invoke-Command -Session $Session -ScriptBlock `
+        Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock `
         {
             param([String]$UserName)
             Import-Module AdvaniaGIT | Out-Null
@@ -34,6 +33,5 @@
             }
             UnLoad-InstanceAdminTools
         } -ArgumentList $UserName
-        Remove-PSSession $Session
     } -ArgumentList $UserName
 }

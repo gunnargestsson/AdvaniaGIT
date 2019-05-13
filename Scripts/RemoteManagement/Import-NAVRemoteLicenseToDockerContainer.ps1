@@ -12,8 +12,7 @@
         param([String]$LicenseFile)
         $LicenseFileName = (Get-Item -Path $LicenseFile).Name
 
-        $Session = New-DockerSession -DockerContainerId $BranchSettings.DockerContainerId
-        Invoke-Command -Session $Session -ScriptBlock `
+        Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName-ScriptBlock `
         {
             param([String]$LicenseFileName)           
             $LicenseFilePath = Join-Path "C:\GIT" $LicenseFileName
@@ -24,6 +23,5 @@
             Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $LicenseFilePath
             UnLoad-InstanceAdminTools
         } -ArgumentList $LicenseFileName
-        Remove-PSSession $Session
     } -ArgumentList $LicenseFile
 }

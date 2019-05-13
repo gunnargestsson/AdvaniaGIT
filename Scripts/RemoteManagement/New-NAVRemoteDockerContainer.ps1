@@ -15,8 +15,7 @@
         Start-DockerContainer -SetupParameters $SetupParameters -BranchSettings $BranchSettings -AdminPassword $AdminPassword
         $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
 
-        $Session = New-DockerSession -DockerContainerId $BranchSettings.DockerContainerId
-        Invoke-Command -Session $Session -ScriptBlock `
+        Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName-ScriptBlock `
         {
             param([PSObject]$BranchSetup)
             
@@ -31,6 +30,5 @@
             Set-Content -Path "C:\AdvaniaGIT\Data\GITSettings.Json" -Value ($SetupParameters | ConvertTo-Json)
                         
         } -ArgumentList $BranchSetup
-        Remove-PSSession $Session
     } -ArgumentList ($BranchSetup, $AdminPassword)
 }

@@ -15,8 +15,7 @@
         Remove-Item -Path (Join-Path $DestinationFilePath $DestinationFileName) -Recurse -Force -ErrorAction SilentlyContinue
         Expand-Archive -Path $DestinationZipFile -DestinationPath $DestinationFilePath -Force
 
-        $Session = New-DockerSession -DockerContainerId $BranchSettings.DockerContainerId
-        Invoke-Command -Session $Session -ScriptBlock `
+        Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock `
         {
             param([String]$ObjectsFolderPath)           
             $ObjectsPath = Join-Path "C:\GIT" $ObjectsFolderPath
@@ -38,6 +37,5 @@
             Compile-UncompiledObjects -SetupParameters $SetupParameters -BranchSettings $BranchSettings
             UnLoad-ModelTools 
         } -ArgumentList $DestinationFileName
-        Remove-PSSession $Session
     } -ArgumentList $DestinationZipFile
 }
