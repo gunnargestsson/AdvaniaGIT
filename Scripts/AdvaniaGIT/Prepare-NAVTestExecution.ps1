@@ -3,6 +3,8 @@
     param
     (
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+    [PSObject]$SetupParameters,
+    [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
     [PSObject]$BranchSettings,
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
     [String]$CompanyName,

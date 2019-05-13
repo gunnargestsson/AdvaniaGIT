@@ -28,7 +28,7 @@ do {
             '1' { 
 
                 $CompanyRegistrationNo = Initialize-NAVTestCompanyRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName
-                Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName 
+                Prepare-NAVTestExecution -SetupParameters $SetupParameters -BranchSettings $BranchSettings -CompanyName $companyName 
                 & (Join-Path $PSScriptRoot Prepare-NAVUnitTest.ps1) 
                 & (Join-path $PSScriptRoot Start-TestClient.ps1)
                 Set-NAVCompanyInfoRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName -RegistrationNo $CompanyRegistrationNo
@@ -37,7 +37,7 @@ do {
             '2' { 
 
                 $CompanyRegistrationNo = Initialize-NAVTestCompanyRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName
-                Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName -OnlyFailingTests
+                Prepare-NAVTestExecution -SetupParameters $SetupParameters -BranchSettings $BranchSettings -CompanyName $companyName -OnlyFailingTests
                 & (Join-Path $PSScriptRoot Prepare-NAVUnitTest.ps1) 
                 & (Join-path $PSScriptRoot Start-TestClient.ps1)
                 Set-NAVCompanyInfoRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName -RegistrationNo $CompanyRegistrationNo
@@ -46,7 +46,7 @@ do {
             '3' { 
 
                 $CompanyRegistrationNo = Initialize-NAVTestCompanyRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName
-                Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName -ForModifiedObjects
+                Prepare-NAVTestExecution -SetupParameters $SetupParameters -BranchSettings $BranchSettings -CompanyName $companyName -ForModifiedObjects
                 & (Join-Path $PSScriptRoot Prepare-NAVUnitTest.ps1) 
                 & (Join-path $PSScriptRoot Start-TestClient.ps1)
                 Set-NAVCompanyInfoRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName -RegistrationNo $CompanyRegistrationNo

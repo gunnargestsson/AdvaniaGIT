@@ -7,7 +7,7 @@ if ($SetupParameters.testCompanyName) {
 
 $CompanyRegistrationNo = Initialize-NAVTestCompanyRegistrationNo -BranchSettings $BranchSettings -CompanyName $companyName
 & (Join-Path $PSScriptRoot Add-NAVWindowsUser.ps1) 
-Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName -CodeunitIdFilter $SetupParameters.codeunitIdFilter
+Prepare-NAVTestExecution -SetupParameters $SetupParameters -BranchSettings $BranchSettings -CompanyName $companyName -CodeunitIdFilter $SetupParameters.codeunitIdFilter
 & (Join-Path $PSScriptRoot Prepare-NAVUnitTest.ps1) 
 
 if ([bool]($SetupParameters.PSObject.Properties.name -match "testExecution") -and $SetupParameters.testExecution -ieq "Background") {

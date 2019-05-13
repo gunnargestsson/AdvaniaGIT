@@ -12,9 +12,9 @@ foreach ($ALPath in (Get-ALPaths -SetupParameters $SetupParameters)) {
     $CodeunitIdFilter = "BETWEEN $($ExtensionAppJsonObject.idRange.from) AND $($ExtensionAppJsonObject.idRange.to)"
 
     if ($index -eq 1) {
-        Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName -CodeunitIdFilter $CodeunitIdFilter
+        Prepare-NAVTestExecution -SetupParameters $SetupParameters -BranchSettings $BranchSettings -CompanyName $companyName -CodeunitIdFilter $CodeunitIdFilter
     } else {
-        Prepare-NAVTestExecution -BranchSettings $BranchSettings -CompanyName $companyName -CodeunitIdFilter $CodeunitIdFilter -TestExecutionContinuing
+        Prepare-NAVTestExecution -SetupParameters $SetupParameters -BranchSettings $BranchSettings -CompanyName $companyName -CodeunitIdFilter $CodeunitIdFilter -TestExecutionContinuing
     }
     $index += 1
 }
