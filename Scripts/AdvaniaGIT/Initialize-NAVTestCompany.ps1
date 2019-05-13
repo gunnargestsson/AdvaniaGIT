@@ -15,11 +15,16 @@
         Set-NAVServerInstance -ServerInstance $BranchSettings.instanceName -Restart 
         Sync-NAVTenant -ServerInstance $BranchSettings.instanceName -Tenant default -Mode Sync -Force 
     }
-    Write-Host "Executing upgrade codeunits for version $([int]$SetupParameters.navVersion.Split(".")[0])..."
-    if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
-        Start-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Language is-IS -ContinueOnError -FunctionExecutionMode Parallel -Force -SkipAppVersionCheck
-    } else {
-        Start-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Language is-IS -ContinueOnError -FunctionExecutionMode Parallel -Force
+    
+    $command = "SELECT [Object ID] FROM [dbo].[Object Metadata] WHERE [Object Type] = '5' AND [Object Subtype] = 'Upgrade'"
+    $Codeunits = Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
+    if ($Codeunits) {
+        Write-Host "Executing upgrade codeunits for version $([int]$SetupParameters.navVersion.Split(".")[0])..."
+        if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
+            Start-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Language is-IS -ContinueOnError -FunctionExecutionMode Parallel -Force -SkipAppVersionCheck
+        } else {
+            Start-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Language is-IS -ContinueOnError -FunctionExecutionMode Parallel -Force
+        }
+        Get-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Progress    
     }
-    Get-NAVDataUpgrade -ServerInstance $BranchSettings.instanceName -Tenant default -Progress    
 }

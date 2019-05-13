@@ -46,7 +46,9 @@
         } else {
             $command = "SELECT [Object ID] FROM [dbo].[NAV App Object Metadata] WHERE [Object ID] $CodeunitIdFilter AND [Object Type] = '5' AND [Object Subtype] = 'Test'"
         }
-        $Codeunits += Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
+        if ([int]$SetupParameters.navVersion.Split(".")[0] -ge 11) {
+            $Codeunits += Get-SQLCommandResult -Server (Get-DatabaseServer -BranchSettings $BranchSettings) -Database $BranchSettings.databaseName -Command $command -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
+        }
 
         foreach ($Codeunit in $Codeunits) {
           $command = "INSERT INTO [$(Get-DatabaseTableName -CompanyName $CompanyName -TableName 'CAL Test Enabled Codeunit')] ([Test Codeunit ID]) VALUES($($Codeunit.'Object ID'))"
