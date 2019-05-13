@@ -56,7 +56,7 @@ do {
                                 
                                 Write-Host "Stopping and removing Docker Container $($selectedContainer.Names)..."
                                 if ($selectedContainer.Status.Contains("Up")) {
-                                    $dockerContainerName = docker.exe stopp $($selectedContainer.Names)
+                                    $dockerContainerName = docker.exe stop $($selectedContainer.Names)
                                 }
                                 Remove-NavContainer -containerName $($selectedContainer.Names)
                                 if ($selectedContainer.branchId -gt "") { 

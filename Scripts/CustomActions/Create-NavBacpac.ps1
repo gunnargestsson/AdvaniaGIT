@@ -1,9 +1,7 @@
 ﻿Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 Write-Host "Requesting new NAV bacpac for branch" $SetupParameters.projectName
 if ($BranchSettings.dockerContainerId -gt "") {
-    $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId
-    Load-DockerInstanceAdminTools -Session $Session
-    Invoke-Command -Session $Session -ScriptBlock {
+    Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock {
         param([string]$ServerInstance)
         Set-NAVServerInstance -ServerInstance $ServerInstance -Stop -Force
     } -ArgumentList $BranchSettings.instanceName

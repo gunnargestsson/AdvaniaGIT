@@ -1,7 +1,5 @@
 ﻿if ($BranchSettings.dockerContainerId -gt "") {    
-    $Session = New-DockerSession -DockerContainerId $BranchSettings.dockerContainerId
-    Load-DockerInstanceAdminTools -Session $Session
-    Invoke-Command -Session $Session -ScriptBlock {
+    Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock {
         param([string]$ServerInstance)
         $CompanyName=(Get-NAVCompany -ServerInstance $ServerInstance).CompanyName
         if ($CompanyName -notmatch "CRONUS") {
