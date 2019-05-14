@@ -19,9 +19,9 @@
     $FTPRequest.Credentials = New-Object System.Net.NetworkCredential($User,$Pass)
     $FTPRequest.Method = [System.Net.WebRequestMethods+FTP]::UploadFile
 
-    # Don't want Binary, Keep Alive unecessary.
-    $FTPRequest.UseBinary = $False
-    $FTPRequest.KeepAlive = $False
+    $FTPRequest.UseBinary = $true
+    $FTPRequest.KeepAlive = $true
+    $FTPRequest.Timeout = 600000
 
     # read in the file to upload as a byte array
     $content = [System.IO.File]::ReadAllBytes($LocalFilePath)
