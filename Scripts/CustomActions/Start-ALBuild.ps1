@@ -20,7 +20,7 @@ Write-Host Download AL Symbols
 & (Join-path $PSScriptRoot 'Download-ALSymbols.ps1')
 Write-Host Build AL Solution with Tests
 & (Join-path $PSScriptRoot 'Build-ALSolutions.ps1')
-if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies")) {
+if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies\*.app")) {
     Write-Host Install AL Dependencies
     & (Join-path $PSScriptRoot 'Install-ALDependencies.ps1')
     Write-Host Restart NAV Service
