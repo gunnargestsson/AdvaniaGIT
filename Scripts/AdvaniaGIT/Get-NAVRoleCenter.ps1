@@ -27,7 +27,7 @@
         # Start Menu
         Clear-Host
         $Profiles | Format-Table -Property No, Id, Description, PageID, Default -AutoSize | Out-Host
-        $input = Read-Host "Please select startup rolecenter (0 = exit)"
+        $input = Read-Host "Please select startup rolecenter (<Enter> for default)"
         switch ($input) {
             '' { 
                 $selectedProfile = $Profiles | Where-Object -Property Default -EQ $true
