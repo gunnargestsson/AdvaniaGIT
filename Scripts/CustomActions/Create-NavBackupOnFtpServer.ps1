@@ -1,6 +1,7 @@
 ﻿if ($SetupParameters.ftpServer -gt "") {
     Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings
     if ($BranchSettings.dockerContainerId -gt "") {
+        & (Join-path $PSScriptRoot 'Remove-DatabaseUsers.ps1')
         Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
     } else {    
         $BackupFilePath = Join-Path $SetupParameters.LogPath "NAVBackupToPublish.bak"
@@ -22,6 +23,8 @@
         $BackupFtpDestinationPath = Join-Path $SetupParameters.navRelease "$($SetupParameters.projectName).bak"
         Put-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -LocalFilePath $BackupFilePath -FtpFilePath $BackupFtpDestinationPath
         Remove-Item -Path $BackupFilePath -ErrorAction SilentlyContinue
+        New-NAVServerUser -WindowsAccount $env:USERNAME -ServerInstance $ServerInstance -ErrorAction SilentlyContinue
+        New-NAVServerUserPermissionSet -WindowsAccount $env:USERNAME -PermissionSetId SUPER -ServerInstance $ServerInstance -ErrorAction SilentlyContinue
     }
 } else {
     Write-Error "No Ftp Server configured!"
