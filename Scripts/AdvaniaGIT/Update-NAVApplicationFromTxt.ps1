@@ -67,9 +67,9 @@
             $FileObjectsHash.Add("$Type-$Id",$true)
             $NAVObject = Get-SQLCommandResult -Server $Server -Database $Database -Command "select [Type],[ID],[Version List],[Modified],[Name],[Date],[Time] from Object where [Type]=$Type and [ID]=$Id" -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
             $FileObjectDateTime = Get-Date
-            $skipObject = ([datetime]::TryParseExact("$($FileObject.Date) $($FileObject.Time)","$($RepositoryCultureInfo.DateTimeFormat.ShortDatePattern) $($RepositoryCultureInfo.DateTimeFormat.LongTimePattern)".Replace("yyyy","yy"),[System.Globalization.CultureInfo]::InvariantCulture,[System.Globalization.DateTimeStyles]::None,[ref]$FileObjectDateTime))
+            $skipObject = ([datetime]::TryParseExact("$($FileObject.Date) $(($FileObject.Time).TrimStart())","$($RepositoryCultureInfo.DateTimeFormat.ShortDatePattern) $($RepositoryCultureInfo.DateTimeFormat.LongTimePattern)".Replace("yyyy","yy"),[System.Globalization.CultureInfo]::InvariantCulture,[System.Globalization.DateTimeStyles]::None,[ref]$FileObjectDateTime))
             if (!$skipObject) {
-                $skipObject = ([datetime]::TryParseExact("$($FileObject.Date) $($FileObject.Time)","$($RepositoryCultureInfo.DateTimeFormat.ShortDatePattern) $($RepositoryCultureInfo.DateTimeFormat.LongTimePattern)",[System.Globalization.CultureInfo]::InvariantCulture,[System.Globalization.DateTimeStyles]::None,[ref]$FileObjectDateTime))
+                $skipObject = ([datetime]::TryParseExact("$($FileObject.Date) $(($FileObject.Time).TrimStart())","$($RepositoryCultureInfo.DateTimeFormat.ShortDatePattern) $($RepositoryCultureInfo.DateTimeFormat.LongTimePattern)",[System.Globalization.CultureInfo]::InvariantCulture,[System.Globalization.DateTimeStyles]::None,[ref]$FileObjectDateTime))
             }
             $NavObjectDateTime = Get-Date
             if ($NAVObject.Date -ne $null -and $NAVObject.Time -ne $null) {
