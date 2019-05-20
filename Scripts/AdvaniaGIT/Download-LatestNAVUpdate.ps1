@@ -17,7 +17,7 @@
         Write-Host "Downloading CU information from Microsoft Blog..."
         $pageId = 1
         while (!$DownloadUrls) {
-            $DownloadUrls = Get-LatestCUDownloadUrls -SetupParameters $SetupParameters -FeedUrl "https://blogs.msdn.microsoft.com/nav/feed/atom/?paged=$pageId"
+            $DownloadUrls = Get-LatestCUDownloadUrls -SetupParameters $SetupParameters -FeedUrl "https://support.microsoft.com/app/content/api/content/feeds/sap/en-gb/dea12e4a-4dd3-35e1-2577-45df252a2b9c/atom"
             if ($pageId -gt 10) { 
                 Write-Host -ForegroundColor Red "Download Urls for $($SetupParameters.navRelease) not found!"
                 throw
