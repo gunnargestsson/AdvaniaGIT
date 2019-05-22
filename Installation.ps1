@@ -87,7 +87,6 @@ foreach ($configFile in (Get-ChildItem -Path (Join-Path $PSScriptRoot 'Data\*.js
 Write-Host "Please update configuration files to match your environment (opened automatically)"
 
 
-$DefaultAnswer = 'Y'
 $Answer = Read-Host -Prompt "Perform Remote Administration Module Installation ? (Default = No)"
 if ($Answer -iin ('Yes','Y')) {
     $ScriptToStart = Join-Path $InstallationPath 'Scripts\Install-RemoteManagementModules.ps1'
@@ -95,9 +94,9 @@ if ($Answer -iin ('Yes','Y')) {
     Start-Process -FilePath (Join-Path $InstallationPath "Data\RemoteSettings.Json")
 }
 
-$DefaultAnswer = 'Y'
-$Answer = Read-Host -Prompt "Perform NAV Environment Configuration (required after NAV installation) ? (Default = Yes)"
-if ($Answer -iin ('Yes','Y','')) {
+
+$Answer = Read-Host -Prompt "Perform NAV Environment Configuration (required after NAV installation) ? (Default = No)"
+if ($Answer -iin ('Yes','Y')) {
     $SetupParameters = Get-Content -Path (Join-Path $InstallationPath "Data\GITSettings.Json") | Out-String | ConvertFrom-Json
     $ScriptToStart = Join-Path $InstallationPath 'Scripts\Prepare-NAVEnvironment.ps1'
     & $ScriptToStart
