@@ -31,6 +31,7 @@
     $DockerSettings = Get-DockerSettings 
     $DockerCreated = $false
 
+    $HasNetworkConnection = ($null -ne (Resolve-DnsName -QuickTimeout -Name $DockerSettings.RepositoryPath -ErrorAction SilentlyContinue))
     if ([System.String]::IsNullOrEmpty($AdminPassword)) {
         $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $AdminUsername
         $AdminPassword = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($DockerCredentials.Password))
@@ -39,7 +40,7 @@
     }
 
     Write-Host "Connecting to repository $($DockerSettings.RepositoryPath)..."
-    if ($DockerSettings.RepositoryPassword -gt "") {
+    if ($DockerSettings.RepositoryPassword -gt "" -and $HasNetworkConnection) {
         try {
             docker.exe login $($DockerSettings.RepositoryPath) -u $($DockerSettings.RepositoryUserName) -p $($DockerSettings.RepositoryPassword)
         }
@@ -98,6 +99,10 @@
         $params += @{ enableSymbolLoading = $true }
     }
 
+    if ($HasNetworkConnection) {
+        $params += @{ alwaysPull = $true }
+    }
+
     if ($SetupParameters.BuildMode) {
         $DockerContainerFriendlyName = "BC$((New-Guid).ToString().Replace('-','').Substring(0,13))"
     } else {
@@ -108,14 +113,14 @@
         }
     }
     if ((Get-NavContainers) -inotcontains $DockerContainerFriendlyName) { 
-        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -alwaysPull -includeCSide -restart no -updateHosts
+        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -includeCSide -restart no -updateHosts
         $DockerCreated = $true
     }
     $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 
    
 
     if ($DockerCreated) { 
-        $DockerSettings = Install-DockerAdvaniaGIT -SetupParameters $SetupParameters -BranchSettings $BranchSettings -containerName $DockerContainerFriendlyName 
+        $DockerSettings = Install-DockerAdvaniaGIT -SetupParameters $SetupParameters -BranchSettings $BranchSettings -containerName $DockerContainerFriendlyName
     } else {
         $DockerSettings = Get-DockerAdvaniaGITConfig -SetupParameters $SetupParameters -BranchSettings $BranchSettings -containerName $DockerContainerFriendlyName 
     } 
