@@ -111,15 +111,16 @@ else
     $Globals | Add-Member LogPath  (Join-Path $SetupParameters.rootPath "Log\$([GUID]::NewGuid().GUID)")
     $Globals | Add-Member LicensePath  (Join-Path $SetupParameters.rootPath "License")
     if (![string]::IsNullOrEmpty($SetupParameters.licenseFile)) {
+        $SetupParameters.licenseFile = ($SetupParameters.licenseFile).Replace("%1",($SetupParameters.navVersion).Split(".")[0])
         if (Test-Path -Path $SetupParameters.licenseFile) {
-        $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile) 
-        } elseif (Test-Path -Path ($SetupParameters.licenseFile).Replace("%1",($SetupParameters.navVersion).Split(".")[0])) {
-            $Globals | Add-Member LicenseFilePath ($SetupParameters.licenseFile).Replace("%1",($SetupParameters.navVersion).Split(".")[0])
-        } elseif (Test-Path -Path (Join-Path $Globals.LicensePath ($SetupParameters.licenseFile).Replace("%1",($SetupParameters.navVersion).Split(".")[0]))) {
-            $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath ($SetupParameters.licenseFile).Replace("%1",($SetupParameters.navVersion).Split(".")[0]))
-        } else {
-            $Globals | Add-Member LicenseFilePath (Join-Path $Globals.LicensePath $SetupParameters.licenseFile) 
+            $LicenseFileFullPath = $SetupParameters.licenseFile
+        } elseif (Test-Path -Path (Join-Path $Globals.LicensePath $SetupParameters.licenseFile)) {
+            $LicenseFileFullPath = (Join-Path $Globals.LicensePath $SetupParameters.licenseFile)
+        } 
+        if ($LicenseFileFullPath) {
+            $Globals | Add-Member LicenseFilePath $LicenseFileFullPath 
         }
+        Write-Host -ForegroundColor Green "Using License: $($SetupParameters.licenseFile) on $($Globals.LicenseFilePath)"
     }
     $Globals | Add-Member DownloadPath  (Join-Path $SetupParameters.rootPath "Download")
     $Globals | Add-Member NewSyntaxTestObjectsPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.testObjectsPath)")
