@@ -14,7 +14,7 @@
         $SelectedTenant = Get-NAVRemoteInstanceDefaultTenant -SelectedInstance $SelectedInstance
         $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
-        $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName
+        $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName -VaultName $Remotes.KeyVaultName
         if (!$KeyVault) { break }
 
         Write-Host "Removing Azure registrations..."

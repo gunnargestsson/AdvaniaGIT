@@ -51,7 +51,7 @@
 
         if ($SelectedInstance.EncryptionProvider -eq "AzureKeyVault") {
             Write-Host "Creating Encryption key for tenant..."
-            $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName
+            $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName -VaultName $Remotes.KeyVaultName
             $TenantKeyVaultKey = Get-NAVAzureKeyVaultKey -KeyVault $KeyVault -ServerInstanceName $SelectedTenant.ServerInstance -TenantId $SelectedTenant.Id
             $AzureKeyVaultSettings = New-Object -TypeName PSObject
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientId -Value $SelectedInstance.AzureKeyVaultClientId

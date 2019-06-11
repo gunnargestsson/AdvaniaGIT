@@ -12,7 +12,7 @@
         $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
         $IconFilePath = Get-NAVClickOnceApplicationIcon -Credential $Credential -DeploymentName $DeploymentName 
-        $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName
+        $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName -VaultName $Remotes.KeyVaultName
         if (!$KeyVault) { break }
 
         #Ask for Instance Name 

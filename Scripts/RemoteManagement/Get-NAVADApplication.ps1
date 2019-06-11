@@ -31,7 +31,7 @@
             $Application = New-AzureRmADApplication -DisplayName $DisplayName -HomePage "$($ServerInstance.PublicWebBaseUrl)365" -IdentifierUris $IdentifierUri -ReplyUrls $ReplyUrls -CertValue $CertValue -StartDate $x509.NotBefore -EndDate $x509.NotAfter 
             $ObjectId = $Application.ObjectId
             Set-AzureRmADApplication -ObjectId $ObjectId -AvailableToOtherTenants $True
-            Set-AzureADApplicationLogo -ObjectId $ObjectId -FilePath $IconFilePath
+            Set-AzureADApplicationLogo -ObjectId $ObjectId -FilePath $IconFilePath -ErrorAction SilentlyContinue
             $RequiredResourceAccess = New-Object -TypeName Microsoft.Open.AzureAD.Model.RequiredResourceAccess
             $ResourceAccess = New-Object -TypeName Microsoft.Open.AzureAD.Model.ResourceAccess
             $ResourceAccess.Id = '311a71cc-e848-46a1-bdf8-97ff7156d8e6'
