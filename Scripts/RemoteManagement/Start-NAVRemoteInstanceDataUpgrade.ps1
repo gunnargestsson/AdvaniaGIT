@@ -19,9 +19,9 @@
                     Write-Host "Starting Data Upgrade for tenant $($Tenant.Id)..."
                     $TenantSettings = Get-TenantSettings -SetupParameters $SetupParameters -Tenant $Tenant
                     if ($SkipCompanyInitialization) {
-                        Start-NAVDataUpgrade -Tenant $Tenant.Id -ServerInstance $InstanceName -Language $TenantSettings.Language -FunctionExecutionMode Parallel -SkipCompanyInitialization -Force
+                        Start-NAVDataUpgrade -Tenant $Tenant.Id -ServerInstance $InstanceName -Language $TenantSettings.Language -FunctionExecutionMode Parallel -SkipCompanyInitialization -Force -SkipAppVersionCheck
                     } else {
-                        Start-NAVDataUpgrade -Tenant $Tenant.Id -ServerInstance $InstanceName -Language $TenantSettings.Language -FunctionExecutionMode Parallel -Force
+                        Start-NAVDataUpgrade -Tenant $Tenant.Id -ServerInstance $InstanceName -Language $TenantSettings.Language -FunctionExecutionMode Parallel -Force -SkipAppVersionCheck
                     }
                 }
                 UnLoad-InstanceAdminTools
