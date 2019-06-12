@@ -82,7 +82,9 @@
                     if ($RemoteComputer.TenantSettings.AllowAppDatabaseWrite -ieq "true" -or $SelectedTenant.Id -ieq "setup") {
                         $Param.AllowAppDatabaseWrite = $true
                     }
-                    Update-NAVRemoteInstanceTenant -Session $Session -SelectedTenant $SelectedTenant -Database $Database 
+                    Update-NAVRemoteInstanceTenant -Session $Session -SelectedTenant $SelectedTenant -Database $Database
+                    Write-Host "Waiting for update process to finish..."
+                    Start-Sleep -Seconds 30
                     Mount-NAVRemoteInstanceTenant @Param
                     Start-NAVRemoteInstanceTenantSync -Session $Session -SelectedTenant $SelectedTenant                    
                     $hostNo ++
