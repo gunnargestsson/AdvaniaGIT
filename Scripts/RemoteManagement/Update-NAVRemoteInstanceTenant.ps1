@@ -30,7 +30,7 @@
                 }
 
                 Mount-NAVTenant @Param
-                Sync-NAVTenant -ServerInstance $SelectedTenant.ServerInstance -Tenant Default -Mode ForceSync -Force
+                Sync-NAVTenant -ServerInstance $SelectedTenant.ServerInstance -Tenant Default -Mode Sync -Force
                 Dismount-NAVTenant -ServerInstance $SelectedTenant.ServerInstance -Id Default -Force
                 UnLoad-InstanceAdminTools
             } -ArgumentList (

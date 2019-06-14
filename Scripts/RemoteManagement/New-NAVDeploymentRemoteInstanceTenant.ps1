@@ -13,7 +13,7 @@
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
 
         $Database = New-NAVDatabaseObject 
-        $DBAdmin = Get-NAVUserPasswordObject -Usage "DBAdminPasswordID"
+        $DBAdmin = Get-NAVUserPasswordObject -Usage "DBUserPasswordID"
         if ($DBAdmin.UserName -gt "") { $Database.DatabaseUserName = $DBAdmin.UserName }
         if ($DBAdmin.Password -gt "") { $Database.DatabasePassword = $DBAdmin.Password }
         if ($DBAdmin.GenericField1 -gt "") { $Database.DatabaseServerName = $DBAdmin.GenericField1 }
