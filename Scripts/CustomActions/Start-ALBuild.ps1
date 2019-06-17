@@ -42,5 +42,15 @@ Write-Host Build AL Solution without Tests
 & (Join-path $PSScriptRoot 'Build-ALSolutions.ps1')
 Write-Host Copy AL Solution to Artifact folder
 & (Join-path $PSScriptRoot 'Copy-ALSolutionToArtifactStagingDirectory.ps1')
+
+if ($SetupParameters.buildRuntimeVersion) {
+    Write-Host Uninstall AL Solutions
+    & (Join-path $PSScriptRoot 'Uninstall-ALExtensionsFromDocker.ps1')
+    Write-Host Install Clean versions
+    & (Join-path $PSScriptRoot 'Install-ALExtensionsToDocker.ps1')
+    Write-Host Export Runtime versions
+    & (Join-path $PSScriptRoot 'Copy-ALRuntimeToArtifacts.ps1')
+}
+
 Write-Host Sign AL Solution in Artifact folder
 & (Join-path $PSScriptRoot 'Sign-ArtifactAppPackage.ps1')
