@@ -24,6 +24,25 @@ if ($SetupParameters.BuildMode) {
         $Version = $ExtensionAppJsonObject.dependencies[0].version.SubString(0,$ExtensionAppJsonObject.Version.LastIndexOf('.'))
         $ExtensionAppJsonObject.dependencies[0].version = $Version+'.' + $SetupParameters.buildId
     }
+    if (![String]::IsNullOrEmpty($SetupParameters.runtime)) {
+        if ([String]::IsNullOrEmpty($ExtensionAppJsonObject.runtime)) {
+            $ExtensionAppJsonObject | Add-Member -MemberType NoteProperty -Name runtime -Value $SetupParameters.runtime
+        } else {
+            $ExtensionAppJsonObject.runtime = $SetupParameters.runtime
+        }
+    }
+
+    if (![String]::IsNullOrEmpty($SetupParameters.navVersion)) {
+        if (![String]::IsNullOrEmpty($ExtensionAppJsonObject.platform)) {
+            $ExtensionAppJsonObject.platform = $SetupParameters.navVersion
+        }
+        if (![String]::IsNullOrEmpty($ExtensionAppJsonObject.application)) {
+            $ExtensionAppJsonObject.application = $SetupParameters.navVersion
+        }
+        if (![String]::IsNullOrEmpty($ExtensionAppJsonObject.test)) {
+            $ExtensionAppJsonObject.test = $SetupParameters.navVersion
+        }
+    }
     $ExtensionName = (Clean-NAVFileName -FileName ($Publisher + '_' + $Name + '_' + $ExtensionAppJsonObject.Version + '.app')).Replace(" ","_")
     $ExtensionAppJsonObject | ConvertTo-Json | set-content $ExtensionAppJsonFile
     Write-Host "Using Symbols Folder: " $ALPackageCachePath
