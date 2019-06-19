@@ -174,7 +174,11 @@
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicePrincipalNameRequired' -NewValue false
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServer' -NewValue $ClientSettings.HelpServer
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServerPort' -NewValue $ClientSettings.HelpServerPort
-                    Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ACSUri' -NewValue "https://login.windows.net/common/wsfed?wa=wsignin1.0%26wtrealm=$($SelectedInstance.AppIdUri)%26wreply=$($SelectedInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx"
+                    if ([int]($ServerInstance.Version).split('.')[0] -ge 13) {                    
+                        Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ACSUri' -NewValue "https://login.microsoftonline.com/common/wsfed?wa=wsignin1.0%26wtrealm=$($SelectedInstance.AppIdUri)%26wreply=$($SelectedInstance.PublicWebBaseUrl)365/SignIn"
+                    } else {
+                        Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ACSUri' -NewValue "https://login.windows.net/common/wsfed?wa=wsignin1.0%26wtrealm=$($SelectedInstance.AppIdUri)%26wreply=$($SelectedInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx"
+                    }
 
                     Write-Host "Creating ClickOnce 365 Directory..."
                     New-ClickOnceDirectory -ClientUserSettings $clientUserSettings -ClickOnceDirectory $clickOnceDirectory

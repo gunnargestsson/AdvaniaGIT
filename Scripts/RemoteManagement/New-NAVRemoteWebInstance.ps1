@@ -50,6 +50,7 @@
                         $KeyValue = $ExecutionContext.InvokeCommand.ExpandString($ClientSettings.$($Property))
                         $navWebClientSettings | Add-Member -MemberType NoteProperty -Name $Property -Value $KeyValue -Force
                     }
+                    $navWebClientSettings | Add-Member -MemberType NoteProperty -Name PersonalizationEnabled -Value "true"
                     $newWebClientSettings = New-Object -TypeName PSObject 
                     $newWebClientSettings | Add-Member -MemberType NoteProperty -Name NAVWebSettings -Value @()
                     $newWebClientSettings.NAVWebSettings = $navWebClientSettings                    
@@ -105,7 +106,8 @@
                             $KeyValue = $ExecutionContext.InvokeCommand.ExpandString($ClientSettings.$($Property))
                             $navWebClientSettings | Add-Member -MemberType NoteProperty -Name $Property -Value $KeyValue -Force
                         }
-                        $navWebClientSettings | Add-Member -MemberType NoteProperty -Name WSFederationLoginEndpoint -Value "https://login.windows.net/common/wsfed?wa=wsignin1.0%26wtrealm=$($SelectedInstance.AppIdUri)%26wreply=$($SelectedInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx" -Force
+                        $navWebClientSettings | Add-Member -MemberType NoteProperty -Name PersonalizationEnabled -Value "true"
+                        $navWebClientSettings | Add-Member -MemberType NoteProperty -Name ACSUri -Value "https://login.microsoftonline.com/common/wsfed?wa=wsignin1.0%26wtrealm=$($SelectedInstance.AppIdUri)%26wreply=$($SelectedInstance.PublicWebBaseUrl)365/SignIn" -Force
                         $newWebClientSettings = New-Object -TypeName PSObject 
                         $newWebClientSettings | Add-Member -MemberType NoteProperty -Name NAVWebSettings -Value @()
                         $newWebClientSettings.NAVWebSettings = $navWebClientSettings                    

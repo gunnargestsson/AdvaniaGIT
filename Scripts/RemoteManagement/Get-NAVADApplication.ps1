@@ -27,7 +27,11 @@
         if ($ReplaceApplication) {
             $x509 = [System.Security.Cryptography.X509Certificates.X509Certificate2]([System.Convert]::FromBase64String($CertValue))           
             $IdentifierUri = "http://$(Get-NAVDnsIdentity -SelectedInstance $ServerInstance)/${DisplayName}"
-            $ReplyUrls = @("$($ServerInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx")
+            if ([int]($ServerInstance.Version).split('.')[0] -ge 13) {
+                $ReplyUrls = @("$($ServerInstance.PublicWebBaseUrl)365/SignIn")
+            } else {
+                $ReplyUrls = @("$($ServerInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx")
+            }
             $Application = New-AzureRmADApplication -DisplayName $DisplayName -HomePage "$($ServerInstance.PublicWebBaseUrl)365" -IdentifierUris $IdentifierUri -ReplyUrls $ReplyUrls -CertValue $CertValue -StartDate $x509.NotBefore -EndDate $x509.NotAfter 
             $ObjectId = $Application.ObjectId
             Set-AzureRmADApplication -ObjectId $ObjectId -AvailableToOtherTenants $True

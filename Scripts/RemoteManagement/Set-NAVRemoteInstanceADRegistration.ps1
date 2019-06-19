@@ -29,13 +29,20 @@
                 Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName AzureKeyVaultKeyUri -KeyValue $ServerInstance.KeyVaultKeyId
 
                 if ([bool]($ServerInstance.PSObject.Properties.name -match "WSFederationLoginEndpoint")) {
-                  Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName WSFederationLoginEndpoint -KeyValue "https://login.windows.net/common/wsfed?wa=wsignin1.0%26wtrealm=$($ServerInstance.ADApplicationIdentifierUris | Select-Object -First 1)%26wreply=$($ServerInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx"
+                    if ([int]($ServerInstance.Version).split('.')[0] -ge 13) {
+                        Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName WSFederationLoginEndpoint -KeyValue "https://login.microsoftonline.com/common/wsfed?wa=wsignin1.0%26wtrealm=$($ServerInstance.ADApplicationIdentifierUris | Select-Object -First 1)%26wreply=$($ServerInstance.PublicWebBaseUrl)365/SignIn"
+                    } else {
+                        Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName WSFederationLoginEndpoint -KeyValue "https://login.windows.net/common/wsfed?wa=wsignin1.0%26wtrealm=$($ServerInstance.ADApplicationIdentifierUris | Select-Object -First 1)%26wreply=$($ServerInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx"
+                    }
                 }
 
                 if ([bool]($ServerInstance.PSObject.Properties.name -match "ServicesCertificateValidationEnabled")) {
                   Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName ServicesCertificateValidationEnabled -KeyValue false
                 }
                 
+                if ([int]($ServerInstance.Version).split('.')[0] -ge 13) {
+                    Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName DisableTokenSigningCertificateValidation -KeyValue true
+                }
 
                 if ($RestartServerInstance) {
                     Write-Host "Starting Instance $($ServerInstance.ServerInstance) ..."
