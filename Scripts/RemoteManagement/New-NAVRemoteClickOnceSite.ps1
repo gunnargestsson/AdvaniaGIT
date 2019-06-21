@@ -107,12 +107,14 @@
 
                 Write-Host "Creating the web site..."
                 New-Website -Name "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -PhysicalPath $clickOnceDirectory -HostHeader $SelectedTenant.ClickOnceHost -Force
-                Write-Host "Adding web site binding..."
-                $certificateSubject = "CN=*.$($SelectedTenant.ClickOnceHost.Split(".")[1]).$($SelectedTenant.ClickOnceHost.Split(".")[2])*"
-                $certificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object -Property Subject -like $certificateSubject
-                Write-Host "Found Certificate $($certificate.Thumbprint) for $($SelectedTenant.ClickOnceHost)..."
-                New-Item -Path "IIS:\SslBindings\!443!$($SelectedTenant.ClickOnceHost)" -Value $certificate -SSLFlags 1 -ErrorAction SilentlyContinue
-                New-WebBinding -Name "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Protocol "https" -Port 443 -HostHeader $SelectedTenant.ClickOnceHost -SslFlags 1
+                if ([int]($SelectedInstance.Version).split('.')[0] -lt 13) {
+                    Write-Host "Adding web site binding..."
+                    $certificateSubject = "CN=*.$($SelectedTenant.ClickOnceHost.Split(".")[1]).$($SelectedTenant.ClickOnceHost.Split(".")[2])*"
+                    $certificate = Get-ChildItem Cert:\LocalMachine\My | Where-Object -Property Subject -like $certificateSubject
+                    Write-Host "Found Certificate $($certificate.Thumbprint) for $($SelectedTenant.ClickOnceHost)..."
+                    New-Item -Path "IIS:\SslBindings\!443!$($SelectedTenant.ClickOnceHost)" -Value $certificate -SSLFlags 1 -ErrorAction SilentlyContinue
+                    New-WebBinding -Name "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)" -Protocol "https" -Port 443 -HostHeader $SelectedTenant.ClickOnceHost -SslFlags 1
+                }
 
                 Write-Host "Creating the web, soap and odata redirect..."
                 New-Item -Path (Join-Path $clickOnceDirectory "web") -ItemType Directory -ErrorAction SilentlyContinue
@@ -174,7 +176,7 @@
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ServicePrincipalNameRequired' -NewValue false
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServer' -NewValue $ClientSettings.HelpServer
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'HelpServerPort' -NewValue $ClientSettings.HelpServerPort
-                    if ([int]($ServerInstance.Version).split('.')[0] -ge 13) {                    
+                    if ([int]($SelectedInstance.Version).split('.')[0] -ge 13) {
                         Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ACSUri' -NewValue "https://login.microsoftonline.com/common/wsfed?wa=wsignin1.0%26wtrealm=$($SelectedInstance.AppIdUri)%26wreply=$($SelectedInstance.PublicWebBaseUrl)365/SignIn"
                     } else {
                         Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'ACSUri' -NewValue "https://login.windows.net/common/wsfed?wa=wsignin1.0%26wtrealm=$($SelectedInstance.AppIdUri)%26wreply=$($SelectedInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx"
