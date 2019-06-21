@@ -21,7 +21,10 @@
         $ClickOncesite = Invoke-Command -Session $Session -ScriptBlock `
             {
                 Param([PSObject]$SelectedInstance, [PSObject]$SelectedTenant, [PSObject]$ClientSettings, [String]$ClickOnceApplicationName, [String]$ClickOnceApplicationPublisher, [String]$DnsIdentity, [string]$TestDeploymentServer)
-                               
+                if ( ($SelectedInstance.PublicWebBaseUrl).substring(($SelectedInstance.PublicWebBaseUrl).length-3) -eq '365') {
+                    $SelectedInstance.PublicWebBaseUrl = ($SelectedInstance.PublicWebBaseUrl).substring(0,($SelectedInstance.PublicWebBaseUrl).length-3)
+                }
+
                 Write-Host "Creating Client Configuration..."
                 $clickOnceCodeSigningPfxPasswordAsSecureString = ConvertTo-SecureString -String $SetupParameters.codeSigningCertificatePassword -AsPlainText -Force
                 $clickOnceDeploymentId = "$($SelectedTenant.ServerInstance)-$($SelectedTenant.Id)"
@@ -30,7 +33,7 @@
                 $wwwRootPath = [System.Environment]::ExpandEnvironmentVariables($wwwRootPath)
                 $clickOnceDirectory = Join-Path (Join-Path $wwwRootPath "ClickOnce") $clickOnceDeploymentId
                 Remove-Item -Path $clickOnceDirectory -Recurse -Force -ErrorAction SilentlyContinue
-                $webSiteUrl = "https://$($SelectedTenant.ClickOnceHost)"
+                $webSiteUrl = "http://$($SelectedTenant.ClickOnceHost)"
                 [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:ProgramData ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))                       
 
                 Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue (Split-Path (Split-Path $SelectedInstance.PublicWinBaseUrl -Parent) -Leaf).Split(':').GetValue(0)
@@ -161,7 +164,7 @@
                     $clickOnceDeploymentId += "365"
                     $AzureADDomain = $SelectedInstance.ClientServicesFederationMetadataLocation.split("/").GetValue(3)
                     Remove-Item -Path $clickOnceDirectory -Recurse -Force -ErrorAction SilentlyContinue
-                    $webSiteUrl = "https://$($SelectedTenant.ClickOnceHost)/365"
+                    $webSiteUrl = "http://$($SelectedTenant.ClickOnceHost)/365"
                     [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:ProgramData ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))                       
 
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue (Split-Path (Split-Path $SelectedInstance.PublicWinBaseUrl -Parent) -Leaf).Split(':').GetValue(0)
@@ -264,7 +267,7 @@
                     $clickOnceDeploymentId += "Test"
                     $AzureADDomain = $SelectedInstance.ClientServicesFederationMetadataLocation.split("/").GetValue(3)
                     Remove-Item -Path $clickOnceDirectory -Recurse -Force -ErrorAction SilentlyContinue
-                    $webSiteUrl = "https://$($SelectedTenant.ClickOnceHost)/Test"
+                    $webSiteUrl = "http://$($SelectedTenant.ClickOnceHost)/Test"
                     [xml]$clientUserSettings = Get-Content -Path (Join-Path $env:ProgramData ('Microsoft\Microsoft Dynamics NAV\' + $SetupParameters.mainVersion + '\ClientUserSettings.config'))                       
 
                     Edit-NAVClientUserSettings -ClientUserSettings $clientUserSettings -KeyName 'Server' -NewValue $TestDeploymentServer
