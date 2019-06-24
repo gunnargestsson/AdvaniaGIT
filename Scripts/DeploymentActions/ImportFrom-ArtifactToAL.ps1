@@ -16,6 +16,7 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
     Write-Host "Expanding App.zip on remote server..."
     Invoke-Command -Session $Session -ScriptBlock {
         param([string]$ZipFileName,[string]$AppFilePath)
+        Write-Host Importing modules from $($SetupParameters.navServicePath)...
         Load-InstanceAdminTools -SetupParameters $SetupParameters
         Load-InstanceAppTools -SetupParameters $SetupParameters        
         if (!(Test-Path -Path $AppFilePath)) { New-Item -Path $AppFilePath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null }
@@ -24,10 +25,18 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
         Expand-Archive -Path $ZipFileName -DestinationPath $TempFilePath -Force
         Remove-Item -Path $ZipFileName -Force -ErrorAction SilentlyContinue
 
-        $App = (Get-ChildItem -Path $TempFilePath -Filter "*.app")[0]
-        $AppToInstall = Get-NAVAppInfo -Path $App.FullName
-        Copy-Item -Path $App.FullName -Destination (Join-Path $AppFilePath "$($AppToInstall.appId).app") -Force
-        Remove-Item -Path $TempFilePath -Recurse -Force
+        if (Test-Path -Path $TempFilePath -PathType Leaf) {
+            $App = (Get-ChildItem -Path $TempFilePath -Filter "*.app")[0]
+            $AppToInstall = Get-NAVAppInfo -Path $App.FullName
+            Copy-Item -Path $App.FullName -Destination (Join-Path $AppFilePath "$($AppToInstall.appId).app") -Force
+            Remove-Item -Path $TempFilePath -Recurse -Force
+        } else {
+            foreach ($App in (Get-ChildItem -Path $TempFilePath -Filter "*.app")) {
+                $AppToInstall = Get-NAVAppInfo -Path $App.FullName
+                Copy-Item -Path $App.FullName -Destination (Join-Path $AppFilePath "$($AppToInstall.appId).app") -Force
+            }
+            Remove-Item -Path $TempFilePath -Recurse -Force
+        }
     } -ArgumentList ((Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-App.zip"), "${WorkFolder}\$($DeploymentSettings.instanceName)")
 
     Write-Host "App upload complete..."
