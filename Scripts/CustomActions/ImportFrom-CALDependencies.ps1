@@ -8,5 +8,6 @@ if (Test-Path $CALObjectsPath) {
 
     # Compile Queries to fix symbols
     & (Join-path $PSScriptRoot 'Start-CompileQueriesOnHost.ps1')
+    & (Join-path $PSScriptRoot 'Start-CompileXMLPortOnHost.ps1')
     & (Join-path $PSScriptRoot 'Start-CompileModifiedObjectsOnHost.ps1')
 }
