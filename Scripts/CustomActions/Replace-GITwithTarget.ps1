@@ -1,5 +1,9 @@
 Check-GitNotUnattached
 
+if ($BranchSettings.dockerContainerId -gt "") {
+    $SetupParameters.navIdePath = Copy-DockerNAVClient -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+}
+
 Load-ModelTools -SetupParameters $SetupParameters
 $ObjectFileName = (Join-Path $SetupParameters.workFolder 'Target.txt')
 
