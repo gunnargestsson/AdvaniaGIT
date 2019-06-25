@@ -15,7 +15,8 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
 
     Write-Host "Expanding App.zip on remote server..."
     Invoke-Command -Session $Session -ScriptBlock {
-        param([string]$ZipFileName,[string]$AppFilePath)
+        param([string]$ZipFileName,[string]$AppFilePath)        
+        $SetupParameters | Add-Member "navServicePath" (Get-NAVServicePath -SetupParameters $SetupParameters) -Force
         Write-Host Importing modules from $($SetupParameters.navServicePath)...
         Load-InstanceAdminTools -SetupParameters $SetupParameters
         Load-InstanceAppTools -SetupParameters $SetupParameters        
