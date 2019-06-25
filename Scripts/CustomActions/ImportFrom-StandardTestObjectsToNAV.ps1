@@ -1,11 +1,11 @@
 ﻿if ($BranchSettings.dockerContainerId -gt "") {
     if ([Bool](Get-Module NAVContainerHelper)) {
-        if ([String]::IsNullOrEmpty($SetupParametesr.testToolkitCountry)) {
+        if ([String]::IsNullOrEmpty($SetupParameters.testToolkitCountry)) {
             Write-Host Importing Test Toolkit to NAV Container…
             Import-TestToolkitToNavContainer -containerName $BranchSettings.dockerContainerName
         } else {
-            Write-Host Importing Test Toolkit for $($SetupParametesr.testToolkitCountry) to NAV Container...
-            Import-TestToolkitToNavContainer -containerName $BranchSettings.dockerContainerName -testToolkitCountry $SetupParametesr.testToolkitCountry
+            Write-Host Importing Test Toolkit for $($SetupParameters.testToolkitCountry) to NAV Container...
+            Import-TestToolkitToNavContainer -containerName $BranchSettings.dockerContainerName -testToolkitCountry $SetupParameters.testToolkitCountry
         }
     } else {
         Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
