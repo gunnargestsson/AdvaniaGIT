@@ -99,6 +99,18 @@
         $params += @{ enableSymbolLoading = $true }
     }
 
+    if (![System.String]::IsNullOrEmpty($SetupParameters.useBestContainerOS)) {    
+        $params += @{ useBestContainerOS = $true }
+    }
+
+    if (![System.String]::IsNullOrEmpty($SetupParameters.includeAL)) {    
+        $params += @{ includeAL = $true }
+    }
+
+    if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
+        $params += @{ includeCSide = $true }
+    }
+
     if ($HasNetworkConnection) {
         $params += @{ alwaysPull = $true }
     }
@@ -113,7 +125,7 @@
         }
     }
     if ((Get-NavContainers) -inotcontains $DockerContainerFriendlyName) { 
-        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -includeCSide -restart no -updateHosts -useBestContainerOS
+        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -restart no -updateHosts
         $DockerCreated = $true
     }
     $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 
