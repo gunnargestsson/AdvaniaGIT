@@ -103,6 +103,10 @@
         $params += @{ useBestContainerOS = $true }
     }
 
+    if (![System.String]::IsNullOrEmpty($SetupParameters.CheckHealth )) {    
+        $params += @{ doNotCheckHealth  = $true }
+    }
+
     if (![System.String]::IsNullOrEmpty($SetupParameters.includeAL)) {    
         $params += @{ includeAL = $true }
     }
