@@ -62,6 +62,12 @@
                 "--env SqlTimeout=1200",
                 "--dns 8.8.8.8")
 
+    $branchAddInsFolder = "$($SetupParameters.Repository)\Add-Ins"
+    if (Test-Path -Path $branchAddInsFolder -PathType Container ) { 
+        $branchAddInsFolder = "$($SetupParameters.Repository)\Add-Ins:c:\run\Add-Ins"
+        $parameters += @("--volume `"$branchAddInsFolder`"")
+    }
+
     if ($SetupParameters.BuildMode) {
         $parameters += @("--env webClient=N",
                          "--env httpSite=N")        
