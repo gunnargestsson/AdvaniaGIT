@@ -9,7 +9,11 @@ $index = 1
 foreach ($ALPath in (Get-ALPaths -SetupParameters $SetupParameters)) {
     $ExtensionAppJsonFile = Join-Path $ALPath.FullName 'app.json'
     $ExtensionAppJsonObject = Get-Content -Raw -Path $ExtensionAppJsonFile | ConvertFrom-Json
-    $CodeunitIdFilter = "BETWEEN $($ExtensionAppJsonObject.idRange.from) AND $($ExtensionAppJsonObject.idRange.to)"
+    if ($ExtensionAppJsonObject.idRange) {
+        $CodeunitIdFilter = "BETWEEN $($ExtensionAppJsonObject.idRange.from) AND $($ExtensionAppJsonObject.idRange.to)"
+    } elseif ($ExtensionAppJsonObject.idRanges) {
+        $CodeunitIdFilter = "BETWEEN $($ExtensionAppJsonObject.idRanges[0].from) AND $($ExtensionAppJsonObject.idRanges[0].to)"
+    }
 
     if ($index -eq 1) {
         Prepare-NAVTestExecution -SetupParameters $SetupParameters -BranchSettings $BranchSettings -CompanyName $companyName -CodeunitIdFilter $CodeunitIdFilter
