@@ -30,6 +30,13 @@ if ($SetupParameters.BuildMode) {
                 $ExtensionAppJsonObject.runtime = $SetupParameters.runtime
             }
         }
+        if (![String]::IsNullOrEmpty($SetupParameters.target)) {
+            if ([String]::IsNullOrEmpty($ExtensionAppJsonObject.target)) {
+                $ExtensionAppJsonObject | Add-Member -MemberType NoteProperty -Name target -Value $SetupParameters.target
+            } else {
+                $ExtensionAppJsonObject.target = $SetupParameters.target
+            }
+        }
         if (![String]::IsNullOrEmpty($SetupParameters.navVersion)) {
             if (![String]::IsNullOrEmpty($ExtensionAppJsonObject.platform)) {
                 $ExtensionAppJsonObject.platform = $SetupParameters.navVersion

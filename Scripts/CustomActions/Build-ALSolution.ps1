@@ -22,6 +22,13 @@ if ($SetupParameters.BuildMode) {
         $Version = $ExtensionAppJsonObject.Version.SubString(0,$ExtensionAppJsonObject.Version.LastIndexOf('.'))
         $ExtensionAppJsonObject.Version = $Version+'.' + $SetupParameters.buildId
     }
+    if (![String]::IsNullOrEmpty($SetupParameters.target)) {
+        if ([String]::IsNullOrEmpty($ExtensionAppJsonObject.target)) {
+            $ExtensionAppJsonObject | Add-Member -MemberType NoteProperty -Name target -Value $SetupParameters.target
+        } else {
+            $ExtensionAppJsonObject.target = $SetupParameters.target
+        }
+    }
     if (![String]::IsNullOrEmpty($SetupParameters.runtime)) {
         if ([String]::IsNullOrEmpty($ExtensionAppJsonObject.runtime)) {
             $ExtensionAppJsonObject | Add-Member -MemberType NoteProperty -Name runtime -Value $SetupParameters.runtime
