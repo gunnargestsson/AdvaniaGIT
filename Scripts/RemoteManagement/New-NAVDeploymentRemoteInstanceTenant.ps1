@@ -83,8 +83,7 @@
                         $Param.AllowAppDatabaseWrite = $true
                     }
                     Update-NAVRemoteInstanceTenant -Session $Session -SelectedTenant $SelectedTenant -Database $Database
-                    Write-Host "Waiting for update process to finish..."
-                    Start-Sleep -Seconds 30
+                    Read-host -Prompt "Waiting for update process to finish.  Press any key to continue."
                     Mount-NAVRemoteInstanceTenant @Param
                     Start-NAVRemoteInstanceTenantSync -Session $Session -SelectedTenant $SelectedTenant                    
                     $hostNo ++
