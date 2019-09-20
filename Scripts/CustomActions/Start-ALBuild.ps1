@@ -23,8 +23,10 @@ Write-Host Build AL Solution with Tests
 if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies\*.app")) {
     Write-Host Install AL Dependencies
     & (Join-path $PSScriptRoot 'Install-ALDependencies.ps1')
-    Write-Host Restart NAV Service
-    & (Join-path $PSScriptRoot 'Restart-NAVService.ps1')
+    if (![String]::IsNullOrEmpty($SetupParameters.restartNAVService)) {
+        Write-Host Restart NAV Service
+        & (Join-path $PSScriptRoot 'Restart-NAVService.ps1')
+    }
 }
 Write-Host Install AL Extension
 & (Join-path $PSScriptRoot 'Install-ALExtensionsToDocker.ps1')
