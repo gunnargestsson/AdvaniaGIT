@@ -33,6 +33,15 @@
     $UpdatedObjects = New-Object -TypeName System.Collections.ArrayList
     $StartTime = Get-Date
 
+    #Set Combined File Name and Prepare file if $ObjectPath is a Folder
+    $ObjectsPathIsFolder = (Test-Path -Path $ObjectsPath -PathType Container)
+    Write-Host("ObjectPathIsFolder value: $($ObjectsPathIsFolder)")
+    if ($ObjectsPathIsFolder -eq $true) {
+        $CombinedFileName = $ObjectsPath + "\ModifiedObjects.txt"
+        Write-Host("CombinedFileName value: $($CombinedFileName)")
+        New-Item -ItemType file $CombinedFileName –force
+    }
+
     foreach ($FileObject in $FileObjects)
     {
         if (!$FileObject.Id) 
@@ -179,17 +188,34 @@
 
         if (-not $NoProgress) 
         {
-            Write-Progress -Status "Importing $i of $count" -Activity 'Importing objects...' -CurrentOperation $ObjToImport.FileName.FileName -PercentComplete ($percent*100) -SecondsRemaining $remtime
+            if ($ObjectsPathIsFolder -eq $true) {
+                Write-Progress -Status "Processing $i of $count" -Activity 'Building object File...' -CurrentOperation $ObjToImport.FileName.FileName -PercentComplete ($percent*100) -SecondsRemaining $remtime
+            }
+            else 
+            {
+                Write-Progress -Status "Processing $i of $count" -Activity 'Importing object File...' -CurrentOperation $ObjToImport.FileName.FileName -PercentComplete ($percent*100) -SecondsRemaining $remtime
+            }
         }
         if (($ObjToImport.Type -eq 7) -and ($ObjToImport.Id -lt 1050))
         {
             $Result = Get-SQLCommandResult -Server $Server -Database $Database -Command "DELETE from Object where [Type]=7 and [ID]=$($ObjToImport.Id)" -Username $SetupParameters.SqlUsername -Password $SetupParameters.SqlPassword
         }
-        Write-Verbose -Message "Importing $($ObjToImport.FileName.FileName)"
-        Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $ObjToImport.FileName.FileName -ImportAction Overwrite -SynchronizeSchemaChanges Force
-        Invoke-PostImportCompilation -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Object $ObjToImport
-    }
 
+        if ($ObjectsPathIsFolder -eq $true) {
+            Write-Verbose -Message "Adding $($ObjToImport.FileName.FileName)"
+            Get-Content $($ObjToImport.FileName.FileName) | Add-Content $CombinedFileName
+        }
+        else 
+        {
+            Write-Verbose -Message "Importing $($ObjToImport.FileName.FileName)"
+            Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $ObjToImport.FileName.FileName -ImportAction Overwrite -SynchronizeSchemaChanges Force
+            Invoke-PostImportCompilation -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Object $ObjToImport
+        }
+    }
+    if ($ObjectsPathIsFolder -eq $true) {
+        Write-Host "Importing $($CombinedFileName) containing $($UpdatedObjects.Count) objects..."
+        Import-NAVApplicationGITObject -SetupParameters $SetupParameters -BranchSettings $BranchSettings -Path $CombinedFileName -ImportAction Overwrite -SynchronizeSchemaChanges Force
+    }
     Write-Host -Object ''
     Write-Host -Object "Updated $($UpdatedObjects.Count) objects..."
 }
