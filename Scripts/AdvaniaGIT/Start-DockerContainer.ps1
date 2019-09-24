@@ -62,15 +62,12 @@
                 "--env SqlTimeout=1200",
                 "--dns 8.8.8.8")
 
-    $branchAddInsFolder = "$($SetupParameters.Repository)\Add-Ins"
-    if (Test-Path -Path $branchAddInsFolder -PathType Container ) { 
-        $branchAddInsFolder = "$($SetupParameters.Repository)\Add-Ins:c:\run\Add-Ins"
-        $parameters += @("--volume `"$branchAddInsFolder`"")
-    }
 
-    if ($SetupParameters.BuildMode) {
-        $parameters += @("--env webClient=N",
-                         "--env httpSite=N")        
+    if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
+        if ($SetupParameters.BuildMode) {
+            $parameters += @("--env webClient=N",
+                             "--env httpSite=N")        
+        }
     }
 
     if (![System.String]::IsNullOrEmpty($BackupFilePath)) {
@@ -93,6 +90,11 @@
 
     if (![System.String]::IsNullOrEmpty($SetupParameters.dockerTestToolkit)) {
         $params += @{ includeTestToolkit = $SetupParameters.dockerTestToolkit }
+    }
+
+    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerTestLibraries)) {
+        $params += @{ includeTestToolkit = $true }
+        $params += @{ includeTestLibrariesOnly = $SetupParameters.dockerTestLibraries }
     }
 
     if (![System.String]::IsNullOrEmpty($SetupParameters.dockerAuthentication)) {

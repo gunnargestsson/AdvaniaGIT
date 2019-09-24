@@ -1,14 +1,16 @@
 Write-Host Build and Update Docker Container
 & (Join-path $PSScriptRoot 'Build-NavEnvironment.ps1')
 
-if (![String]::IsNullOrEmpty($SetupParameters.CreateSymbols)) {
-    & (Join-path $PSScriptRoot 'Build-NAVSymbolReferences.ps1')
+if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
+    if (![String]::IsNullOrEmpty($SetupParameters.CreateSymbols)) {
+        & (Join-path $PSScriptRoot 'Build-NAVSymbolReferences.ps1')
+    }
+
+    & (Join-path $PSScriptRoot 'ImportFrom-CALDependencies.ps1')
+
+    Write-Host Initialize Test Company
+    & (Join-path $PSScriptRoot 'Initialize-NAVCompany.ps1')
 }
-
-& (Join-path $PSScriptRoot 'ImportFrom-CALDependencies.ps1')
-
-Write-Host Initialize Test Company
-& (Join-path $PSScriptRoot 'Initialize-NAVCompany.ps1')
 Write-Host Download AL Addin
 & (Join-path $PSScriptRoot 'Download-ALAddin.ps1')
 
@@ -23,20 +25,29 @@ Write-Host Build AL Solution with Tests
 if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies\*.app")) {
     Write-Host Install AL Dependencies
     & (Join-path $PSScriptRoot 'Install-ALDependencies.ps1')
-    if (![String]::IsNullOrEmpty($SetupParameters.restartNAVService)) {
-        Write-Host Restart NAV Service
-        & (Join-path $PSScriptRoot 'Restart-NAVService.ps1')
+    if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
+        if (![String]::IsNullOrEmpty($SetupParameters.restartNAVService)) {
+            Write-Host Restart NAV Service
+            & (Join-path $PSScriptRoot 'Restart-NAVService.ps1')
+        }
     }
+}
+if ([int]($SetupParameters.navVersion).split(".")[0] -ge 15) {
+    & (Join-path $PSScriptRoot 'Download-ALDependencies.ps1')
 }
 Write-Host Install AL Extension
 & (Join-path $PSScriptRoot 'Install-ALExtensionsToDocker.ps1')
-Write-Host Import Test Libraries
-& (Join-path $PSScriptRoot 'ImportFrom-StandardTestLibrariesToNAV.ps1')
-Write-Host Execute AL Test Codeunits
-& (Join-path $PSScriptRoot 'Start-ALTestsExecution.ps1')
-Write-Host Save Test Results
-& (Join-path $PSScriptRoot 'Save-TestResults.ps1')
-Write-Host Remove Test Code
+if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
+    Write-Host Import Test Libraries
+    & (Join-path $PSScriptRoot 'ImportFrom-StandardTestLibrariesToNAV.ps1')
+    Write-Host Execute AL Test Codeunits
+    & (Join-path $PSScriptRoot 'Start-ALTestsExecution.ps1')
+    Write-Host Save Test Results
+    & (Join-path $PSScriptRoot 'Save-TestResults.ps1')
+    Write-Host Remove Test Code
+} else {
+    & (Join-path $PSScriptRoot 'Start-ALTestsInContainer.ps1')
+}
 & (Join-path $PSScriptRoot 'Remove-ALTestFolders.ps1')
 Write-Host Clear Previous builds
 & (Join-path $PSScriptRoot 'Clear-ALOutFolder.ps1')

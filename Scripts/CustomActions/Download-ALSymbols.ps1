@@ -10,19 +10,24 @@ if ($BranchSettings.dockerContainerName -eq "") {
 $navVersion = "$(($SetupParameters.navVersion).Split(".")[0]).0.0.0"
 
 $baseUrl = "http://$($BranchSettings.dockerContainerName):$($BranchSettings.developerServicesPort)/$($BranchSettings.instanceName)/dev/packages"
-$appUrl = $baseUrl + "?publisher=Microsoft&appName=Application&versionText=${navVersion}"
-$sysUrl = $baseurl + "?publisher=Microsoft&appName=System&versionText=${navVersion}"
-$testUrl = $baseurl + "?publisher=Microsoft&appName=Test&versionText=${navVersion}"
+if ($navVersion -lt "15.0.0.0") {
+    $appUrl = $baseUrl + "?publisher=Microsoft&appName=Application&versionText=${navVersion}"
+    $sysUrl = $baseurl + "?publisher=Microsoft&appName=System&versionText=${navVersion}"
+    $testUrl = $baseurl + "?publisher=Microsoft&appName=Test&versionText=${navVersion}"
+    Write-Host "Downloading Application from $appUrl..."
+    Invoke-RestMethod -Method Get -Uri ($appUrl) -OutFile (Join-Path $SetupParameters.LogPath 'Application.app') -UseDefaultCredentials
+    Write-Host "Downloading System from $sysUrl..."
+    Invoke-RestMethod -Method Get -Uri ($sysUrl) -OutFile (Join-Path $SetupParameters.LogPath 'System.app') -UseDefaultCredentials
+    Write-Host "Downloading Test from $testUrl..."
+    Invoke-RestMethod -Method Get -Uri ($testUrl) -OutFile (Join-Path $SetupParameters.LogPath 'Test.app') -UseDefaultCredentials
 
-Write-Host "Downloading Application from $appUrl..."
-Invoke-RestMethod -Method Get -Uri ($appUrl) -OutFile (Join-Path $SetupParameters.LogPath 'Application.app') -UseDefaultCredentials
-Write-Host "Downloading System from $sysUrl..."
-Invoke-RestMethod -Method Get -Uri ($sysUrl) -OutFile (Join-Path $SetupParameters.LogPath 'System.app') -UseDefaultCredentials
-Write-Host "Downloading Test from $testUrl..."
-Invoke-RestMethod -Method Get -Uri ($testUrl) -OutFile (Join-Path $SetupParameters.LogPath 'Test.app') -UseDefaultCredentials
+    if (!(Test-Path (Join-Path $SetupParameters.LogPath 'Application.app'))) {throw}    
+} else {
+     $sysUrl = $baseurl + "?publisher=Microsoft&appName=System&versionText=${navVersion}"
+    Write-Host "Downloading System from $sysUrl..."
+    Invoke-RestMethod -Method Get -Uri ($sysUrl) -OutFile (Join-Path $SetupParameters.LogPath 'System.app') -UseDefaultCredentials
+}
 
-
-if (!(Test-Path (Join-Path $SetupParameters.LogPath 'Application.app'))) {throw}
 if (!(Test-Path (Join-Path $SetupParameters.LogPath 'System.app'))) {throw}
 
 if ($SetupParameters.BuildMode) {
@@ -30,7 +35,7 @@ if ($SetupParameters.BuildMode) {
     New-Item -Path $BranchWorkFolder -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
     Remove-Item -Path (Join-Path $BranchWorkFolder 'Symbols') -Force -Recurse -ErrorAction SilentlyContinue
     New-Item -Path (Join-Path $BranchWorkFolder 'Symbols') -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null    
-    Move-Item -Path (Join-Path $SetupParameters.LogPath 'Application.app') -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force
+    Move-Item -Path (Join-Path $SetupParameters.LogPath 'Application.app') -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force -ErrorAction SilentlyContinue
     Move-Item -Path (Join-Path $SetupParameters.LogPath 'System.app') -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force
     Move-Item -Path (Join-Path $SetupParameters.LogPath 'Test.app') -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force -ErrorAction SilentlyContinue
     # Copy Dependencies from repository

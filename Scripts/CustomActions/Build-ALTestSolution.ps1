@@ -17,13 +17,6 @@ if ($SetupParameters.BuildMode) {
     $ExtensionAppJsonObject = Get-Content -Raw -Path $ExtensionAppJsonFile | ConvertFrom-Json
     $Publisher = $ExtensionAppJsonObject.Publisher
     $Name = $ExtensionAppJsonObject.Name
-    if (![String]::IsNullOrEmpty($SetupParameters.buildId)) {
-        $Version = $ExtensionAppJsonObject.Version.SubString(0,$ExtensionAppJsonObject.Version.LastIndexOf('.'))
-        $ExtensionAppJsonObject.Version = $Version+'.' + $SetupParameters.buildId
-
-        $Version = $ExtensionAppJsonObject.dependencies[0].version.SubString(0,$ExtensionAppJsonObject.Version.LastIndexOf('.'))
-        $ExtensionAppJsonObject.dependencies[0].version = $Version+'.' + $SetupParameters.buildId
-    }
     if (![String]::IsNullOrEmpty($SetupParameters.runtime)) {
         if ([String]::IsNullOrEmpty($ExtensionAppJsonObject.runtime)) {
             $ExtensionAppJsonObject | Add-Member -MemberType NoteProperty -Name runtime -Value $SetupParameters.runtime
