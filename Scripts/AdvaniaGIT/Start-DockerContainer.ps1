@@ -119,6 +119,10 @@
         $params += @{ includeAL = $true }
     }
 
+    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerAssignPremiumPlan)) {    
+        $params += @{ assignPremiumPlan = $SetupParameters.dockerAssignPremiumPlan }
+    }
+
     if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
         $params += @{ includeCSide = $true }
     }
