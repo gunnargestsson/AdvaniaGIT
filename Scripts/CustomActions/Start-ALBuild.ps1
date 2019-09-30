@@ -15,11 +15,15 @@ Write-Host Download AL Addin
 & (Join-path $PSScriptRoot 'Download-ALAddin.ps1')
 
 if ($SetupParameters.ftpServer -ne "") {
-    Write-Host Download AL Dependencies
+    Write-Host Download AL Dependencies from ftp server
     & (Join-path $PSScriptRoot 'Download-ALDependenciesFromFTPServer.ps1')    
 }
 Write-Host Download AL Symbols
 & (Join-path $PSScriptRoot 'Download-ALSymbols.ps1')
+if ([int]($SetupParameters.navVersion).split(".")[0] -ge 15) {
+    Write-Host Download AL Dependencies from container
+    & (Join-path $PSScriptRoot 'Download-ALDependencies.ps1')
+}
 Write-Host Build AL Solution with Tests
 & (Join-path $PSScriptRoot 'Build-ALSolutions.ps1')
 if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies\*.app")) {
@@ -32,9 +36,7 @@ if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies\*.app")
         }
     }
 }
-if ([int]($SetupParameters.navVersion).split(".")[0] -ge 15) {
-    & (Join-path $PSScriptRoot 'Download-ALDependencies.ps1')
-}
+
 Write-Host Install AL Extension
 & (Join-path $PSScriptRoot 'Install-ALExtensionsToDocker.ps1')
 if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
