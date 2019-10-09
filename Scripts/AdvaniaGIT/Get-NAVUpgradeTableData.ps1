@@ -18,12 +18,12 @@
 
     $CreateSelectStatement = $false
 
-    [xml]$TenantXml = Get-NAVTableMetaDataXml -DatabaseName $TenantDatabase -DatabaseServer $DatabaseServer -TableId $TableId -Snapshot
+    [xml]$TenantXml = Get-NAVTableMetaDataXml -DatabaseName $TenantDatabase -DatabaseServer $DatabaseServer -TableId $TableId
     [xml]$ApplicationXml = Get-NAVTableMetaDataXml -DatabaseName $ApplicationDatabase -DatabaseServer $DatabaseServer -TableId $TableId
 
     $ReplaceChars = '."\/%]['''
     $FieldsInSelect = @()
-    $SelectFields = ""
+    $SelectFields = ""    
     foreach ($field in ($TenantXml.MetaTable.Keys.FirstChild.Key).split(',')) {
         $FieldsInSelect += $field.substring(5)
     }
