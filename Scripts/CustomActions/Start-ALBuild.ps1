@@ -24,8 +24,7 @@ if ([int]($SetupParameters.navVersion).split(".")[0] -ge 15) {
     Write-Host Download AL Dependencies from container
     & (Join-path $PSScriptRoot 'Download-ALDependencies.ps1')
 }
-Write-Host Build AL Solution with Tests
-& (Join-path $PSScriptRoot 'Build-ALSolutions.ps1')
+
 if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies\*.app")) {
     Write-Host Install AL Dependencies
     & (Join-path $PSScriptRoot 'Install-ALDependencies.ps1')
@@ -36,6 +35,9 @@ if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies\*.app")
         }
     }
 }
+
+Write-Host Build AL Solution with Tests
+& (Join-path $PSScriptRoot 'Build-ALSolutions.ps1')
 
 Write-Host Install AL Extension
 & (Join-path $PSScriptRoot 'Install-ALExtensionsToDocker.ps1')
