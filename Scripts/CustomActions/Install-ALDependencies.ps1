@@ -5,7 +5,7 @@
     Write-Host "Installing in $($SetupParameters.dependenciesOrder) order"
     $Apps = Get-ChildItem -Path (Join-Path $SetupParameters.repository "Dependencies") -Filter "*.app" | Sort-Object -Property $SetupParameters.dependenciesOrder     
 }
-foreach ($app in $Apps | Sort-Object -Property LastWriteTime) {
+foreach ($app in $Apps) {
     Publish-NavContainerApp -containerName $BranchSettings.dockerContainerName -appFile $app.FullName -skipVerification -sync -install 
 }
 Remove-Item -Path (Join-Path $SetupParameters.repository "Dependencies\*.*") -Recurse -ErrorAction SilentlyContinue
