@@ -1,6 +1,13 @@
 ﻿if ($BranchSettings.dockerContainerId -gt "") {    
     Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -ScriptBlock {
         param([string]$ServerInstance)
+        $AdminTool = Get-Item 'C:\Program Files\Microsoft Dynamics NAV\*\Service\NavAdminTool.ps1'
+        if ($AdminTool) {
+            Import-Module $AdminTool.FullName -DisableNameChecking
+        } else {
+            $AdminTool = Get-Item 'C:\Program Files\Microsoft Dynamics 365 Business Central\*\Service\NavAdminTool.ps1'
+            Import-Module $AdminTool.FullName -DisableNameChecking
+        }
         $CompanyList = Get-NAVCompany -ServerInstance $ServerInstance
         if ($CompanyList -eq $null) {
             $CompanyName = "My Test Company"
