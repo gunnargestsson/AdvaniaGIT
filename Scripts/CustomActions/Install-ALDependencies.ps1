@@ -1,7 +1,9 @@
 ﻿if ([String]::IsNullOrEmpty($SetupParameters.dependenciesOrder)) {
-    $Apps = Get-ChildItem -Path (Join-Path $SetupParameters.repository "Dependencies") -Filter "*.app" | Sort-Object -Property LastWriteTime
+    Write-Host "Installing in Last Write Time order"
+    $Apps = Get-ChildItem -Path (Join-Path $SetupParameters.repository "Dependencies") -Filter "*.app" | Sort-Object -Property LastWriteTime -Descending
 } else {
-    $Apps = Get-ChildItem -Path (Join-Path $SetupParameters.repository "Dependencies") -Filter "*.app" | Sort-Object -Property $SetupParameters.dependenciesOrder    
+    Write-Host "Installing in $($SetupParameters.dependenciesOrder) order"
+    $Apps = Get-ChildItem -Path (Join-Path $SetupParameters.repository "Dependencies") -Filter "*.app" | Sort-Object -Property $SetupParameters.dependenciesOrder     
 }
 foreach ($app in $Apps | Sort-Object -Property LastWriteTime) {
     Publish-NavContainerApp -containerName $BranchSettings.dockerContainerName -appFile $app.FullName -skipVerification -sync -install 
