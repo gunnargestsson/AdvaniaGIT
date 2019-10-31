@@ -4,7 +4,9 @@
     param
     (
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-        [PSObject]$SetupParameters = (New-Object -TypeName PSObject)
+        [PSObject]$SetupParameters = (New-Object -TypeName PSObject),
+        [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
+        [Switch]$ReverseOrder
     )
 
     $ALPaths = @()
@@ -42,6 +44,6 @@
 
         }
     }
-
+    if ($ReverseOrder) { $ALPaths = Reverse-HashTable $ALPaths }
     return $ALPaths
 }
