@@ -110,6 +110,7 @@ else
     $Globals | Add-Member buildSourcePath  (Join-Path $Repository $SetupParameters.buildSourcePath)
     $Globals | Add-Member LogPath  (Join-Path $SetupParameters.rootPath "Log\$([GUID]::NewGuid().GUID)")
     $Globals | Add-Member LicensePath  (Join-Path $SetupParameters.rootPath "License")
+
     if (![string]::IsNullOrEmpty($SetupParameters.licenseFile)) {
         $SetupParameters.licenseFile = ($SetupParameters.licenseFile).Replace("%1",($SetupParameters.navVersion).Split(".")[0])
         if (Test-Path -Path $SetupParameters.licenseFile) {
@@ -121,6 +122,18 @@ else
             $Globals | Add-Member LicenseFilePath $LicenseFileFullPath 
         }
         Write-Host -ForegroundColor Green "Using License: $($SetupParameters.licenseFile) on $($Globals.LicenseFilePath)"
+    }
+
+    if (![string]::IsNullOrEmpty($SetupParameters.dependencyLicenseFile)) {
+        $SetupParameters.dependencyLicenseFile = ($SetupParameters.dependencyLicenseFile).Replace("%1",($SetupParameters.navVersion).Split(".")[0])
+        if (Test-Path -Path $SetupParameters.dependencyLicenseFile) {
+            $dependencyLicenseFileFullPath = $SetupParameters.dependencyLicenseFile
+        } elseif (Test-Path -Path (Join-Path $Globals.LicensePath $SetupParameters.dependencyLicenseFile)) {
+            $dependencyLicenseFileFullPath = (Join-Path $Globals.LicensePath $SetupParameters.dependencyLicenseFile)
+        } 
+        if ($dependencyLicenseFileFullPath) {
+            $Globals | Add-Member dependencyLicenseFilePath $dependencyLicenseFileFullPath 
+        }
     }
     $Globals | Add-Member DownloadPath  (Join-Path $SetupParameters.rootPath "Download")
     $Globals | Add-Member NewSyntaxTestObjectsPath  (Join-Path $Repository "$($SetupParameters.NewSyntaxPrefix)$($SetupParameters.testObjectsPath)")

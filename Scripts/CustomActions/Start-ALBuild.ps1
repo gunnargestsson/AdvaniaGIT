@@ -27,11 +27,21 @@ if ([int]($SetupParameters.navVersion).split(".")[0] -ge 15) {
 
 if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies\*.app")) {
     Write-Host Install AL Dependencies
+    if (![string]::IsNullOrEmpty($SetupParameters.dependencyLicenseFileFullPath)) {
+        if (Test-Path $SetupParameters.dependencyLicenseFileFullPath) {  
+            Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.dependencyLicenseFileFullPath 
+        }
+    }
     & (Join-path $PSScriptRoot 'Install-ALDependencies.ps1')
     if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
         if (![String]::IsNullOrEmpty($SetupParameters.restartNAVService)) {
             Write-Host Restart NAV Service
             & (Join-path $PSScriptRoot 'Restart-NAVService.ps1')
+        }
+    }
+    if (![string]::IsNullOrEmpty($SetupParameters.LicenseFileFullPath)) {
+        if (Test-Path $SetupParameters.LicenseFileFullPath) {  
+            Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFileFullPath 
         }
     }
 }

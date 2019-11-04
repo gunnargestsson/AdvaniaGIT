@@ -10,6 +10,10 @@ function Update-NAVLicense
     )   
     if (Test-Path $LicenseFilePath) {
 		Write-Host "Importing NAV license ..."
-    	Import-NAVServerLicense -ServerInstance $BranchSettings.instanceName -LicenseFile $LicenseFilePath -Database NavDatabase -Force
+        if ($BranchSettings.dockerContainerName -gt "") {
+            Import-NavContainerLicense -containerName $BranchSettings.dockerContainerName -licenseFile $LicenseFilePath 
+        } else {
+    	    Import-NAVServerLicense -ServerInstance $BranchSettings.instanceName -LicenseFile $LicenseFilePath -Database NavDatabase -Force
+        }
     }
 }
