@@ -132,7 +132,8 @@ else
             $dependencyLicenseFileFullPath = (Join-Path $Globals.LicensePath $SetupParameters.dependencyLicenseFile)
         } 
         if ($dependencyLicenseFileFullPath) {
-            $Globals | Add-Member dependencyLicenseFilePath $dependencyLicenseFileFullPath 
+            $Globals | Add-Member dependencyLicenseFilePath $dependencyLicenseFileFullPath
+            Write-Host -ForegroundColor Green "Using License: $($SetupParameters.dependencyLicenseFile) on $($Globals.dependencyLicenseFilePath)" 
         }
     }
     $Globals | Add-Member DownloadPath  (Join-Path $SetupParameters.rootPath "Download")

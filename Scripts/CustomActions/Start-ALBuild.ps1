@@ -27,9 +27,9 @@ if ([int]($SetupParameters.navVersion).split(".")[0] -ge 15) {
 
 if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies\*.app")) {
     Write-Host Install AL Dependencies
-    if (![string]::IsNullOrEmpty($SetupParameters.dependencyLicenseFileFullPath)) {
-        if (Test-Path $SetupParameters.dependencyLicenseFileFullPath) {  
-            Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.dependencyLicenseFileFullPath 
+    if (![string]::IsNullOrEmpty($SetupParameters.dependencyLicenseFilePath)) {
+        if (Test-Path $SetupParameters.dependencyLicenseFilePath) {  
+            Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.dependencyLicenseFilePath 
         }
     }
     & (Join-path $PSScriptRoot 'Install-ALDependencies.ps1')
@@ -39,9 +39,9 @@ if (Test-Path -Path (Join-Path $SetupParameters.repository "Dependencies\*.app")
             & (Join-path $PSScriptRoot 'Restart-NAVService.ps1')
         }
     }
-    if (![string]::IsNullOrEmpty($SetupParameters.LicenseFileFullPath)) {
-        if (Test-Path $SetupParameters.LicenseFileFullPath) {  
-            Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFileFullPath 
+    if (![string]::IsNullOrEmpty($SetupParameters.LicenseFilePath)) {
+        if (Test-Path $SetupParameters.LicenseFilePath) {  
+            Update-NAVLicense -BranchSettings $BranchSettings -LicenseFilePath $SetupParameters.LicenseFilePath 
         }
     }
 }
