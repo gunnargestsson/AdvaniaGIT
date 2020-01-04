@@ -56,7 +56,7 @@
         }
     }   
 
-    if ($CreateSelectStatement) {
+    if ($CreateSelectStatement -or $ApplicationXml -eq $null) {
         foreach ($field in $FieldsInSelect) {
             $fieldName = ($TenantXml.MetaTable.Fields.Field | Where-Object -Property ID -EQ $field).Name
             for ($i = 0;$i -lt $ReplaceChars.Length;$i++) 
