@@ -1,12 +1,18 @@
-﻿if ([String]::IsNullOrEmpty($SetupParameters.dependenciesOrder)) {
-    Write-Host "Installing in Last Write Time order"
-    $Apps = Get-ChildItem -Path (Join-Path $SetupParameters.repository "Dependencies") -Filter "*.app" | Sort-Object -Property LastWriteTime -Descending
-} else {
-    Write-Host "Installing in $($SetupParameters.dependenciesOrder) order"
-    $Apps = Get-ChildItem -Path (Join-Path $SetupParameters.repository "Dependencies") -Filter "*.app" | Sort-Object -Property $SetupParameters.dependenciesOrder     
-}
+﻿$Apps = Get-ChildItem -Path (Join-Path $SetupParameters.repository "Dependencies") -Filter "*.app"
+$AppsToInstall = @{}
 foreach ($app in $Apps) {
-    Publish-NavContainerApp -containerName $BranchSettings.dockerContainerName -appFile $app.FullName -skipVerification -sync -install 
+    $AppJson = Get-NavContainerAppInfoFile -ContainerName $BranchSettings.dockerContainerName -AppPath $app.FullName
+    $AppJson | Add-Member -MemberType NoteProperty -Name "AppPath" -Value $app.FullName
+    $AppsToInstall.Add($AppJson.Name,$AppJson)   
 }
+
+foreach ($app in (Get-ALBuildOrder -Apps $AppsToInstall)) {
+    if (Test-Path $app.AppPath) {
+        Write-Host "Publishing App from $($app.AppPath)..."
+        Publish-NavContainerApp -containerName $BranchSettings.dockerContainerName -appFile $app.AppPath -skipVerification -sync -install 
+    }
+}
+
 Remove-Item -Path (Join-Path $SetupParameters.repository "Dependencies\*.*") -Recurse -ErrorAction SilentlyContinue
    
+
