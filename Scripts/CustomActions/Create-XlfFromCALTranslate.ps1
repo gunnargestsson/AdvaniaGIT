@@ -3,7 +3,8 @@
 if ($SetupParameters.Languages -eq $null) {
     $Languages = @()
     $Language = New-Object -TypeName PSObject
-    $Language | Add-Member -MemberType NoteProperty -Name Language -Value $LanguageName = Get-NAVTranslationTarget -SetupParameters $SetupParameters -BranchSettings $BranchSettings
+    $Language | Add-Member -MemberType NoteProperty -Name Language -Value (Get-NAVTranslationTarget -SetupParameters $SetupParameters -BranchSettings $BranchSettings)
+    $Languages += $Language
 } else {
     $Languages = $SetupParameters.Languages
 }
