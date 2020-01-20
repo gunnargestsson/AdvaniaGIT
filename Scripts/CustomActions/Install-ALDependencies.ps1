@@ -7,7 +7,7 @@ foreach ($app in $Apps) {
 }
 
 foreach ($app in (Get-ALBuildOrder -Apps $AppsToInstall)) {
-    if (Test-Path $app.AppPath) {
+    if (!([String]::IsNullOrEmpty($app.AppPath))) {
         Write-Host "Publishing App from $($app.AppPath)..."
         Publish-NavContainerApp -containerName $BranchSettings.dockerContainerName -appFile $app.AppPath -skipVerification -sync -install 
     }
