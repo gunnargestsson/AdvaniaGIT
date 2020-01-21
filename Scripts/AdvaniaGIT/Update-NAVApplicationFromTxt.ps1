@@ -37,7 +37,7 @@
     $ObjectsPathIsFolder = (Test-Path -Path $ObjectsPath -PathType Container)
     Write-Host("ObjectPathIsFolder value: $($ObjectsPathIsFolder)")
     if ($ObjectsPathIsFolder -eq $true) {
-        $CombinedFileName = $ObjectsPath + "\ModifiedObjects.txt"
+        $CombinedFileName = Join-Path $SetupParameters.WorkFolder "ModifiedObjects.txt"
         Write-Host("CombinedFileName value: $($CombinedFileName)")
         New-Item -ItemType file $CombinedFileName –force
     }
