@@ -2,7 +2,7 @@
     "name": "advaniagit",
     "displayName": "AdvaniaGIT",
     "description": "AdvaniaGIT SCM",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "publisher": "advaniagit",
     "icon": "img/icon.png",
     "license": "GPL 3.0",
@@ -37,6 +37,7 @@
         "onCommand:advaniagit.CreateNavBackupOnFtpServer",
         "onCommand:advaniagit.CreateNavBacpac",
         "onCommand:advaniagit.CreateReverseDeltas",
+        "onCommand:advaniagit.CleanLocalBranchTree",
         "onCommand:advaniagit.CreateXlfLabelsInALCode",
         "onCommand:advaniagit.CreateXlfFromCALTranslateFile",
         "onCommand:advaniagit.UpdateUsageCategory",
@@ -279,6 +280,11 @@
             {
                 "title": "Export NAV Permission Sets to GIT",
                 "command": "advaniagit.ExportPermissionSets",
+                "category": "Advania"
+            },
+            {
+                "title": "Clean Local Branch Tree",
+                "command": "advaniagit.CleanLocalBranchTree",
                 "category": "Advania"
             },
             {

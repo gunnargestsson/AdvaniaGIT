@@ -70,6 +70,9 @@ export function CreateNavBacpac(Repository) {
 export function CreateReverseDeltas(Repository) {
     StartAction(Repository,`Create-ReverseDeltas.ps1`);
 }
+export function CleanLocalBranchTree(Repository) {
+    StartAction(Repository,`Clean-LocalBranchTree.ps1`);
+}
 export function CreateXlfLabelsInALCode(Repository) {
     StartAction(Repository,`Create-XlfLabelsInALCode.ps1`);
     vscode.window.showInformationMessage('Make sure to compile the project with Ctrl+Shift+B to create Xlf file!')    
