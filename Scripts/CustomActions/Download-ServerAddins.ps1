@@ -2,7 +2,6 @@
     Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings    
 }
 
-$SetupParameters
 $FileName = Join-Path $SetupParameters.LogPath 'AddIns.zip'
 if ($SetupParameters.addinsUrl) {
     Download-NAVFile -Url $SetupParameters.addinsUrl -FileName $FileName
