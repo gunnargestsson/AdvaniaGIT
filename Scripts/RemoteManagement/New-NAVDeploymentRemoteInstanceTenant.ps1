@@ -59,6 +59,9 @@
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateStoreName -Value $SelectedInstance.AzureKeyVaultClientCertificateStoreName
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultClientCertificateThumbprint -Value $SelectedInstance.AzureKeyVaultClientCertificateThumbprint
             $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AzureKeyVaultKeyUri -Value $TenantKeyVaultKey.Id
+            $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name AadTenantId -Value $Remotes.AadTenantId
+            $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name EnvironmentType -Value $Remotes.EnvironmentType
+            $AzureKeyVaultSettings | Add-Member -MemberType NoteProperty -Name MajorVersion -Value ([int]($SelectedInstance.Version).Split(".").Get(0))
         }
 
         $hostNo = 1

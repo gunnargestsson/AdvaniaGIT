@@ -44,6 +44,10 @@
                 if ($AzureKeyVaultSettings) {
                     $Param.EncryptionProvider = "AzureKeyVault"
                     $Param.AzureKeyVaultSettings = (New-Object Microsoft.Dynamics.Nav.Types.AzureKeyVaultSettings($AzureKeyVaultSettings.AzureKeyVaultClientId,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreLocation,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateStoreName,$AzureKeyVaultSettings.AzureKeyVaultClientCertificateThumbprint,$AzureKeyVaultSettings.AzureKeyVaultKeyUri))
+                    if ($AzureKeyVaultSettings.MajorVersion -ge 14) {
+                        $Param.AadTenantId = $AzureKeyVaultSettings.AadTenantId
+                        $Param.EnvironmentType = $AzureKeyVaultSettings.EnvironmentType
+                    }
                 }
                 if ($AllowAppDatabaseWrite -or $Param.Id -ieq "setup") {
                     $Param.AllowAppDatabaseWrite = $true
