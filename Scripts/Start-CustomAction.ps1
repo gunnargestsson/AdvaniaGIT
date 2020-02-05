@@ -78,8 +78,10 @@ else
 
     # Find Branch Settings
     $BranchSettings = Get-BranchSettings -SetupParameters $SetupParameters
-    if ($BranchSettings.dockerContainerName -gt "") {
-        $DockerContainerConfiguration = Get-DockerContainerConfiguration -DockerContainerName $BranchSettings.dockerContainerName 
+    if ($IsInAdminMode) {
+        if ($BranchSettings.dockerContainerName -gt "") {
+            $DockerContainerConfiguration = Get-DockerContainerConfiguration -DockerContainerName $BranchSettings.dockerContainerName 
+        }
     }
     
     # Set Global Parameters
@@ -120,8 +122,8 @@ else
         } 
         if ($LicenseFileFullPath) {
             $Globals | Add-Member LicenseFilePath $LicenseFileFullPath 
+            Write-Host -ForegroundColor Green "Using License: $($SetupParameters.licenseFile) on $($Globals.LicenseFilePath)"
         }
-        Write-Host -ForegroundColor Green "Using License: $($SetupParameters.licenseFile) on $($Globals.LicenseFilePath)"
     }
 
     if (![string]::IsNullOrEmpty($SetupParameters.dependencyLicenseFile)) {
@@ -158,10 +160,12 @@ else
     $env:WorkFolder = $SetupParameters.WorkFolder
     
     # Use NAV Container Helper if available
-    if (![Bool](Get-Module NAVContainerHelper)) {
-        if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
-            if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
-            Import-Module NAVContainerHelper -DisableNameChecking
+    if ($IsInAdminMode) {
+        if (![Bool](Get-Module NAVContainerHelper)) {
+            if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
+                if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
+                Import-Module NAVContainerHelper -DisableNameChecking
+            }
         }
     }
 
