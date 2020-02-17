@@ -33,7 +33,7 @@ foreach ($Language in $Languages) {
 
     if ($Txt2ALTranslationFolder) {
         if (Test-Path $Txt2ALTranslationFolder -PathType Container) {
-            $Txt2ALTranslationTargets = Get-ChildItem -Path $Txt2ALTranslationFolder -Filter "*-${LanguageName}.xlf" -Recurse
+            $Txt2ALTranslationTargets = Get-ChildItem -Path $Txt2ALTranslationFolder -Filter "*${LanguageName}.xlf" -Recurse
             foreach ($Txt2ALTranslationTarget in $Txt2ALTranslationTargets) {
                 $TranslationTable = $TranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $Txt2ALTranslationTarget.FullName -TranslateTable $TranslationTable
             }
