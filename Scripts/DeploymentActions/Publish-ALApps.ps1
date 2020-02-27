@@ -15,7 +15,10 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
 
     Write-Host "Expanding App.zip on remote server..."
     Invoke-Command -Session $Session -ScriptBlock {
-        param([string]$ServerInstance,[string]$ZipFileName,[string]$AppFilePath,[string]$Publisher)        
+        param([string]$ServerInstance,[string]$ZipFileName,[string]$AppFilePath,[string]$Publisher,[string]$mainVersion)
+        if ($mainVersion) {
+            $SetupParameters.mainVersion = $mainVersion
+        }
         $SetupParameters | Add-Member "navServicePath" (Get-NAVServicePath -SetupParameters $SetupParameters) -Force
         Write-Host Importing modules from $($SetupParameters.navServicePath)...
         Load-InstanceAdminTools -SetupParameters $SetupParameters
@@ -69,7 +72,7 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
         }
 
 
-    } -ArgumentList ($DeploymentSettings.instanceName, (Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-App.zip"), "${WorkFolder}\$($DeploymentSettings.instanceName)", $DeploymentSettings.publisher)
+    } -ArgumentList ($DeploymentSettings.instanceName, (Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-App.zip"), "${WorkFolder}\$($DeploymentSettings.instanceName)", $DeploymentSettings.publisher, $DeploymentSettings.mainVersion)
 
     Write-Host "App upload complete..."
 }

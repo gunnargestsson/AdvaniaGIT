@@ -1,6 +1,11 @@
 Write-Host Build and Update Docker Container
 & (Join-path $PSScriptRoot 'Build-NavEnvironment.ps1')
 
+if ($SetupParameters.DownloadDotNetAddins) {
+    Write-Host "Dowload DotNet Addins to Server Add-ins folder"
+    & (Join-path $PSScriptRoot 'Download-ServerAddins.ps1')
+}
+
 if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
     if (![String]::IsNullOrEmpty($SetupParameters.CreateSymbols)) {
         & (Join-path $PSScriptRoot 'Build-NAVSymbolReferences.ps1')
@@ -18,6 +23,7 @@ if ($SetupParameters.ftpServer -ne "") {
     Write-Host Download AL Dependencies from ftp server
     & (Join-path $PSScriptRoot 'Download-ALDependenciesFromFTPServer.ps1')    
 }
+
 Write-Host Download AL Symbols
 & (Join-path $PSScriptRoot 'Download-ALSymbols.ps1')
 if ([int]($SetupParameters.navVersion).split(".")[0] -ge 15) {
