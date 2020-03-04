@@ -20,8 +20,9 @@ if ($SetupParameters.BuildMode) {
         $Publisher = $ExtensionAppJsonObject.Publisher
         $Name = $ExtensionAppJsonObject.Name
         if (![String]::IsNullOrEmpty($SetupParameters.buildId)) {
-            $Version = $ExtensionAppJsonObject.Version.SubString(0,$ExtensionAppJsonObject.Version.LastIndexOf('.'))
-            $ExtensionAppJsonObject.Version = $Version+'.' + $SetupParameters.buildId
+            $VersionParts = $ExtensionAppJsonObject.Version.Split('.');
+            $VersionParts[2] = $SetupParameters.buildId;
+            $ExtensionAppJsonObject.Version = [System.String]::Join(".",$VersionParts);            
         }
         if (![String]::IsNullOrEmpty($SetupParameters.runtime)) {
             if ([String]::IsNullOrEmpty($ExtensionAppJsonObject.runtime)) {

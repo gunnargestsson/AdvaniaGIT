@@ -9,9 +9,9 @@ if ([String]::IsNullOrEmpty($SetupParameters.CUBuildMode) -or $SetupParameters.C
  
     } else  {
         if ($($SetupJson.navSolution.SubString(0,2)) -eq "W1") {
-            $SetupJson | Add-Member -MemberType NoteProperty -Name dockerImage -Value "mcr.microsoft.com/dynamics-nav:$(($SetupJson.navBuild).substring(0,4))" -Force
+            $SetupJson | Add-Member -MemberType NoteProperty -Name dockerImage -Value "mcr.microsoft.com/dynamicsnav:$(($SetupJson.navBuild).substring(0,4))" -Force
         } else {
-            $SetupJson | Add-Member -MemberType NoteProperty -Name dockerImage -Value "mcr.microsoft.com/dynamics-nav:$(($SetupJson.navBuild).substring(0,4))-$($SetupJson.navSolution.SubString(0,2).ToLower())" -Force
+            $SetupJson | Add-Member -MemberType NoteProperty -Name dockerImage -Value "mcr.microsoft.com/dynamicsnav:$(($SetupJson.navBuild).substring(0,4))-$($SetupJson.navSolution.SubString(0,2).ToLower())" -Force
         }
     }
 }
