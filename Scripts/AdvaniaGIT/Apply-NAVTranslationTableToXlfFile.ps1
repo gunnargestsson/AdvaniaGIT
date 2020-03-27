@@ -11,7 +11,7 @@
         [String]$TargetLanguage
     )
 
-    Write-Host "Loading translation file ${XlfFile}..."
+    Write-Host "Updating translation file ${XlfFile}..."
     [xml]$Xlf = Get-Content -Path $XlfFile -Encoding UTF8 
     $Xlf.PreserveWhitespace = $true
     $Xlf.DocumentElement.file.SetAttribute('target-language',$TargetLanguage)

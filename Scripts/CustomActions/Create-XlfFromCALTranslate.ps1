@@ -43,6 +43,11 @@ foreach ($Language in $Languages) {
     foreach ($ALSolution in $ALSolutions) {
         Write-Host "Solution: $($ALSolution.BaseName)..."
         $TranslationFolder = Join-Path $ALSolution.FullName "Translations"
+        if ($TranslationTable) {
+            $AppTranslationTable = $TranslationTable
+        } else {
+            $AppTranslationTable = @{}
+        }
         if (Test-Path $TranslationFolder) {
             $TranslationSource = Get-ChildItem -Path $TranslationFolder -Filter '*.g.xlf' -ErrorAction SilentlyContinue
             if ([string]::IsNullOrEmpty($TranslationSource)) {
@@ -52,18 +57,12 @@ foreach ($Language in $Languages) {
 
             $TranslationTarget = ($TranslationSource.FullName).Replace(".g.xlf",".${LanguageName}.xlf")
             if (Test-Path $TranslationTarget) {
-                $TranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $TranslationTarget -TranslateTable $TranslationTable
+                $AppTranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $TranslationTarget -TranslateTable $AppTranslationTable
                 Remove-Item -Path $TranslationTarget -Force    
             }
 
-            if ($TranslationTable) {
-                Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget 
-                Apply-NAVTranslationTableToXlfFile -TranslationTable $TranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName 
-            } else {
-                $TranslationTable = @{}
-                Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget 
-                Apply-NAVTranslationTableToXlfFile -TranslationTable $TranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName 
-            }
+            Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget 
+            Apply-NAVTranslationTableToXlfFile -TranslationTable $AppTranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName 
         }
     }
 }
