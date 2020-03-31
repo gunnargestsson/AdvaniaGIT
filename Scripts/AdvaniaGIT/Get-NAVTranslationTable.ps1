@@ -13,27 +13,31 @@
 
     Write-Host "Loading translation data from ${TranslationFile}..."
     $CALTranslateFile = Get-Content -Encoding Oem -Path $TranslationFile
-    $LanguageNo = '-A' + $LanguageNo  
-    if (!$TranslateTable) {$TranslateTable = (New-Object System.Collections.Hashtable)}
-    $keyFound = $false
-    $NoOfLines = 0
+    $NoOfLines = $CALTranslateFile.Count
+    $LinesRead = 0;
+    $LanguageNo = '-A' + $LanguageNo
+    $enuTable = New-Object System.Collections.Hashtable
+    $transTable = New-Object System.Collections.Hashtable
     foreach ($CALTranslateLine in $CALTranslateFile) {    
-        $index = $CALTranslateLine.Split(':')[0]
-        if ($keyFound -and $CALTranslateLine -match $LanguageNo) {
-            $object= $CALTranslateLine.Split(':')[0]
-            $pos = $object.IndexOf('-A')
-            $object = $object.Substring($pos + 2)
-            $pos = $object.IndexOf('-')
-            $object = $object.Substring(0,$pos - 1)
-            $TranslateTable.Add($Key,$CALTranslateLine.Split(':')[1])
-            $NoOfLines ++
-        } 
-        $keyFound = $false
-        if ($index -match '-A1033') {        
-            $key = $CALTranslateLine.Split(':')[1]
-            $keyFound = !($TranslateTable.ContainsKey($key))
-        }
+        $LinesRead += 1
+        $transTable.Add($CALTranslateLine.Substring(0,$CALTranslateLine.IndexOf(':')),$CALTranslateLine.Substring($CALTranslateLine.IndexOf(':') + 1))
+        Write-Progress -Activity "Reading CAL Translation File" -PercentComplete (100 * $LinesRead / $NoOfLines)
     }
-    Write-Host "${NoOfLines} lines loaded in memory!"
+    
+    $NoOfLines = $transTable.Count
+    $LinesRead = 0;
+    foreach ($key in $transTable.Keys) {
+        $LinesRead += 1
+        if ($key -match '-A1033') {
+            $lang = $key.Replace('-A1033',$LanguageNo)
+            if (!$TranslateTable.ContainsKey($transTable.Item($key))) {
+                if ($transTable.ContainsKey($lang)) {                
+                   $TranslateTable.Add($transTable.Item($key),$transTable.Item($lang))
+                }            
+            }
+        }
+        Write-Progress -Activity "Adding translation" -PercentComplete (100 * $LinesRead / $NoOfLines)
+    }
+    
     return $TranslateTable    
 }

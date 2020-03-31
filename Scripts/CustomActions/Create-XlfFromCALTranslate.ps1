@@ -21,12 +21,26 @@ foreach ($Language in $Languages) {
     Write-Host "Select ${LanguageName} C/AL translation file to import..."
     $CALTranslationFile = Get-NAVTranslationFileName -initialDirectory $SetupParameters.Repository
 
+    if ($CALTranslationFile) {
+        if (Test-Path $CALTranslationFile) {
+            $CALTranslationTable = Get-NAVTranslationTable -TranslationFile $CALTranslationFile -LanguageNo $LanguageId -TranslateTable @{}
+        }
+    }
+
+    if ($Txt2ALTranslationFolder) {
+        if (Test-Path $Txt2ALTranslationFolder -PathType Container) {
+            $Txt2ALTranslationTargets = Get-ChildItem -Path $Txt2ALTranslationFolder -Filter "*${LanguageName}.xlf" -Recurse
+            foreach ($Txt2ALTranslationTarget in $Txt2ALTranslationTargets) {
+                $ALTranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $Txt2ALTranslationTarget.FullName -TranslateTable @{}
+            }
+        }
+    }
+
     Write-Host "Select ${LanguageName} Txt2AL translation files path to import..."
     $Txt2ALTranslationFolder = Get-NAVTranslationsFolderName -initialDirectory $SetupParameters.Repository
 
     foreach ($ALSolution in $ALSolutions) {
         Write-Host "Solution: $($ALSolution.BaseName)..."
-        $TranslationTable = $null
         $TranslationFolder = Join-Path $ALSolution.FullName "Translations"
         if (Test-Path $TranslationFolder) {
             $TranslationSource = Get-ChildItem -Path $TranslationFolder -Filter '*.g.xlf' -ErrorAction SilentlyContinue
@@ -34,30 +48,27 @@ foreach ($Language in $Languages) {
                 Write-Host -ForegroundColor Red "Unable to locate a translation source file in folder ${TranslationFolder}"
                 throw
             }
-
+                    
             $TranslationTarget = ($TranslationSource.FullName).Replace(".g.xlf",".${LanguageName}.xlf")
             if (Test-Path $TranslationTarget) {
-                $TranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $TranslationTarget -TranslateTable $TranslationTable
+                $PreviousTranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $TranslationTarget -TranslateTable @{}
                 Remove-Item -Path $TranslationTarget -Force    
             } 
+            Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget
+            if ($PreviousTranslationTable) {
+                Write-Host "Adding Previous Translations..."
+                Apply-NAVTranslationTableToXlfFile -TranslationTable $PreviousTranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName
+            }
 
-            if ($CALTranslationFile) {
-                if (Test-Path $CALTranslationFile) {
-                    $TranslationTable = Get-NAVTranslationTable -TranslationFile $CALTranslationFile -LanguageNo $LanguageId -TranslateTable $TranslationTable
-                }
+            if ($ALTranslationTable) {
+                Write-Host "Adding AL Translations..."
+                Apply-NAVTranslationTableToXlfFile -TranslationTable $ALTranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName
             }
-        
-            if ($Txt2ALTranslationFolder) {
-                if (Test-Path $Txt2ALTranslationFolder -PathType Container) {
-                    $Txt2ALTranslationTargets = Get-ChildItem -Path $Txt2ALTranslationFolder -Filter "*${LanguageName}.xlf" -Recurse
-                    foreach ($Txt2ALTranslationTarget in $Txt2ALTranslationTargets) {
-                        $TranslationTable = $TranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $Txt2ALTranslationTarget.FullName -TranslateTable $TranslationTable
-                    }
-                }
+            if ($CALTranslationTable) {
+                Write-Host "Adding C/AL Translations..."
+                Apply-NAVTranslationTableToXlfFile -TranslationTable $CALTranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName
             }
-        
-            Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget 
-            Apply-NAVTranslationTableToXlfFile -TranslationTable $TranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName 
+
         }
     }
 }
