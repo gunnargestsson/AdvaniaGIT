@@ -59,7 +59,6 @@ foreach ($Language in $Languages) {
                 Write-Host "Adding Previous Translations..."
                 Apply-NAVTranslationTableToXlfFile -TranslationTable $PreviousTranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName
             }
-
             if ($ALTranslationTable) {
                 Write-Host "Adding AL Translations..."
                 Apply-NAVTranslationTableToXlfFile -TranslationTable $ALTranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName
@@ -68,7 +67,6 @@ foreach ($Language in $Languages) {
                 Write-Host "Adding C/AL Translations..."
                 Apply-NAVTranslationTableToXlfFile -TranslationTable $CALTranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName
             }
-
         }
     }
 }
