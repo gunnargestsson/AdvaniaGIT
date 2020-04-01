@@ -9,6 +9,8 @@ if ($SetupParameters.Languages -eq $null) {
     $Languages = $SetupParameters.Languages
 }
 
+$PreviousLanguageName = "xx-YY"
+
 foreach ($Language in $Languages) {
     $LanguageName = $Language.Language
 
@@ -18,26 +20,32 @@ foreach ($Language in $Languages) {
     }
     $LanguageId = Get-NAVLanguageIdFromLanguageName -LanguageName $LanguageName
 
-    Write-Host "Select ${LanguageName} C/AL translation file to import..."
-    $CALTranslationFile = Get-NAVTranslationFileName -initialDirectory $SetupParameters.Repository
+    if ($LanguageName.Substring(0,2) -eq $PreviousLanguageName.Substring(0,2)) {
+        Write-Host "Using Previous Language Data..."
+    } else {
+        Write-Host "Select ${LanguageName} C/AL translation file to import..."
+        $CALTranslationFile = Get-NAVTranslationFileName -initialDirectory $SetupParameters.Repository
 
-    if ($CALTranslationFile) {
-        if (Test-Path $CALTranslationFile) {
-            $CALTranslationTable = Get-NAVTranslationTable -TranslationFile $CALTranslationFile -LanguageNo $LanguageId -TranslateTable @{}
-        }
-    }
-
-    if ($Txt2ALTranslationFolder) {
-        if (Test-Path $Txt2ALTranslationFolder -PathType Container) {
-            $Txt2ALTranslationTargets = Get-ChildItem -Path $Txt2ALTranslationFolder -Filter "*${LanguageName}.xlf" -Recurse
-            foreach ($Txt2ALTranslationTarget in $Txt2ALTranslationTargets) {
-                $ALTranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $Txt2ALTranslationTarget.FullName -TranslateTable @{}
+        if ($CALTranslationFile) {
+            if (Test-Path $CALTranslationFile) {
+                $CALTranslationTable = Get-NAVTranslationTable -TranslationFile $CALTranslationFile -LanguageNo $LanguageId -TranslateTable @{}
             }
         }
-    }
 
-    Write-Host "Select ${LanguageName} Txt2AL translation files path to import..."
-    $Txt2ALTranslationFolder = Get-NAVTranslationsFolderName -initialDirectory $SetupParameters.Repository
+        Write-Host "Select ${LanguageName} Txt2AL translation files path to import..."
+        $Txt2ALTranslationFolder = Get-NAVTranslationsFolderName -initialDirectory $SetupParameters.Repository
+
+        if ($Txt2ALTranslationFolder) {
+            if (Test-Path $Txt2ALTranslationFolder -PathType Container) {
+                $Txt2ALTranslationTargets = Get-ChildItem -Path $Txt2ALTranslationFolder -Filter "*${LanguageName}.xlf" -Recurse
+                foreach ($Txt2ALTranslationTarget in $Txt2ALTranslationTargets) {
+                    $ALTranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $Txt2ALTranslationTarget.FullName -TranslateTable @{}
+                }
+            }
+        }
+
+    }
+    $PreviousLanguageName = $LanguageName
 
     foreach ($ALSolution in $ALSolutions) {
         Write-Host "Solution: $($ALSolution.BaseName)..."
@@ -53,7 +61,9 @@ foreach ($Language in $Languages) {
             if (Test-Path $TranslationTarget) {
                 $PreviousTranslationTable = Get-NAVTranslationTableFromXlf -XlfFile $TranslationTarget -TranslateTable @{}
                 Remove-Item -Path $TranslationTarget -Force    
-            } 
+            } else {
+            	$PreviousTranslationTable = $null
+            }
             Copy-Item -Path $TranslationSource.FullName -Destination $TranslationTarget
             if ($PreviousTranslationTable) {
                 Write-Host "Adding Previous Translations..."
@@ -67,6 +77,7 @@ foreach ($Language in $Languages) {
                 Write-Host "Adding C/AL Translations..."
                 Apply-NAVTranslationTableToXlfFile -TranslationTable $CALTranslationTable -XlfFile $TranslationTarget -TargetLanguage $LanguageName
             }
+
         }
     }
 }
