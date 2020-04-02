@@ -6,7 +6,7 @@
     $OpenFileDialog.Multiselect = $false
     $OpenFileDialog.Title = "Select CAL Translation file..."
     $OpenFileDialog.initialDirectory = $initialDirectory
-    $OpenFileDialog.filter = "TXT (*.txt)| *.txt"
+    $OpenFileDialog.filter = "TXT (*.txt)|*.txt|CSV (*.csv)|*.csv|All files (*.*)|*.*"
     $OpenFileDialog.ShowDialog() | Out-Null
     return $OpenFileDialog.FileName
 }

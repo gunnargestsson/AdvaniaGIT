@@ -44,10 +44,6 @@
                     $NoOfAutomaticallyTranslated ++
                 } else {
                     Write-Verbose "no translation found for $($node.source)"
-                    $target = $Xlf.CreateElement('target', $Xlf.DocumentElement.NamespaceURI)
-                    $target.InnerText = ''
-                    $target.SetAttribute('state','needs-translation')
-                    $targetNode = $node.InsertBefore($target,$node.note[0])
                     $NoOfNeedsTranslation ++
                 }
             }
