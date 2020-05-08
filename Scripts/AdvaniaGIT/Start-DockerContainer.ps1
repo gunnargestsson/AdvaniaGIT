@@ -60,13 +60,26 @@
                 "--volume `"$volume`"",
                 "--volume `"$rootPath`"",
                 "--env SqlTimeout=1200",
-                "--dns 8.8.8.8")
+                "--dns 8.8.8.8",
+                "--restart always")
 
 
     if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
         if ($SetupParameters.BuildMode) {
             $parameters += @("--env webClient=N",
                              "--env httpSite=N")        
+        }
+    }
+
+    if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
+        if (![System.String]::IsNullOrEmpty($SetupParameters.mapAddInFolder)) {
+            $branchAddInsFolder = "$($SetupParameters.Repository)\Add-Ins"
+            if (Test-Path -Path $branchAddInsFolder -PathType Container ) { 
+                $branchAddInsFolder = "$($SetupParameters.Repository)\Add-Ins:c:\run\Add-Ins"
+                $parameters += @(
+                                    "--volume `"$branchAddInsFolder`""
+                                )
+            }
         }
     }
 
