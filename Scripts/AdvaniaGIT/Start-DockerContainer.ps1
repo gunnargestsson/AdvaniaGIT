@@ -111,6 +111,10 @@
         $params += @{ useBestContainerOS = $true }
     }
 
+    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerIsolation)) {    
+        $params += @{ isolation = $SetupParameters.dockerIsolation }
+    }
+
     if (![System.String]::IsNullOrEmpty($SetupParameters.CheckHealth )) {    
         $params += @{ doNotCheckHealth  = $true }
     }
