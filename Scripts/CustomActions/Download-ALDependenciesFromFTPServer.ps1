@@ -28,6 +28,7 @@
                         $DependencyAppPath = "build/${version}/" + $DependencyAppName;
                         Write-Host "Trying to download ${DependencyAppPath} from FTP Server..."
                         Get-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath $DependencyAppPath -LocalFilePath (Join-Path $dependencyPath $DependencyAppName)
+                        Copy-Item -Path (Join-Path $dependencyPath $DependencyAppName) -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force -ErrorAction SilentlyContinue                       
                     }
                 }
             }

@@ -145,7 +145,7 @@
         }
     }
     if ((Get-NavContainers) -inotcontains $DockerContainerFriendlyName) { 
-        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -restart no -updateHosts
+        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -restart no -updateHosts -EnableTaskScheduler:$false
         $DockerCreated = $true
     }
     $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 
