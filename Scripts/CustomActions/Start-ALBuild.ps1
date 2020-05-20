@@ -1,10 +1,6 @@
 Write-Host Build and Update Docker Container
 & (Join-path $PSScriptRoot 'Build-NavEnvironment.ps1')
 
-Write-Host Import Test Libraries
-& (Join-path $PSScriptRoot 'ImportFrom-StandardTestLibrariesToNAV.ps1')
-
-
 if ($SetupParameters.DownloadDotNetAddins) {
     Write-Host "Dowload DotNet Addins to Server Add-ins folder"
     & (Join-path $PSScriptRoot 'Download-ServerAddins.ps1')
@@ -20,6 +16,10 @@ if ([int]($SetupParameters.navVersion).split(".")[0] -lt 15) {
     Write-Host Initialize Test Company
     & (Join-path $PSScriptRoot 'Initialize-NAVCompany.ps1')
 }
+
+Write-Host Import Test Libraries
+& (Join-path $PSScriptRoot 'ImportFrom-StandardTestLibrariesToNAV.ps1')
+
 Write-Host Download AL Addin
 & (Join-path $PSScriptRoot 'Download-ALAddin.ps1')
 
