@@ -25,7 +25,7 @@
                     if (Test-Path -Path (Join-Path $dependencyPath $DependencyAppName)) {
                         Write-Host "${DependencyAppName} already downloaded..."
                     } else {
-                        $DependencyAppPath = "build/${version}/" + $DependencyAppName;
+                        $DependencyAppPath = "build/${version}/latest/" + $DependencyAppName;
                         Write-Host "Trying to download ${DependencyAppPath} from FTP Server..."
                         Get-FtpFile -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpFilePath $DependencyAppPath -LocalFilePath (Join-Path $dependencyPath $DependencyAppName)
                         Copy-Item -Path (Join-Path $dependencyPath $DependencyAppName) -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force -ErrorAction SilentlyContinue                       
