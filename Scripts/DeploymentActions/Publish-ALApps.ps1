@@ -3,6 +3,20 @@ $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.Us
 
 $WorkFolder = $DeploymentSettings.workFolder
 if (!(Test-Path -Path $WorkFolder)) {New-Item -Path $WorkFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null}
+if (![String]::IsNullOrEmpty(($DeploymentSettings.LockFile))) {
+    if (!(Test-Path -Path $DeploymentSettings.LockFile)) { Set-Content -Path $DeploymentSettings.LockFile -Value 'Lock File' }
+    $file = $null
+        while (!($file)) {
+            try {
+                $file = [System.IO.File]::Open($DeploymentSettings.LockFile, [System.IO.FileMode]::Open, [System.IO.FileAccess]::ReadWrite, [System.IO.FileShare]::Read)
+            } catch [System.IO.IOException]  {
+                Write-Host "Waiting for previous publish process to finish..."
+                Start-Sleep -Seconds 10
+            }
+        }
+}
+$host.SetShouldExit(0)
+
 Write-Host "Connecting to $($DeploymentSettings.instanceServer)..."
 $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentSettings.instanceServer -SetupPath $WorkFolder
 
@@ -84,3 +98,4 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
 }
 
 $Session | Remove-PSSession
+if (![String]::IsNullOrEmpty(($DeploymentSettings.LockFile))) { $file.Dispose() }
