@@ -78,7 +78,8 @@
         if ($CustomDatabase) {
             $result = Get-SQLCommandResult -Server $DatabaseServer -Database $CustomDatabase -Command "SELECT COUNT(*) FROM [${TenantDatabase}].[dbo].[${TableName}]"
             if ([int]$result.Column1 -gt 0) {
-                $result = Get-SQLCommandResult -Server $DatabaseServer -Database $CustomDatabase -Command "SELECT ${SelectFields} INTO [${TableName}] FROM [${TenantDatabase}].[dbo].[${TableName}]"                
+                Write-Verbose -Message "Adding table ${TableName}"
+                $result = Get-SQLCommandResult -Server $DatabaseServer -Database $CustomDatabase -Command "SELECT ${SelectFields} INTO [${TableName}] FROM [${TenantDatabase}].[dbo].[${TableName}]"
                 $TableData = New-Object -TypeName Xml
                 $TableData.LoadXml("<?xml version=`"1.0`" encoding=`"UTF-8`" standalone=`"no`"?><TableData><Table></Table><Fields></Fields></TableData>");
 
@@ -103,7 +104,8 @@
                     $newNode = $node.AppendChild($childNode)
                 }
                 $TableData.OuterXml
-                $result = Get-SQLCommandResult -Server $DatabaseServer -Database $CustomDatabase -Command "INSERT INTO [dbo].[Object] ([Name],[MetaData],[Company]) VALUES ('$($TenantXml.MetaTable.Name)', '$($TableData.OuterXml)', '$($CompanyName)')"
+                $XmlAsBase64 = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($TableData.OuterXml))
+                $result = Get-SQLCommandResult -Server $DatabaseServer -Database $CustomDatabase -Command "INSERT INTO [dbo].[Object] ([Name],[MetaData],[Company]) VALUES ('$($TenantXml.MetaTable.Name)', '${XmlAsBase64}', '$($CompanyName)')"
             }
         } else {
             $SelectStatement = "SELECT ${SelectFields} FROM [${TableName}] FOR XML PATH('Row')"
