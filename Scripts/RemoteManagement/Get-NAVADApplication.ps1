@@ -14,7 +14,7 @@
     PROCESS 
     {    
         $DisplayName = "${DeploymentName}-$($ServerInstance.ServerInstance)"
-        $Application = Get-AzureRmADApplication -DisplayNameStartWith $DisplayName        
+        $Application = Get-AzureRmADApplication -DisplayName $DisplayName        
         if (!$Application) {
             $ReplaceApplication = $true
         } else {
@@ -44,6 +44,10 @@
             $RequiredResourceAccess.ResourceAppId = '00000002-0000-0000-c000-000000000000'
             Set-AzureADApplication -ObjectId $ObjectId -RequiredResourceAccess $RequiredResourceAccess
             $Application = Get-AzureRmADApplication -DisplayNameStartWith $DisplayName
+        } else {
+            $x509 = [System.Security.Cryptography.X509Certificates.X509Certificate2]([System.Convert]::FromBase64String($CertValue))
+            Get-AzureRmADAppCredential -ObjectId $Application.ObjectId | Remove-AzureRmADAppCredential -ObjectId $Application.ObjectId -Force -ErrorAction SilentlyContinue
+            $newCredential = New-AzureRmADAppCredential -ObjectId $Application.ObjectId -CertValue $CertValue -StartDate $x509.NotBefore -EndDate $x509.NotAfter -ErrorAction SilentlyContinue
         }
         Return $Application
     }

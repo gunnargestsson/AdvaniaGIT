@@ -124,6 +124,10 @@
         $params += @{ useBestContainerOS = $true }
     }
 
+    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerIsolation)) {    
+        $params += @{ isolation = $SetupParameters.dockerIsolation }
+    }
+
     if (![System.String]::IsNullOrEmpty($SetupParameters.CheckHealth )) {    
         $params += @{ doNotCheckHealth  = $true }
     }
@@ -154,7 +158,7 @@
         }
     }
     if ((Get-NavContainers) -inotcontains $DockerContainerFriendlyName) { 
-        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -restart no -updateHosts
+        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -restart no -updateHosts -EnableTaskScheduler:$false
         $DockerCreated = $true
     }
     $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 

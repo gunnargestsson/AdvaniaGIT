@@ -21,16 +21,33 @@ if ($SetupParameters.BuildMode) {
         $includedApps += $ExtensionAppJsonObject.id
         foreach ($dependency in $ExtensionAppJsonObject.Dependencies) {
             $DependencyAppName = "$($dependency.publisher) $($dependency.name)".Replace(" ","_") + ".app"
+            if ($dependency.appId -eq $null) {
+                $dependency | Add-Member -MemberType NoteProperty -Name appId -Value $dependency.id
+            }
             if ($includedApps.Contains($dependency.appId)) {
                 Write-Host "${DependencyAppName} included in build..."
             } else {         
-                if (Test-Path -Path (Join-Path $dependencyPath $DependencyAppName)) {
+                if (Test-Path -Path (Join-Path (Join-Path $BranchWorkFolder 'Symbols') $DependencyAppName)) {
                     Write-Host "${DependencyAppName} already downloaded..."
                 } else {
-                    $appUrl = $baseUrl + "?publisher=$($dependency.publisher)&appName=$($dependency.name)&versionText=$($dependency.version)"
-                    Write-Host "Downloading App from $appUrl..."
-                    Invoke-RestMethod -Method Get -Uri ($appUrl) -OutFile (Join-Path $SetupParameters.LogPath $DependencyAppName) -UseDefaultCredentials
-                    Move-Item -Path (Join-Path $SetupParameters.LogPath $DependencyAppName) -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force -ErrorAction SilentlyContinue
+                    if (!(Test-Path -Path (Join-Path $SetupParameters.LogPath $DependencyAppName))) {
+                        $appUrl = $baseUrl + "?publisher=$($dependency.publisher)&appName=$($dependency.name)&versionText=$($dependency.version)"
+                        Write-Host "Downloading App from $appUrl..."
+                        Invoke-RestMethod -Method Get -Uri ($appUrl) -OutFile (Join-Path $SetupParameters.LogPath $DependencyAppName) -UseDefaultCredentials
+                        Move-Item -Path (Join-Path $SetupParameters.LogPath $DependencyAppName) -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force -ErrorAction SilentlyContinue
+                        if ($dependency.name -eq "Application") {
+                            $DependencyAppName = "$($dependency.publisher) Base Application".Replace(" ","_") + ".app"
+                            $appUrl = $baseUrl + "?publisher=$($dependency.publisher)&appName=Base Application&versionText=$($dependency.version)"
+                            Write-Host "Downloading App from $appUrl..."
+                            Invoke-RestMethod -Method Get -Uri ($appUrl) -OutFile (Join-Path $SetupParameters.LogPath $DependencyAppName) -UseDefaultCredentials
+                            Move-Item -Path (Join-Path $SetupParameters.LogPath $DependencyAppName) -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force -ErrorAction SilentlyContinue
+                            $DependencyAppName = "$($dependency.publisher) System Application".Replace(" ","_") + ".app"
+                            $appUrl = $baseUrl + "?publisher=$($dependency.publisher)&appName=System Application&versionText=$($dependency.version)"
+                            Write-Host "Downloading App from $appUrl..."
+                            Invoke-RestMethod -Method Get -Uri ($appUrl) -OutFile (Join-Path $SetupParameters.LogPath $DependencyAppName) -UseDefaultCredentials
+                            Move-Item -Path (Join-Path $SetupParameters.LogPath $DependencyAppName) -Destination (Join-Path $BranchWorkFolder 'Symbols') -Force -ErrorAction SilentlyContinue                       
+                        }
+                    }
                 }
             }
         }

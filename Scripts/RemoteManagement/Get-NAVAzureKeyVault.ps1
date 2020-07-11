@@ -2,19 +2,22 @@
     param (
         [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
         [String]$DeploymentName,
+        [Parameter(Mandatory=$True, ValueFromPipelineByPropertyname=$true)]
+        [String]$VaultName,
         [Parameter(Mandatory=$False, ValueFromPipelineByPropertyname=$true)]
-        [String]$VaultName
+        [String]$ResourceGroupName
     )
     PROCESS 
     {    
-        
-        if ($VaultName) {
-        	$KeyVault = Get-AzureRmKeyVault | Where-Object -Property VaultName -like $VaultName
-        } else {
-        	$KeyVault = Get-AzureRmKeyVault | Where-Object -Property VaultName -like "${DeploymentName}*"
-      	}
+        if ($VaultName.Length -gt 24) { $VaultName = $VaultName.Substring(0,24) }
+        $KeyVault = Get-AzureRmKeyVault | Where-Object -Property VaultName -like $VaultName
         if (!$KeyVault) {
-            $ResourceGroup = Get-NAVAzureResourceGroup -Message "No Key Vault found for $DeploymentName, Select a resource group for the Key Vault."
+            if ([String]::IsNullOrEmpty($ResourceGroupName)) {
+                $ResourceGroup = Get-NAVAzureResourceGroup -Message "No Key Vault found for $DeploymentName, Select a resource group for the Key Vault."
+                $ResourceGroupName = $ResourceGroup.ResourceGroupName
+            } else {
+                $ResourceGroup = Get-AzureRmResourceGroup -Name $ResourceGroupName 
+            }
             if ([String]::IsNullOrEmpty($VaultName)) {
                 $VaultName = "${DeploymentName}$($ResourceGroup.ResourceGroupName)"
             }

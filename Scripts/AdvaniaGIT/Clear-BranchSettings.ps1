@@ -17,6 +17,6 @@
     $LocalBranchSettings.dockerContainerId = ""
     $LocalBranchSettings.dockerContainerIp = ""
     $LocalBranchSettings.projectName = ""
-    $BlankBranchSettings = Update-BranchSettings -BranchSettings $LocalBranchSettings    
+    $BlankBranchSettings = Update-BranchSettings -BranchSettings $LocalBranchSettings -Clear  
     Return $ReturnedBranchSettings
 }

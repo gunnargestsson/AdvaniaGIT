@@ -15,8 +15,13 @@
     {          
         $RemoteConfig = Get-NAVRemoteConfig
         $Remotes = $RemoteConfig.Remotes | Where-Object -Property Deployment -eq $DeploymentName
-        $IconFilePath = Get-NAVClickOnceApplicationIcon -Credential $Credential -DeploymentName $DeploymentName 
-        $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName -VaultName $Remotes.KeyVaultName
+        $IconFilePath = Get-NAVClickOnceApplicationIcon -Credential $Credential -DeploymentName $DeploymentName
+        if ([String]::IsNullOrEmpty($Remotes.KeyVaultName)) {
+            $ResourceGroupName = (Get-NAVAzureDnsZone -DnsHostName $Remotes.ClickOnceHost).ResourceGroupName
+            $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName -VaultName "${DeploymentName}${ResourceGroupName}" -ResourceGroupName $ResourceGroupName
+        } else {
+            $KeyVault = Get-NAVAzureKeyVault -DeploymentName $DeploymentName -VaultName $Remotes.KeyVaultName
+        }
         if (!$KeyVault) { break }
 
         Write-Host "Updating Instance for $DeploymentName..."

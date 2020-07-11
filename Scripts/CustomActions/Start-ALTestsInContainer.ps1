@@ -5,7 +5,16 @@
 }
 
 $ResultFile = Join-path $env:ProgramData "NavContainerHelper\Extensions\$($BranchSettings.dockerContainerName)\my\TestResults.xml"
-Run-TestsInBCContainer -containerName $BranchSettings.dockerContainerName -XUnitResultFileName $ResultFile
+foreach ($ALPath in (Get-ALPaths -SetupParameters $SetupParameters)) {
+    $ALProjectFolder = $ALPath.FullName
+    $ExtensionAppJsonFile = Join-Path $ALProjectFolder 'app.json'
+    $ExtensionAppJsonObject = Get-Content -Raw -Path $ExtensionAppJsonFile | ConvertFrom-Json
+    if (Test-Path -Path $ResultFile) {
+        Run-TestsInBCContainer -containerName $BranchSettings.dockerContainerName -XUnitResultFileName $ResultFile -extensionId $ExtensionAppJsonObject.id -AppendToXUnitResultFile
+    } else {
+        Run-TestsInBCContainer -containerName $BranchSettings.dockerContainerName -XUnitResultFileName $ResultFile -extensionId $ExtensionAppJsonObject.id
+    }
+}
 if ($SetupParameters.TestResultsPath) {
     $OutFile = Join-Path $Repository $SetupParameters.TestResultsPath
 } else {

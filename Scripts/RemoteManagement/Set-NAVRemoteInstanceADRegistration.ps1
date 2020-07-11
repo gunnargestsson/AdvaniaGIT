@@ -31,7 +31,7 @@
                 if ([bool]($ServerInstance.PSObject.Properties.name -match "WSFederationLoginEndpoint")) {
                     if ([int]($ServerInstance.Version).split('.')[0] -ge 13) {
                         Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName WSFederationLoginEndpoint -KeyValue "https://login.microsoftonline.com/common/wsfed?wa=wsignin1.0%26wtrealm=$($ServerInstance.ADApplicationIdentifierUris | Select-Object -First 1)%26wreply=$($ServerInstance.PublicWebBaseUrl)365/SignIn"
-                    } else {
+                    } elseif ([int]($ServerInstance.Version).split('.')[0] -ge 10) {
                         Set-NAVServerConfiguration -ServerInstance $ServerInstance.ServerInstance -KeyName WSFederationLoginEndpoint -KeyValue "https://login.windows.net/common/wsfed?wa=wsignin1.0%26wtrealm=$($ServerInstance.ADApplicationIdentifierUris | Select-Object -First 1)%26wreply=$($ServerInstance.PublicWebBaseUrl)365/WebClient/SignIn.aspx"
                     }
                 }

@@ -3,15 +3,34 @@ $VMCredential = New-Object System.Management.Automation.PSCredential($VMAdmin.Us
 
 $WorkFolder = $DeploymentSettings.workFolder
 if (!(Test-Path -Path $WorkFolder)) {New-Item -Path $WorkFolder -ItemType Directory -ErrorAction SilentlyContinue | Out-Null}
+if (![String]::IsNullOrEmpty(($DeploymentSettings.LockFile))) {
+    if (!(Test-Path -Path $DeploymentSettings.LockFile)) { Set-Content -Path $DeploymentSettings.LockFile -Value 'Lock File' }
+    $file = $null
+        while (!($file)) {
+            try {
+                $file = [System.IO.File]::Open($DeploymentSettings.LockFile, [System.IO.FileMode]::Open, [System.IO.FileAccess]::ReadWrite, [System.IO.FileShare]::Read)
+            } catch [System.IO.IOException]  {
+                Write-Host "Waiting for previous publish process to finish..."
+                Start-Sleep -Seconds 10
+            }
+        }
+}
+$host.SetShouldExit(0)
+
 Write-Host "Connecting to $($DeploymentSettings.instanceServer)..."
 $Session = New-NAVRemoteSession -Credential $VMCredential -HostName $DeploymentSettings.instanceServer -SetupPath $WorkFolder
 
+Get-ChildItem -Path (Get-Location).Path -Filter *Test*.app | Remove-Item
 
 if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
+
+    $RandomCharacters = -join ((65..90) + (97..122) | Get-Random -Count 8 | % {[char]$_})
+    $zipFileName = $RandomCharacters + "App.zip"
+
     Write-Host "Uploading Artifact AL to remote server as App.zip..."
-    Compress-Archive -Path (Join-Path (Get-Location).Path *.app) -DestinationPath (Join-Path $WorkFolder 'App.zip') -Force
-    Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder 'App.zip') -DestinationFile (Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-App.zip") 
-    Remove-Item -Path (Join-Path $WorkFolder 'App.zip')  -Force -ErrorAction SilentlyContinue
+    Compress-Archive -Path (Join-Path (Get-Location).Path *.app) -DestinationPath (Join-Path $WorkFolder $zipFileName) -Force
+    Copy-FileToRemoteMachine -Session $Session -SourceFile (Join-Path $WorkFolder $zipFileName) -DestinationFile (Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-App.zip") 
+    Remove-Item -Path (Join-Path $WorkFolder $zipFileName)  -Force -ErrorAction SilentlyContinue
 
     Write-Host "Expanding App.zip on remote server..."
     Invoke-Command -Session $Session -ScriptBlock {
@@ -49,7 +68,8 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
                 $availableApp = Get-NAVAppInfo -ServerInstance $ServerInstance -Id $installedApp.AppId | Where-Object -Property Version -gt $installedApp.Version | Sort-Object -Property Version | Select-Object -Last 1
                 if ($availableApp) {
                     Write-Host Upgrading to version $availableApp.Version 
-                    Sync-NAVApp -ServerInstance $ServerInstance -Tenant $tenant.id -AppName $installedApp.Name -Version $availableApp.Version 
+                    #Uninstall-NAVApp $ServerInstance -Tenant $tenant.id -AppName $installedApp.Name -Version $installedApp.Version
+                    Sync-NAVApp -ServerInstance $ServerInstance -Tenant $tenant.id -AppName $installedApp.Name -Version $availableApp.Version #-Mode ForceSync -Force
                     Start-NAVAppDataUpgrade -ServerInstance $ServerInstance -Tenant $tenant.id -AppName $installedApp.Name -Version $availableApp.Version -Language is-IS
                 }
             }
@@ -78,3 +98,4 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
 }
 
 $Session | Remove-PSSession
+if (![String]::IsNullOrEmpty(($DeploymentSettings.LockFile))) { $file.Dispose() }
