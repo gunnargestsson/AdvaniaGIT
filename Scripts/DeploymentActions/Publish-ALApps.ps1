@@ -34,7 +34,7 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
 
     Write-Host "Expanding App.zip on remote server..."
     Invoke-Command -Session $Session -ScriptBlock {
-        param([string]$ServerInstance,[string]$ZipFileName,[string]$AppFilePath,[string]$Publisher,[string]$mainVersion)
+        param([string]$ServerInstance,[string]$ZipFileName,[string]$AppFilePath,[string]$Publisher,[string]$mainVersion,[boolean]$uninstall)
         if ($mainVersion) {
             $SetupParameters.mainVersion = $mainVersion
         }
@@ -75,24 +75,28 @@ if (Get-ChildItem -Path (Get-Location).Path -Filter *.app) {
             }
         }
 
-        $installedApps = @()
+        if ($uninstall) {
+            $installedApps = @()
 
-        $tenants = Get-NAVTenant -ServerInstance $ServerInstance 
-        foreach ($tenant in $tenants) {
-            $installedApps += Get-NAVAppInfo -ServerInstance $ServerInstance -Tenant $tenant.Id | Where-Object -Property Publisher -EQ $Publisher
-        }
-
-        foreach ($publishedApp in (Get-NAVAppInfo -ServerInstance $ServerInstance | Where-Object -Property Publisher -EQ $Publisher | Sort-Object -Property Name)) {        
-            if ($installedApps | Where-Object -Property appId -EQ $publishedApp.appId | Where-Object -Property Version -EQ $publishedApp.Version) {
-                Write-Host App $($publishedApp.Name) version $($publishedApp.Version) is in use
-            } else {
-                Write-Host Unpublishing App $($publishedApp.Name) version $($publishedApp.Version)
-                Unpublish-NAVApp -ServerInstance $ServerInstance -Name $publishedApp.Name -Publisher $publishedApp.Publisher -Version $publishedApp.Version
+            $tenants = Get-NAVTenant -ServerInstance $ServerInstance 
+            foreach ($tenant in $tenants) {
+                $installedApps += Get-NAVAppInfo -ServerInstance $ServerInstance -Tenant $tenant.Id | Where-Object -Property Publisher -EQ $Publisher
             }
+
+            foreach ($publishedApp in (Get-NAVAppInfo -ServerInstance $ServerInstance | Where-Object -Property Publisher -EQ $Publisher | Sort-Object -Property Name)) {        
+                if ($installedApps | Where-Object -Property appId -EQ $publishedApp.appId | Where-Object -Property Version -EQ $publishedApp.Version) {
+                    Write-Host App $($publishedApp.Name) version $($publishedApp.Version) is in use
+                } else {
+                    Write-Host Unpublishing App $($publishedApp.Name) version $($publishedApp.Version)
+                    Unpublish-NAVApp -ServerInstance $ServerInstance -Name $publishedApp.Name -Publisher $publishedApp.Publisher -Version $publishedApp.Version
+                }
+            }
+        } else {
+            Write-Host "Unpublish skipped on manual execution"
         }
 
 
-    } -ArgumentList ($DeploymentSettings.instanceName, (Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-App.zip"), "${WorkFolder}\$($DeploymentSettings.instanceName)", $DeploymentSettings.publisher, $DeploymentSettings.mainVersion)
+    } -ArgumentList ($DeploymentSettings.instanceName, (Join-Path $WorkFolder "$($DeploymentSettings.instanceName)-App.zip"), "${WorkFolder}\$($DeploymentSettings.instanceName)", $DeploymentSettings.publisher, $DeploymentSettings.mainVersion, [String]::IsNullOrEmpty($DeploymentSettings.ManualStartBy))
 
     Write-Host "App upload complete..."
 }
