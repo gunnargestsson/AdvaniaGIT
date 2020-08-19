@@ -52,8 +52,6 @@
 
     Write-Host "Preparing Docker Container for Dynamics NAV..."    
     
-    $imageName = $SetupParameters.dockerImage
-
     $volume = "$($SetupParameters.Repository):C:\GIT"
     $rootPath = "$($SetupParameters.rootPath):C:\Host"
     $parameters = @(
@@ -101,8 +99,7 @@
         $params += @{ imageName = $SetupParameters.dockerImage }
         if (![System.String]::IsNullOrEmpty($SetupParameters.dockerIsolation)) {    
             $params += @{ isolation = $SetupParameters.dockerIsolation }
-    }
-
+        }
     } elseif (![String]::IsNullOrEmpty($SetupParameters.artifact)) {
 
         if ($SetupParameters.artifact -like 'https://*') {
@@ -183,7 +180,7 @@
         }
     }
     if ((Get-NavContainers) -inotcontains $DockerContainerFriendlyName) { 
-        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -restart no -updateHosts -doNotCheckHealth -doNotUseRuntimePackages -EnableTaskScheduler:$false
+        New-NavContainer -accept_eula -accept_outdated -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -restart no -updateHosts -doNotCheckHealth -doNotUseRuntimePackages -EnableTaskScheduler:$false
         $DockerCreated = $true
     }
     $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 
