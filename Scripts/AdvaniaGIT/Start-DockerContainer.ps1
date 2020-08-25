@@ -93,13 +93,15 @@
         additionalParameters = $parameters
         doNotExportObjectsToText = $true 
         shortcuts = 'None'
+        locale = (Get-WinSystemLocale).name
         }
-
+        
     if (![System.String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
         $params += @{ imageName = $SetupParameters.dockerImage }
         if (![System.String]::IsNullOrEmpty($SetupParameters.dockerIsolation)) {    
             $params += @{ isolation = $SetupParameters.dockerIsolation }
-        }
+    }
+
     } elseif (![String]::IsNullOrEmpty($SetupParameters.artifact)) {
 
         if ($SetupParameters.artifact -like 'https://*') {

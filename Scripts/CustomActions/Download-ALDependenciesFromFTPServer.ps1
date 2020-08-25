@@ -1,5 +1,5 @@
 ﻿if ($SetupParameters.BuildMode) {
-    $version = Get-NavContainerNavVersion -containerOrImageName $BranchSettings.dockerContainerName
+    $version = [String]::Join('.',((Get-NavContainerNavVersion -containerOrImageName $BranchSettings.dockerContainerName).split('.')[0,1]))
     $dependencyPath = Join-Path $SetupParameters.repository "Dependencies"
     Remove-Item -Path $dependencyPath -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -Path $dependencyPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
