@@ -1,6 +1,10 @@
 ﻿if ($BranchSettings.dockerContainerId -gt "") {
     if ([Bool](Get-Module NAVContainerHelper)) {
-        Import-TestToolkitToNavContainer -containerName $BranchSettings.dockerContainerName -includeTestLibrariesOnly -doNotUpdateSymbols
+        if ([String]::IsNullOrEmpty($SetupParameters.CreateSymbols)) {
+            Import-TestToolkitToNavContainer -containerName $BranchSettings.dockerContainerName -includeTestLibrariesOnly
+        } else {
+            Import-TestToolkitToNavContainer -containerName $BranchSettings.dockerContainerName -includeTestLibrariesOnly -doNotUpdateSymbols
+        }
     } else {
         Start-DockerCustomAction -BranchSettings $BranchSettings -ScriptName $MyInvocation.MyCommand.Name -BuildSettings $BuildSettings
     }

@@ -93,7 +93,6 @@
         additionalParameters = $parameters
         doNotExportObjectsToText = $true 
         shortcuts = 'None'
-        locale = (Get-WinSystemLocale).name
         }
         
     if (![System.String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
