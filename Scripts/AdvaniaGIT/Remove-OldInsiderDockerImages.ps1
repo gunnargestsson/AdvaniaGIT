@@ -22,14 +22,14 @@
     }
 
     foreach ($insiderImage in ($insiderImages | Sort-Object -Property Version -Descending)) {
-        $oldedImages = $insiderImages | `
+        $oldImages = $insiderImages | `
             Where-Object -Property Repository -eq $insiderImage.Repository | `
             Where-Object -Property Tag -EQ $insiderImage.Tag | `
             Where-Object -Property Major -EQ $insiderImage.Major | `
             Where-Object -Property Minor -EQ $insiderImage.Minor | `
             Where-Object -Property Language -EQ $insiderImage.Language | `
             Where-Object -Property Version -LT $insiderImage.Version
-        $oldedImages | % {
+        $oldImages | % {
             if ($imagesToRemove -notcontains $($_.ID)) {
                 $imagesToRemove += $($_.ID)
                 Write-Host "Removing Docker Image $($_.ID)"
