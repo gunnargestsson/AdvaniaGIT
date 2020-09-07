@@ -26,7 +26,7 @@ foreach ($AlApp in $ALApps) {
         }
         
         $destFileName = $path.Name
-        $fullDestFileName = $path.BaseName + '_' + $AlApp.version + '.app'
+        $fullDestFileName = $path.BaseName + "_" + ($AlApp.version).Major + "." + ($AlApp.version).Minor + "_BC${version}" + ".app"
 
         Write-Host "Upload ${destFileName} to $($SetupParameters.ftpServer)..."
         Create-FtpDirectory -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpDirectoryPath "Runtime"
