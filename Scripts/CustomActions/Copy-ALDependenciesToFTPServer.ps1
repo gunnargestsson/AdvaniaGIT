@@ -3,7 +3,7 @@
     foreach ($ALPath in (Get-ChildItem -Path (Join-Path $SetupParameters.repository 'Dependencies'))) { 
         $destFileName = ($ALPath.Name).Split(".")[0]
         $destFileName = $destFileName.Substring(0,$destFileName.Length - 3) + ".app"
-        $fullDestFileName = [String]::Join('.',(($ALPath.Name).Split(".")[0,1])) + "_BC${version}" + ".app"
+        $fullDestFileName = $ALPath.Name;
 
         Write-Host "Uploading ${destFileName} to $($SetupParameters.ftpServer)..."
         Create-FtpDirectory -Server $SetupParameters.ftpServer -User $SetupParameters.ftpUser -Pass $SetupParameters.ftpPass -FtpDirectoryPath "Build"

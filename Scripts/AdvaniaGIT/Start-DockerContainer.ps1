@@ -18,10 +18,10 @@
     [String]$MemoryLimit = ""
     )
     
-    if (![Bool](Get-Module NAVContainerHelper)) {
-        if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
+    if (![Bool](Get-Module $SetupParameters.containerHelperModuleName)) {
+        if ([Bool](Get-Module $SetupParameters.containerHelperModuleName -ListAvailable)) {
             if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
-            Import-Module NAVContainerHelper -DisableNameChecking
+            Import-Module $SetupParameters.containerHelperModuleName -DisableNameChecking
         } else {
             Write-Host -ForegroundColor Red "NAV Container Helper is required.  Please use the VS Code command to install NAV container helper!"
             throw
@@ -94,13 +94,12 @@
         doNotExportObjectsToText = $true 
         shortcuts = 'None'
         }
-        
+
     if (![System.String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
         $params += @{ imageName = $SetupParameters.dockerImage }
         if (![System.String]::IsNullOrEmpty($SetupParameters.dockerIsolation)) {    
             $params += @{ isolation = $SetupParameters.dockerIsolation }
-    }
-
+        }
     } elseif (![String]::IsNullOrEmpty($SetupParameters.artifact)) {
 
         if ($SetupParameters.artifact -like 'https://*') {

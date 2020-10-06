@@ -4,7 +4,7 @@
     $companyName = Get-FirstCompanyName -SQLServer (Get-DatabaseServer -BranchSettings $BranchSettings) -SQLDb $BranchSettings.databaseName
 }
 
-$ResultFile = Join-path $env:ProgramData "NavContainerHelper\Extensions\$($BranchSettings.dockerContainerName)\my\TestResults.xml"
+$ResultFile = Join-path $env:ProgramData "$SetupParameters.containerHelperModuleName\Extensions\$($BranchSettings.dockerContainerName)\my\TestResults.xml"
 foreach ($ALPath in (Get-ALPaths -SetupParameters $SetupParameters)) {
     $ALProjectFolder = $ALPath.FullName
     $ExtensionAppJsonFile = Join-Path $ALProjectFolder 'app.json'

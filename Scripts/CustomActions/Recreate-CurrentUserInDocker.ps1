@@ -1,4 +1,4 @@
-﻿if ([Bool](Get-Module NAVContainerHelper)) {
+﻿if ([Bool](Get-Module $SetupParameters.containerHelperModuleName)) {
     Invoke-ScriptInNavContainer -containerName $BranchSettings.dockerContainerName -scriptblock {
         param([string]$NAVUserName)
         Get-NAVServerUser -ServerInstance NAV | Remove-NAVServerUser -ServerInstance NAV -Force

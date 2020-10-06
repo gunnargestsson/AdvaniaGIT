@@ -158,13 +158,17 @@ else
     New-Item -Path $SetupParameters.LogPath -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
     if ($IsInAdminMode ) { Add-BlankLines -SetupParameters $SetupParameters }
     $env:WorkFolder = $SetupParameters.WorkFolder
+
+    if (![bool]$SetupParameters.PSObject.Properties.Name -eq 'containerHelperModuleName') {
+        $SetupParameters | Add-Member -MemberType NoteProperty -Name 'containerHelperModuleName' -Value 'NAVContainerHelper'
+    }
     
     # Use NAV Container Helper if available
     if ($IsInAdminMode) {
-        if (![Bool](Get-Module NAVContainerHelper)) {
-            if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
+        if (![Bool](Get-Module $SetupParameters.containerHelperModuleName)) {
+            if ([Bool](Get-Module $SetupParameters.containerHelperModuleName -ListAvailable)) {
                 if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
-                Import-Module NAVContainerHelper -DisableNameChecking
+                Import-Module $SetupParameters.containerHelperModuleName -DisableNameChecking
             }
         }
     }
