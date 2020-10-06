@@ -24,16 +24,29 @@
 
     $ReplaceChars = '."\/%]['''
     $FieldsInSelect = @()
-    $SelectFields = ""    
-    foreach ($field in ($TenantXml.MetaTable.Keys.FirstChild.Key).split(',')) {
+    $SelectFields = "" 
+    if ($TenantXml.MetaTable.Keys.FirstChild.Key) {
+        $KeyList = $TenantXml.MetaTable.Keys.FirstChild.Key
+    } else {
+        $KeyList = $TenantXml.MetaTable.Keys.FirstChild.name
+    }
+    foreach ($field in ($KeyList).split(',')) {
         $FieldsInSelect += $field.substring(5)
     }
 
-    foreach ($field in $TenantXml.MetaTable.Fields.Field) {
+    if ($TenantXml.MetaTable.Fields.Field) {
+        $FieldList = $TenantXml.MetaTable.Fields.Field
+        $AppFieldList = $ApplicationXml.MetaTable.Fields.Field
+    } else {
+        $FieldList = $TenantXml.MetaTable.Fields.MetaField
+        $AppFieldList = $ApplicationXml.MetaTable.Fields.MetaField
+    }
+
+    foreach ($field in $FieldList) {
         if ($FieldsInSelect -contains $field.ID) {
             Write-Verbose -Message "Field $($field.ID) $($field.Name) is a primary key field"
-        } elseif ($field.FieldClass -eq "Normal" -and $field.Enabled -eq "1") {
-            $applicationField = $ApplicationXml.MetaTable.Fields.Field | Where-Object -Property ID -EQ $field.ID
+        } elseif ($field.FieldClass -eq "Normal" -or !$field.FieldClass -and $field.Enabled -in ("1","true")) {
+            $applicationField = $AppFieldList | Where-Object -Property ID -EQ $field.ID
             if ($applicationField) {                
                 if ($applicationField.Datatype -ne $field.Datatype -or `
                     $applicationField.DataLength -lt $field.DataLength -or `
@@ -59,7 +72,7 @@
 
     if ($CreateSelectStatement -or $ApplicationXml -eq $null) {
         foreach ($field in $FieldsInSelect) {
-            $fieldName = ($TenantXml.MetaTable.Fields.Field | Where-Object -Property ID -EQ $field).Name
+            $fieldName = ($FieldList | Where-Object -Property ID -EQ $field).Name
             for ($i = 0;$i -lt $ReplaceChars.Length;$i++) 
             {
                 $fieldName = $fieldName.Replace($ReplaceChars[$i],'_')
@@ -69,7 +82,7 @@
             }
             $SelectFields += "[${fieldName}] AS Field${field}"
         }
-        if ($TenantXml.DocumentElement.Attributes.GetNamedItem("DataPerCompany").Value -eq 1) {
+        if ($TenantXml.DocumentElement.Attributes.GetNamedItem("DataPerCompany").Value -eq 1 -or $TenantXml.MetaTable.isDataPerCompany -eq "true") {
             $TableName = Get-DatabaseTableName -CompanyName $CompanyName -TableName $TenantXml.MetaTable.Name
         } else {
             $TableName = Get-DatabaseTableName -TableName $TenantXml.MetaTable.Name

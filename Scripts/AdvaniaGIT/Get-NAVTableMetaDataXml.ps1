@@ -20,7 +20,7 @@
     if ([String]::IsNullOrEmpty($dbproperty)) {
         $command = "SELECT [Metadata] FROM [Object Metadata Snapshot] WHERE [Object Type] = 1 AND [Object ID] = ${TableId}"
     } else {
-        $command = "SELECT [Metadata] FROM [Object Metadata] WHERE [Object Type] = 1 AND [Object ID] = ${TableId}"
+        $command = "SELECT [Metadata] FROM [Object Metadata Snapshot] WHERE [Object Type] = 1 AND [Object ID] = ${TableId}"
     }
     try {
         $Metadata = Get-SQLCommandResult -Server $DatabaseServer -Database $DatabaseName -Username $Username -Password $Password -Command $command
