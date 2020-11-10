@@ -36,12 +36,16 @@
 
     if ($TenantXml.MetaTable.Fields.Field) {
         $FieldList = $TenantXml.MetaTable.Fields.Field
-        $AppFieldList = $ApplicationXml.MetaTable.Fields.Field
     } else {
         $FieldList = $TenantXml.MetaTable.Fields.MetaField
-        $AppFieldList = $ApplicationXml.MetaTable.Fields.MetaField
     }
 
+    if ($ApplicationXml.MetaTable.Fields.Field) {
+        $AppFieldList = $ApplicationXml.MetaTable.Fields.Field
+    } else {
+        $AppFieldList = $ApplicationXml.MetaTable.Fields.MetaField
+    }
+    
     foreach ($field in $FieldList) {
         if ($FieldsInSelect -contains $field.ID) {
             Write-Verbose -Message "Field $($field.ID) $($field.Name) is a primary key field"
