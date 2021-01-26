@@ -51,15 +51,8 @@
             Write-Verbose -Message "Field $($field.ID) $($field.Name) is a primary key field"
         } elseif ($field.FieldClass -eq "Normal" -or !$field.FieldClass -and $field.Enabled -in ("1","true")) {
             $applicationField = $AppFieldList | Where-Object -Property ID -EQ $field.ID
-            if ($applicationField) {                
-                if ($applicationField.Datatype -ne $field.Datatype -or `
-                    $applicationField.DataLength -lt $field.DataLength -or `
-                    $applicationField.Enabled -ne $field.Enabled -or `
-                    $applicationField.FieldClass -ne $field.FieldClass -or `
-                    $applicationField.AutoIncrement -ne $field.AutoIncrement -or `
-                    $applicationField.ExtendedDatatype -ne $field.ExtendedDatatype -or `
-                    $applicationField.SQL_Timestamp -ne $field.SQL_Timestamp -or `
-                    $applicationField.ClosingDates -ne $field.ClosingDates ) 
+            if ($applicationField) {     
+                if (!(Get-NAVFieldMatch -TenantField $field -ApplicationField $applicationField))
                 {
                     Write-Verbose -Message "Found field $($applicationField.ID)"
                     $FieldsInSelect += $field.ID
