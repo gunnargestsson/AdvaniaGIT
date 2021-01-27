@@ -84,12 +84,13 @@
         } else {
             $TableName = Get-DatabaseTableName -TableName $TenantXml.MetaTable.Name
         }
+        $CompanyTableName = Get-DatabaseTableName -CompanyName $CompanyName -TableName $TenantXml.MetaTable.Name
         
         if ($CustomDatabase) {
             $result = Get-SQLCommandResult -Server $DatabaseServer -Database $CustomDatabase -Command "SELECT COUNT(*) FROM [${TenantDatabase}].[dbo].[${TableName}]"
             if ([int]$result.Column1 -gt 0) {
                 Write-Verbose -Message "Adding table ${TableName}"
-                $result = Get-SQLCommandResult -Server $DatabaseServer -Database $CustomDatabase -Command "SELECT ${SelectFields} INTO [${TableName}] FROM [${TenantDatabase}].[dbo].[${TableName}]"
+                $result = Get-SQLCommandResult -Server $DatabaseServer -Database $CustomDatabase -Command "SELECT ${SelectFields} INTO [${CompanyTableName}] FROM [${TenantDatabase}].[dbo].[${TableName}]"
                 $TableData = New-Object -TypeName Xml
                 $TableData.LoadXml("<?xml version=`"1.0`" encoding=`"UTF-8`" standalone=`"no`"?><TableData><Table></Table><Fields></Fields></TableData>");
 
