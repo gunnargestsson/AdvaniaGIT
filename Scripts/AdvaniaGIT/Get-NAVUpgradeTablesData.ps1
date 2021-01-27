@@ -10,7 +10,7 @@
         [Parameter(Mandatory = $false,ValueFromPipelineByPropertyName = $true)]
         [string]$DatabaseServer = 'localhost',
         [Parameter(Mandatory = $true,ValueFromPipelineByPropertyName = $true)]
-        [string]$CompanyName,
+        [string[]]$CompanyNames,
         [Parameter(Mandatory = $false,ValueFromPipelineByPropertyName = $true)]
         [string]$ExportPath,
         [Parameter(Mandatory = $false,ValueFromPipelineByPropertyName = $true)]
@@ -24,13 +24,6 @@
 
     foreach ($table in (Get-NAVTenantTableNos -TenantDatabase $TenantDatabase -DatabaseServer $DatabaseServer -NosOnly)) {
         Write-Verbose -Message "Table $($table.TableId)"
-        $Xml = Get-NAVUpgradeTableData -TenantDatabase $TenantDatabase -ApplicationDatabase $ApplicationDatabase -DatabaseServer $DatabaseServer -TableId $table.TableId -CompanyName $CompanyName -CustomDatabase $CustomDatabase                
-        if (![String]::IsNullOrEmpty($Xml)) {
-            if ($ExportPath) {
-                $ExportFilePath = Join-Path $ExportPath "Table$($table.TableId).xml"        
-                Set-Content -Value $Xml -Path $ExportFilePath -Encoding UTF8 -Force
-            }
-            Write-Verbose -Message "Exported"
-        }
+        Get-NAVUpgradeTableData -TenantDatabase $TenantDatabase -ApplicationDatabase $ApplicationDatabase -DatabaseServer $DatabaseServer -TableId $table.TableId -ExportPath $ExportPath -CompanyNames $CompanyNames -CustomDatabase $CustomDatabase                
     }
 }
