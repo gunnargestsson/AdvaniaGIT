@@ -19,29 +19,13 @@
         [string]$CustomDatabase
     )
 
-    if ($ExportPath) {
-        foreach ($CompanyName in $CompanyNames) {
-            $CompanyExportPath = Join-Path $ExportPath ([RegEx]::Replace($CompanyName, "[{0}]" -f ([RegEx]::Escape([String][System.IO.Path]::GetInvalidFileNameChars())), ''))
-            New-Item -Path $CompanyExportPath -ItemType Directory -ErrorAction SilentlyContinue| Out-Null
-        }
-    }
-
     $CreateSelectStatement = $false
 
     [xml]$TenantXml = Get-NAVTableMetaDataXml -DatabaseName $TenantDatabase -DatabaseServer $DatabaseServer -TableId $TableId
     [xml]$ApplicationXml = Get-NAVTableMetaDataXml -DatabaseName $ApplicationDatabase -DatabaseServer $DatabaseServer -TableId $TableId
 
-    $ReplaceChars = '."\/%]['''
-    $FieldsInSelect = @()
+    $ReplaceChars = '."\/%]['''    
     $SelectFields = "" 
-    if ($TenantXml.MetaTable.Keys.FirstChild.Key) {
-        $KeyList = $TenantXml.MetaTable.Keys.FirstChild.Key
-    } else {
-        $KeyList = $TenantXml.MetaTable.Keys.FirstChild.name
-    }
-    foreach ($field in ($KeyList).split(',')) {
-        $FieldsInSelect += $field.substring(5)
-    }
 
     if ($TenantXml.MetaTable.Fields.Field) {
         $FieldList = $TenantXml.MetaTable.Fields.Field
@@ -49,10 +33,24 @@
         $FieldList = $TenantXml.MetaTable.Fields.MetaField
     }
 
-    if ($ApplicationXml.MetaTable.Fields.Field) {
-        $AppFieldList = $ApplicationXml.MetaTable.Fields.Field
+    if ($ApplicationXml -eq $null) {
+        $FieldsInSelect = ($FieldList | Where-Object -Property FieldClass -EQ "Normal").ID
     } else {
-        $AppFieldList = $ApplicationXml.MetaTable.Fields.MetaField
+        if ($ApplicationXml.MetaTable.Fields.Field) {
+            $AppFieldList = $ApplicationXml.MetaTable.Fields.Field
+        } else {
+            $AppFieldList = $ApplicationXml.MetaTable.Fields.MetaField
+        }
+
+        if ($TenantXml.MetaTable.Keys.FirstChild.Key) {
+            $KeyList = $TenantXml.MetaTable.Keys.FirstChild.Key
+        } else {
+            $KeyList = $TenantXml.MetaTable.Keys.FirstChild.name
+        }
+        $FieldsInSelect = @()
+        foreach ($field in ($KeyList).split(',')) {
+            $FieldsInSelect += $field.substring(5)
+        }
     }
     
     foreach ($field in $FieldList) {
@@ -174,7 +172,7 @@
                 if ($ExportPath) {
                     $CompanyExportPath = Join-Path $ExportPath ([RegEx]::Replace($CompanyName, "[{0}]" -f ([RegEx]::Escape([String][System.IO.Path]::GetInvalidFileNameChars())), ''))
                     $ExportFilePath = Join-Path $CompanyExportPath "Table$($table.TableId).xml"        
-                    Set-Content -Value $Xml -Path $ExportFilePath -Encoding UTF8 -Force
+                    Set-Content -Value $TableData.OuterXml -Path $ExportFilePath -Encoding UTF8 -Force
                 }
                 Write-Verbose -Message "Exported"
             }

@@ -2,7 +2,7 @@
     Param($TenantField,$ApplicationField)
     
     if ($ApplicationField.Datatype -eq $TenantField.Datatype -and `
-        $ApplicationField.DataLength -lt $TenantField.DataLength -and `
+        $ApplicationField.DataLength -ge $TenantField.DataLength -and `
         $ApplicationField.Enabled -eq $TenantField.Enabled -and `
         $ApplicationField.FieldClass -eq $TenantField.FieldClass) { return $true }
                 
