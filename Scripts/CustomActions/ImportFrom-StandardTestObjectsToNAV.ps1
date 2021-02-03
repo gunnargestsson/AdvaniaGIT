@@ -1,5 +1,5 @@
 ﻿if ($BranchSettings.dockerContainerId -gt "") {
-    if ([Bool](Get-Module NAVContainerHelper)) {
+    if ([Bool](Get-Module $SetupParameters.containerHelperModuleName)) {
         if ([String]::IsNullOrEmpty($SetupParameters.testToolkitCountry)) {
             Write-Host Importing Test Toolkit to NAV Container…
             Import-TestToolkitToNavContainer -containerName $BranchSettings.dockerContainerName 

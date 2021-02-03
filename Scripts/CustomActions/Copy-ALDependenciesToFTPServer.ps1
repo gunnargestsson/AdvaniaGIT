@@ -1,5 +1,5 @@
 ﻿if ($SetupParameters.BuildMode) {
-    $version = Get-NavContainerNavVersion -containerOrImageName $BranchSettings.dockerContainerName
+    $version = [String]::Join('.',((Get-NavContainerNavVersion -containerOrImageName $BranchSettings.dockerContainerName).split('.')[0,1]))
     foreach ($ALPath in (Get-ChildItem -Path (Join-Path $SetupParameters.repository 'Dependencies'))) { 
         $destFileName = ($ALPath.Name).Split(".")[0]
         $destFileName = $destFileName.Substring(0,$destFileName.Length - 3) + ".app"

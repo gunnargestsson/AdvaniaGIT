@@ -1,4 +1,4 @@
-﻿$version = Get-NavContainerNavVersion -containerOrImageName $BranchSettings.dockerContainerName
+﻿$version = [String]::Join('.',((Get-NavContainerNavVersion -containerOrImageName $BranchSettings.dockerContainerName).split('.')[0,1]))
 if (![String]::IsNullOrEmpty($SetupParameters.Publisher)) {
     $ALApps = Get-NavContainerAppInfo -containerName $BranchSettings.dockerContainerName | Where-Object -Property Publisher -EQ $SetupParameters.Publisher
     $appNameFromAppJson = $false

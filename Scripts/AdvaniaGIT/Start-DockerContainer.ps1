@@ -18,10 +18,10 @@
     [String]$MemoryLimit = ""
     )
     
-    if (![Bool](Get-Module NAVContainerHelper)) {
-        if ([Bool](Get-Module NAVContainerHelper -ListAvailable)) {
+    if (![Bool](Get-Module $SetupParameters.containerHelperModuleName)) {
+        if ([Bool](Get-Module $SetupParameters.containerHelperModuleName -ListAvailable)) {
             if (!$SetupParameters.BuildMode) { Write-Host -ForegroundColor Green "Using NAV Container Helper from @freddydk..." }
-            Import-Module NAVContainerHelper -DisableNameChecking
+            Import-Module $SetupParameters.containerHelperModuleName -DisableNameChecking
         } else {
             Write-Host -ForegroundColor Red "NAV Container Helper is required.  Please use the VS Code command to install NAV container helper!"
             throw
@@ -52,8 +52,6 @@
 
     Write-Host "Preparing Docker Container for Dynamics NAV..."    
     
-    $imageName = $SetupParameters.dockerImage
-
     $volume = "$($SetupParameters.Repository):C:\GIT"
     $rootPath = "$($SetupParameters.rootPath):C:\Host"
     $parameters = @(
@@ -96,7 +94,35 @@
         doNotExportObjectsToText = $true 
         shortcuts = 'None'
         }
-        
+
+    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerImage)) {
+        $params += @{ imageName = $SetupParameters.dockerImage }
+        if (![System.String]::IsNullOrEmpty($SetupParameters.dockerIsolation)) {    
+            $params += @{ isolation = $SetupParameters.dockerIsolation }
+        }
+    } elseif (![String]::IsNullOrEmpty($SetupParameters.artifact)) {
+
+        if ($SetupParameters.artifact -like 'https://*') {
+            $artifactUrl = $SetupParameters.artifact
+            $params += @{ imageName = "custombuild" }          
+        }
+        else {
+            Write-Host "Finding Url for $($SetupParameters.artifact)"
+            $segments = "$($SetupParameters.artifact)/////".Split('/')
+            if ($segments[0] -eq "bcinsider") {
+                Write-Host "Using insider build"
+                $artifactUrl = Get-BCArtifactUrl -storageAccount $segments[0] -type $segments[1] -version $segments[2] -country $segments[3] -select $segments[4] -sasToken $DockerSettings.InsiderSasToken | Select-Object -First 1
+            } else {
+                $artifactUrl = Get-BCArtifactUrl -storageAccount $segments[0] -type $segments[1] -version $segments[2] -country $segments[3] -select $segments[4]  | Select-Object -First 1
+            }
+            $params += @{ imageName = $segments[0] }
+            if (-not ($artifactUrl)) {
+                throw "Unable to locate artifactUrl from $($SetupParameters.artifact)"
+            }
+        }
+        $params += @{ artifactUrl= "$artifactUrl" }       
+    }
+
     if (![System.String]::IsNullOrEmpty($LicenseFilePath)) {
         $params += @{ licensefile = "$LicenseFilePath" }
     }
@@ -122,10 +148,6 @@
 
     if (![System.String]::IsNullOrEmpty($SetupParameters.useBestContainerOS)) {    
         $params += @{ useBestContainerOS = $true }
-    }
-
-    if (![System.String]::IsNullOrEmpty($SetupParameters.dockerIsolation)) {    
-        $params += @{ isolation = $SetupParameters.dockerIsolation }
     }
 
     if (![System.String]::IsNullOrEmpty($SetupParameters.CheckHealth )) {    
@@ -158,7 +180,7 @@
         }
     }
     if ((Get-NavContainers) -inotcontains $DockerContainerFriendlyName) { 
-        New-NavContainer -accept_eula -accept_outdated  -imageName $imageName -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -restart no -updateHosts -EnableTaskScheduler:$false
+        New-NavContainer -accept_eula -accept_outdated -containerName $DockerContainerFriendlyName -Credential $DockerCredentials @params -restart no -updateHosts -doNotCheckHealth -doNotUseRuntimePackages -EnableTaskScheduler:$false
         $DockerCreated = $true
     }
     $DockerContainerId = Get-NavContainerId -containerName $DockerContainerFriendlyName 

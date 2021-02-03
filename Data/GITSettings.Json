@@ -31,5 +31,6 @@
   "VSCodePath": "AL",
   "NewSyntaxPrefix": "NewSyntax",
   "filesEncoding": "cp850",
-  "skipDeleteCheck": "false"
+  "skipDeleteCheck": "false",
+  "containerHelperModuleName": "NAVContainerHelper"
 }

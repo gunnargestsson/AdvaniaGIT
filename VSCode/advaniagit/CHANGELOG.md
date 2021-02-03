@@ -107,3 +107,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.1.2]
 - Add new command to clean local branch tree
+
+## [1.1.3]
+- Add double quote for the repository folder path

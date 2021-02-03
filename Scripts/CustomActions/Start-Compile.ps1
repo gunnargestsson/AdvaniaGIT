@@ -1,6 +1,6 @@
 Check-NAVServiceRunning -SetupParameters $SetupParameters -BranchSettings $BranchSettings
 if ($BranchSettings.dockerContainerId -gt "") {
-    if ([Bool](Get-Module NAVContainerHelper)) {
+    if ([Bool](Get-Module $SetupParameters.containerHelperModuleName)) {
         if (![String]::IsNullOrEmpty($SetupParameters.dockerAuthentication) -and $SetupParameters.dockerAuthentication -ieq "NavUserPassword") {
             $DockerCredentials = Get-DockerAdminCredentials -Message "Enter credentials for the Docker Container" -DefaultUserName $env:USERNAME        
             Compile-ObjectsInNavContainer -containerName $BranchSettings.dockerContainerName -sqlCredential $DockerCredentials

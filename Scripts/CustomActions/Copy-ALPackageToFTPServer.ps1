@@ -1,7 +1,7 @@
 ﻿if ($SetupParameters.BuildMode) {
     $BranchWorkFolder = Join-Path $SetupParameters.rootPath "Log\$($SetupParameters.BranchId)"
 
-    $version = Get-NavContainerNavVersion -containerOrImageName $BranchSettings.dockerContainerName
+    $version = [String]::Join('.',((Get-NavContainerNavVersion -containerOrImageName $BranchSettings.dockerContainerName).split('.')[0,1]))
     foreach ($ALPath in (Get-ChildItem -Path (Join-Path $BranchWorkFolder 'out'))) { 
         if (![String]::IsNullOrEmpty($SetupParameters.buildId)) {
             $destFileName = ($ALPath.Name).Replace("$($SetupParameters.buildId).app","0.app")

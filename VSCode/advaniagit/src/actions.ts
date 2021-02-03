@@ -349,13 +349,13 @@ export function ImportModelTools(Repository) {
 function StartAction(Repository, Action) {
     console.log(`Starting: ${Action}`);
     Repository = FindGITFolder(Repository);
-    terminal.PSTerminal.sendText(`Start-AdvaniaGITAction -Repository ${Repository} -ScriptName \"${Action}\" -Wait $false`);
+    terminal.PSTerminal.sendText(`Start-AdvaniaGITAction -Repository \"${Repository}\" -ScriptName \"${Action}\" -Wait $false`);
 }
 
 function StartActionWithBuildSettings(Repository, Action, BuildSettings) {
     console.log(`Starting: ${Action}`);
     Repository = FindGITFolder(Repository);
-    terminal.PSTerminal.sendText(`Start-AdvaniaGITAction -Repository ${Repository} -ScriptName \"${Action}\" -BuildSettings ${BuildSettings} -Wait $false`);
+    terminal.PSTerminal.sendText(`Start-AdvaniaGITAction -Repository \"${Repository}\" -ScriptName \"${Action}\" -BuildSettings ${BuildSettings} -Wait $false`);
 }
 
 function FindGITFolder(Repository): String {
